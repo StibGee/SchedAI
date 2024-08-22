@@ -1,0 +1,122 @@
+/*------main-------*/
+body {
+    background-image: url('/assets/img/icons/bg.PNG');
+    background-size: cover; /* or 'contain', '100% 100%', etc. */
+    background-repeat: no-repeat; /* or 'repeat', 'repeat-x', 'repeat-y' */
+    background-position: center center; /* or 'top left', 'bottom right', etc. */
+    background-attachment: fixed; /* or 'scroll' */
+}
+
+.user{
+    margin: 10px;
+}
+.header-text{
+    margin-right: 15px;
+    text-align: end;
+    margin-bottom: 0 ;
+}
+
+.header-text h5{
+    color: #1A5319;
+    font-weight:500;
+}
+span{
+    padding: 0;
+    margin: 0;
+}
+
+.text{
+    margin-bottom: 30px;
+    gap: 20px;
+    font-family: 'Baloo Paaji 2', cursive;
+}
+.text h2{
+    font-weight: 700;
+}
+
+.text span{
+    font-size: 24px;
+    font-weight: 500;
+    color: #ADBC9F;
+}
+
+.searchbar {
+    justify-content: flex-end;
+
+}
+
+.searchbar input[type="search"] {
+    width: 70%;
+    border-radius: 24px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.form-select{
+    border-radius: 24px;
+    width: 70%;
+    padding: 6px;
+    background-color: #d8e4db;
+    font-size: 14px;
+
+}
+
+.faculty-info li{
+    list-style: none;
+}
+.subload-title h5{
+    color: #1A5319;
+    font-weight:bold;
+}
+/*------subject loaded---*/
+#Subject-load{
+    background-color: #eeeeee;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow on all sides */
+}
+
+.table{
+    border: none;
+}
+
+
+.table-responsive{
+    border:none;
+}
+
+
+/*-----schedule table-----*/
+.sched-container{
+    background-color: #E4EFE7;
+    padding: 24PX;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.text h2{
+    font-weight: bolder;
+    color: #1A5319;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+.sched-table{
+    background-color: #ffff;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+#tabularView{
+    font-size: 12px;
+}
+#viewToggleButton{
+    font-size: 13px;
+    padding: 6px;
+    border-radius: 12px;
+    border: none;
+    background-color: #ffff;
+}
+
+.toogle select{
+    border-radius: 16px;
+    padding: 4px;
+}
