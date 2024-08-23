@@ -1,0 +1,78 @@
+
+.header-text{
+    margin-right: 15px;
+    text-align: end;
+    margin-bottom: 0 ;
+}
+
+.header-text h5{
+    color: #1A5319;
+    font-weight:500;
+}
+span{
+    padding: 0;
+    margin: 0;
+}
+
+.text{
+    margin-bottom: 30px;
+    gap: 20px;
+    font-family: 'Baloo Paaji 2', cursive;
+}
+.text span{
+    font-size: 24px;
+    font-weight: 500;
+    color: #ADBC9F;
+}
+.text h2{
+    font-weight: 700;
+    color: #1A5319;
+}
+.form-select{
+    border-radius: 14px;
+}
+
+/*-----table-header---*/
+
+.form{
+    font-size: 14px;
+    width: 80%;
+    gap: 13px;
+    background-color: #E4EFE7;
+    border-radius: 12px;
+
+}
+
+.form-control{
+    height: 28px;
+    border-radius: 12px;
+}
+.form-select{
+    height: 28px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+.row{
+    margin: 0 10px;
+}
+
+.add{
+    background-color: #119e0e;
+    border: none;
+    color: #ffffff;
+    border-radius: 16px;
+    width: 11%;
+}
+.cancel{
+    background-color: #aa0202;
+    border: none;
+    color: #ffffff;
+    border-radius: 16px;
+    width: 11%;
+}
+
+
+.button{
+    gap: 12px;
+    height: 28px;
+}

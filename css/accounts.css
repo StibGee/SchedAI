@@ -1,0 +1,105 @@
+
+.header-text{
+    margin-right: 15px;
+    text-align: end;
+    margin-bottom: 0 ;
+}
+
+.header-text h5{
+    color: #1A5319;
+    font-weight:500;
+}
+span{
+    padding: 0;
+    margin: 0;
+}
+
+.text{
+    margin-bottom: 30px;
+    gap: 20px;
+    font-family: 'Baloo Paaji 2', cursive;
+}
+.text span{
+    font-size: 24px;
+    font-weight: 500;
+    color: #ADBC9F;
+}
+
+.reg-account{
+    background-color: #80AF81;
+    border-radius: 24px;
+    width: 70%;
+    color: #ffffff;
+}
+button{
+    border: none;
+    width: 80px;
+    background-color: #ffffff;
+    border-radius: 20px;
+}
+.head-label{
+    font-weight: 600;
+}
+
+.btn-dots {
+    border: none;
+    background: none;
+    padding: 0;
+    width: 24px; /* Adjust as needed */
+    height: 24px; /* Adjust as needed */
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-menu-end {
+    right: 0;
+    left: auto;
+    width: auto;
+}
+.custom-icon-size {
+    font-size: 40px; /* Adjust the size as needed */
+    color: #1A5319;
+    border: none;
+    background-color: none;
+}
+
+.add-faculty button{
+    border: none;
+    background-color: none;
+}
+.account-table{
+    background-color: #E4EFE7;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 80%;
+}
+
+/*--- add account*/
+
+.add{
+    background-color: #119e0e;
+    border: none;
+    color: #ffffff;
+    border-radius: 16px;
+    width: 11%;
+}
+.cancel{
+    background-color: #aa0202;
+    border: none;
+    color: #ffffff;
+    border-radius: 16px;
+    width: 11%;
+}
+
+.form-select{
+    border-radius: 24px;
+    height: 32px;
+}
+.form-control{
+    border-radius: 24px;
+    height: 32px;
+}
