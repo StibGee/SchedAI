@@ -1,0 +1,72 @@
+
+
+.table-content{
+
+    background-color:#eeeeee ;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.table-contents{
+    background-color:#E4EFE7 ;
+    border-radius: 16px;
+    padding: 24px;
+}
+.searchbar .form-control{
+    height: 32px;
+    border-radius: 12px;
+}
+.form-select{
+    height: 32px;
+    border-radius: 12px;
+}
+
+
+.modal-body .form-select{
+    border-radius: 14px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 32px;
+}
+
+
+
+.form-control{
+    border-radius:  16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 32px;
+}
+
+
+.modal{
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px); /* Added backdrop-filter for blur effect */
+}
+.head-label{
+    color: #1A5319;
+}
+
+
+.modal-footer button{
+    width: 90px;
+    border-radius: 14px;
+    padding: 3px;
+}
+
+h5{
+    font-weight: 600;
+    font-size: 16px;
+}
+button.cancel{
+    background-color: #aa0202;
+    border: none;
+    color: #ffffff;
+}
+button.confirm{
+    background-color: #119e0e;
+    border: none;
+    color: #ffffff;
+}
+
+tbody th{
+    font-weight: 100;
+}

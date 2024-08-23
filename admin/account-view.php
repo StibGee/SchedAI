@@ -32,9 +32,9 @@
                     <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
                 </div>
                 <div class="col-2 add-account d-flex justify-content-end">
-               
-                    <button class="add-subject" data-bs-toggle="modal" data-bs-target="#formModal"><i class="fa-solid fa-folder-plus custom-icon-size"></i></button>
-                    
+
+                <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
+
                 </div>
 
             </div>
@@ -89,7 +89,7 @@
                         <div class="modal-body p-3">
                             <div class="position-absolute top-0 end-0 mt-3 me-3 z-1">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                           
+
                             </div>
                             <div class="rounded-top-3 form p-4">
                                 <h2 class="head-label">Add Account</h2>

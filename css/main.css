@@ -230,3 +230,36 @@ a {
     }
 
 }
+
+.header-text{
+    margin-right: 15px;
+    text-align: end;
+    margin-bottom: 0 ;
+}
+
+.header-text h5{
+    color: #1A5319;
+    font-weight:500;
+}
+span{
+    padding: 0;
+    margin: 0;
+}
+
+.text{
+    margin-bottom: 30px;
+    gap: 20px;
+}
+.text span{
+    font-size: 24px;
+    font-weight: 500;
+    color: #ADBC9F;
+}
+.text h2{
+    font-weight: 700;
+    color: #1A5319;
+}
+.button-modal{
+    background: none;
+    border: none;
+}

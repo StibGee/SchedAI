@@ -31,6 +31,10 @@
                     <i class="fa-solid fa-book"></i>
                         <span class="nav_name">Subject</span>
                     </a>
+                    <a href="../admin/room.php" class="nav_link">
+                    <i class="fa-solid fa-school"></i>
+                        <span class="nav_name">Rooms</span>
+                    </a>
                     <a href="../admin/account.php" class="nav_link">
                     <i class="fa-solid fa-gears"></i>
                         <span class="nav_name">Accounts</span>
