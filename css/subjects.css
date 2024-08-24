@@ -163,3 +163,16 @@ button.confirm{
     border: none;
     background-color: none;
 }
+.nav_links{
+    background-color:#80AF81;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    text-decoration: none;
+    color: black;
+}
+.mt-3 .form-check-input{
+    margin-right: 12px;
+}

@@ -24,20 +24,16 @@
                     <i class="fa-regular fa-calendar"></i>
                         <span class="nav_name">Schedule</span>
                     </a>
-                    <a href="../admin/prospectus.php" class="nav_link">
-                    <i class="fa-regular fa-calendar"></i>
-                        <span class="nav_name">Prospectus</span>
+                    <a href="../admin/academic-plan.php" class="nav_link">
+                    <i class="fa-solid fa-diagram-project"></i>
+                        <span class="nav_name">Academic Plan</span>
                     </a>
                     <a href="../admin/faculty.php" class="nav_link">
                     <i class="fa-solid fa-users"></i>
                         <span class="nav_name">Faculty</span>
                     </a>
-                    <a href="../admin/subjects.php" class="nav_link">
-                    <i class="fa-solid fa-book"></i>
-                        <span class="nav_name">Subject</span>
-                    </a>
                     <a href="../admin/room.php" class="nav_link">
-                    <i class="fa-solid fa-school"></i>
+                    <i class="fa-solid fa-shop"></i>
                         <span class="nav_name">Rooms</span>
                     </a>
                     <a href="../admin/account.php" class="nav_link">

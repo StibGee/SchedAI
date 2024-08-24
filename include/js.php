@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 <script src="../vendor/jquery-3.7.1/jquery.min.js"></script>
 <script src="../vendor/dataTable-1.13.6/datatables.min.js"></script>
 <script src="../vendor/pdfmake-0.2.7/pdfmake.min.js"></script>

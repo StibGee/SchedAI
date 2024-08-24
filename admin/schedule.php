@@ -82,12 +82,10 @@
             <div class="modal-dialog modal-lg mt-6" role="document">
                 <div class="modal-content border-0">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="formModalLabel">Modal Title</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-3">
-
-                        <div class="rounded-top-3 bg-body-tertiary p-4">
+                        <div class="rounded-top-3 bg-body-tertiary p-2">
                             <h2 class="head-label">Generate New Schedule</h2>
                             <div class="container mt-4">
                                 <form>
