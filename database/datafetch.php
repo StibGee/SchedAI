@@ -41,4 +41,10 @@ $sqlroom = "SELECT *, department.name AS departmentname FROM room JOIN departmen
 $stmt = $pdo->prepare($sqlroom); 
 $stmt->execute();  
 $room = $stmt->fetchAll();
+
+#fetch all calendars
+$sqlcalendar = "SELECT * FROM calendar";
+$stmt = $pdo->prepare($sqlcalendar); 
+$stmt->execute();  
+$calendar = $stmt->fetchAll();
 ?>

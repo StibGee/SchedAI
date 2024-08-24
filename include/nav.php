@@ -24,6 +24,10 @@
                     <i class="fa-regular fa-calendar"></i>
                         <span class="nav_name">Schedule</span>
                     </a>
+                    <a href="../admin/prospectus.php" class="nav_link">
+                    <i class="fa-regular fa-calendar"></i>
+                        <span class="nav_name">Prospectus</span>
+                    </a>
                     <a href="../admin/faculty.php" class="nav_link">
                     <i class="fa-solid fa-users"></i>
                         <span class="nav_name">Faculty</span>
