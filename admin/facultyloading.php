@@ -4,7 +4,7 @@
         require_once('../include/head.php');
     ?>
 
-<body >
+<body>
 
     <?php
        

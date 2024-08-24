@@ -5,15 +5,12 @@ if(!isset($_SESSION)){
     
 }
 #fetch all faculty
-$sqlfaculty = "SELECT * FROM faculty";
+$sqlfaculty = "SELECT *, department.name AS departmentname FROM faculty JOIN department ON department.id=faculty.departmentid";
 $stmt = $pdo->prepare($sqlfaculty); 
 $stmt->execute();  
 $faculty = $stmt->fetchAll();
 
-$sqlfacultyinfo = "SELECT * FROM faculty ";
-$stmt = $pdo->prepare($sqlfacultyinfo); 
-$stmt->execute();  
-$facultyinfo = $stmt->fetchAll();
+
 
 #fetch faculty info
 if (isset($_SESSION['id'])){
@@ -32,4 +29,16 @@ $sqldepartment = "SELECT * FROM department";
 $stmt = $pdo->prepare($sqldepartment); 
 $stmt->execute();  
 $department = $stmt->fetchAll();
+
+#fetch all subjects
+$sqlsubject = "SELECT *, department.name AS departmentname, subject.name AS subjectname FROM subject JOIN department ON department.id = subject.departmentid";
+$stmt = $pdo->prepare($sqlsubject); 
+$stmt->execute();  
+$subject = $stmt->fetchAll();
+
+#fetch all rooms
+$sqlroom = "SELECT *, department.name AS departmentname FROM room JOIN department ON department.id = room.departmentid";
+$stmt = $pdo->prepare($sqlroom); 
+$stmt->execute();  
+$room = $stmt->fetchAll();
 ?>

@@ -15,7 +15,7 @@ $lecunit = trim(stripslashes(htmlspecialchars($_POST['lecunit'])));
 
 if (isset($_POST['lab'])) {
 $lab = trim(stripslashes(htmlspecialchars($_POST['lab'])));
-$labunit = trim(stripslashes(htmlspecialchars($_POST['labunit'])));
+$labunit = $_POST['labunit'];
 }
 $focus = trim(stripslashes(htmlspecialchars($_POST['focus'])));
 
@@ -46,7 +46,7 @@ if (isset($_POST['lab'])) {
         $stmt2 = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, 'lab', :masters, :departmentid, :focus)");
         $stmt2->bindParam(':subjectcode', $subjectcode);
         $stmt2->bindParam(':name', $subjectname);
-        $stmt2->bindParam(':unit', $labcunit);
+        $stmt2->bindParam(':unit', $labunit);
         $stmt2->bindParam(':masters', $masters);
         $stmt2->bindParam(':departmentid', $departmentid);
         $stmt2->bindParam(':focus', $focus);

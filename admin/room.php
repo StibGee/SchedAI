@@ -8,6 +8,7 @@
 
     <?php
         require_once('../include/nav.php');
+        require_once('../database/datafetch.php');
     ?>
     <main>
         <div class="container mb-1">
@@ -36,100 +37,30 @@
             </div>
             <div class =" container mt-3">
                 <div class="row d-flex justify-content-around">
-                    <div class="col-6  p-4">
-                        <div class="table-content">
-                        <table class="table  mb-0 ">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Room Code</th>
-                                        <th>Room Type</th>
-                                        <th>Time Range</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                        <th scope="row">1</th>
-                                        <td>LR1</td>
-                                        <td>lecture</td>
-                                        <td>1 <span>hr</span> 30 <span>mins</span></td>
-
-                                    </tr>
-                                    <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                        <th scope="row">1</th>
-                                        <td>LR1</td>
-                                        <td>lecture</td>
-                                        <td>1 <span>hr</span> 30 <span>mins</span></td>
-
-                                    </tr>
-                                    <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                        <th scope="row">1</th>
-                                        <td>LR1</td>
-                                        <td>lecture</td>
-                                        <td>1 <span>hr</span> 30 <span>mins</span></td>
-
-                                    </tr>
-                                    <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                        <th scope="row">1</th>
-                                        <td>LR1</td>
-                                        <td>lecture</td>
-                                        <td>1 <span>hr</span> 30 <span>mins</span></td>
-
-                                    </tr>
-                                    <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                        <th scope="row">1</th>
-                                        <td>LR1</td>
-                                        <td>lecture</td>
-                                        <td>1 <span>hr</span> 30 <span>mins</span></td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                    <div class="col-5 room-table p-4">
+                    
+                    <div class=" room-table p-4">
                         <div class="table-contents">
-                        <label for="">Room code</label>
                         <table class="table  mb-0">
                             <thead>
                                 <tr>
-                                    <th>Day</th>
-                                    <th>Room Hours</th>
-                                    <th>Action</th>
+                                    <th>ID</th>
+                                    <th>Room Name</th>
+                                    <th>Type</th>
+                                    <th>Department</th>
+                                    <th>Time Start</th>
+                                    <th>Time End</th>
                                 </tr>
                             </thead>
-                            <tbody>
                                 <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                    <td>Monday</td>
-                                    <td>7:00 am - 7:00 pm</td>
+                                    <?php foreach($room as $rooms){ ?>
+                                    <td><?php echo $rooms['id'];?></td>
+                                    <td><?php echo $rooms['name'];?></td>
+                                    <td><?php echo $rooms['type'];?></td>
+                                    <td><?php echo $rooms['departmentname'];?></td>
+                                    <td><?php echo $rooms['timestart'];?></td>
+                                    <td><?php echo $rooms['timeend'];?></td>
                                     <td></td>
-                                </tr>
-                                <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                    <td>Monday</td>
-                                    <td>7:00 am - 7:00 pm</td>
-                                    <td></td>
-                                </tr>
-                                <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                    <td>Monday</td>
-                                    <td>7:00 am - 7:00 pm</td>
-                                    <td></td>
-                                </tr>
-                                <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                    <td>Monday</td>
-                                    <td>7:00 am - 7:00 pm</td>
-                                    <td></td>
-                                </tr>
-                                <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                    <td>Monday</td>
-                                    <td>7:00 am - 7:00 pm</td>
-                                    <td></td>
-                                </tr>
-                                <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                    <td>Monday</td>
-                                    <td>7:00 am - 7:00 pm</td>
-                                    <td></td>
+                                    <?php } ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -155,116 +86,71 @@
                             <div class="rounded-top-3 form p-4">
                                 <h2 class="head-label">Add Rooms</h2>
                                 <div class="container form ">
-                                    <form id="facultyForm" class="row g-3 mt-4 needs-validation" novalidate="">
-                                        <h5>Room Type</h5>
-                                        <div class="row ">
-                                            <div class="col-md-6">
-                                                <select class="form-select" id="room-type" required="">
-                                                    <option selected="" disabled="" value="">Choose...</option>
-                                                    <option>Lecture</option>
-                                                    <option>Laboratory</option>
-                                                </select>
+                                    <form id="facultyForm" method="POST"  action="../database/addroom.php" class="row g-3 mt-4 needs-validation" novalidate="">
+                                    <h5>Room Details</h5>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="firstname">Room Name</label>
+                                                
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" name="name" required>
+                                                    </div>
+                                               
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="firstname">Room Type</label>
+                                                
+                                                    <div class="col-md-8">
+                                                        <select class="form-select" id="room-type" id="type" required name="type">
+                                                            <option selected="" disabled="">Choose...</option>
+                                                            <option value="lab">Lecture</option>
+                                                            <option value="lec">Laboratory</option>
+                                                        </select>
+                                                    </div>
+                                               
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="firstname">Department</label>
+                                               
+                                                    <div class="col-md-8">
+                                                        <select class="form-select" id="room-type" required name="departmentid">
+                                                            <option selected="" disabled="">Choose...</option>
+                                                            <?php foreach($department as $departments){ ?>
+                                                            <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                              
                                             </div>
                                         </div>
-                                        <h5>Setup Room Time Slot</h5>
-                                        <div class="container">
-                                        <div class="row ">
-                                            <div class="col-md-6">
+                                        <div class="row mt-3">
+                                            <h5>Time Setup</h5>
+                                            <div class="col-md-4">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th>Day</th>
-                                                            <th>Hour Range</th>
+                                                            <th class="text-center">Start Time</th>
+                                                            <th class="text-center">End Time</th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        
                                                         <tr>
-                                                            <th>Monday</th>
                                                             <td>
                                                                 <div class="form-row d-flex">
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="startTimeMonday" value="07:00">
+                                                                    <div class="col-12">
+                                                                        <input type="time" class="form-control" name="timestart" value="07:00">
                                                                     </div>
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="endTimeMonday" value="19:00">
-                                                                    </div>
+                                                                    
                                                                 </div>
                                                             </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Tuesday</th>
                                                             <td>
                                                                 <div class="form-row d-flex">
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="startTimeTuesday" value="07:00">
+                                                                    <div class="col-12">
+                                                                        <input type="time" class="form-control" name="timeend" value="07:00">
                                                                     </div>
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="endTimeTuesday" value="19:00">
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Wednesday</th>
-                                                            <td>
-                                                                <div class="form-row d-flex">
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="startTimeWednesday" value="07:00">
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="endTimeWednesday" value="19:00">
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Day</th>
-                                                            <th>Hour Range</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <th>Thursday</th>
-                                                            <td>
-                                                                <div class="form-row d-flex">
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="startTimeThursday" value="07:00">
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="endTimeThursday" value="19:00">
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Friday</th>
-                                                            <td>
-                                                                <div class="form-row d-flex">
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="startTimeFriday" value="07:00">
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="endTimeFriday" value="19:00">
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Saturday</th>
-                                                            <td>
-                                                                <div class="form-row d-flex">
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="startTimeSaturday" value="07:00">
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <input type="time" class="form-control" name="endTimeSaturday" value="19:00">
-                                                                    </div>
+                                                                   
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -272,14 +158,14 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
-                                    </form>
+                                    
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
 
                                 <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                                <button type="button" class="confirm" onclick="window.location.href='room.php'">Done</button>
+                                <button type="submit" class="confirm">Done</button>
+                                </form>
                             </div>
                         </div>
                     </div>

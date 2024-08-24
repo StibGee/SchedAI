@@ -56,7 +56,7 @@
 
             <div class="sched-container my-4 p-3">
                 <div class="sched-table ">
-                        <table class="table">
+                        <table id="example" class="table">
                             <thead>
                                 <tr>
                                     <th>Subject ID</th>
@@ -64,23 +64,25 @@
                                     <th>Description</th>
                                     <th>Type</th>
                                     <th>Unit</th>
-                                    <th>Sub Hour</th>
-                                    <th>Year</th>
-                                    <th>Offered</th>
+                                    <th>Department</th>
+                                    <th>Focus</th>
                                     <th>Action</th>
 
                                 </tr>
                             </thead>
                             <tbody id="tabularTableBody">
+                            <?php foreach ($subject as $subjects){ ?>
                                 <tr>
-                                    <td>BSCS123</td>
-                                    <td>CS139</td>
-                                    <td>Web Development</td>
-                                    <td>Lec</td>
-                                    <td>3.0</td>
-                                    <td>3rd year </td>
-                                    <td>Computer Science</td>
-                                    <td>1st Semester</td>
+                                   
+                                    <td><?php echo $subjects['id'];?></td>
+                                    <td><?php echo $subjects['subjectcode'];?></td>
+                                    <td><?php echo $subjects['subjectname'];?></td>
+                                    <td><?php echo $subjects['type'];?></td>
+                                    <td><?php echo $subjects['unit'];?></td>
+                                    <td><?php echo $subjects['departmentname'];?></td>
+                                    <td><?php echo $subjects['focus'];?></td>
+                                  
+                                
                                     <td>
                                         <button type="button" id="dropdownMenuButton" class="btn-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fa-solid fa-ellipsis"></i>
@@ -92,6 +94,7 @@
                                         </ul>
                                     </td>
                                 </tr>
+                                <?php }?>
                             </tbody>
                         </table>
 
@@ -193,7 +196,7 @@
                                                                 <select class="form-select" id="unit" required="" name="labunit">
                                                                     <option selected="" disabled="" value="">Choose...</option>
                                                                   
-                                                                    <option selected value="labunit">3.0</option>
+                                                                    <option selected value="3.0">3.0</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -241,3 +244,8 @@
         require_once('../include/js.php')
     ?>
 </html>
+<script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
+    </script>

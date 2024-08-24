@@ -18,7 +18,7 @@
 <script src="../vendor/responsivevoice.js"></script>
 
 <!-- DataTables JavaScript -->
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<!--<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>-->
 
 <!-- DataTables Buttons JavaScript -->
 <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
