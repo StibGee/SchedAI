@@ -8,6 +8,7 @@
 
     <?php
         require_once('../include/nav.php');
+        require_once('../database/datafetch.php');
     ?>
     <main>
         <div class="container mb-5">
@@ -100,7 +101,7 @@
                 </div>
 
             </div>
-             <!-- Modal Form -->
+            <!-- Modal Form -->
             <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg mt-6" role="document">
                     <div class="modal-content border-0">
@@ -112,30 +113,38 @@
                             <div class="rounded-top-3 form p-4">
                                 <h2 class="head-label">Add Subject</h2>
                                 <div class="container form ">
-                                    <form id="facultyForm" class="row g-3 mt-4 needs-validation" novalidate="">
+                                    <form id="facultyForm" class="row g-3 mt-4 needs-validation" action="../database/addsubject.php" method="POST" novalidate="">
                                         <h5>Department</h5>
                                         <div class="row ">
                                             <div class="col-md-6">
-                                                <select class="form-select" id="department" required="">
+                                                <select class="form-select" id="department" name="departmentid" required="">
                                                     <option selected="" disabled="" value="">Choose...</option>
-                                                    <option>Information Technology</option>
-                                                    <option>Computer Science</option>
+                                                    <?php foreach($department as $departments){ ?>
+                                                    <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
+                                                    <?php } ?>
                                                 </select>
+                                                
                                             </div>
+                                            <div class=" mt-3">
+                                                <div class="col-md-2">
+                                                <input class="form-check-input " type="checkbox" id="checkbox-1" name="masters" data-bulk-select-row="data-bulk-select-row" /><h5>Masters </h5>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                         <h5>Subject Information</h5>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label class="form-label" for="subcode">Subject Code</label>
-                                                <input class="form-control" id="subcode" type="text" required />
+                                                <input class="form-control" id="subcode" type="text" name="subjectcode" required />
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label" for="subname">Subject Name</label>
-                                                <input class="form-control" id="subname" type="text" required />
+                                                <input class="form-control" id="subname" type="text" name="subjectname" required />
                                             </div>
                                         </div>
                                         <h5>Subject Details</h5>
-                                        <div class="row">
+                                        <!--<div class="row">
                                             <div class="col-md-6">
                                                 <label class="form-label" for="yearlvl">Year Level</label>
                                                 <select class="form-select" id="yearlvl" required="">
@@ -154,21 +163,21 @@
                                                     <option>2nd semester</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <div class="row ml-5 ">
                                             <div class="col-6">
                                                 <div class="form-check ">
                                                     <div class="row mt-3 ">
                                                             <div class="col-md-2">
                                                                 <label class="form-label ml-5" for="subtype">Type </label>
-                                                                <h5>Lec  <input class="form-check-input " type="checkbox" id="checkbox-1" data-bulk-select-row="data-bulk-select-row" /> <input class="form-check-input " type="checkbox" id="checkbox-1" data-bulk-select-row="data-bulk-select-row" /></h5>
+                                                                <h5>Lec  </h5>
                                                             </div>
                                                             <div class="col-md-5">
                                                                 <label class="form-label" for="unit">Unit</label>
-                                                                <select class="form-select" id="unit" required="">
+                                                                <select class="form-select" id="unit" required="" name="lecunit">
                                                                     <option selected="" disabled="" value="">Choose...</option>
-                                                                    <option>1.0</option>
-                                                                    <option>3.0</option>
+                                                                    <option value="2.0">2.0</option>
+                                                                    <option value="3.0">3.0</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -178,39 +187,45 @@
                                                     </div>
                                                     <div class="row mt-3">
                                                             <div class="col-md-2">
-                                                                <h5>Lab <input class="form-check-input " type="checkbox" id="checkbox-1" data-bulk-select-row="data-bulk-select-row" /></h5>
+                                                                <h5>Lab <input class="form-check-input " type="checkbox" id="checkbox-1" name="lab" data-bulk-select-row="data-bulk-select-row" /></h5>
                                                             </div>
                                                             <div class="col-md-5">
-                                                                <select class="form-select" id="unit" required="">
+                                                                <select class="form-select" id="unit" required="" name="labunit">
                                                                     <option selected="" disabled="" value="">Choose...</option>
-                                                                    <option>1.0</option>
-                                                                    <option>3.0</option>
+                                                                  
+                                                                    <option selected value="labunit">3.0</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <input class="form-control" id="subname" type="number" required  />
                                                             </div>
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="col-6 mt-3">
                                             <label class="form-label" for="subname">Program Focus</label>
-                                                <select class="form-select" id="department" required="">
+                                                <select class="form-select" id="department" required="" name="focus">
                                                     <option selected="" disabled="" value="">Choose...</option>
                                                     <option>Major</option>
                                                     <option>Minor</option>
                                                 </select>
+                                               
+                                                
                                             </div>
+                                            
 
                                         </div>
-                                    </form>
+                                    
                                 </div>
                             </div>
                 <div class="modal-footer d-flex justify-content-between">
 
                     <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="button" class="confirm" onclick="window.location.href='subjects.php'">Done</button>
+                    <button type="submit" class="confirm">Done</button>
+                    
                 </div>
+                </form>
             </div>
         </div>
         </div>

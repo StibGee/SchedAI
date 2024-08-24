@@ -7,7 +7,9 @@
 <body >
 
     <?php
+       
         require_once('../include/nav.php');
+        require_once('../database/datafetch.php');
     ?>
             <main>
             <div class="container">
@@ -37,10 +39,12 @@
             <div class="row">
                 <div class=" col-5 mt-2">
                 <div class="faculty-info">
-                    <li>Name :</li>
-                    <li>Rank :</li>
-                    <li>Email :</li>
+                    <?php foreach($facultyinfo as $facultyinfos){ ?>
+                    <li>Name : <?php echo $facultyinfos['fname']." ".$facultyinfos['mname']." ".$facultyinfos['lname'];?></li>
+                    <li>Rank : <?php echo $facultyinfos['type'];?></li>
+                    <li>Contact : <?php echo $facultyinfos['contactno'];?></li>
                     <li>Specialization :</li>
+                <?php } ?>
                 </div>
                 <div class="row mt-4">
                     <div class="col-9 subload-title">

@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr onclick="window.location.href='/resources/admin/final-sched.php'">
+                        <tr onclick="window.location.href='../admin/final-sched.php'">
                             <th scope="row">2021-2022</th>
                             <td>Second Semester</td>
                             <td>Computer Science</td>
@@ -60,7 +60,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr onclick="window.location.href='/resources/admin/final-sched.php'">
+                        <tr onclick="window.location.href='../admin/final-sched.php'">
                             <th scope="row">2021-2022</th>
                             <td>First Semester</td>
                             <td>Computer Science</td>

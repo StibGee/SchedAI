@@ -1,9 +1,10 @@
+<?php session_start();?>
 <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
         <div class="user d-flex justify-content-center align-items-center">
             <div class="header-text">
-                <h5>User Name</h5>
+                <h5><?php echo $_SESSION['fname'];?></h5>
             </div>
             <img src="../img/icons/user.png" width="40" height="40" alt="">
         </div>

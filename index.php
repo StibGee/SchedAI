@@ -31,17 +31,17 @@
                 <div id="loginModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <form id="loginForm" action="./admin/facultyloading.php" method="GET" onsubmit="return validateForm()">
+                        <form id="loginForm" action="./database/login.php" method="POST" onsubmit="return validateForm()">
                             <h2><span class="entypo-login"><i class="fa fa-sign-in"></i></span> Login</h2>
                             <button type="submit" class="submit"><span class="entypo-lock"><i class="fa fa-lock"></i></span></button>
                             <span class="entypo-user inputUserIcon">
                                 <i class="fa fa-user"></i>
                             </span>
-                            <input type="text" class="user" id="username" placeholder="username" required/>
+                            <input type="text" class="user" id="username" name="username" placeholder="username" required/>
                             <span class="entypo-key inputPassIcon" onclick="togglePasswordVisibility()">
                                 <i class="fa fa-eye" id="eyeIcon"></i>
                             </span>
-                            <input type="password" class="pass" id="password" placeholder="password" required/>
+                            <input type="password" class="pass" id="password" name="password" placeholder="password" required/>
                         </form>
                     </div>
                 </div>
