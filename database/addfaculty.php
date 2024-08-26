@@ -1,7 +1,6 @@
 <?php
 require_once("config.php");
 
-$facultyid = trim(stripslashes(htmlspecialchars($_POST['facultyid'])));
 $fname = trim(stripslashes(htmlspecialchars($_POST['fname'])));
 $mname = trim(stripslashes(htmlspecialchars($_POST['mname'])));
 $lname = trim(stripslashes(htmlspecialchars($_POST['lname'])));
@@ -27,8 +26,8 @@ if (isset($_POST['rank'])&&($_POST['rank']=='phd')) {
     $phd='no';
 }
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM faculty WHERE facultyid = :facultyid");
-$stmt->bindParam(':facultyid', $facultyid);
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM faculty WHERE fname = :fname");
+$stmt->bindParam(':fname', $fname);
 $stmt->execute();
 $facultyexists = $stmt->fetchColumn();
 
@@ -41,8 +40,7 @@ if ($facultyexists) {
 $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
 
 try {
-    $stmt = $pdo->prepare("INSERT INTO faculty (facultyid, fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, teachinghours, masters, phd, rank) VALUES (:facultyid, :fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :teachinghours, :masters, :phd, :rank)");
-    $stmt->bindParam(':facultyid', $facultyid);
+    $stmt = $pdo->prepare("INSERT INTO faculty (fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, teachinghours, masters, phd, rank) VALUES (:fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :teachinghours, :masters, :phd, :rank)");
     $stmt->bindParam(':fname', $fname);
     $stmt->bindParam(':mname', $mname);
     $stmt->bindParam(':lname', $lname);

@@ -5,7 +5,7 @@ if(!isset($_SESSION)){
     
 }
 #fetch all faculty
-$sqlfaculty = "SELECT *, department.name AS departmentname FROM faculty JOIN department ON department.id=faculty.departmentid";
+$sqlfaculty = "SELECT *, department.name AS departmentname, faculty.id AS facultyid FROM faculty JOIN department ON department.id=faculty.departmentid";
 $stmt = $pdo->prepare($sqlfaculty); 
 $stmt->execute();  
 $faculty = $stmt->fetchAll();
