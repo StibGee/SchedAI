@@ -19,7 +19,7 @@
             <div class="row mt-4">
                 <div class="header-table">
                     <h5>
-                        <button onclick="window.location.href='/resources/admin/schedule.php'">
+                        <button onclick="window.location.href='schedule.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
                         Semester <span>Department</span> <span>SY-</span> <span>Year</span>

@@ -102,22 +102,12 @@
                                                 <h5>Select Academic Year</h5>
                                                 <select class="form-select form-select-sm" id="select-academic-year"></select>
                                             </div>
-                                            <div class="form-group room-availability">
-                                                <h5>Add Room Availability</h5>
-                                                <div class="rooms ml-3">
-                                                    <div class="g-3 row">
-                                                        <label class="form-label col-form-label col-form-label-sm col-lg-2">Lec</label>
-                                                        <div class="col">
-                                                            <input placeholder="Input No. of Rooms" type="number" class="form-control form-control-sm" style="width: 200px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="g-3 row">
-                                                        <label class="form-label col-form-label col-form-label-sm col-lg-2">lab</label>
-                                                        <div class="col">
-                                                            <input placeholder="Input No. of Rooms" type="number" class="form-control form-control-sm" style="width: 200px;">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="form-group room-availability col-6">
+                                            <label for="select-room">Room Availability</label>
+                                                <select class="form-select form-select-sm" id="select-room">
+                                                    <option value="">Select Room</option>
+                                                    <!-- Options will be populated dynamically or statically here -->
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -128,33 +118,15 @@
                                                     <option>Second Semester</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group num-of-section">
-                                                <h5>Student Sections</h5>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">First Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">Second Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">Third Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2 pr-5">Forth Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
+                                            <div class="form-group semester">
+                                                <h5>Select Load Subject</h5>
+                                                <label for="select-subject">Academic plan</label>
+                                                    <select class="form-select form-select-sm" id="select-subject">
+                                                        <option value="">Choose Year</option>
+                                                        <!-- Options will be populated dynamically or statically here -->
+                                                    </select>
                                             </div>
+
                                         </div>
                                     </div>
                                 </form>
@@ -175,7 +147,7 @@
 
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/sched.css">
-    <script src="../js/main.js"></script>
+    <script src="../js/schedule.js"></script>
     <?php
         require_once('../include/js.php')
     ?>

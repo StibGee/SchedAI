@@ -29,6 +29,7 @@
                             <a href="../admin/subjects.php" class="nav_links">
                                 <span class="nav_sub">Subjects</span>
                             </a>
+
                         </div>
                     </div>
                 </div>
@@ -48,7 +49,7 @@
                             </select>
                         </div>
                         <div class="col-3 d-flex align-items-center justify-content-start">
-                            <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
+                            <button onclick="window.location.href='allocate-sub.php'"> <img src="../img/icons/add-icon.png" alt=""></button>
                         </div>
                     </div>
                 </div>
@@ -94,24 +95,5 @@
         require_once('../include/js.php')
     ?>
 
-<script>
-    document.getElementById('start').addEventListener('input', function() {
-        const startYear = parseInt(this.value);
-        if (!isNaN(startYear) && startYear >= 1900 && startYear < 2099) {
-            document.getElementById('end').value = startYear + 1;
-        } else {
-            document.getElementById('end').value = '';  // Clear the end year if the input is invalid
-        }
-    });
-
-    document.getElementById('end').addEventListener('input', function() {
-        const endYear = parseInt(this.value);
-        if (!isNaN(endYear) && endYear > 1900 && endYear <= 2100) {
-            document.getElementById('start').value = endYear - 1;
-        } else {
-            document.getElementById('start').value = '';  // Clear the start year if the input is invalid
-        }
-    });
-</script>
 
 </html>

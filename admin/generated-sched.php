@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-        require_once('./include/head.php');
+        require_once('../include/head.php');
     ?>
 
 <body >
 
     <?php
-        require_once('./include/nav.php');
+        require_once('../include/nav.php');
     ?>
     <main>
         <div class="container mb-5">
@@ -136,11 +136,11 @@
     </main>
 
 </body>
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/generated-sched.css">
-    <script src="/assets/js/generate-sched.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/generated-sched.css">
+    <script src="../js/generate-sched.js"></script>
     <?php
-        require_once('./include/js.php')
+        require_once('../include/js.php')
     ?>
 
 </html>

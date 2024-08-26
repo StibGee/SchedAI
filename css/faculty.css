@@ -158,3 +158,10 @@ button.confirm{
     background-color: #119e0e;
     border: none;
 }
+.form-select[multiple] {
+    height: auto;
+    min-height: 120px; /* Adjust the height as needed */
+}
+.col-9 .form-select {
+    width: 100%;
+}

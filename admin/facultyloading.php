@@ -7,17 +7,17 @@
 <body>
 
     <?php
-       
+
         require_once('../include/nav.php');
         require_once('../database/datafetch.php');
     ?>
             <main>
             <div class="container">
                 <div class="row">
-                <div class="text d-flex align-items-center" >
-                    <h2> Hola !!! </h2> <span> Role</span>
+                    <div class="text d-flex align-items-center" >
+                        <h2> Hola !!! </h2> <span> Role</span>
+                    </div>
                 </div>
-            </div>
             <div class="row  mb-4 mx-2">
                 <div class="faculty-type col-3">
                     <select class="form-select form-select-sm" id="select-faculty-type">

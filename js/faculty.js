@@ -28,4 +28,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 });
 
+document.getElementById('search-sub').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const options = document.querySelectorAll('#position option');
+    options.forEach(option => {
+        if (option.text.toLowerCase().includes(searchValue)) {
+            option.style.display = 'block';
+        } else {
+            option.style.display = 'none';
+        }
+    });
+});
 
+document.getElementById('search-sub').addEventListener('focus', function() {
+    const options = document.querySelectorAll('#position option');
+    options.forEach(option => {
+        option.style.display = 'block';
+    });
+});

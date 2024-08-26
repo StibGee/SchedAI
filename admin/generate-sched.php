@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-        require_once('./include/head.php');
+        require_once('../include/head.php');
     ?>
 
 <body >
 
     <?php
-        require_once('./include/nav.php');
+        require_once('../include/nav.php');
     ?>
     <main>
         <div class="container mb-5">
@@ -22,7 +22,7 @@
                     <p>SY- <span>Year</span></p>
                 </div>
                 <div class="col-6 generate d-flex justify-content-end align-items-center">
-                    <button id="assign" data-toggle="modal" data-target="#formModal">Generate</button>
+                    <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal">Generate</button>
                 </div>
             </div>
             <div class="sched-container my-3">
@@ -178,11 +178,11 @@
 
     </main>
 </body>
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/generate-sched.css">
-    <script src="/assets/js/generate-sched.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/generate-sched.css">
+    <script src="../js/generate-sched.js"></script>
     <?php
-        require_once('./include/js.php')
+        require_once('../include/js.php')
     ?>
 
 </html>

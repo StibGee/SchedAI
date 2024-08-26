@@ -1,0 +1,29 @@
+.form-select{
+    border-radius: 12px;
+}
+.load-sub{
+    border-radius: 16px;
+    background-color: #80AF81;
+}
+.view{
+    width: 20%;
+    border: none;
+    border-radius: 12px;
+    margin-right: 3px;
+}
+.load-sub label{
+    color: #ffffff;
+}
+button.cancel{
+    background-color: #aa0202;
+    border: none;
+    color: #ffffff;
+}
+button.confirm{
+    background-color: #119e0e;
+    border: none;
+}
+.btn button{
+    width: 100px;
+    border-radius: 14px;
+}

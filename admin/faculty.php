@@ -105,118 +105,121 @@
 
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="rounded-top-3 form p-4">
+                            <div class="rounded-top-3 form p-4" style="max-height: 400px; overflow-y: auto;">
                                 <h2 class="head-label">Add faculty</h2>
-                                <div class="container form ">
-                                <form id="facultyForm" action="../database/addfaculty.php" method="POST" class="row g-3 needs-validation" novalidate="">
-                                    <div class="col-6">
+                                <div class="container form">
+                                    <form id="facultyForm" action="../database/addfaculty.php" method="POST" class="row g-3 needs-validation" novalidate="">
+                                        <div class="col-6">
                                             <label class="form-label" for="department">Deparment</label>
-                                            <select class="form-select" id="department" name="departmentid" required >
-                                            <option selected="" disabled="" value="">Choose...</option>
-                                            <?php foreach($department as $departments){ ?>
-                                            <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
-                                            <?php } ?>
+                                            <select class="form-select" id="department" name="departmentid" required>
+                                                <option selected="" disabled="" value="">Choose...</option>
+                                                <?php foreach($department as $departments){ ?>
+                                                <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
+                                                <?php } ?>
                                             </select>
                                             <div class="invalid-feedback">Please select Department</div>
                                         </div>
-                                    <h5>Personal Information</h5>
-                                    <div class="row mt-2">
-
-                                    <div class="col-md-5">
-                                        <label class="form-label" for="firstname">First name</label>
-                                        <input class="form-control" id="firstname" type="text" name="fname" required>
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="form-label" for="lastname">Last name</label>
-                                        <input class="form-control" id="lastname" type="text" name="lname" required>
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label" for="midleinit">MI</label>
-                                        <input class="form-control" id="midleinit" type="text" name="mname" required="" />
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-                                    </div>
-
-                                    <div class="row mt-2">
-                                    <div class="col-md-4">
-                                        <label class="form-label" for="contactnumber">Contact Number</label>
-                                        <input class="form-control" id="contactnumber" name="contactno" type="tel" required />
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label" for="birthdate">Birthdate</label>
-                                        <input class="form-control" id="birthdate" name="bday" type="date" required />
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label" for="gender">Gender</label>
-                                        <select class="form-select" id="gender" name="gender" required="">
-                                        <option selected="" disabled="" >Choose...</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Male">Female</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select a Gender</div>
-                                    </div>
-                                    </div>
-
-                                    <h5>Account Details</h5>
-                                    <div class="row mt-2">
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="email">Username</label>
-                                        <input class="form-control" id="email" type="text" name="username" required>
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="password">Password</label>
-                                        <input class="form-control" id="password" type="text" name="password" required>
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-                                    </div>
-
-                                    <h5>Faculty Information</h5>
-                                    <div class="row mt-2">
-                                        <div class="col-3">
-                                            <label class="form-label" for="position">Type</label>
-                                            <select class="form-select" id="position" name="type" required="">
-                                            <option selected="" disabled="" value="">Choose...</option>
-                                            <option value="regular">Regular </option>
-                                            <option value="contractual">Contractual</option>
-                                            </select>
-                                            <div class="invalid-feedback">Please select a Gender</div>
+                                        <h5>Personal Information</h5>
+                                        <div class="row mt-2">
+                                            <div class="col-md-5">
+                                                <label class="form-label" for="firstname">First name</label>
+                                                <input class="form-control" id="firstname" type="text" name="fname" required>
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label" for="lastname">Last name</label>
+                                                <input class="form-control" id="lastname" type="text" name="lname" required>
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="midleinit">MI</label>
+                                                <input class="form-control" id="midleinit" type="text" name="mname" required />
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
                                         </div>
-                                        <div class="col-4">
-                                            <label class="form-label" for="startdate">Start Date</label>
-                                            <input class="form-control" id="startdate" type="date" name="startdate" required />
-                                            <div class="valid-feedback">Looks good!</div>
-                                        </div>
-                                        <div class="col-4">
-                                            <label class="form-label" for="teachinghours">Teaching Hours</label>
-                                            <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week" />
-                                        </div>
-                                    </div>
 
-                                    <div class="row mt-3">
-                                        <div class="col-3">
-                                            <label class="form-label" for="rank">Rank</label>
-                                            <select class="form-select" id="position" name="rank" required="">
-                                            <option selected  value="None">Choose...</option>
-                                            <option value="phd">PhD </option>
-                                            <option value="masters">Masters</option>
-                                            </select>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="contactnumber">Contact Number</label>
+                                                <input class="form-control" id="contactnumber" name="contactno" type="tel" required />
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="birthdate">Birthdate</label>
+                                                <input class="form-control" id="birthdate" name="bday" type="date" required />
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="gender">Gender</label>
+                                                <select class="form-select" id="gender" name="gender" required="">
+                                                    <option selected="" disabled="">Choose...</option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Male">Female</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please select a Gender</div>
+                                            </div>
                                         </div>
-                                        <div class="col-9">
-                                            <label class="form-label" for="assign-sub">Assign Subject <span>*optional</span></label>
-                                            <select class="form-select" id="position" name="rank" required="">
-                                            <option selected  value="None">Choose...</option>
-                                            <option value="phd">sub1 </option>
-                                            <option value="masters">sub2</option>
-                                            </select>
+
+                                        <h5>Account Details</h5>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="email">Username</label>
+                                                <input class="form-control" id="email" type="text" name="username" required>
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="password">Password</label>
+                                                <input class="form-control" id="password" type="text" name="password" required>
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
                                         </div>
-                                    </div>
 
+                                        <h5>Faculty Information</h5>
+                                        <div class="row mt-2">
+                                            <div class="col-3">
+                                                <label class="form-label" for="position">Type</label>
+                                                <select class="form-select" id="position" name="type" required="">
+                                                    <option selected="" disabled="" value="">Choose...</option>
+                                                    <option value="regular">Regular </option>
+                                                    <option value="contractual">Contractual</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please select a Gender</div>
+                                            </div>
+                                            <div class="col-4">
+                                                <label class="form-label" for="startdate">Start Date</label>
+                                                <input class="form-control" id="startdate" type="date" name="startdate" required />
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="col-4">
+                                                <label class="form-label" for="teachinghours">Teaching Hours</label>
+                                                <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week" />
+                                            </div>
+                                        </div>
 
+                                        <div class="row mt-3">
+                                            <div class="col-3">
+                                                <label class="form-label" for="rank">Rank</label>
+                                                <select class="form-select" id="position" name="rank" required="">
+                                                    <option selected value="None">Choose...</option>
+                                                    <option value="phd">PhD </option>
+                                                    <option value="masters">Masters</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-9">
+                                                <label class="form-label" for="assign-sub">Assign Subject <span>*optional</span></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="search-sub" placeholder="Search subjects">
+                                                </div>
+                                                <select class="form-select" id="position" name="rank[]" multiple required>
+                                                    <option value="None">Choose...</option>
+                                                    <option value="phd">sub1</option>
+                                                    <option value="masters">sub2</option>
+                                                    <option value="bachelors">sub3</option>
+                                                    <option value="associate">sub4</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                     <div class="modal-footer d-flex justify-content-between">
@@ -230,6 +233,7 @@
 </body>
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/faculty.css">
+
 <?php
         require_once('../include/js.php')
     ?>
