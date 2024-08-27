@@ -1,0 +1,91 @@
+.step-indicator {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 20px; /* Adjust as needed to position the steps relative to the line */
+}
+
+.step-indicator::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 35px; /* Adjust to align with the center of the step circle */
+    width: 2px;
+    height: 80%;
+    background-color: #dee2e6;
+    z-index: 1;
+}
+
+.step-indicator .step {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+    border: 2px solid #dee2e6;
+    border-radius: 50%;
+    z-index: 2;
+    position: relative;
+    margin: 10px 0;
+}
+
+.step-indicator .step.active {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.step-indicator .step.completed {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.step-content {
+    display: none;
+}
+
+.step-content.active {
+    display: block;
+}
+
+.step-label {
+    position: absolute;
+    left: 40px;
+    white-space: nowrap;
+    color: #6c757d;
+    transition: color 0.3s;
+}
+
+.step-indicator .step:hover .step-label {
+    color: #0d6efd;
+}
+
+body {
+    padding: 0;
+}
+
+.step-content{
+    background-color: #E4EFE7;
+    border-radius: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-control{
+    border-radius: 16px;
+
+}
+.form-select{
+    border-radius: 16px;
+
+}
+.wrap{
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+.prefer-table{
+    background-color: #ffffff;
+    border-radius: 12px;
+}

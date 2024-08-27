@@ -72,11 +72,11 @@
                             <td><?php if ($calendars['sem']==1){ echo '1st semester';} else{ echo '2nd semester';}?></td>
 
                             <td>
-                                <div class="actions">
-                                    <i class="fas fa-edit"></i>
-                                    <i class="fas fa-trash"></i>
-                                    <i class="fas fa-eye"></i>
-                                </div>
+                            <div class="actions">
+                                <a href="edit.php?id=123" class="action-link"><i class="fas fa-edit"></i></a>
+                                <a href="delete.php?id=123" class="action-link"><i class="fas fa-trash"></i></a>
+                                <a href="academicplan-view.php" class="action-link"><i class="fas fa-eye"></i></a>
+                            </div>
                             </td>
                         </tr>
                         <?php } ?>

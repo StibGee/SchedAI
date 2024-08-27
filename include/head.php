@@ -18,7 +18,7 @@
     <link href="../vendor/boxicons-2.1.4/css/boxicons.min.css" rel='stylesheet'>
     <link rel="stylesheet" href="../vendor/all.min.css">
     <link href='../vendor/interfont.css' rel='stylesheet'>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- DataTables Buttons CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">

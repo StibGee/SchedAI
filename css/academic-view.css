@@ -1,0 +1,17 @@
+.academic-view{
+    background-color: #E4EFE7;
+    border-radius: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+}
+
+h5 button{
+    background-color: none;
+    border: none;
+}
+.searchbar .form-control{
+    border-radius: 16px;
+}
+.form-select{
+    border-radius: 16px;
+}

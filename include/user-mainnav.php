@@ -25,28 +25,17 @@
                 <div class="nav_list">
                     <a href="../admin/facultyloading.php" class="nav_link active">
                     <i class="fa-solid fa-spinner"></i>
-                        <span class="nav_name">Faculty Loading</span>
+                        <span class="nav_name">Assigned Schedule</span>
                     </a>
                     <a href="../admin/schedule.php" class="nav_link">
                     <i class="fa-regular fa-calendar"></i>
-                        <span class="nav_name">Schedule</span>
+                        <span class="nav_name">My Profile</span>
                     </a>
                     <a href="../admin/academic-plan.php" class="nav_link">
                     <i class="fa-solid fa-diagram-project"></i>
-                        <span class="nav_name">Academic Plan</span>
+                        <span class="nav_name">Account</span>
                     </a>
-                    <a href="../admin/faculty.php" class="nav_link">
-                    <i class="fa-solid fa-users"></i>
-                        <span class="nav_name">Faculty</span>
-                    </a>
-                    <a href="../admin/room.php" class="nav_link">
-                    <i class="fa-solid fa-shop"></i>
-                        <span class="nav_name">Rooms</span>
-                    </a>
-                    <a href="../admin/account.php" class="nav_link">
-                    <i class="fa-solid fa-gears"></i>
-                        <span class="nav_name">Accounts</span>
-                    </a>
+
                 </div>
             </div>
         </nav>

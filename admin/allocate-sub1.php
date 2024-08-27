@@ -12,7 +12,7 @@
         $departmentid=$_POST['departmentid'];
         $semester=$_POST['semester'];
         $academicyear=$_POST['academicyear'];
-        
+
     ?>
     <main>
         <div class="container mb-1">
@@ -27,11 +27,11 @@
                 </div>
 
             </div>
-            
+
             <div class="container py-3">
                 <div class="row">
                 <div class="col-md-3 steps sticky-sidebar r">
-                
+
                     <div class=" g-3 row year-level d-flex">
                         <div class=" col-6">
                         <label class="form-label " id="year-level-label">First Year</label>
@@ -58,7 +58,8 @@
                     </div>
                 </div>
                     <div class="col-md-9 scrollable-content">
-                        <form action="../database/addacademicplan.php" method="POST" id="wizardForm">
+
+
                             <input type="number" name="departmentid" value=<?php echo $departmentid;?> hidden>
                             <input type="number" name="semester" value=<?php echo $semester;?> hidden>
                             <input type="number" name="academicyear" value=<?php echo $academicyear;?> hidden>
@@ -78,14 +79,14 @@
                                             </tr>
                                         </thead>
                                         <tbody id="loadedSubjects1" class="list">
-                                            
+
                                         </tbody>
                                     </table>
                                     </div>
 
                                 </div>
                                 <div class="row mt-3 d-flex justify-content-end my-2 p-3">
-                                    
+
                                     <label for="">Select Subjects to Load</label>
                                     <div class="table-sub1 table-sub my-3 p-3">
                                         <table id="subjects1" class="table table-sm fs-9 mb-0 ">
@@ -105,9 +106,9 @@
                                                 <?php $seenSubjectCodes = [];
 
                                                 foreach ($subject as $subjects) {
-                                                
+
                                                     if (!in_array($subjects['subjectcode'], $seenSubjectCodes)) {
-                                                    
+
                                                         $seenSubjectCodes[] = $subjects['subjectcode'];
                                                         $displaySubjectCode = $subjects['subjectcode'];
                                                     } else {
@@ -121,7 +122,7 @@
                                                     <td class="align-middle subtype"><?php echo $subjects['type']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['unit']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['focus']; ?></td>
-                                                    
+
                                                     <td class="align-middle">
                                                         <input type="checkbox" class="form-check-input load-subject-checkbox1" data-subjectid1="<?php echo $subjects['subjectid']; ?>" data-subjectcode1="<?php echo $subjects['subjectcode']; ?>" data-subjectname1="<?php echo $subjects['subjectname']; ?>" data-type1="<?php echo $subjects['type']; ?>" data-unit1="<?php echo $subjects['unit']; ?>" data-focus1="<?php echo $subjects['focus']; ?>">
                                                     </td>
@@ -150,13 +151,13 @@
                                             </tr>
                                         </thead>
                                         <tbody id="loadedSubjects2" class="list">
-                                            
+
                                         </tbody>
                                     </table>
                                     </div>
                                 </div>
                                 <div class="row mt-3 d-flex justify-content-end my-2 p-3">
-                                    
+
                                     <label for="">Select Subjects to Load</label>
                                     <div class="table-sub2 table-sub my-3 p-3">
                                         <table id="subjects2" class="table table-sm fs-9 mb-0">
@@ -180,7 +181,7 @@
                                                     <td class="align-middle subtype"><?php echo $subjects['type']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['unit']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['focus']; ?></td>
-                                                    
+
                                                     <td class="align-middle">
                                                         <input type="checkbox" class="form-check-input load-subject-checkbox load-subject-checkbox2" data-subjectid2="<?php echo $subjects['subjectid']; ?>" data-subjectcode2="<?php echo $subjects['subjectcode']; ?>" data-subjectname2="<?php echo $subjects['subjectname']; ?>" data-type2="<?php echo $subjects['type']; ?>" data-unit2="<?php echo $subjects['unit']; ?>" data-focus2="<?php echo $subjects['focus']; ?>">
                                                     </td>
@@ -210,7 +211,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="loadedSubjects3" class="list">
-                                            
+
                                         </tbody>
                                     </table>
                                     </div>
@@ -242,7 +243,7 @@
                                                     <td class="align-middle subtype"><?php echo $subjects['type']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['unit']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['focus']; ?></td>
-                                                    
+
                                                     <td class="align-middle">
                                                         <input type="checkbox" class="form-check-input load-subject-checkbox3" data-subjectid3="<?php echo $subjects['subjectid']; ?>" data-subjectcode3="<?php echo $subjects['subjectcode']; ?>" data-subjectname3="<?php echo $subjects['subjectname']; ?>" data-type3="<?php echo $subjects['type']; ?>" data-unit3="<?php echo $subjects['unit']; ?>" data-focus3="<?php echo $subjects['focus']; ?>">
                                                     </td>
@@ -260,21 +261,21 @@
                             <div class="row">
                                     <label for="">Fourth Year Subjects</label>
                                     <div class="table-load my-3 p-3">
-                                    <table class="table table-sm fs-9 mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th data-sort="subcode">Code</th>
-                                                <th data-sort="desc">Description</th>
-                                                <th data-sort="type">Type</th>
-                                                <th data-sort="focus">Focus</th>
-                                                <th data-sort="units">Units</th>
-                                                <th> </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="loadedSubjects4" class="list">
-                                            
-                                        </tbody>
-                                    </table>
+                                        <table class="table table-sm fs-9 mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th data-sort="subcode">Code</th>
+                                                    <th data-sort="desc">Description</th>
+                                                    <th data-sort="type">Type</th>
+                                                    <th data-sort="focus">Focus</th>
+                                                    <th data-sort="units">Units</th>
+                                                    <th> </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="loadedSubjects4" class="list">
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <div class="row mt-3 d-flex justify-content-end my-2 p-3">
@@ -304,7 +305,7 @@
                                                     <td class="align-middle subtype"><?php echo $subjects['type']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['unit']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['focus']; ?></td>
-                                                    
+
                                                     <td class="align-middle">
                                                         <input type="checkbox" class="form-check-input load-subject-checkbox4" data-subjectid4="<?php echo $subjects['subjectid']; ?>" data-subjectcode4="<?php echo $subjects['subjectcode']; ?>" data-subjectname4="<?php echo $subjects['subjectname']; ?>" data-type4="<?php echo $subjects['type']; ?>" data-unit4="<?php echo $subjects['unit']; ?>" data-focus4="<?php echo $subjects['focus']; ?>">
                                                     </td>
@@ -318,12 +319,12 @@
                                 <button type="button" class="btn btn-secondary prev-step">Previous</button>
                                 <button type="submit" class="btn btn-submit">Submit</button>
                             </div>
-                        
+
                     </div>
                 </form>
                 </div>
             </div>
-            
+
         </div>
     </main>
 </body>
@@ -335,44 +336,44 @@
     <?php
         require_once('../include/js.php');
     ?>
-    
+
     <script>
         $(document).ready(function() {
             $('#subjects1').DataTable({
-              
-                searching: true, 
-                ordering: true,  
-                paging: true,   
+
+                searching: true,
+                ordering: true,
+                paging: true,
                 pageLength: 5,
                 lengthChange: false
             });
         });
         $(document).ready(function() {
             $('#subjects2').DataTable({
-              
-                searching: true, 
-                ordering: true,  
-                paging: true,   
+
+                searching: true,
+                ordering: true,
+                paging: true,
                 pageLength: 5,
                 lengthChange: false
             });
         });
         $(document).ready(function() {
             $('#subjects3').DataTable({
-              
-                searching: true, 
-                ordering: true,  
-                paging: true,   
+
+                searching: true,
+                ordering: true,
+                paging: true,
                 pageLength: 5,
                 lengthChange: false
             });
         });
         $(document).ready(function() {
             $('#subjects4').DataTable({
-              
-                searching: true, 
-                ordering: true,  
-                paging: true,   
+
+                searching: true,
+                ordering: true,
+                paging: true,
                 pageLength: 5,
                 lengthChange: false
             });
@@ -411,24 +412,24 @@
 
                 document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
                     if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode && cb !== checkbox) {
-                        cb.checked = true; 
-                        handleCheckboxChange({ target: cb }, tableId, checkboxClass, subjectPrefix); 
+                        cb.checked = true;
+                        handleCheckboxChange({ target: cb }, tableId, checkboxClass, subjectPrefix);
                     }
                 });
             } else {
-                
+
                 document.querySelectorAll(`tr[data-subjectcode${subjectPrefix}="${subjectCode}"]`).forEach(row => row.remove());
 
-                
+
                 document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
                     if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode) {
-                        cb.checked = false; 
+                        cb.checked = false;
                     }
                 });
             }
         }
 
-       
+
         function handleRemoveSubject(e, tableId, checkboxClass, subjectPrefix) {
             const row = e.target.closest('tr');
             const subjectCode = row.getAttribute(`data-subjectcode${subjectPrefix}`);
@@ -466,7 +467,7 @@
 
 
 
-    
+
 
 
 </html>
