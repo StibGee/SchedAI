@@ -27,7 +27,7 @@
                 </div>
 
             </div>
-            <form action="../database/addacademicplan.php" method="POST" id="wizardForm">
+            
             <div class="container py-3">
                 <div class="row">
                 <div class="col-md-3 steps sticky-sidebar r">
@@ -35,21 +35,6 @@
                     <div class=" g-3 row year-level d-flex">
                         <div class=" col-6">
                         <label class="form-label " id="year-level-label">First Year</label>
-                        </div>
-
-                        <div id="sectionInputsContainer" class="col-6">
-                            <div class="input-group col-6" data-year="1">
-                                <input placeholder="No. of Sections" type="number" name="section1" id="section1" class="form-control form-control-sm" style="width: 120px;">
-                            </div>
-                            <div class="input-group col-6" data-year="2">
-                                <input placeholder="No. of Sections" type="number" name="section2" id="section2" class="form-control form-control-sm" style="width: 120px;">
-                            </div>
-                            <div class="input-group col-6" data-year="3">
-                                <input placeholder="No. of Sections" type="number" name="section3" id="section3" class="form-control form-control-sm" style="width: 120px;">
-                            </div>
-                            <div class="input-group col-6" data-year="4">
-                                <input placeholder="No. of Sections" type="number" name="section4" id="section4" class="form-control form-control-sm" style="width: 120px;">
-                            </div>
                         </div>
 
                     </div>
@@ -73,8 +58,7 @@
                     </div>
                 </div>
                     <div class="col-md-9 scrollable-content">
-                        
-                  
+                        <form action="../database/addacademicplan.php" method="POST" id="wizardForm">
                             <input type="number" name="departmentid" value=<?php echo $departmentid;?> hidden>
                             <input type="number" name="semester" value=<?php echo $semester;?> hidden>
                             <input type="number" name="academicyear" value=<?php echo $academicyear;?> hidden>
@@ -118,10 +102,21 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="list">
-                                                <?php foreach ($subject as $subjects){ ?>
+                                                <?php $seenSubjectCodes = [];
+
+                                                foreach ($subject as $subjects) {
+                                                
+                                                    if (!in_array($subjects['subjectcode'], $seenSubjectCodes)) {
+                                                    
+                                                        $seenSubjectCodes[] = $subjects['subjectcode'];
+                                                        $displaySubjectCode = $subjects['subjectcode'];
+                                                    } else {
+                                                        $displaySubjectCode = '';
+                                                    }
+                                                ?>
                                                 <tr>
                                                     <td class="align-middle subid" hidden><?php echo $subjects['subjectid'];?></td>
-                                                    <td class="align-middle subcode"><?php echo $subjects['subjectcode']; ?></td>
+                                                    <td class="align-middle subcode"><?php echo $displaySubjectCode; ?></td>
                                                     <td class="align-middle desc"><?php echo $subjects['subjectname']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['type']; ?></td>
                                                     <td class="align-middle subtype"><?php echo $subjects['unit']; ?></td>
@@ -325,9 +320,10 @@
                             </div>
                         
                     </div>
+                </form>
                 </div>
             </div>
-            </form>
+            
         </div>
     </main>
 </body>
@@ -383,202 +379,92 @@
         });
     </script>
 
-    <script>
-    document.querySelector('.table-sub1 tbody').addEventListener('change', function(e) {
-        if (e.target.classList.contains('load-subject-checkbox1')) {
-            const subjectCode1 = e.target.getAttribute('data-subjectcode1');
-            const subjectid1 = e.target.getAttribute('data-subjectid1');
-            const loadedSubjectsTable1 = document.getElementById('loadedSubjects1');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function handleCheckboxChange(e, tableId, checkboxClass, subjectPrefix) {
+            const checkbox = e.target;
+            const subjectCode = checkbox.getAttribute(`data-subjectcode${subjectPrefix}`);
+            const subjectId = checkbox.getAttribute(`data-subjectid${subjectPrefix}`);
+            const isChecked = checkbox.checked;
+            const loadedSubjectsTable = document.getElementById(tableId);
 
-            if (e.target.checked) {
-                const subjectName1 = e.target.getAttribute('data-subjectname1');
-                const type1 = e.target.getAttribute('data-type1');
-                const unit1 = e.target.getAttribute('data-unit1');
-                const focus1 = e.target.getAttribute('data-focus1');
+            if (isChecked) {
+                const subjectName = checkbox.getAttribute(`data-subjectname${subjectPrefix}`);
+                const type = checkbox.getAttribute(`data-type${subjectPrefix}`);
+                const unit = checkbox.getAttribute(`data-unit${subjectPrefix}`);
+                const focus = checkbox.getAttribute(`data-focus${subjectPrefix}`);
 
-                const row = `
-                    <tr data-subjectid1="${subjectid1}">
-                        <td hidden><input type="text" name="subjectid1[]" value="${subjectid1}" class="form-control"></td>
-                        <td>${subjectCode1}</td>
-                        <td>${subjectName1}</td>
-                        <td>${type1}</td>
-                        <td>${unit1}</td>
-                        <td>${focus1}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-subject1">Remove</button></td>
-                    </tr>
-                `;
-                loadedSubjectsTable1.insertAdjacentHTML('beforeend', row);
-            } else {
-                // If unchecked, remove the corresponding row
-                const rowToRemove = loadedSubjectsTable1.querySelector(`tr[data-subjectid1="${subjectid1}"]`);
-                if (rowToRemove) {
-                    rowToRemove.remove();
+                if (!loadedSubjectsTable.querySelector(`tr[data-subjectid${subjectPrefix}="${subjectId}"]`)) {
+                    const row = `
+                        <tr data-subjectid${subjectPrefix}="${subjectId}" data-subjectcode${subjectPrefix}="${subjectCode}">
+                            <td hidden><input type="text" name="subjectid${subjectPrefix}[]" value="${subjectId}" class="form-control"></td>
+                            <td>${subjectCode}</td>
+                            <td>${subjectName}</td>
+                            <td>${type}</td>
+                            <td>${unit}</td>
+                            <td>${focus}</td>
+                            <td><button type="button" class="btn btn-danger btn-sm remove-subject${subjectPrefix}">Remove</button></td>
+                        </tr>
+                    `;
+                    loadedSubjectsTable.insertAdjacentHTML('beforeend', row);
                 }
-            }
-        }
-    });
 
-    document.getElementById('loadedSubjects1').addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-subject1')) {
-            const row = e.target.closest('tr');
-            const subjectid1 = row.getAttribute('data-subjectid1');
-
-            // Uncheck the corresponding checkbox in the "Select Subjects to Load" table
-            const checkbox = document.querySelector(`.load-subject-checkbox1[data-subjectid1="${subjectid1}"]`);
-            if (checkbox) {
-                checkbox.checked = false;
-            }
-            row.remove();
-        }
-    });
-    //subject2
-    document.querySelector('.table-sub2 tbody').addEventListener('change', function(e) {
-        if (e.target.classList.contains('load-subject-checkbox2')) {
-            const subjectCode2 = e.target.getAttribute('data-subjectcode2');
-            const subjectid2 = e.target.getAttribute('data-subjectid2');
-            const loadedSubjectsTable2 = document.getElementById('loadedSubjects2');
-
-            if (e.target.checked) {
-                const subjectName2 = e.target.getAttribute('data-subjectname2');
-                const type2 = e.target.getAttribute('data-type2');
-                const unit2 = e.target.getAttribute('data-unit2');
-                const focus2 = e.target.getAttribute('data-focus2');
-
-                const row = `
-                    <tr data-subjectid2="${subjectid2}">
-                        <td hidden><input type="text" name="subjectid2[]" value="${subjectid2}" class="form-control"></td>
-                        <td>${subjectCode2}</td>
-                        <td>${subjectName2}</td>
-                        <td>${type2}</td>
-                        <td>${unit2}</td>
-                        <td>${focus2}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-subject2">Remove</button></td>
-                    </tr>
-                `;
-                loadedSubjectsTable2.insertAdjacentHTML('beforeend', row);
+                document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
+                    if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode && cb !== checkbox) {
+                        cb.checked = true; 
+                        handleCheckboxChange({ target: cb }, tableId, checkboxClass, subjectPrefix); 
+                    }
+                });
             } else {
-                // If unchecked, remove the corresponding row
-                const rowToRemove = loadedSubjectsTable2.querySelector(`tr[data-subjectid2="${subjectid2}"]`);
-                if (rowToRemove) {
-                    rowToRemove.remove();
-                }
+                
+                document.querySelectorAll(`tr[data-subjectcode${subjectPrefix}="${subjectCode}"]`).forEach(row => row.remove());
+
+                
+                document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
+                    if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode) {
+                        cb.checked = false; 
+                    }
+                });
             }
         }
-    });
 
-    document.getElementById('loadedSubjects2').addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-subject2')) {
+       
+        function handleRemoveSubject(e, tableId, checkboxClass, subjectPrefix) {
             const row = e.target.closest('tr');
-            const subjectid2 = row.getAttribute('data-subjectid2');
+            const subjectCode = row.getAttribute(`data-subjectcode${subjectPrefix}`);
+            const subjectId = row.getAttribute(`data-subjectid${subjectPrefix}`);
 
-            // Uncheck the corresponding checkbox in the "Select Subjects to Load" table
-            const checkbox = document.querySelector(`.load-subject-checkbox2[data-subjectid2="${subjectid2}"]`);
-            if (checkbox) {
-                checkbox.checked = false;
-            }
-            row.remove();
-        }
-    });
-    //subject 3
-    // For subject3
-    document.querySelector('.table-sub3 tbody').addEventListener('change', function(e) {
-        if (e.target.classList.contains('load-subject-checkbox3')) {
-            const subjectCode3 = e.target.getAttribute('data-subjectcode3');
-            const subjectid3 = e.target.getAttribute('data-subjectid3');
-            const loadedSubjectsTable3 = document.getElementById('loadedSubjects3');
+            document.querySelectorAll(`#${tableId} tr[data-subjectcode${subjectPrefix}="${subjectCode}"]`).forEach(row => row.remove());
 
-            if (e.target.checked) {
-                const subjectName3 = e.target.getAttribute('data-subjectname3');
-                const type3 = e.target.getAttribute('data-type3');
-                const unit3 = e.target.getAttribute('data-unit3');
-                const focus3 = e.target.getAttribute('data-focus3');
-
-                const row = `
-                    <tr data-subjectid3="${subjectid3}">
-                        <td hidden><input type="text" name="subjectid3[]" value="${subjectid3}" class="form-control"></td>
-                        <td>${subjectCode3}</td>
-                        <td>${subjectName3}</td>
-                        <td>${type3}</td>
-                        <td>${unit3}</td>
-                        <td>${focus3}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-subject3">Remove</button></td>
-                    </tr>
-                `;
-                loadedSubjectsTable3.insertAdjacentHTML('beforeend', row);
-            } else {
-                // If unchecked, remove the corresponding row
-                const rowToRemove = loadedSubjectsTable3.querySelector(`tr[data-subjectid3="${subjectid3}"]`);
-                if (rowToRemove) {
-                    rowToRemove.remove();
+            document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
+                if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode) {
+                    cb.checked = false;
                 }
-            }
+            });
         }
-    });
-
-    document.getElementById('loadedSubjects3').addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-subject3')) {
-            const row = e.target.closest('tr');
-            const subjectid3 = row.getAttribute('data-subjectid3');
-
-            // Uncheck the corresponding checkbox in the "Select Subjects to Load" table
-            const checkbox = document.querySelector(`.load-subject-checkbox3[data-subjectid3="${subjectid3}"]`);
-            if (checkbox) {
-                checkbox.checked = false;
-            }
-            row.remove();
-        }
-    });
-    //subject 4
-    // For subject4
-    document.querySelector('.table-sub4 tbody').addEventListener('change', function(e) {
-        if (e.target.classList.contains('load-subject-checkbox4')) {
-            const subjectCode4 = e.target.getAttribute('data-subjectcode4');
-            const subjectid4 = e.target.getAttribute('data-subjectid4');
-            const loadedSubjectsTable4 = document.getElementById('loadedSubjects4');
-
-            if (e.target.checked) {
-                const subjectName4 = e.target.getAttribute('data-subjectname4');
-                const type4 = e.target.getAttribute('data-type4');
-                const unit4 = e.target.getAttribute('data-unit4');
-                const focus4 = e.target.getAttribute('data-focus4');
-
-                const row = `
-                    <tr data-subjectid4="${subjectid4}">
-                        <td hidden><input type="text" name="subjectid4[]" value="${subjectid4}" class="form-control"></td>
-                        <td>${subjectCode4}</td>
-                        <td>${subjectName4}</td>
-                        <td>${type4}</td>
-                        <td>${unit4}</td>
-                        <td>${focus4}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-subject4">Remove</button></td>
-                    </tr>
-                `;
-                loadedSubjectsTable4.insertAdjacentHTML('beforeend', row);
-            } else {
-                // If unchecked, remove the corresponding row
-                const rowToRemove = loadedSubjectsTable4.querySelector(`tr[data-subjectid4="${subjectid4}"]`);
-                if (rowToRemove) {
-                    rowToRemove.remove();
+        function attachEventListeners(tableSelector, checkboxClass, subjectPrefix, tableId) {
+            document.querySelector(tableSelector).addEventListener('change', function(e) {
+                if (e.target.classList.contains(checkboxClass)) {
+                    handleCheckboxChange(e, tableId, checkboxClass, subjectPrefix);
                 }
-            }
+            });
+
+            document.getElementById(tableId).addEventListener('click', function(e) {
+                if (e.target.classList.contains(`remove-subject${subjectPrefix}`)) {
+                    handleRemoveSubject(e, tableId, checkboxClass, subjectPrefix);
+                }
+            });
         }
+
+        attachEventListeners('.table-sub1 tbody', 'load-subject-checkbox1', '1', 'loadedSubjects1');
+        attachEventListeners('.table-sub2 tbody', 'load-subject-checkbox2', '2', 'loadedSubjects2');
+        attachEventListeners('.table-sub3 tbody', 'load-subject-checkbox3', '3', 'loadedSubjects3');
+        attachEventListeners('.table-sub4 tbody', 'load-subject-checkbox4', '4', 'loadedSubjects4');
     });
-
-    document.getElementById('loadedSubjects4').addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-subject4')) {
-            const row = e.target.closest('tr');
-            const subjectid4 = row.getAttribute('data-subjectid4');
-
-            // Uncheck the corresponding checkbox in the "Select Subjects to Load" table
-            const checkbox = document.querySelector(`.load-subject-checkbox4[data-subjectid4="${subjectid4}"]`);
-            if (checkbox) {
-                checkbox.checked = false;
-            }
-            row.remove();
-        }
-    });
-
 </script>
+
+
+
 
     
 

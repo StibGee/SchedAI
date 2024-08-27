@@ -3,9 +3,9 @@ require_once("config.php");
 
 $departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
 if (isset($_POST['masters'])) {
-    $masters='yes';
+    $masters='Yes';
 }else{
-    $masters='no';
+    $masters='No';
 }
 $subjectcode = trim(stripslashes(htmlspecialchars($_POST['subjectcode'])));
 $subjectname = trim(stripslashes(htmlspecialchars($_POST['subjectname'])));
@@ -34,11 +34,11 @@ if ($subjectexists) {
 }
 
 if (isset($_POST['lab'])) {
-    
+    $labname = $subjectname . ' LAB';
     try {
         $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, :hours, 'Lec', :masters, :departmentid, :focus)");
         $stmt->bindParam(':subjectcode', $subjectcode);
-        $stmt->bindParam(':name', $subjectname);
+        $stmt->bindParam(':name', $labname);
         $stmt->bindParam(':unit', $lecunit);
         $stmt->bindParam(':hours', $lecunit);
         $stmt->bindParam(':masters', $masters);

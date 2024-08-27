@@ -25,10 +25,11 @@ cursor.execute("SET FOREIGN_KEY_CHECKS = 0; UPDATE `subjectschedule` SET `facult
 conn.commit()
 
 def facultysubjectmatch(subjectschedulesubjectid, facultysubjectfsubjectid, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
+    print (subjectschedulesubjectid, facultysubjectfsubjectid, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid)
     return subjectschedulesubjectid == facultysubjectfsubjectid and (
         subjectschedulesubjectmasters == facultysubjectmasters or subjectschedulesubjectmasters == 'No'
     ) and (subjectscheduledepartmentid==facultysubjectdepartmentid or facultysubjectdepartmentid==3)
-
+    
 def facultyworkinghourscheck(facultyworkinghours, subjectschedulesubjecthours, subjectscheduleid, facultysubjectfacultyid):
     if facultyworkinghours>subjectschedulesubjecthours:
         print(facultysubjectfacultyid," enough working hours for", subjectscheduleid)
@@ -42,9 +43,9 @@ for subjects in subject:
     subjectcode = subjects[1]
     subjectname = subjects[2]
     subjectunit = subjects[3]
-    subjecttype = subjects[4]
-    subjectmasters = subjects[5]
-    subjectdepartmentid = subjects[6]
+    subjecthours = subjects[4]
+    subjecttype = subjects[5]
+    subjectmasters = subjects[6]
     subjectfocus = subjects[7]
 
 facultyworkinghours={}
@@ -86,8 +87,9 @@ for subjectschedules in subjectschedule:
     subjectschedulesubjecthours= subjectschedules[15]
     subjectschedulesubjecttype = subjectschedules[16]  
     subjectschedulesubjectmasters = subjectschedules[17]  
-    subjectschedulesubjectfocus = subjectschedules[19]  
-
+    subjectschedulesubjectfocus = subjectschedules[18]  
+    
+    
     if subjectschedulesubjectfocus!="Major":
         break
 
@@ -106,9 +108,10 @@ for subjectschedules in subjectschedule:
         facultysubjectphd = facultysubjects[12]
         facultysubjectdepartmentid = facultysubjects[13]
         facultysubjectstartdate = facultysubjects[14]
-
-    
+        
+        
         if subjectscheduleid is not assignedsubjects:
+            
             if facultysubjectmatch(subjectschedulesubjectid, facultysubjectfsubjectid, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
                 if facultyworkinghourscheck(facultyworkinghours[facultysubjectfacultyid], subjectschedulesubjecthours, subjectscheduleid, facultysubjectfacultyid):
                     facultyworkinghours[facultysubjectfacultyid]=facultyworkinghours[facultysubjectfacultyid]-subjectschedulesubjecthours

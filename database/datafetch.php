@@ -31,7 +31,7 @@ $stmt->execute();
 $department = $stmt->fetchAll();
 
 #fetch all subjects
-$sqlsubject = "SELECT *,subject.name as subjectname, subject.id as subjectid, department.name AS departmentname, subject.name AS subjectname FROM subject JOIN department ON department.id = subject.departmentid";
+$sqlsubject = "SELECT *,subject.name as subjectname, subject.id as subjectid, subject.name AS subjectname FROM subject";
 $stmt = $pdo->prepare($sqlsubject); 
 $stmt->execute();  
 $subject = $stmt->fetchAll();

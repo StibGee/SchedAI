@@ -86,22 +86,33 @@
                                         <th>Description</th>
                                         <th>Type</th>
                                         <th>Unit</th>
-                                        <th>Department</th>
+                                        
                                         <th>Focus</th>
                                         <th>Action</th>
 
                                     </tr>
                                 </thead>
                                 <tbody id="tabularTableBody">
-                                <?php foreach ($subject as $subjects){ ?>
+                                <?php $seenSubjectCodes = [];
+
+                                    foreach ($subject as $subjects) {
+                                       
+                                        if (!in_array($subjects['subjectcode'], $seenSubjectCodes)) {
+                                        
+                                            $seenSubjectCodes[] = $subjects['subjectcode'];
+                                            $displaySubjectCode = $subjects['subjectcode'];
+                                        } else {
+                                            $displaySubjectCode = '';
+                                        }
+                                    ?>
                                     <tr>
 
                                         <td><?php echo $subjects['id'];?></td>
-                                        <td><?php echo $subjects['subjectcode'];?></td>
+                                        <td><?php echo $displaySubjectCode;?></td>
                                         <td><?php echo $subjects['subjectname'];?></td>
                                         <td><?php echo $subjects['type'];?></td>
                                         <td><?php echo $subjects['unit'];?></td>
-                                        <td><?php echo $subjects['departmentname'];?></td>
+                                    
                                         <td><?php echo $subjects['focus'];?></td>
 
 
