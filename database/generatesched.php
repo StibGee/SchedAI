@@ -4,10 +4,7 @@ require_once("config.php");
 $departmentid = $_POST['departmentid'];
 $semester = $_POST['semester'];
 $academicyear = $_POST['academicyear'];
-$subjectid1 = $_POST['subjectid1'];
-$subjectid2 = $_POST['subjectid2'];
-$subjectid3 = $_POST['subjectid3'];
-$subjectid4 = $_POST['subjectid4'];
+$academicplan = $_POST['academicplan'];
 $section1_count = $_POST['section1'];
 $section2_count = $_POST['section2'];
 $section3_count = $_POST['section3'];
@@ -31,7 +28,6 @@ function generateSectionLetters($numSections) {
     return array_slice(range('A', 'Z'), 0, $numSections);
 }
 
-// Generate section arrays for each year level
 $section1 = generateSectionLetters($section1_count);
 $section2 = generateSectionLetters($section2_count);
 $section3 = generateSectionLetters($section3_count);
@@ -40,70 +36,37 @@ $section4 = generateSectionLetters($section4_count);
 
 
 
-foreach($subjectid1 as $subjectsid1){
-    foreach($section1 as $sections1){
-        try {
-            $stmt = $pdo->prepare("INSERT INTO subjectschedule (subjectid, calendarid, yearlvl, section, departmentid) VALUES (:subjectid, :calendarid, 1, :section, :departmentid)");
-            $stmt->bindParam(':subjectid', $subjectsid1);
-            $stmt->bindParam(':calendarid', $calendarid);
-            $stmt->bindParam(':section', $sections1);
-            $stmt->bindParam(':departmentid', $departmentid);
+$yearLevels = [1, 2, 3, 4]; // Year levels to loop through
+$sections = [
+    1 => $section1,  // Sections for year level 1
+    2 => $section2,  // Sections for year level 2
+    3 => $section3,  // Sections for year level 3
+    4 => $section4   // Sections for year level 4
+];
+
+try {
+    foreach ($sections as $yearlvl => $sectionArray) {
+        foreach ($sectionArray as $section) {
+            $stmt = $pdo->prepare("
+                INSERT INTO subjectschedule (subjectid, calendarid, yearlvl, section, departmentid)
+                SELECT subjectid, calendarid, yearlvl, :section, departmentid
+                FROM academicplan
+                WHERE calendarid = :calendarid AND departmentid = :departmentid AND yearlvl = :yearlvl
+            ");
+
+            $stmt->bindParam(':section', $section);
+            $stmt->bindValue(':calendarid', $calendarid, PDO::PARAM_INT);
+            $stmt->bindValue(':departmentid', $departmentid, PDO::PARAM_INT);
+            $stmt->bindValue(':yearlvl', $yearlvl, PDO::PARAM_INT);
+
             $stmt->execute();
-        
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
         }
     }
-    
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
 }
-foreach($subjectid2 as $subjectsid2){
-    foreach($section2 as $sections2){
-        try {
-            $stmt = $pdo->prepare("INSERT INTO subjectschedule (subjectid, calendarid, yearlvl, section, departmentid) VALUES (:subjectid, :calendarid, 2, :section, :departmentid)");
-            $stmt->bindParam(':subjectid', $subjectsid2);
-            $stmt->bindParam(':calendarid', $calendarid);
-            $stmt->bindParam(':section', $sections2);
-            $stmt->bindParam(':departmentid', $departmentid);
-            $stmt->execute();
-        
-            
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
-}
-foreach($subjectid3 as $subjectsid3){
-    foreach($section3 as $sections3){
-        try {
-            $stmt = $pdo->prepare("INSERT INTO subjectschedule (subjectid, calendarid, yearlvl, section, departmentid) VALUES (:subjectid, :calendarid, 3, :section, :departmentid)");
-            $stmt->bindParam(':subjectid', $subjectsid3);
-            $stmt->bindParam(':calendarid', $calendarid);
-            $stmt->bindParam(':section', $sections3);
-            $stmt->bindParam(':departmentid', $departmentid);
-            $stmt->execute();
-        
-            
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
-}
-foreach($subjectid4 as $subjectsid4){
-    foreach($section4 as $sections4){
-        try {
-            $stmt = $pdo->prepare("INSERT INTO subjectschedule (subjectid, calendarid, yearlvl, section, departmentid) VALUES (:subjectid, :calendarid, 4, :section, :departmentid)");
-            $stmt->bindParam(':subjectid', $subjectsid4);
-            $stmt->bindParam(':calendarid', $calendarid);
-            $stmt->bindParam(':section', $sections4);
-            $stmt->bindParam(':departmentid', $departmentid);
-            $stmt->execute();
-        
-                
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
-}
+
+
 try {
     $sql = "UPDATE calendar SET status = 'loaded' WHERE id = :calendarid";
     $stmt = $pdo->prepare($sql);
