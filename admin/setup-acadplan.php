@@ -24,44 +24,48 @@
 
             </div>
             <div class="container mt-5 ">
-                <div class="row ">
-                    <div class="department col-4 ">
-                        <label for="">Select Department</label>
-                        <select class="form-select form-select-sm mt-2" id="select-department">
-                            <option>Information Technology</option>
-                            <option>Computer Science</option>
-                        </select>
-                    </div>
-                    <div class="academic-year col-4 ">
-                        <div class="form-group academic-year">
-                            <label for="">Select Academic Year</label>
-                            <select class="form-select form-select-sm mt-2" id="select-academic-year"></select>
+                <form action="allocate-sub1.php" method="POST">
+                    <div class="row ">
+                        <div class="department col-4 ">
+                            <label for="">Select Department</label>
+                            <select class="form-select form-select-sm mt-2" id="select-department" name="departmentid">
+                                <option value="1">Computer Science</option>
+                                <option value="2">Information</option>
+                            </select>
+                        </div>
+                        <div class="academic-year col-4 ">
+                            <div class="form-group academic-year">
+                                <label for="">Select Academic Year</label>
+                                <div class="col-6">
+                                    <input type="text" name="academicyear" class="form-control form-control-sm" style="width: 120px;" value="<?php echo date('Y'); ?>" readonly>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="semester col-4 ">
-                        <label for="">Select Semester</label>
-                        <select class="form-select form-select-sm mt-2" id="select-department">
-                            <option>First Semester</option>
-                            <option>Second Semester</option>
-                        </select>
-                    </div>
-                    <div class="academic-year col-4 ">
-                        <label for="">Load Subjects</label>
-                        <div class="load-sub d-flex justify-content-between align-items-center  p-1  mt-2">
-                            <label for="" class="mx-3 ">Load subjects per year level</label>
-                            <button type="button" class="view " onclick="window.location.href='allocate-sub.php'">Load</button>
+                    <div class="row mt-4">
+                        <div class="semester col-4 ">
+                            <label for="">Select Semester</label>
+                            <select name="semester" class="form-select form-select-sm mt-2" id="select-department">
+                                <option value="1">First Semester</option>
+                                <option value="2">Second Semester</option>
+                            </select>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <label for="">*important</label>
+                        <div class="academic-year col-4 ">
+                            <label for="">Load Subjects</label>
+                            <div class="load-sub d-flex justify-content-between align-items-center  p-1  mt-2">
+                                <label for="" class="mx-3 ">Load subjects per year level</label>
+                                <button type="submit" class="view ">Load</button>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <label for="">*important</label>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div class="btn col-8 mt-4 d-flex justify-content-between ">
                 <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                <button type="submit" class="confirm" onclick="window.location.href='academic-plan.php'">Done</button>
+                <button type="button" class="confirm" onclick="window.location.href='academic-plan.php'">Done</button>
             </div>
 
 

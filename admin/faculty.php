@@ -210,25 +210,20 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="search-sub" placeholder="Search subjects">
                                                 </div>
-                                                <select class="form-select" id="position" name="rank[]" multiple required>
-                                                    <option value="None">Choose...</option>
-                                                    <option value="phd">sub1</option>
-                                                    <option value="masters">sub2</option>
-                                                    <option value="bachelors">sub3</option>
-                                                    <option value="associate">sub4</option>
-                                                </select>
+                                            
                                             </div>
                                         </div>
-                                    </form>
+                                    
                                 </div>
                             </div>
                     <div class="modal-footer d-flex justify-content-between">
 
                         <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                         <button type="submit" class="confirm">Done</button>
-                        </form>
+                        
                     </div>
             </div>
+            </form>
     </main>
 </body>
 <link rel="stylesheet" href="../css/main.css">

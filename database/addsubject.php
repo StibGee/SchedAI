@@ -16,6 +16,7 @@ $lecunit = trim(stripslashes(htmlspecialchars($_POST['lecunit'])));
 if (isset($_POST['lab'])) {
 $lab = trim(stripslashes(htmlspecialchars($_POST['lab'])));
 $labunit = $_POST['labunit'];
+
 }
 $focus = trim(stripslashes(htmlspecialchars($_POST['focus'])));
 
@@ -33,17 +34,19 @@ if ($subjectexists) {
 }
 
 if (isset($_POST['lab'])) {
+    
     try {
-        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, 'lec', :masters, :departmentid, :focus)");
+        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, :hours, 'Lec', :masters, :departmentid, :focus)");
         $stmt->bindParam(':subjectcode', $subjectcode);
         $stmt->bindParam(':name', $subjectname);
         $stmt->bindParam(':unit', $lecunit);
+        $stmt->bindParam(':hours', $lecunit);
         $stmt->bindParam(':masters', $masters);
         $stmt->bindParam(':departmentid', $departmentid);
         $stmt->bindParam(':focus', $focus);
         $stmt->execute();
     
-        $stmt2 = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, 'lab', :masters, :departmentid, :focus)");
+        $stmt2 = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, 3, 'Lab', :masters, :departmentid, :focus)");
         $stmt2->bindParam(':subjectcode', $subjectcode);
         $stmt2->bindParam(':name', $subjectname);
         $stmt2->bindParam(':unit', $labunit);
@@ -60,10 +63,11 @@ if (isset($_POST['lab'])) {
     
 } else {
     try {
-        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, 'lec', :masters, :departmentid, :focus)");
+        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, :hours, 'lec', :masters, :departmentid, :focus)");
         $stmt->bindParam(':subjectcode', $subjectcode);
         $stmt->bindParam(':name', $subjectname);
         $stmt->bindParam(':unit', $lecunit);
+        $stmt->bindParam(':hours', $lecunit);
         $stmt->bindParam(':masters', $masters);
         $stmt->bindParam(':departmentid', $departmentid);
         $stmt->bindParam(':focus', $focus);

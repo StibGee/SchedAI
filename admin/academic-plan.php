@@ -49,7 +49,7 @@
                             </select>
                         </div>
                         <div class="col-3 d-flex align-items-center justify-content-start">
-                            <button onclick="window.location.href='allocate-sub.php'"> <img src="../img/icons/add-icon.png" alt=""></button>
+                            <button onclick="window.location.href='setup-acadplan.php'"> <img src="../img/icons/add-icon.png" alt=""></button>
                         </div>
                     </div>
                 </div>

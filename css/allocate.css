@@ -122,3 +122,6 @@
     border-radius: 16px;
     color: #B0EBB4;
 }
+#subjects1,#subjects2,#subjects3,#subjects4{
+    min-width: 100% !important;
+}

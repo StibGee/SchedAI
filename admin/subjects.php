@@ -213,7 +213,7 @@
                                                                     <select class="form-select" id="unit" required="" name="labunit">
                                                                         <option selected="" disabled="" value="">Choose...</option>
 
-                                                                        <option selected value="3.0">3.0</option>
+                                                                        <option selected value="1.0">1.0</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-4">

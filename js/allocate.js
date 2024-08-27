@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const yearLevelLabel = document.getElementById('year-level-label');
     const nextButtons = document.querySelectorAll('.next-step');
     const prevButtons = document.querySelectorAll('.prev-step');
-    const submitBtn = document.getElementById('submitBtn');
-    const wizardForm = document.getElementById('wizardForm');
+    const sectionInputsContainer = document.getElementById('sectionInputsContainer');
+    const inputGroups = sectionInputsContainer.querySelectorAll('.input-group');
 
     let currentStep = 0;
 
@@ -26,6 +26,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 step.classList.remove('completed');
             }
         });
+
+        // Hide all input groups first
+        inputGroups.forEach(group => group.style.display = 'none');
+
+        // Show the input group for the current step
+        inputGroups[stepIndex].style.display = 'block';
 
         const yearLevels = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
         yearLevelLabel.textContent = yearLevels[stepIndex];
@@ -48,19 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    submitBtn.addEventListener('click', () => {
-        // Perform form validation if needed
-        if (validateForm()) {
-            wizardForm.submit();
-            window.location.href = 'setup-acadplan.php';
-        }
-    });
-
-    function validateForm() {
-        // Add your form validation logic here
-        return true; // Return false if validation fails
-    }
 
     // Initialize the first step
     updateStep(currentStep);

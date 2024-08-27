@@ -29,8 +29,8 @@ def facultysubjectmatch(subjectschedulesubjectid, facultysubjectfsubjectid, subj
         subjectschedulesubjectmasters == facultysubjectmasters or subjectschedulesubjectmasters == 'No'
     ) and (subjectscheduledepartmentid==facultysubjectdepartmentid or facultysubjectdepartmentid==3)
 
-def facultyworkinghourscheck(facultyworkinghours,subjectschedulesubjectunit, subjectscheduleid, facultysubjectfacultyid):
-    if facultyworkinghours>subjectschedulesubjectunit:
+def facultyworkinghourscheck(facultyworkinghours, subjectschedulesubjecthours, subjectscheduleid, facultysubjectfacultyid):
+    if facultyworkinghours>subjectschedulesubjecthours:
         print(facultysubjectfacultyid," enough working hours for", subjectscheduleid)
         return True
     else:
@@ -110,8 +110,8 @@ for subjectschedules in subjectschedule:
     
         if subjectscheduleid is not assignedsubjects:
             if facultysubjectmatch(subjectschedulesubjectid, facultysubjectfsubjectid, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
-                if facultyworkinghourscheck(facultyworkinghours[facultysubjectfacultyid], subjectschedulesubjectunit, subjectscheduleid, facultysubjectfacultyid):
-                    facultyworkinghours[facultysubjectfacultyid]=facultyworkinghours[facultysubjectfacultyid]-subjectschedulesubjectunit
+                if facultyworkinghourscheck(facultyworkinghours[facultysubjectfacultyid], subjectschedulesubjecthours, subjectscheduleid, facultysubjectfacultyid):
+                    facultyworkinghours[facultysubjectfacultyid]=facultyworkinghours[facultysubjectfacultyid]-subjectschedulesubjecthours
                     assignedsubjects[subjectscheduleid]=facultysubjectfacultyid
                     print(f"Faculty ID {facultysubjectfacultyid} has {facultyworkinghours[facultysubjectfacultyid]} hours available")
                     cursor.execute(f"UPDATE `subjectschedule` SET `facultyid` = {facultysubjectfacultyid} WHERE `id` = {subjectscheduleid}")
