@@ -21,6 +21,7 @@ if (isset($_SESSION['id'])){
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $facultyinfo = $stmt->fetchAll();
+
     
 }
 
@@ -47,4 +48,5 @@ $sqlcalendar = "SELECT * FROM calendar";
 $stmt = $pdo->prepare($sqlcalendar); 
 $stmt->execute();  
 $calendar = $stmt->fetchAll();
+
 ?>
