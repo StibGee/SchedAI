@@ -9,8 +9,7 @@
             <div class="dropdown">
                 <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="../faculty/profiling.php">user(temporary)</a></li>
+                    <li><a class="dropdown-item" href="../faculty/profile.php">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Logout</a></li>
                 </ul>
             </div>
@@ -23,11 +22,11 @@
                     <img src="../img/logo/Sched-logo1.png" width="100">
                 </a>
                 <div class="nav_list">
-                    <a href="../admin/facultyloading.php" class="nav_link active">
+                    <a href="../faculty/dashboard.php" class="nav_link active">
                     <i class="fa-solid fa-spinner"></i>
                         <span class="nav_name">Assigned Schedule</span>
                     </a>
-                    <a href="../admin/schedule.php" class="nav_link">
+                    <a href="../faculty/profile.php" class="nav_link">
                     <i class="fa-regular fa-calendar"></i>
                         <span class="nav_name">My Profile</span>
                     </a>

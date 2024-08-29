@@ -4,35 +4,28 @@
         require_once('../include/head.php');
     ?>
 
-<body >
+<body>
 
     <?php
-        require_once('../include/nav.php');
+
+        require_once('../include/user-mainnav.php');
+        require_once('../database/datafetch.php');
     ?>
-    <main>
-        <div class="container mb-5">
-            <div class="row">
-                <div class="text d-flex align-items-center ">
-                    <h2> Hola !!! </h2> <span> Role</span>
-                </div>
+<main>
+    <div class="container ">
+        <div class="row">
+            <div class="text d-flex align-items-center" >
+                <h2> Hola !!! </h2> <span> Role</span>
             </div>
-            <div class="row mt-4">
+        </div>
+        <div class="row mt-4">
                 <div class="header-table">
                     <h5>
-                        <button onclick="window.location.href='schedule.php'">
-                            <i class="fa-solid fa-circle-arrow-left"></i>
-                        </button>
                         Semester <span>Department</span> <span>SY-</span> <span>Year</span>
                     </h5>
                 </div>
             </div>
             <div class="row d-flex justify-content-end align-items-center">
-                <div class="col-3">
-                    <select class="form-select form-select-sm col" id="select-department">
-                        <option>Institute of Technology</option>
-                        <option>Computer Science</option>
-                    </select>
-                </div>
                 <div class="col-1">
                     <select class="form-select  form-select-sm " id="select-year&sec">
                         <option>all</option>
@@ -127,11 +120,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-    </main>
+    </div>
+</main>
 </body>
-    <link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/generated-sched.css">
     <script src="../js/facultyloading.js"></script>
     <?php

@@ -9,7 +9,7 @@
     <?php
         require_once('../include/user-nav.php');
         require_once('../database/datafetch.php');
-        
+
     ?>
 
     <main>
@@ -52,7 +52,7 @@
                     <div class="step-content active p-4" id="step1">
                         <h5>Personal Information</h5>
                         <?php foreach($facultyinfo as $facultyinfos){ ?>
-    
+
                         <div class="row mt-2">
                             <div class="col-md-5">
                                 <label class="form-label" for="firstname">First name</label>
@@ -272,12 +272,7 @@
                                     </tbody>
                                 </table>
 
-                            <div class="table-load my-2 p-3 col-6" id="specialization-container" style="display: none;">
-                                <label class="form-label" for="specialization">Specialization</label>
-                                <select class="form-select" id="specialization" name="specialization" required>
-                                    <option selected disabled value="">Choose...</option>
-                                </select>
-                            </div>
+                            
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">

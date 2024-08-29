@@ -1,0 +1,58 @@
+.profile-table{
+    border: 1px solid black;
+    border-radius: 16px;
+
+}
+.table-header{
+    border-bottom: 1px solid black ;
+}
+.profile-info{
+    border-right: 1px solid black ;
+}
+
+.form-group{
+    margin: 16px 0 12px 0;
+}
+.pref{
+    border-radius: 12px;
+    background-color: #E4EFE7;
+}
+label{
+    font-size: 14px;
+    font-weight: 600;
+    color:#1A5319;
+    ;
+}
+.img-upload {
+    position: relative;
+    display: inline-block;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.circle-image {
+    display: block;
+}
+
+.custom-file-upload {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+    background: white; /* Background color for the camera icon */
+    border-radius: 50%; /* Makes the background circular */
+    padding: 5px; /* Adjust as needed */
+}
+
+.camera-icon {
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+    display: block;
+}
+
+.img {
+    display: none; /* Hide the actual file input */
+}
