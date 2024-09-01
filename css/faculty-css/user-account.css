@@ -1,0 +1,14 @@
+.forgot-password {
+    text-align: right;
+}
+.form-group a{
+    color: rgb(196, 0, 0);
+}
+.form-group {
+    margin-top: 24px;
+    width: 40%;
+
+}
+.form-control{
+    border-radius: 16px;
+}

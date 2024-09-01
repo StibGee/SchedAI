@@ -33,7 +33,7 @@
                                 <form action="student-profile.php" method="post">
                                 </form>
                             </div>
-                            <div class="col-5">
+                            <div class="col-6">
                                 <h3>Name</h3>
                                 <div class="row">
                                     <label for="">[degree]</label>
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="col-5 d-flex justify-content-end align-items-center ">
-                                <button>save</button>
+                                <button class="save">save</button>
                             </div>
                         </div>
                     </div>
@@ -53,22 +53,13 @@
                                 <input type="text" class="form-control" id="teachingHour">
                             </div>
                             <div class="form-group">
-                                <label for="genderText">Gender</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="genderText">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary">edit</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label for="genderSelect">Gender</label>
                                 <div class="input-group">
                                     <select class="form-control" id="genderSelect">
                                         <option>male</option>
                                     </select>
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary">edit</button>
+                                    <button class="btn "><i class="fa-solid fa-pen"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +68,7 @@
                                 <div class="input-group">
                                     <input type="email" class="form-control" id="email">
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary">edit</button>
+                                    <button class="btn "><i class="fa-solid fa-pen"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -85,9 +76,7 @@
                                 <label for="contactNo">Contact No.</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="contactNo">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary">edit</button>
-                                    </div>
+                                    <button class="btn "><i class="fa-solid fa-pen"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +129,7 @@
                                 <div class="preference-table p-3">
                                     <label for="">Preferencess</label>
                                     <div class="d-flex justify-content-end">
-                                        <button>edit</button>
+                                    <button class="btn "><i class="fa-solid fa-pen"></i></button>
                                     </div>
 
                                     <div class="pref p-3 m-4">

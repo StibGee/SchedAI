@@ -30,11 +30,10 @@
                     <i class="fa-regular fa-calendar"></i>
                         <span class="nav_name">My Profile</span>
                     </a>
-                    <a href="../admin/academic-plan.php" class="nav_link">
-                    <i class="fa-solid fa-diagram-project"></i>
+                    <a href="../faculty/user-account.php" class="nav_link">
+                    <i class="fa-solid fa-gear"></i>
                         <span class="nav_name">Account</span>
                     </a>
-
                 </div>
             </div>
         </nav>

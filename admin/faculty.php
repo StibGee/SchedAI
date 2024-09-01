@@ -210,17 +210,17 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="search-sub" placeholder="Search subjects">
                                                 </div>
-                                            
+
                                             </div>
                                         </div>
-                                    
+
                                 </div>
                             </div>
                     <div class="modal-footer d-flex justify-content-between">
 
                         <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                         <button type="submit" class="confirm">Done</button>
-                        
+
                     </div>
             </div>
             </form>
@@ -228,11 +228,13 @@
 </body>
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/faculty.css">
+<script src="../js/main.js"></script>
+
+<script src="../js/faculty.js"></script>
 
 <?php
         require_once('../include/js.php')
     ?>
-<script src="../js/faculty.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
         $(document).ready(function() {

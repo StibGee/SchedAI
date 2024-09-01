@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="btn col-8 mt-4 d-flex justify-content-between ">
-                <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="button" class="cancel" onclick="window.location.href='academic-plan.php'">Cancel</button>
                 <button type="button" class="confirm" onclick="window.location.href='academic-plan.php'">Done</button>
             </div>
 

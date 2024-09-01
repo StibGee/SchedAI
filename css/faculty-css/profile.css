@@ -56,3 +56,23 @@ label{
 .img {
     display: none; /* Hide the actual file input */
 }
+.form-control{
+    height: 32px;
+    border-radius: 12px;
+}
+
+.save{
+    border-radius: 12px;
+    width: 18%;
+    background-color: #80AF81;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.save:hover{
+    border-radius: 12px;
+    width: 18%;
+    background-color: #ffffff;
+    border: 2px solid #80AF81;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #80AF81;
+}

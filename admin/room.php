@@ -37,7 +37,7 @@
             </div>
             <div class =" container mt-3">
                 <div class="row d-flex justify-content-around">
-                    
+
                     <div class=" room-table p-4">
                         <div class="table-contents">
                         <table class="table  mb-0">
@@ -91,15 +91,15 @@
                                         <div class="row mt-2">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="firstname">Room Name</label>
-                                                
+
                                                     <div class="col-md-10">
                                                         <input type="text" class="form-control" name="name" required>
                                                     </div>
-                                               
+
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="firstname">Room Type</label>
-                                                
+
                                                     <div class="col-md-8">
                                                         <select class="form-select" id="room-type" id="type" required name="type">
                                                             <option selected="" disabled="">Choose...</option>
@@ -107,11 +107,11 @@
                                                             <option value="lec">Laboratory</option>
                                                         </select>
                                                     </div>
-                                               
+
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="firstname">Department</label>
-                                               
+
                                                     <div class="col-md-8">
                                                         <select class="form-select" id="room-type" required name="departmentid">
                                                             <option selected="" disabled="">Choose...</option>
@@ -120,7 +120,7 @@
                                                             <?php } ?>
                                                         </select>
                                                     </div>
-                                              
+
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -135,14 +135,14 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        
+
                                                         <tr>
                                                             <td>
                                                                 <div class="form-row d-flex">
                                                                     <div class="col-12">
                                                                         <input type="time" class="form-control" name="timestart" value="07:00">
                                                                     </div>
-                                                                    
+
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -150,7 +150,7 @@
                                                                     <div class="col-12">
                                                                         <input type="time" class="form-control" name="timeend" value="07:00">
                                                                     </div>
-                                                                   
+
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -158,7 +158,7 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">

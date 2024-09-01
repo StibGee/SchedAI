@@ -87,10 +87,10 @@
                     <div class="modal-body p-3">
                     <form action="../database/generatesched.php" method="post">
                         <div class="rounded-top-3 bg-body-tertiary p-2">
-                            
+
                             <h2 class="head-label">Generate New Schedule</h2>
                             <div class="container mt-4">
-                                
+
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group department ">
@@ -98,14 +98,14 @@
                                                 <select name="departmentid" class="form-select form-select-sm " id="select-department">
                                                     <option value="1">Computer Science</option>
                                                     <option value="2">Information Technology</option>
-                                                    
+
                                                 </select>
                                             </div>
                                             <div class="form-group academic-year">
                                                 <h5>Select Academic Year</h5>
+                                                <label for="select-subject" class="my-2">Select Academic Year</label>
                                                 <input type="text" name="academicyear" class="form-control form-control-sm" style="width: 120px;" value="<?php echo date('Y'); ?>" readonly>
                                             </div>
-                                            
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group semester">
@@ -128,8 +128,12 @@
                                                         <!-- Options will be populated dynamically or statically here -->
                                                     </select>
                                             </div>
-                                            <div class="form-group num-of-section">
-                                                <h5>Student Sections</h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-group num-of-section">
+                                        <div class="row">
+                                            <h5>Student Sections</h5>
+                                            <div class="col-6">
                                                 <div class="g-3 row">
                                                     <label class="form-label col-form-label col-form-label-sm col-lg-2">First Year</label>
                                                     <div class="col">
@@ -142,6 +146,8 @@
                                                         <input placeholder="Input No. of Sections" type="number" name="section2" class="form-control form-control-sm" style="width: 200px;">
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-6">
                                                 <div class="g-3 row">
                                                     <label class="form-label col-form-label col-form-label-sm col-lg-2">Third Year</label>
                                                     <div class="col">
@@ -155,10 +161,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-                            
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
@@ -167,7 +171,7 @@
                             <button type="submit" class="confirm">Done</button>
                         </div>
                     </div>
-                    
+
                 </div>
                 </div>
             </div>

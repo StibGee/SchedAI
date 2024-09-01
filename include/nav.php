@@ -10,7 +10,6 @@
                 <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="../faculty/profiling.php">user(temporary)</a></li>
                     <li><a class="dropdown-item" href="#">Logout</a></li>
                 </ul>
             </div>
