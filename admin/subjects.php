@@ -12,45 +12,17 @@
     ?>
     <main>
         <div class="container mb-1">
-            <div class="row">
-                <div class="text d-flex align-items-center ">
-                    <h2> Hola !!! </h2> <span> Role</span>
-                </div>
-            </div>
-            <div class="row d-flex align-items-center">
-                <div  class="col-4">
-                    <div class="row ">
-                        <div class="col-6">
-                            <a href="../admin/academic-plan.php" class="nav_links">
-                                <span class="nav_acad">Academic Plan</span>
-                            </a>
-                        </div>
-                        <div class="col-6 ">
-                            <a href="../admin/subjects.php" class="nav_links">
-                                <span class="nav_sub">Subjects</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="container mb-5">
-
                 <div class="row  d-flex align-items-center mt-4">
                     <div class="header-table col-4">
-                        <h3>Subjects</h3>
+                        <h4>
+                            <button onclick="window.location.href='curriculum-subjects.php'">
+                            <i class="fa-solid fa-circle-arrow-left"></i>
+                            </button>Subjects <span>for </span> [Curriculum SY]
+                        </h4>
                     </div>
                     <div class="col-8">
                     <div class="row  d-flex align-items-center justify-content-end">
-                    <div class="col-2">
-                        <select class="form-select " id="select-year">
-                            <option>All</option>
-                            <option>CS1</option>
-                            <option>CS2</option>
-                            <option>CS3</option>
-                            <option>CS4</option>
-                        </select>
-                    </div>
                     <div class="col-2">
                         <select class="form-select  " id="select-subtype">
                             <option>all</option>
@@ -86,7 +58,7 @@
                                         <th>Description</th>
                                         <th>Type</th>
                                         <th>Unit</th>
-                                        
+
                                         <th>Focus</th>
                                         <th>Action</th>
 
@@ -96,9 +68,9 @@
                                 <?php $seenSubjectCodes = [];
 
                                     foreach ($subject as $subjects) {
-                                       
+
                                         if (!in_array($subjects['subjectcode'], $seenSubjectCodes)) {
-                                        
+
                                             $seenSubjectCodes[] = $subjects['subjectcode'];
                                             $displaySubjectCode = $subjects['subjectcode'];
                                         } else {
@@ -112,7 +84,7 @@
                                         <td><?php echo $subjects['subjectname'];?></td>
                                         <td><?php echo $subjects['type'];?></td>
                                         <td><?php echo $subjects['unit'];?></td>
-                                    
+
                                         <td><?php echo $subjects['focus'];?></td>
 
 

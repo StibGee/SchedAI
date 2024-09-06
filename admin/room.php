@@ -12,11 +12,6 @@
     ?>
     <main>
         <div class="container mb-1">
-            <div class="row">
-                <div class="text d-flex align-items-center">
-                    <h2> Hola !!! </h2> <span> Role</span>
-                </div>
-            </div>
             <div class="row mt-2 d-flex align-items-center">
                 <div class="col-5">
                     <h3>Rooms</h3>

@@ -11,11 +11,6 @@
     ?>
     <main>
         <div class="container mb-5">
-            <div class="row">
-                <div class="text  d-flex align-items-center ">
-                    <h2> Hola !!!  <span> Role</span></h2>
-                </div>
-            </div>
             <div class="header-table ">
                 <h3>Accounts</h3>
                 <p>View and update your general account information.</p>

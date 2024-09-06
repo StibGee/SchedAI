@@ -13,6 +13,7 @@
     padding: 10px;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
 }
 
 #tabularView{
@@ -132,7 +133,7 @@
 
 .modal{
     background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px); /* Added backdrop-filter for blur effect */
+
 }
 .head-label{
     color: #1A5319;

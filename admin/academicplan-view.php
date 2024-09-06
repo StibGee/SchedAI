@@ -12,11 +12,6 @@
     ?>
     <main>
         <div class="container mb-1">
-            <div class="row">
-                <div class="text d-flex align-items-center ">
-                    <h2> Hola !!! </h2> <span> Role</span>
-                </div>
-            </div>
             <div class="row d-flex align-items-center">
                 <div  class="col-4">
                     <div class="row ">
@@ -24,7 +19,7 @@
                         <button onclick="window.location.href='academic-plan.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        Academic Plan <span>SY-</span> <span>Year</span>
+                        Curriculum Plan <span>SY-</span> <span>Year</span>
                     </h5>
                     </div>
                 </div>

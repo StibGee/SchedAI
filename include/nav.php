@@ -32,7 +32,7 @@
                     </a>
                     <a href="../admin/academic-plan.php" class="nav_link">
                     <i class="fa-solid fa-diagram-project"></i>
-                        <span class="nav_name">Academic Plan</span>
+                        <span class="nav_name">Curriculum Plan</span>
                     </a>
                     <a href="../admin/faculty.php" class="nav_link">
                     <i class="fa-solid fa-users"></i>

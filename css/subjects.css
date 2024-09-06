@@ -4,6 +4,19 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: 32px;
 }
+.curriculum-sched{
+    width: 60%;
+    margin: 0 auto;
+    background-color: #E4EFE7;
+    padding: 18px;
+    border-radius: 16px;
+}
+
+button{
+    border: none;
+    background: none;
+}
+
 /*-----modal----*/
 
 

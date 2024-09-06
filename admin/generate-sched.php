@@ -12,11 +12,6 @@
     <main>
         <div class="container mb-5">
             <div class="row">
-                <div class="text d-flex align-items-center">
-                    <h2> Hola !!! </h2> <span> Role</span>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-6">
                     <h5>Semester <span>Department</span></h5>
                     <p>SY- <span>Year</span></p>

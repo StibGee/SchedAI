@@ -11,14 +11,9 @@
     ?>
     <main>
         <div class="container mb-1">
-            <div class="row">
-                <div class="text d-flex align-items-center">
-                    <h2> Hola !!! </h2> <span> Role</span>
-                </div>
-            </div>
             <div class="row d-flex align-items-center">
                 <div class="col-5">
-                    <h3>Curriculum Schedules</h3>
+                    <h3>Academic Schedules</h3>
                 </div>
                 <div class="department col-3">
                     <select class="form-select form-select-sm" id="select-department">
@@ -90,7 +85,10 @@
 
                             <h2 class="head-label">Generate New Schedule</h2>
                             <div class="container mt-4">
-
+                                    <div class="form-group academic-year">
+                                        <h5>Select Academic Year</h5>
+                                        <input type="text" name="academicyear" class="form-control form-control-sm" style="width: 120px;" value="<?php echo date('Y'); ?>" readonly>
+                                    </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group department ">
@@ -101,11 +99,7 @@
 
                                                 </select>
                                             </div>
-                                            <div class="form-group academic-year">
-                                                <h5>Select Academic Year</h5>
-                                                <label for="select-subject" class="my-2">Select Academic Year</label>
-                                                <input type="text" name="academicyear" class="form-control form-control-sm" style="width: 120px;" value="<?php echo date('Y'); ?>" readonly>
-                                            </div>
+
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group semester">
@@ -115,52 +109,70 @@
                                                     <option value="2">Second Semester</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group semester">
-                                                <h5>Select Load Subject</h5>
-                                                <label for="select-subject">Academic plan</label>
-                                                    <select name="academicplan" class="form-select form-select-sm" id="select-subject">
-                                                        <option value="2024">2024-2025</option>
-                                                        <option value="2023">2023-2024</option>
-                                                        <option value="2022">2022-2023</option>
-                                                        <option value="2021">2021-2022</option>
-                                                        <option value="2020">2020-2021</option>
-                                                        <option value="2019">2019-2020</option>
-                                                        <!-- Options will be populated dynamically or statically here -->
-                                                    </select>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group num-of-section">
                                         <div class="row">
                                             <h5>Student Sections</h5>
-                                            <div class="col-6">
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">First Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section1" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">Second Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section2" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">Third Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section3" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2 pr-5">Forth Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section4" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <table class="table mx-2" >
+                                                <thead>
+                                                    <tr>
+                                                        <th style="border: none;">Year</th>
+                                                        <th style="border: none;">Number of Sections</th>
+                                                        <th style="border: none;">Select Curriculum</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="border: none;">First Year</td>
+                                                        <td style="border: none;">
+                                                            <input placeholder="Input No. of Sections" type="number" name="section1" class="form-control form-control-sm" style="width: 200px;">
+                                                        </td>
+                                                        <td style="border: none;">
+                                                            <select class="form-select form-select-sm m-0">
+                                                                <option>2018-2021</option>
+                                                                <option>2022-2025</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: none;">Second Year</td>
+                                                        <td style="border: none;">
+                                                            <input placeholder="Input No. of Sections" type="number" name="section2" class="form-control form-control-sm" style="width: 200px;">
+                                                        </td>
+                                                        <td style="border: none;">
+                                                            <select class="form-select form-select-sm m-0">
+                                                                <option>2018-2021</option>
+                                                                <option>2022-2025</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: none;">Third Year</td>
+                                                        <td style="border: none;">
+                                                            <input placeholder="Input No. of Sections" type="number" name="section3" class="form-control form-control-sm" style="width: 200px;">
+                                                        </td>
+                                                        <td style="border: none;">
+                                                            <select class="form-select form-select-sm m-0">
+                                                                <option>2018-2021</option>
+                                                                <option>2022-2025</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: none;">Fourth Year</td>
+                                                        <td style="border: none;">
+                                                            <input placeholder="Input No. of Sections" type="number" name="section4" class="form-control form-control-sm" style="width: 200px;">
+                                                        </td>
+                                                        <td style="border: none;">
+                                                            <select class="form-select form-select-sm m-0">
+                                                                <option>2018-2021</option>
+                                                                <option>2022-2025</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                             </div>

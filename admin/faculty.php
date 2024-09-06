@@ -13,11 +13,6 @@
 
     <main>
         <div class="container mb-1">
-            <div class="row">
-                <div class="text d-flex align-items-center ">
-                    <h2> Hola !!! </h2> <span> Role</span>
-                </div>
-            </div>
             <div class="row  d-flex align-items-center">
                 <div class="header-table col-3">
                     <h3>Instructors</h3>
@@ -97,7 +92,7 @@
             </div>
         </div>
          <!-- Modal Form -->
-         <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+            <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg mt-6" role="document">
                     <div class="modal-content border-0">
                         <div class="modal-body p-3">
@@ -105,7 +100,7 @@
 
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="rounded-top-3 form p-4" style="max-height: 400px; overflow-y: auto;">
+                            <div class="rounded-top-3 form p-4" style="max-height: 500px; overflow-y: auto;">
                                 <h2 class="head-label">Add faculty</h2>
                                 <div class="container form">
                                     <form id="facultyForm" action="../database/addfaculty.php" method="POST" class="row g-3 needs-validation" novalidate="">
@@ -226,17 +221,15 @@
             </form>
     </main>
 </body>
-<link rel="stylesheet" href="../css/main.css">
-<link rel="stylesheet" href="../css/faculty.css">
-<script src="../js/main.js"></script>
 
-<script src="../js/faculty.js"></script>
 
-<?php
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/faculty.css">
+    <script src="../js/faculty.js"></script>
+    <?php
         require_once('../include/js.php')
     ?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+    <script>
         $(document).ready(function() {
             $('#example').DataTable();
         });
