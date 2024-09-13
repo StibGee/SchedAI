@@ -75,4 +75,6 @@ try {
 }catch(PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
+
+//header("Location: ../admin/loadingscreen.php");
 ?>

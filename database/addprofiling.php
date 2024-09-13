@@ -9,9 +9,10 @@
     $type = $_POST['type'];
     $startdate = $_POST['startdate'];
     $teachinghours = $_POST['teachinghours'];
-    $highestdegree = $_POST['highestdegree'];
-    $specialization = $_POST['specialization'];
+    if(isset($highestdegree)){ $highestdegree = $_POST['highestdegree'];}
+    
     $facultyid = $_POST['facultyid'];
+    $subjectid=$_POST['subjectid'];
 
     $monday = isset($_POST['monday']) ? 1 : 0;
     $mondaystartTime = isset($_POST['mondaystartTime']) ? $_POST['mondaystartTime'] : null;
@@ -37,6 +38,17 @@
     $saturdaystartTime = isset($_POST['saturdaystartTime']) ? $_POST['saturdaystartTime'] : null;
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
+    foreach($subjectid as $subjectids){
+        try {
+            $stmt = $pdo->prepare("INSERT INTO facultysubject (facultyid, subjectid) VALUES (:facultyid,:subjectid)");
+            $stmt->bindParam(':facultyid', $facultyid);
+            $stmt->bindParam(':subjectid', $subjectids);
+            $stmt->execute();
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    
 
     if (isset($monday) && $monday) {
         try {
@@ -117,6 +129,6 @@
 
    
     $_SESSION['msg'] = "profileupdated";
-    //header('Location: ../faculty/user-dashboard.php');
-
+    header('Location: ../faculty/user-dashboard.php');
+    
 ?>

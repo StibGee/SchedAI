@@ -1,7 +1,7 @@
 <?php
 require_once("config.php");
 
-$departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
+//$departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
 if (isset($_POST['masters'])) {
     $masters='Yes';
 }else{
@@ -10,7 +10,6 @@ if (isset($_POST['masters'])) {
 $subjectcode = trim(stripslashes(htmlspecialchars($_POST['subjectcode'])));
 $subjectname = trim(stripslashes(htmlspecialchars($_POST['subjectname'])));
 
-$lec = trim(stripslashes(htmlspecialchars($_POST['lec'])));
 $lecunit = trim(stripslashes(htmlspecialchars($_POST['lecunit'])));
 
 if (isset($_POST['lab'])) {
@@ -36,22 +35,22 @@ if ($subjectexists) {
 if (isset($_POST['lab'])) {
     $labname = $subjectname . ' LAB';
     try {
-        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, :hours, 'Lec', :masters, :departmentid, :focus)");
+        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus) VALUES (:subjectcode, :name, :unit, :hours, 'Lec', :masters,  :focus)");
         $stmt->bindParam(':subjectcode', $subjectcode);
-        $stmt->bindParam(':name', $labname);
+        $stmt->bindParam(':name', $subjectname);
         $stmt->bindParam(':unit', $lecunit);
         $stmt->bindParam(':hours', $lecunit);
         $stmt->bindParam(':masters', $masters);
-        $stmt->bindParam(':departmentid', $departmentid);
+        
         $stmt->bindParam(':focus', $focus);
         $stmt->execute();
     
-        $stmt2 = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, 3, 'Lab', :masters, :departmentid, :focus)");
+        $stmt2 = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus) VALUES (:subjectcode, :name, :unit, 3, 'Lab', :masters,  :focus)");
         $stmt2->bindParam(':subjectcode', $subjectcode);
-        $stmt2->bindParam(':name', $subjectname);
+        $stmt2->bindParam(':name', $labname);
         $stmt2->bindParam(':unit', $labunit);
         $stmt2->bindParam(':masters', $masters);
-        $stmt2->bindParam(':departmentid', $departmentid);
+        
         $stmt2->bindParam(':focus', $focus);
         $stmt2->execute();
     
@@ -63,13 +62,13 @@ if (isset($_POST['lab'])) {
     
 } else {
     try {
-        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, departmentid, focus) VALUES (:subjectcode, :name, :unit, :hours, 'lec', :masters, :departmentid, :focus)");
+        $stmt = $pdo->prepare("INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus) VALUES (:subjectcode, :name, :unit, :hours, 'Lec', :masters,  :focus)");
         $stmt->bindParam(':subjectcode', $subjectcode);
         $stmt->bindParam(':name', $subjectname);
         $stmt->bindParam(':unit', $lecunit);
         $stmt->bindParam(':hours', $lecunit);
         $stmt->bindParam(':masters', $masters);
-        $stmt->bindParam(':departmentid', $departmentid);
+        
         $stmt->bindParam(':focus', $focus);
         $stmt->execute();
     

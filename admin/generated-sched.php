@@ -132,7 +132,7 @@
 
 </body>
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/generated-sched.css">
+    <link rel="stylesheet" href="../css/generated-sched-room.css">
     <script src="../js/generate-sched.js"></script>
     <?php
         require_once('../include/js.php')

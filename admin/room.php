@@ -46,17 +46,19 @@
                                     <th>Time End</th>
                                 </tr>
                             </thead>
-                                <tr onclick="window.location.href='/resources/admin/final-sched.php'">
-                                    <?php foreach($room as $rooms){ ?>
+                            <?php foreach($room as $rooms){ ?>
+                                <tr>
+                                    
                                     <td><?php echo $rooms['id'];?></td>
-                                    <td><?php echo $rooms['name'];?></td>
+                                    <td><?php echo $rooms['roomname'];?></td>
                                     <td><?php echo $rooms['type'];?></td>
                                     <td><?php echo $rooms['departmentname'];?></td>
                                     <td><?php echo $rooms['timestart'];?></td>
                                     <td><?php echo $rooms['timeend'];?></td>
                                     <td></td>
-                                    <?php } ?>
+                                    
                                 </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                         </div>

@@ -122,7 +122,7 @@
                                     <h2 class="head-label">Add Subject</h2>
                                     <div class="container form ">
                                         <form id="facultyForm" class="row g-3 mt-4 needs-validation" action="../database/addsubject.php" method="POST" novalidate="">
-                                            <h5>Department</h5>
+                                            <!--<h5>Department</h5>
                                             <div class="row ">
                                                 <div class="col-md-6">
                                                 <label for="">Select Department</label>
@@ -134,7 +134,7 @@
                                                     </select>
 
                                                 </div>
-                                            </div>
+                                            </div>-->
                                             <h5>Subject Information</h5>
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -173,7 +173,7 @@
                                                         <div class="row mt-3 ">
                                                                 <div class="col-md-2">
                                                                     <label class="form-label ml-5" for="subtype">Type </label>
-                                                                    <h5>Lec  </h5>
+                                                                    <h5>Lec </h5>
                                                                 </div>
                                                                 <div class="col-md-5">
                                                                     <label class="form-label" for="unit">Unit</label>

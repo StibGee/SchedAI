@@ -200,13 +200,18 @@
                                                     <option value="masters">Masters</option>
                                                 </select>
                                             </div>
-                                            <div class="col-9">
+                                            <!--<div class="col-9">
                                                 <label class="form-label" for="assign-sub">Assign Subject <span>*optional</span></label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="search-sub" placeholder="Search subjects">
                                                 </div>
+<<<<<<< Updated upstream
 
                                             </div>
+=======
+                                            
+                                            </div>-->
+>>>>>>> Stashed changes
                                         </div>
 
                                 </div>

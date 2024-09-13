@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-
-=======
 import mysql.connector
 import time
 
@@ -124,7 +121,7 @@ for subjectschedules in subjectschedule:
         if subjectschedulesubjectfocus!="Major":
             print("Minor subject")
             
-        time.sleep(0.001)
+        time.sleep(0.005)
         
         if subjectscheduleid is not assignedsubjects:
             
@@ -156,12 +153,12 @@ for subjectschedules in subjectschedule:
 
 end_time = time.time()
 
+# Calculating the total time taken
 total_time = end_time - start_time
 print(f"Greedy Algorithm")
 print(f"Utilizing 2 processor")
-print(f"4GB of RAM")
+print(f"8GB of RAM")
 print(f"ran in {total_time:.2f} seconds")
 
 cursor.close()
 conn.close()
->>>>>>> Stashed changes

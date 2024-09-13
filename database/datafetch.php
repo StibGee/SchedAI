@@ -1,11 +1,11 @@
 <?php
 require_once("config.php");
-if(!isset($_SESSION)){
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
-    
 }
+
 #fetch all faculty
-$sqlfaculty = "SELECT *, department.name AS departmentname, faculty.id AS facultyid FROM faculty JOIN department ON department.id=faculty.departmentid";
+$sqlfaculty = "SELECT *, department.name AS departmentname, faculty.id AS facultyid, faculty.lname as facultylname FROM faculty JOIN department ON department.id=faculty.departmentid";
 $stmt = $pdo->prepare($sqlfaculty); 
 $stmt->execute();  
 $faculty = $stmt->fetchAll();
@@ -38,7 +38,7 @@ $stmt->execute();
 $subject = $stmt->fetchAll();
 
 #fetch all rooms
-$sqlroom = "SELECT *, department.name AS departmentname FROM room JOIN department ON department.id = room.departmentid";
+$sqlroom = "SELECT *, department.name AS departmentname, room.name AS roomname, room.id as roomid FROM room JOIN department ON department.id = room.departmentid";
 $stmt = $pdo->prepare($sqlroom); 
 $stmt->execute();  
 $room = $stmt->fetchAll();
@@ -48,5 +48,14 @@ $sqlcalendar = "SELECT * FROM calendar";
 $stmt = $pdo->prepare($sqlcalendar); 
 $stmt->execute();  
 $calendar = $stmt->fetchAll();
+
+if (isset($calendarid) && isset($departmentid)){
+    $sqlsubjectschedule = "SELECT subject.name as subjectname, subjectcode, subject.type as subjecttype, subject.unit as subjectunit, room.name as roomname, subjectschedule.timestart as starttime,subjectschedule.timeend as endtime,day, yearlvl, section, faculty.fname as facultyfname, faculty.mname as facultymname, faculty.lname as facultylname FROM subjectschedule LEFT JOIN faculty ON subjectschedule.facultyid = faculty.id JOIN department ON department.id=subjectschedule.departmentid JOIN subject ON subject.id=subjectschedule.subjectid JOIN room ON room.id=subjectschedule.roomid WHERE subjectschedule.calendarid=$calendarid and subjectschedule.departmentid=$departmentid ORDER BY subjectcode,FIELD(subjecttype, 'Lec', 'Lab'),subjectunit DESC, section asc";
+    $stmt = $pdo->prepare($sqlsubjectschedule); 
+    $stmt->execute();  
+    $subjectschedule = $stmt->fetchAll();
+
+}
+
 
 ?>

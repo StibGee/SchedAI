@@ -1,0 +1,38 @@
+.outputstatus {
+    white-space: pre-wrap; /* Preserve formatting */
+}
+.progress{
+    min-width: 25%;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-content: center;
+    align-items: center;
+    height: 100lvh;
+}
+.progress{
+    width: 100%;
+}
+.progresspopup{
+    margin-top: 30px;
+    box-shadow: 0 2px 4px rgba(70, 70, 70, 0.151), 0 8px 16px 0px #0000003c;
+    width: 35%;
+    border-radius: 5px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    
+    
+}
+.outputstatus{
+    display: flex;
+    justify-content: START;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    margin-top: 5px;
+}

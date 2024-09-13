@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 $(' #tabularView, #calendarView').toggle();
             });
              // Sample data for tabular view
-             const tabularData = [
+            const tabularData = [
                 { no: 3, department: 'Physics', code: 'PHYS101', description: 'Intro to Physics', type: 'Lab', unit: 2, room: 'L101', time: '1:00 PM - 3:00 PM', day: 'Wednesday', yearSec: '1C', lecturer: 'Dr. Brown' },
                 // Add more data as needed
             ];
