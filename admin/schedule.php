@@ -18,11 +18,7 @@
         <div class="container mb-1">
             <div class="row d-flex align-items-center">
                 <div class="col-5">
-<<<<<<< Updated upstream
-                    <h3>Academic Schedules</h3>
-=======
                     <h3><?php if(($_SESSION['departmentid'])==1){echo "BSCS";}else{echo "BSIT";}?>  Curriculum Schedules</h3>
->>>>>>> Stashed changes
                 </div>
                 <div class="col-3">
                     <form class="mb-0" action="schedule.php" method="POST">
@@ -134,50 +130,6 @@
                                                     <option value="2">Second Semester</option>
                                                 </select>
                                             </div>
-<<<<<<< Updated upstream
-=======
-                                            <div class="form-group semester">
-                                                <h5>Select Load Subject</h5>
-                                                <label for="select-subject">Academic plan</label>
-                                                    <select name="academicplan" class="form-select form-select-sm" id="select-subject">
-                                                        <option value="2024">2024-2025</option>
-                                                        <option value="2023">2023-2024</option>
-                                                        <option value="2022">2022-2023</option>
-                                                        <option value="2021">2021-2022</option>
-                                                        <option value="2020">2020-2021</option>
-                                                        <option value="2019">2019-2020</option>
-                                                      
-                                                    </select>
-                                            </div>
-                                            <div class="form-group num-of-section">
-                                                <h5>Student Sections</h5>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">First Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section1" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">Second Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section2" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2">Third Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section3" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                                <div class="g-3 row">
-                                                    <label class="form-label col-form-label col-form-label-sm col-lg-2 pr-5">Forth Year</label>
-                                                    <div class="col">
-                                                        <input placeholder="Input No. of Sections" type="number" name="section4" class="form-control form-control-sm" style="width: 200px;">
-                                                    </div>
-                                                </div>
-                                            </div>
-
->>>>>>> Stashed changes
                                         </div>
                                     </div>
                                     <div class="form-group num-of-section">
