@@ -15,3 +15,73 @@ h5 button{
 .form-select{
     border-radius: 16px;
 }
+.nav li{
+    background-color: #afafaf;
+    padding: 4px;
+    width: 45%;
+    border-radius: 4px;
+    color: #ffffff;
+}
+
+.scrollable-content {
+    max-height: 100vh; /* Adjust as needed */
+    overflow-y: auto;
+}
+
+.table-sub {
+    border-radius: 12px;
+    background-color: #eeeeee;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.table-load{
+    border-radius: 12px;
+    background-color: #E4EFE7;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.form-control{
+    border-radius: 16px;
+}
+.btn{
+    width: 100px;
+    padding: 5px;
+}
+.next-step{
+    border:none;
+    background-color: #80AF81;
+    border-radius: 16px;
+}
+.next-step:hover{
+    border: 2px solid #80AF81;
+    background-color: #ffffff;
+    border-radius: 16px;
+    color: #198754;
+}
+.prev-step{
+    border-radius: 16px;
+}
+.btn-submit{
+    border:none;
+    background-color: #80AF81;
+    border-radius: 16px;
+}
+.btn-submit:hover{
+    border: 2px solid #80AF81;
+    background-color: #ffffff;
+    border-radius: 16px;
+    color: #B0EBB4;
+}
+#subjects1,#subjects2,#subjects3,#subjects4{
+    min-width: 100% !important;
+}
+.add{
+    background-color: #ffffff;
+    border: none;
+}
+#hiddenForm {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}

@@ -1,74 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-        require_once('../include/head.php');
-    ?>
-
 <body >
 
     <?php
         require_once('../include/nav.php');
-        require_once('../database/datafetch.php');
+
     ?>
     <main>
         <div class="container mb-1">
-            <div class="row d-flex align-items-center">
+            <div class="row">
                 <div  class="col-4">
                     <div class="row ">
-                    <h5>
+                        <h5>
                         <button onclick="window.location.href='academic-plan.php'">
-                            <i class="fa-solid fa-circle-arrow-left"></i>
-                        </button>
-                        Curriculum Plan <span>SY-</span> <span>Year</span>
-                    </h5>
+                                <i class="fa-solid fa-circle-arrow-left"></i>
+                            </button>
+                            Academic Plan <span>Sy</span>
+                        </h5>
                     </div>
                 </div>
-                <div class="col-8">
-                    <div class="row  d-flex align-items-center justify-content-end">
-                        <div class="department col-4">
-                            <select class="form-select form-select-sm p-2" id="select-department">
-                                <option>Information Technology</option>
-                                <option>Computer Science</option>
-                            </select>
+            </div>
+
+            <div class="container py-3">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-1">
+                        <select class="form-select  form-select-sm " id="select-position">
+                            <option>all</option>
+                            <option>Dean</option>
+                            <option>Visiting</option>
+                        </select>
+                    </div>
+
+                    <div class="searchbar col-3 ">
+                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 steps sticky-sidebar ">
+                        <h5>Year Level</h5>
+                        <div class="nav d-flex align-items-center mt-3 text-center">
+
+                            <li>First Year</li>
                         </div>
-                        <div class="col-5">
-                            <div class="searchbar ">
-                                <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
+                    </div>
+                    <div class="col-md-9 scrollable-content">
+                            <div class="row">
+                                <label for="">First Year Subjects Loaded</label>
+                                <div class="table-load my-3 p-3">
+                                    <table id="" class="table table-sm fs-9 mb-0 p-3">
+                                        <thead>
+                                            <tr>
+                                                <th data-sort="subcode">Code</th>
+                                                <th data-sort="desc">Description</th>
+                                                <th data-sort="desc">Type</th>
+                                                <th data-sort="desc">Unit</th>
+                                                <th data-sort="desc">Time</th>
+                                                <th data-sort="desc">Focus</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="loadedSubjects1" class="list">
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-
-                    </div>
                 </div>
 
-            </div>
-
-            <div class="academic-view mt-4 p-3">
-                <table class="mb-0 table table-hover ">
-                    <thead>
-                        <tr>
-                            <th>Code</th>
-                            <th >Description</th>
-                            <th >Type</th>
-                            <th >Unit</th>
-                            <th >Focus</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Code</td>
-                            <td >Description</td>
-                            <td >Type</td>
-                            <td >Unit</td>
-                            <td >Focus</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
-
     </main>
 </body>
-
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/academic-view.css">
     <script src="../js/main.js"></script>

@@ -1,3 +1,20 @@
+.academic-view{
+    background-color: #E4EFE7;
+    border-radius: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+}
+
+h5 button{
+    background-color: none;
+    border: none;
+}
+.searchbar .form-control{
+    border-radius: 16px;
+}
+.form-select{
+    border-radius: 16px;
+}
 .nav li{
     background-color: #afafaf;
     padding: 4px;
@@ -67,4 +84,18 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
+}
+.cancel{
+    background-color: #aa0202;
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    width: 40%;
+}
+.confirm{
+    background-color: #119e0e;
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    width: 40%;
 }

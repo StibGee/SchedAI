@@ -205,15 +205,9 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="search-sub" placeholder="Search subjects">
                                                 </div>
-<<<<<<< Updated upstream
 
-                                            </div>
-=======
-                                            
                                             </div>-->
->>>>>>> Stashed changes
                                         </div>
-
                                 </div>
                             </div>
                     <div class="modal-footer d-flex justify-content-between">
