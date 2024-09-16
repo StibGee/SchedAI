@@ -1,0 +1,13 @@
+academicplan-view
+	- add + button done
+	- add link to school years done
+    - fetch data
+    - add subject per year lvl
+
+academic-plan
+    - remove the + button done 
+schedule
+    - move the generate to inside the final-sched
+general-subject
+    - make it wizard 
+

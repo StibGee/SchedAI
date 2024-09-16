@@ -4,9 +4,7 @@
         require_once('../include/head.php');
         session_start();
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Check if the necessary POST variables are set
             if (isset($_POST['year']) && isset($_POST['sem']) && isset($_POST['calendarid'])) {
-                // Sanitize the input data
                 $year = htmlspecialchars($_POST['year']);
                 $_SESSION['year']=$year;
                 $sem = htmlspecialchars($_POST['sem']);
@@ -14,7 +12,7 @@
 
                 $calendarid = htmlspecialchars($_POST['calendarid']);
                 $_SESSION['calendarid']=$calendarid;
-                // Print the calendar ID
+
                 
             } else {
                 $calendarid=$_SESSION['calendarid'];

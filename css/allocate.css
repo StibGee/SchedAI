@@ -1,9 +1,77 @@
-.nav li{
-    background-color: #afafaf;
-    padding: 4px;
-    width: 45%;
-    border-radius: 4px;
-    color: #ffffff;
+.steps.sticky-sidebar.r {
+    position: sticky;
+    top: 0;
+    align-self: flex-start; /* Ensures the sidebar stays at the top of the container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+    position: relative;
+}
+
+.step-indicator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background-color: #dee2e6;
+    z-index: 1;
+}
+
+.step-indicator .step {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+    border: 2px solid #dee2e6;
+    border-radius: 50%;
+    z-index: 2;
+    position: relative;
+    margin: 10px 0;
+}
+
+.step-indicator .step.active {
+    background-color: #5f5f5f;
+    border-color: #5f5f5f;
+    color: white;
+}
+
+.step-indicator .step.completed {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.step-content {
+    display: none;
+}
+
+.step-content.active {
+    display: block;
+}
+
+.step-label {
+    position: absolute;
+    left: 40px;
+    white-space: nowrap;
+    color: #6c757d;
+    transition: color 0.3s;
+}
+
+.step-indicator .step:hover .step-label {
+    color: #a0a0a0;
 }
 
 .scrollable-content {
@@ -56,15 +124,4 @@
 }
 #subjects1,#subjects2,#subjects3,#subjects4{
     min-width: 100% !important;
-}
-.add{
-    background-color: #ffffff;
-    border: none;
-}
-#hiddenForm {
-    margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
 }

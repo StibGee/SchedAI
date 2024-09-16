@@ -283,7 +283,6 @@
     }
     document.querySelector('.btn-close').addEventListener('click', function() {
     console.log('Modal is being closed');
-    // Additional code to handle modal close
 });
 </script>
 <?php

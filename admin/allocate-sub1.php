@@ -120,8 +120,8 @@
 
         </div>
     </main>
- <!-- Modal Form -->
- <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+                <!-- Modal Form -->
+                <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg mt-6" role="document">
                         <div class="modal-content border-0">
                             <div class="modal-body p-3">
