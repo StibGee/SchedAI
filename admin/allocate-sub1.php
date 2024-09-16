@@ -65,6 +65,55 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="row mt-3 d-flex justify-content-end my-2 p-3">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="">Select Subjects to Load</label>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="curriculum">Select Curriculum</label>
+                                            <select class="form-select" id="curriculum" required="">
+                                                <option selected="" disabled="" value="">Choose...</option>
+                                                <option>2018-2021</option>
+                                                <option>2022-2024</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-sub1 table-sub my-3 p-3">
+                                        <table id="subjects1" class="table table-sm fs-9 mb-0 ">
+                                            <thead>
+                                                <tr>
+                                                    <th data-sort="subcode" hidden>id</th>
+                                                    <th data-sort="subcode">Code</th>
+                                                    <th data-sort="desc">Description</th>
+                                                    <th data-sort="desc">Type</th>
+                                                    <th data-sort="desc">Unit</th>
+                                                    <th data-sort="desc">Focus</th>
+                                                    <th data-sort="desc">Select</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody class="list">
+                                            
+                                                <tr>
+                                                    <td class="align-middle subid" hidden><?php echo $subjects['subjectid'];?></td>
+                                                    <td class="align-middle subcode"><input type="text"></td>
+                                                    <td class="align-middle desc"><input type="text"></td>
+                                                    <td class="align-middle subtype"><select name="" id=""><option value="Lec"></option></select></td>
+                                                    <td class="align-middle subtype"><input type="text"></td>
+                                                    <td class="align-middle subtype"><select name="" id=""><option value="Lec"></option></select></td>
+
+                                                    <td class="align-middle">
+                                                        <button>+</button>
+                                                    </td>
+                                                </tr>
+                                                <!-- Add more rows as needed -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary next-step">Next</button>
                             </div>
                     </div>
             </div>
