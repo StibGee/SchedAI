@@ -8,7 +8,20 @@
 
     <?php
         require_once('../include/nav.php');
-        require_once('../database/datafetch.php');
+        //require_once('../database/datafetch.php');
+        require_once('../classes/room.php');
+        require_once('../classes/department.php');
+        require_once('../classes/db.php');
+        $db = new Database();
+        $pdo = $db->connect();
+
+        // Initialize Room class
+        $room = new Room($pdo);
+        $roomsall = $room->getAllRooms();
+
+        $department = new Department($pdo);
+        $departmentsall = $department->getalldepartment();
+        
     ?>
     <main>
         <div class="container mb-1">
@@ -44,18 +57,26 @@
                                     <th>Department</th>
                                     <th>Time Start</th>
                                     <th>Time End</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
-                            <?php foreach($room as $rooms){ ?>
+                            <?php foreach($roomsall as $rooms){ ?>
                                 <tr>
                                     
-                                    <td><?php echo $rooms['id'];?></td>
+                                    <td><?php echo $rooms['roomid'];?></td>
                                     <td><?php echo $rooms['roomname'];?></td>
                                     <td><?php echo $rooms['type'];?></td>
                                     <td><?php echo $rooms['departmentname'];?></td>
                                     <td><?php echo $rooms['timestart'];?></td>
                                     <td><?php echo $rooms['timeend'];?></td>
-                                    <td></td>
+                                    <td>
+                                        <a href="edit_room.php?id=<?php echo $rooms['id']; ?>" class="btn btn-warning">Edit</a>
+                                        <form action="../processing/roomprocessing.php" method="post" style="display:inline;">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<?php echo $rooms['roomid']; ?>">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
+                                        </form>
+                                    </td>
                                     
                                 </tr>
                                 <?php } ?>
@@ -83,7 +104,8 @@
                             <div class="rounded-top-3 form p-4">
                                 <h2 class="head-label">Add Rooms</h2>
                                 <div class="container form ">
-                                    <form id="facultyForm" method="POST"  action="../database/addroom.php" class="row g-3 mt-4 needs-validation" novalidate="">
+                                    <form id="facultyForm" method="POST"  action="../processing/roomprocessing.php" class="row g-3 mt-4 needs-validation" novalidate="">
+                                    <input type="hidden" name="action" value="add">
                                     <h5>Room Details</h5>
                                         <div class="row mt-2">
                                             <div class="col-md-4">
@@ -112,7 +134,7 @@
                                                     <div class="col-md-8">
                                                         <select class="form-select" id="room-type" required name="departmentid">
                                                             <option selected="" disabled="">Choose...</option>
-                                                            <?php foreach($department as $departments){ ?>
+                                                            <?php foreach($departmentsall as $departments){ ?>
                                                             <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
                                                             <?php } ?>
                                                         </select>

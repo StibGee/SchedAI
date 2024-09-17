@@ -8,13 +8,23 @@
 
     <?php
         require_once('../include/nav.php');
-        require_once('../database/datafetch.php');
+        require_once('../classes/db.php');
+        require_once('../classes/curriculum.php');
+
         if(isset($_POST['departmentid'])){
             $_SESSION['academicplandepartmentid'] = $_POST['departmentid'];
-        } else {
-            $_SESSION['academicplandepartmentid'] = 1;
+            $academicplandepartmentid=$_SESSION['academicplandepartmentid'];
+        }elseif(isset($_SESSION['academicplandepartmentid'])){
+            $academicplandepartmentid=$_SESSION['academicplandepartmentid'];
+        }else{
+            $academicplandepartmentid=1;
+            $_SESSION['academicplandepartmentid'] = $academicplandepartmentid;
         }
-        
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $curriculum = new Curriculum($pdo);
+        $calendar = $curriculum->getallcurriculums();
     ?>
     <main>
         <div class="container mb-1">
@@ -73,12 +83,13 @@
                                 <th scope="row"><?php echo htmlspecialchars($displayyear); ?></th>
                                 <td><?php echo htmlspecialchars($calendars['sem']); ?></td>
                                 <td>
-                                    <div class="actions">
-                                        <i class="fas fa-edit"></i>
-                                        <i class="fas fa-trash"></i>
-                                        <i class="fas fa-eye"></i>
-                                    </div>
-                                </td>
+                                        <a href="edit_room.php?id=<?php echo $calendars['id']; ?>" class="btn btn-warning">Edit</a>
+                                        <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<?php echo $calendars['id']; ?>">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this curriculum?');">Delete</button>
+                                        </form>
+                                    </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -94,22 +105,24 @@
 
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="allocate-sub1.php" method="POST">
+                        <form action="../processing/curriculumprocessing.php" method="POST">
+                            <input type="text" value="add" name="action" hidden>
                             <div class="academic-year ">
                                 <div class="form-group academic-year">
-                                    <label for="">Select Curriculum</label>
+                                    <label for="">Enter Year</label>
                                     <div class="col-6">
-                                        <input type="text" name="academicyear" class="form-control form-control-sm" style="width: 120px;" value="<?php echo date('Y'); ?>" readonly>
+                                        <span><input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" style="width: 120px;">-<input type="number" name="" id="endyear" class="form-control form-control-sm" style="width: 120px;"></span>
+                                        
                                     </div>
                                 </div>
                             </div>
-                            <div class="department ">
+                            <!--<div class="department ">
                                 <label for="">Select Department</label>
                                 <select class="form-select form-select-sm mt-2" id="select-department" name="departmentid">
                                     <option value="1">Computer Science</option>
                                     <option value="2">Information</option>
                                 </select>
-                            </div>
+                            </div>-->
 
                             <div class="semester">
                                 <label for="">Select Semester</label>
@@ -118,11 +131,12 @@
                                     <option value="2">Second Semester</option>
                                 </select>
                             </div>
+                            <div class="modal-footer d-flex justify-content-between">
+                                <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                <button type="submit" class="confirm">Done</button>
+                            </div>
                         </form>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                        <button type="submit" class="confirm">Done</button>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -142,6 +156,23 @@
         document.querySelector('.btn-close').addEventListener('click', function() {
         console.log('Modal is being closed');
     }); 
+    </script>
+    <script>
+        const startYearInput = document.getElementById('startyear');
+        const endYearInput = document.getElementById('endyear');
+
+        startYearInput.addEventListener('input', function() {
+            const startYear = parseInt(startYearInput.value);
+            if (!isNaN(startYear)) {
+                endYearInput.value = startYear + 1;
+            }
+        });
+        endYearInput.addEventListener('input', function() {
+            const endYear = parseInt(endYearInput.value);
+            if (!isNaN(endYear)) {
+                startYearInput.value = endYear - 1;
+            }
+        });
     </script>
     <script src="../js/main.js"></script>
     

@@ -10,4 +10,9 @@ schedule
     - move the generate to inside the final-sched
 general-subject
     - make it wizard 
+room
+    - edit functionality
+    - delete functionality done
+    - design action button
+
 

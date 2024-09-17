@@ -3,8 +3,16 @@
 <body >
 
     <?php
-    
         require_once('../include/nav.php');
+        require_once('../classes/subject.php');
+        require_once('../classes/db.php');
+
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $subject = new Subject($pdo);
+        
+        
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -26,11 +34,11 @@
                 $year=$_SESSION['year'];
                 
             }
-            if (isset($_SESSION['departmentid'])){
-                $departmentid = htmlspecialchars($_SESSION['departmentid']);
+            if (isset($_SESSION['academicplandepartmentid'])){
+                $departmentid = htmlspecialchars($_SESSION['academicplandepartmentid']);
             }else{
                 $departmentid =1;
-                $_SESSION['departmentid']=$departmentid;
+                $_SESSION['academicplandepartmentid']=$departmentid;
             }
             if (isset($_POST['academicplanyearlvl'])){
                 $yearlvl= htmlspecialchars($_POST['academicplanyearlvl']);
@@ -41,8 +49,13 @@
                 
             }
         } else {
-            echo "Form not submitted.";
+            $year=$_SESSION['year'];
+            $sem=$_SESSION['sem'];
+            $calendarid = $_SESSION['calendarid'];
+            $departmentid = $_SESSION['departmentid'];
+            $yearlvl=$_SESSION['yearlvl'];
         }
+        $filteredsubject = $subject->filteredsubjects($calendarid, $departmentid, $yearlvl);
 
     ?>
     <main>
@@ -54,7 +67,7 @@
                         <button onclick="window.location.href='academic-plan.php'">
                                 <i class="fa-solid fa-circle-arrow-left"></i>
                             </button>
-                            Academic Plan for <span><?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
+                            Academic Plan for <span><?php if ($departmentid==1){echo 'BSCS ';}elseif($departmentid==2){echo 'IT ';}elseif($departmentid==3){echo 'ACT ';};?><?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
                         </h5>
                     </div>
                 </div>
@@ -114,11 +127,35 @@
                                                 <th data-sort="desc">Unit</th>
                                                 <th data-sort="desc">Time</th>
                                                 <th data-sort="desc">Focus</th>
+                                                <th data-sort="desc">Action</th>
 
                                             </tr>
                                         </thead>
                                         <tbody id="loadedSubjects1" class="list">
-
+                                        <?php if (!empty($filteredsubject)) { ?>
+                                            <?php foreach ($filteredsubject as $filteredsubjects) { ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($filteredsubjects['subjectcode']) ?></td>
+                                                    <td><?= htmlspecialchars($filteredsubjects['subjectname']) ?></td>
+                                                    <td><?= htmlspecialchars($filteredsubjects['type']) ?></td>
+                                                    <td><?= htmlspecialchars($filteredsubjects['unit']) ?></td>
+                                                    <td><?= htmlspecialchars($filteredsubjects['hours']) ?></td>
+                                                    <td><?= htmlspecialchars($filteredsubjects['focus']) ?></td>
+                                                    <td>
+                                                        <a href="edit_subject.php?id=<?= htmlspecialchars($filteredsubjects['id']) ?>" class="btn btn-warning">Edit</a>
+                                                        <form action="../processing/subjectprocessing.php" method="post" style="display:inline;">
+                                                            <input type="hidden" name="action" value="delete">
+                                                            <input type="hidden" name="id" value="<?= htmlspecialchars($filteredsubjects['id']) ?>">
+                                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this subject?');">Delete</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        <?php } else { ?>
+                                            <tr>
+                                                <td colspan="7">No subjects found.</td> <!-- Adjust colspan based on the number of columns -->
+                                            </tr>
+                                        <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -138,7 +175,12 @@
                         <div class="rounded-top-3 form p-4">
                             <h2 class="head-label">Add Subject</h2>
                             <div class="container form ">
-                                <form id="facultyForm" class="row g-3 mt-4 needs-validation" action="../database/addsubject.php" method="POST" novalidate="">
+                                <form id="facultyForm" class="row g-3 mt-4 needs-validation" action="../processing/subjectprocessing.php" method="POST" novalidate="">
+                                    <input type="text" value='add' name="action" hidden>
+                                    <input type="text" value='<?php echo $calendarid;?>' name="calendarid" hidden>
+                                    <input type="text" value='<?php echo $departmentid;?>' name="departmentid" hidden>
+                                    <input type="text" value='<?php echo $yearlvl;?>' name="yearlvl" hidden>
+                                    <input value="add" name="action" hidden>
                                     <!--<h5>Department</h5>
                                     <div class="row ">
                                         <div class="col-md-6">

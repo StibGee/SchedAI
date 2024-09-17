@@ -2,6 +2,15 @@
 <html lang="en">
 <?php
         require_once('../include/head.php');
+        require_once('../classes/schedule.php');
+        require_once('../classes/db.php');
+
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $schedule = new Schedule($pdo);
+        
+
         session_start();
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['year']) && isset($_POST['sem']) && isset($_POST['calendarid'])) {
@@ -29,7 +38,7 @@
         } else {
             echo "Form not submitted.";
         }
-
+        $filteredschedules=$schedule->filteredschedule($calendarid, $departmentid);
 
     ?>
 
@@ -111,7 +120,7 @@
                             <tbody id="tabularTableBody">
                             <?php $seenSubjectCodes = [];
 
-                                foreach ($subjectschedule as $subjectschedules) {
+                                foreach ($filteredschedules as $subjectschedules) {
                                     if (!in_array($subjectschedules['subjectcode'], $seenSubjectCodes)) {
                                     
                                         $seenSubjectCodes[] = $subjectschedules['subjectcode'];

@@ -21,9 +21,6 @@ if ($calendarid) {
     
 }
 
-
-
-
 foreach($subjectid1 as $subjectsid1){
     try {
         $stmt = $pdo->prepare("INSERT INTO academicplan (subjectid, calendarid, departmentid, yearlvl) VALUES (:subjectid, :calendarid, :departmentid, 1)");
