@@ -9,7 +9,15 @@
     <?php
 
         require_once('../include/user-mainnav.php');
-        require_once('../database/datafetch.php');
+        require_once('../classes/subject.php');
+        require_once('../classes/db.php');
+
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $subject = new Subject($pdo);
+        $distinctsubjects = $subject->getdistinctsubjhects();
+        
     ?>
             <main>
             <div class="container ">
@@ -26,6 +34,7 @@
                                 <div class="image-container">
                                     <img src="http://www.clker.com/cliparts/M/o/W/d/C/j/about-icon-md.png" width="70" height="70" class="circle-image">
                                     <label for="file-upload" class="custom-file-upload">
+                                        
                                         <i class="fa-solid fa-camera"></i>
                                     </label>
                                     <input id="file-upload" type="file" name="image" class="img">

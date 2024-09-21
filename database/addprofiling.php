@@ -12,7 +12,7 @@
     if(isset($highestdegree)){ $highestdegree = $_POST['highestdegree'];}
     
     $facultyid = $_POST['facultyid'];
-    $subjectid=$_POST['subjectid'];
+    $subjectname=$_POST['subjectname'];
 
     $monday = isset($_POST['monday']) ? 1 : 0;
     $mondaystartTime = isset($_POST['mondaystartTime']) ? $_POST['mondaystartTime'] : null;
@@ -38,11 +38,11 @@
     $saturdaystartTime = isset($_POST['saturdaystartTime']) ? $_POST['saturdaystartTime'] : null;
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
-    foreach($subjectid as $subjectids){
+    foreach($subjectname as $subjectnames){
         try {
-            $stmt = $pdo->prepare("INSERT INTO facultysubject (facultyid, subjectid) VALUES (:facultyid,:subjectid)");
+            $stmt = $pdo->prepare("INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid,:subjectname)");
             $stmt->bindParam(':facultyid', $facultyid);
-            $stmt->bindParam(':subjectid', $subjectids);
+            $stmt->bindParam(':subjectname', $subjectnames);
             $stmt->execute();
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();

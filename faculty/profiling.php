@@ -8,8 +8,27 @@
 
     <?php
         require_once('../include/user-nav.php');
-        require_once('../database/datafetch.php');
+    
+        require_once('../classes/subject.php');
+        require_once('../classes/db.php');
+        require_once('../classes/faculty.php');
 
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $subject = new Subject($pdo);
+        $faculty = new Faculty($pdo);
+
+        if (isset($_SESSION['id'])){
+            $facultyid=$_SESSION['id'];
+        }
+
+        $distinctsubjects = $subject->getdistinctsubjects();
+        $facultyinfo = $faculty->getfacultyinfo($facultyid);
+        
+        
+        
+            
     ?>
 
     <main>
@@ -133,10 +152,9 @@
                                 <table class="table table-sm fs-9 mb-0 text-center ">
                                     <thead>
                                         <tr>
-                                            <th data-sort="subcode">Code</th>
-                                            <th data-sort="desc">Description</th>
-                                            <th data-sort="type">Type</th>
-                                            <th></th>
+                                            <th data-sort="subcode">Subject Name</th>
+                                            <th data-sort="desc">Type</th>
+                                            
                                             <th>action</th>
                                         </tr>
                                     </thead>
@@ -151,35 +169,24 @@
                                 <table id="subjects1" class="table table-sm fs-9 mb-0 text-center">
                                     <thead>
                                         <tr>
-                                            <th data-sort="subcode">Code</th>
-                                            <th data-sort="desc">Description</th>
+                                            
+                                            <th data-sort="desc">Subject Name</th>
                                             <th data-sort="type">Type</th>
                                             <th>Select</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list">
-                                        <?php $seenSubjectCodes = [];
+                                        <?php
 
-                                        foreach ($subject as $subjects) {
-
-                                            if (!in_array($subjects['subjectcode'], $seenSubjectCodes)) {
-
-                                                $seenSubjectCodes[] = $subjects['subjectcode'];
-                                                $displaySubjectCode = $subjects['subjectcode'];
-                                            } else {
-                                                $displaySubjectCode = '';
-                                            }
+                                        foreach ($distinctsubjects as $subjects) {
                                         ?>
                                         <tr>
-                                            <td class="align-middle subid" hidden><?php echo $subjects['subjectid'];?></td>
-                                            <td class="align-middle subcode"><?php echo $displaySubjectCode; ?></td>
-                                            <td class="align-middle desc"><?php echo $subjects['subjectname']; ?></td>
+                                         
+                                           
+                                            <td class="align-middle desc"><?php echo $subjects['name']; ?></td>
                                             <td class="align-middle subtype"><?php echo $subjects['type']; ?></td>
-                                            <td class="align-middle subtype"><?php echo $subjects['unit']; ?></td>
-                                            <td class="align-middle subtype"><?php echo $subjects['focus']; ?></td>
-
                                             <td class="align-middle">
-                                                <input type="checkbox" class="form-check-input load-subject-checkbox1" data-subjectid1="<?php echo $subjects['subjectid']; ?>" data-subjectcode1="<?php echo $subjects['subjectcode']; ?>" data-subjectname1="<?php echo $subjects['subjectname']; ?>" data-type1="<?php echo $subjects['type']; ?>" data-unit1="<?php echo $subjects['unit']; ?>" data-focus1="<?php echo $subjects['focus']; ?>">
+                                                <input type="checkbox" class="form-check-input load-subject-checkbox1" data-subjectname1="<?php echo $subjects['name']; ?>" data-type1="<?php echo $subjects['type']; ?>">
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -294,88 +301,71 @@
         require_once('../include/js.php')
     ?>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    function handleCheckboxChange(e, tableId, checkboxClass, subjectPrefix) {
-        const checkbox = e.target;
-        const subjectCode = checkbox.getAttribute(`data-subjectcode${subjectPrefix}`);
-        const subjectId = checkbox.getAttribute(`data-subjectid${subjectPrefix}`);
-        const isChecked = checkbox.checked;
-        const loadedSubjectsTable = document.getElementById(tableId);
-
-        if (isChecked) {
-            const subjectName = checkbox.getAttribute(`data-subjectname${subjectPrefix}`);
-            const type = checkbox.getAttribute(`data-type${subjectPrefix}`);
-            const unit = checkbox.getAttribute(`data-unit${subjectPrefix}`);
-            const focus = checkbox.getAttribute(`data-focus${subjectPrefix}`);
-
-            if (!loadedSubjectsTable.querySelector(`tr[data-subjectid${subjectPrefix}="${subjectId}"]`)) {
-                const row = `
-                    <tr data-subjectid${subjectPrefix}="${subjectId}" data-subjectcode${subjectPrefix}="${subjectCode}">
-                        <td hidden><input type="text" name="subjectid[]" value="${subjectId}" class="form-control"></td>
-                        <td>${subjectCode}</td>
-                        <td>${subjectName}</td>
-                        <td>${type}</td>
-                        <td>${unit}</td>
-                        <td>${focus}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-subject${subjectPrefix}">Remove</button></td>
-                    </tr>
-                `;
-                loadedSubjectsTable.insertAdjacentHTML('beforeend', row);
-            }
-
-            document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
-                if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode && cb !== checkbox) {
-                    cb.checked = true;
-                    handleCheckboxChange({ target: cb }, tableId, checkboxClass, subjectPrefix);
-                }
-            });
-        } else {
-            document.querySelectorAll(`tr[data-subjectcode${subjectPrefix}="${subjectCode}"]`).forEach(row => row.remove());
-
-            document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
-                if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode) {
-                    cb.checked = false;
-                }
-            });
-        }
-    }
-
-    function handleRemoveSubject(e, tableId, checkboxClass, subjectPrefix) {
-        const row = e.target.closest('tr');
-        const subjectCode = row.getAttribute(`data-subjectcode${subjectPrefix}`);
-        const subjectId = row.getAttribute(`data-subjectid${subjectPrefix}`);
-
-        document.querySelectorAll(`#${tableId} tr[data-subjectcode${subjectPrefix}="${subjectCode}"]`).forEach(row => row.remove());
-
-        document.querySelectorAll(`.${checkboxClass}`).forEach(cb => {
-            if (cb.getAttribute(`data-subjectcode${subjectPrefix}`) === subjectCode) {
-                cb.checked = false;
-            }
-        });
-    }
-
-    function attachEventListeners(tableSelector, checkboxClass, subjectPrefix, tableId) {
-        document.querySelector(tableSelector).addEventListener('change', function(e) {
-            if (e.target.classList.contains(checkboxClass)) {
-                handleCheckboxChange(e, tableId, checkboxClass, subjectPrefix);
-            }
-        });
-
-        document.getElementById(tableId).addEventListener('click', function(e) {
-            if (e.target.classList.contains(`remove-subject${subjectPrefix}`)) {
-                handleRemoveSubject(e, tableId, checkboxClass, subjectPrefix);
-            }
-        });
-    }
-
-    attachEventListeners('.table-sub1 tbody', 'load-subject-checkbox1', '1', 'loadedSubjects1');
+    document.querySelector('.btn-primary[type="submit"]').addEventListener('click', function() {
+    document.getElementById('wizardForm').submit();
 });
 
 </script>
 <script>
-    document.querySelector('.btn-primary[type="submit"]').addEventListener('click', function() {
-    document.getElementById('wizardForm').submit();
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener to checkboxes in the "Preferred Subject Selection" table
+        document.querySelectorAll('.load-subject-checkbox1').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const subjectName = this.getAttribute('data-subjectname1');
+                const subjectType = this.getAttribute('data-type1');
+
+                if (this.checked) {
+                    // Add the selected subject to the "Teaching Specialization" table
+                    addToSpecialization(subjectName, subjectType, this);
+                } else {
+                    // Remove the subject from the "Teaching Specialization" table
+                    removeFromSpecialization(subjectName);
+                }
+            });
+        });
+    });
+
+    function addToSpecialization(subjectName, subjectType, checkbox) {
+        const tbody = document.getElementById('loadedSubjects1');
+
+        // Create a new row for the specialization table
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
+            <td class="align-middle">${subjectName}</td>
+            <td class="align-middle">${subjectType}</td>
+            <td class="align-middle">
+                <button type="button" class="btn btn-danger btn-sm remove-subject">Remove</button>
+            </td>
+        `;
+
+        // Add remove button functionality
+        newRow.querySelector('.remove-subject').addEventListener('click', function() {
+            // Remove the row from the specialization table
+            newRow.remove();
+            
+            // Uncheck the corresponding checkbox
+            checkbox.checked = false;
+        });
+
+        // Append the new row to the specialization table
+        tbody.appendChild(newRow);
+    }
+
+    function removeFromSpecialization(subjectName) {
+        const tbody = document.getElementById('loadedSubjects1');
+        const rows = tbody.querySelectorAll('tr');
+
+        // Loop through all rows to find the one with the matching subject name
+        rows.forEach(function(row) {
+            const subjectCell = row.querySelector('td:first-child');
+
+            if (subjectCell && subjectCell.textContent.trim() === subjectName) {
+                // Remove the matching row
+                row.remove();
+            }
+        });
+    }
 
 </script>
 

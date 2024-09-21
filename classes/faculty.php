@@ -1,7 +1,7 @@
 <?php
 require_once('db.php');
 
-class Room {
+class Faculty {
     private $pdo;
 
     public function __construct($pdo) {
@@ -29,6 +29,15 @@ class Room {
         
         }
     }
+    public function addfacultysubject($subjectname, $facultyid) {
+        foreach($subjectname as $subjectnames){
+            $stmt = "INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid,:subjectname)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':facultyid', $facultyid);
+            $stmt->bindParam(':subjectname', $subjectnames);
+            return $stmt->execute();
+        }
+    }
     
 
     public function getroombyid($id) {
@@ -54,10 +63,13 @@ class Room {
         return $stmt->execute([':id' => $id]);
     }
 
-    public function getallrooms() {
-        $sql = "SELECT *, department.name AS departmentname, room.name AS roomname, room.id as roomid FROM room JOIN department ON department.id = room.departmentid";
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function getfacultyinfo($id) {
+        $sql = "SELECT * FROM faculty WHERE id=:id";
+        $stmt = $this->pdo->prepare($sql); 
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT); 
+        $stmt->execute(); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
+    
 }
 ?>
