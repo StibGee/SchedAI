@@ -32,8 +32,12 @@ function addcurriculum() {
 
     $academicyear = isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
     $semester = isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
-
-    $result = $curriculum->addcurriculum($academicyear, $semester);
+    if(isset($_POST['curriculumplan'])&&($_POST['curriculumplan']=='yes')) {
+        $curriculumplan='1';
+    }else{
+        $curriculumplan='0';
+    }
+    $result = $curriculum->addcurriculum($academicyear, $semester, $curriculumplan);
 
     if ($result) {
         header("Location: ../admin/academic-plan.php?curriculum=added");

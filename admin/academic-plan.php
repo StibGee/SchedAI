@@ -123,7 +123,10 @@
                                     <option value="2">Information</option>
                                 </select>
                             </div>-->
-
+                            <div class="col-6">
+                                <span><input type="checkbox" name="curriculumplan" id="" value="yes"><label for="">New curriculum plan</label></span>
+                                        
+                            </div>
                             <div class="semester">
                                 <label for="">Select Semester</label>
                                 <select name="semester" class="form-select form-select-sm mt-2" id="select-department">

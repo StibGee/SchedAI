@@ -244,22 +244,24 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="subname">Subject hours</label>
-                                                            <input class="form-control" id="subname" type="number" required  />
+                                                            <input class="form-control" id="subhours" type="text" readonly>
                                                         </div>
                                                 </div>
                                                 <div class="row mt-3">
                                                         <div class="col-md-2">
                                                             <h5>Lab <input class="form-check-input " type="checkbox" id="checkbox-1" name="lab" data-bulk-select-row="data-bulk-select-row" /></h5>
                                                         </div>
-                                                        <div class="col-md-5">
-                                                            <select class="form-select" id="unit" required="" name="labunit">
-                                                                <option selected="" disabled="" value="">Choose...</option>
-
-                                                                <option selected value="1.0">1.0</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <input class="form-control" id="subname" type="number" required  />
+                                                        <div class="" id="lab-section">
+                                                            <div class="col-md-5" >
+                                                                <select class="form-select" id="unit" required="" name="labunit">
+                                                                    <option selected="" disabled="" value="">Choose...</option>
+                                                                    <option selected value="1.0">1.0</option>
+                                                                    <option selected value="6.0">6.0</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input class="form-control" id="subhourslab" type="text" readonly>
+                                                            </div>
                                                         </div>
                                                 </div>
 
@@ -272,6 +274,7 @@
                                                     <option selected="" disabled="" value="">Choose...</option>
                                                     <option>Major</option>
                                                     <option>Minor</option>
+                                                    <option value="Major1">Major<p>(no schedule)</p></option>
                                                 </select>
                                                 <div class="row mt-3">
                                                     <label for="">Mark check if the Subject requires <span>Masters</span></label>
@@ -298,7 +301,43 @@
         </div>
     </main>
 </body>
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const labSection = document.getElementById("lab-section");
+            const labCheckbox = document.getElementById("checkbox-1");
+            const lecUnitSelect = document.querySelector("select[name='lecunit']");
+            const labUnitSelect = document.querySelector("select[name='labunit']");
+            const lecHoursInput = document.getElementById("subhours");
+            const labHoursInput = document.getElementById("subhourslab");
+
+        
+            labSection.style.display = "none";
+
+         
+            labCheckbox.addEventListener("change", function () {
+                if (this.checked) {
+                    labSection.style.display = "flex"; 
+                    labHoursInput.value = "3hrs"; 
+                } else {
+                    labSection.style.display = "none"; 
+                    labHoursInput.value = ""; 
+                }
+            });
+
+            lecUnitSelect.addEventListener("change", function () {
+                const lecUnitValue = parseFloat(this.value);
+                if (lecUnitValue === 3.0) {
+                    lecHoursInput.value = "1.5hrs 2x";
+                } else if (lecUnitValue === 2.0) {
+                    lecHoursInput.value = "2hrs";
+                } else {
+                    lecHoursInput.value = ""; 
+                }
+            });
+
+        });
+    </script>
+
     </script>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/academic-view.css">

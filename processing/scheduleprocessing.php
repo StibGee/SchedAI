@@ -1,17 +1,19 @@
 <?php
 require_once '../classes/db.php'; 
+require_once '../classes/schedule.php'; 
 require_once '../classes/curriculum.php'; 
 
 
 $db = new Database();
 $pdo = $db->connect();
-$Schedule = new Schedule ($pdo); 
+$schedule = new Schedule ($pdo); 
+$curriculum = new Curriculum ($pdo); 
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 switch ($action) {
     case 'add':
-        addcurriculum();
+        addschedule();
         break;
     case 'update':
         updateRoom();
@@ -28,18 +30,33 @@ switch ($action) {
 }
 
 function addschedule() {
+    global $schedule;
     global $curriculum;
 
-    $academicyear = isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
-    $semester = isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
+    $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $departmentid= isset($_POST['departmentid']) ? filter_var($_POST['departmentid'], FILTER_SANITIZE_STRING) : '';
+    $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
+    $section1= isset($_POST['section1']) ? filter_var($_POST['section1'], FILTER_SANITIZE_STRING) : '';
+    $curriculum1= isset($_POST['curriculum1']) ? filter_var($_POST['curriculum1'], FILTER_SANITIZE_STRING) : '';
+    $section2= isset($_POST['section2']) ? filter_var($_POST['section2'], FILTER_SANITIZE_STRING) : '';
+    $curriculum2= isset($_POST['curriculum2']) ? filter_var($_POST['curriculum2'], FILTER_SANITIZE_STRING) : '';
+    $section3= isset($_POST['section3']) ? filter_var($_POST['section3'], FILTER_SANITIZE_STRING) : '';
+    $curriculum3= isset($_POST['curriculum3']) ? filter_var($_POST['curriculum3'], FILTER_SANITIZE_STRING) : '';
+    $section4= isset($_POST['section4']) ? filter_var($_POST['section4'], FILTER_SANITIZE_STRING) : '';
+    $curriculum4= isset($_POST['curriculum4']) ? filter_var($_POST['curriculum4'], FILTER_SANITIZE_STRING) : '';
 
-    $result = $curriculum->addcurriculum($academicyear, $semester);
+    $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
+    $request = $schedule->addrequest($departmentid, $calendarid);
+    $result1 = $schedule->addschedule(1,$academicyear, $departmentid, $semester, $section1, $curriculum1, $calendarid);
+    $result2 = $schedule->addschedule(2,$academicyear, $departmentid, $semester, $section2, $curriculum2, $calendarid);
+    $result3 = $schedule->addschedule(3,$academicyear, $departmentid, $semester, $section3, $curriculum3, $calendarid);
+    $result4 = $schedule->addschedule(4,$academicyear, $departmentid, $semester, $section4, $curriculum4, $calendarid);
 
-    if ($result) {
+    if ($result1 && $result2 && $result3 && $result4) {
         header("Location: ../admin/academic-plan.php?curriculum=added");
     } else {
         header("Location: ../admin/academic-plan.php?curriculum=error");
-    }
+    }    
     exit();
 }
 

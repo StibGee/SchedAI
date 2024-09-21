@@ -7,12 +7,21 @@
 <body>
     <?php
         require_once('../include/nav.php');
-        require_once('../database/datafetch.php');
+        require_once('../classes/db.php');
+        require_once('../classes/curriculum.php');
+        
         if(isset($_POST['departmentid'])){
             $_SESSION['departmentid'] = $_POST['departmentid'];
         } else {
             $_SESSION['departmentid'] = 1;
         }
+        
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $curriculum = new Curriculum($pdo);
+        $calendar = $curriculum->getallcurriculumsschedule();
+        $calendardistinct = $curriculum->getdistinctcurriculumsschedule();
     ?>
     <main>
         <div class="container mb-1">
@@ -91,7 +100,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-3">
-                        <form id="formModalForm" action="../database/generatesched.php" method="post">
+                        <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
+                            <input type="hidden" name="action" value="add">
                             <div class="rounded-top-3 bg-body-tertiary p-2">
                                 <h2 class="head-label">Generate New Schedule</h2>
                                 <div class="container mt-4">
@@ -151,9 +161,14 @@
                                                             <input placeholder="Input No. of Sections" type="number" name="section1" class="form-control form-control-sm" style="width: 200px;">
                                                         </td>
                                                         <td style="border: none;">
-                                                            <select class="form-select form-select-sm m-0">
-                                                                <option>2018-2021</option>
-                                                                <option>2022-2025</option>
+                                                            <select class="form-select form-select-sm m-0" name="curriculum1">
+                                                                <?php 
+                                                                foreach ($calendardistinct as $calendardistincts) {?>
+                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
+                                                                    
+                                                                <?php
+                                                                }
+                                                                ?>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -163,9 +178,14 @@
                                                             <input placeholder="Input No. of Sections" type="number" name="section2" class="form-control form-control-sm" style="width: 200px;">
                                                         </td>
                                                         <td style="border: none;">
-                                                            <select class="form-select form-select-sm m-0">
-                                                                <option>2018-2021</option>
-                                                                <option>2022-2025</option>
+                                                        <select class="form-select form-select-sm m-0" name="curriculum2">
+                                                                <?php 
+                                                                foreach ($calendardistinct as $calendardistincts) {?>
+                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
+                                                                    
+                                                                <?php
+                                                                }
+                                                                ?>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -175,9 +195,14 @@
                                                             <input placeholder="Input No. of Sections" type="number" name="section3" class="form-control form-control-sm" style="width: 200px;">
                                                         </td>
                                                         <td style="border: none;">
-                                                            <select class="form-select form-select-sm m-0">
-                                                                <option>2018-2021</option>
-                                                                <option>2022-2025</option>
+                                                        <select class="form-select form-select-sm m-0" name="curriculum3">
+                                                                <?php 
+                                                                foreach ($calendardistinct as $calendardistincts) {?>
+                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
+                                                                    
+                                                                <?php
+                                                                }
+                                                                ?>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -187,9 +212,14 @@
                                                             <input placeholder="Input No. of Sections" type="number" name="section4" class="form-control form-control-sm" style="width: 200px;">
                                                         </td>
                                                         <td style="border: none;">
-                                                            <select class="form-select form-select-sm m-0">
-                                                                <option>2018-2021</option>
-                                                                <option>2022-2025</option>
+                                                        <select class="form-select form-select-sm m-0" name="curriculum4">
+                                                                <?php 
+                                                                foreach ($calendardistinct as $calendardistincts) {?>
+                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
+                                                                    
+                                                                <?php
+                                                                }
+                                                                ?>
                                                             </select>
                                                         </td>
                                                     </tr>
