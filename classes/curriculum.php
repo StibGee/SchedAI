@@ -75,6 +75,11 @@ class Curriculum {
         $stmt = $this->pdo->query($sqlcalendar);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getdistinctcurriculumsscheduleall() {
+        $sqlcalendar = "SELECT DISTINCT year as year,name as name FROM calendar ORDER BY year";
+        $stmt = $this->pdo->query($sqlcalendar);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function findcurriculumid($academicyear, $semester) {
         $query = "SELECT id FROM calendar WHERE year = :academicyear AND sem = :semester LIMIT 1";
         $stmt = $this->pdo->prepare($query);

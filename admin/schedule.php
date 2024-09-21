@@ -22,6 +22,7 @@
         $curriculum = new Curriculum($pdo);
         $calendar = $curriculum->getallcurriculumsschedule();
         $calendardistinct = $curriculum->getdistinctcurriculumsschedule();
+        $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();
     ?>
     <main>
         <div class="container mb-1">
@@ -109,7 +110,15 @@
                                         <div class="col-6">
                                             <div class="form-group academic-year">
                                                 <h5>Select Academic Year</h5>
-                                                <input type="text" name="academicyear" class="form-control form-control-sm" style="width: 120px;" value="<?php echo date('Y'); ?>" readonly>
+                                                <select name="academicyear" id="">
+                                                    <?php  
+                                                        foreach ($calendardistinctall as $calendardistinctsall) {?>
+                                                            <option value="<?php echo $calendardistinctsall['year'];?>"><?php echo $calendardistinctsall['name'];?></option>
+                                                                
+                                                            <?php
+                                                        }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
