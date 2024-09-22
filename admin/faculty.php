@@ -74,7 +74,13 @@
                                             <i class="fa-solid fa-ellipsis"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                                            <li>
+                                                <form action="profiling.php" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">
+                                                    <button type="submit" class="dropdown-item">Edit</button>
+                                                </form>
+                                            </li>
+
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
                                         </ul>
