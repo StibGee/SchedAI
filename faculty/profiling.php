@@ -66,7 +66,8 @@
                 </div>
             </div>
             <div class="col-md-9 scrollable-content mt-4">
-                <form id="wizardForm" method="POST" action="../database/addprofiling.php">
+                <form id="wizardForm" method="POST" action="../processing/facultyprocessing.php">
+                    <input type="hidden" name="action" value="addprofiling">
                     <input type="number" name="facultyid" value="<?php echo $_SESSION['id'];?>" hidden>
                     <div class="step-content active p-4" id="step1">
                         <h5>Personal Information</h5>
