@@ -34,8 +34,8 @@ facultypreference = cursor.fetchall()
 cursor.execute("SET FOREIGN_KEY_CHECKS = 0; UPDATE `subjectschedule` SET `facultyid` = NULL; SET FOREIGN_KEY_CHECKS = 1;", multi=True)
 conn.commit()
 
-def facultysubjectmatch(subjectschedulesubjectid, facultysubjectfsubjectid, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
-    return (subjectschedulesubjectid == facultysubjectfsubjectid and (
+def facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
+    return (subjectschedulesubjectname == facultysubjectfsubjectname and (
         subjectschedulesubjectmasters == facultysubjectmasters or subjectschedulesubjectmasters == 'No'
     ) and (subjectscheduledepartmentid == facultysubjectdepartmentid or facultysubjectdepartmentid == 3))
 
@@ -49,25 +49,24 @@ workinghoursleft={}
 def assign_subject(currentshubjectid):
     
     if currentshubjectid >= len(subjectschedule):
-        return True  # Base case: All subjects assigned successfully
+        return True  
 
     subjectschedules = subjectschedule[currentshubjectid]
     subjectscheduleid = subjectschedules[0]
-    subjectschedulesubjectid = subjectschedules[1]
+    subjectschedulesubjectname = subjectschedules[13]
     subjectschedulesubjecthours = subjectschedules[15]
     subjectschedulesubjectmasters = subjectschedules[17]
     subjectscheduledepartmentid = subjectschedules[10]
     
     for facultysubjects in facultysubject:
         facultysubjectfacultyid = facultysubjects[1]
-        facultysubjectfsubjectid = facultysubjects[2]
+        facultysubjectfsubjectname = facultysubjects[2]
         facultysubjectmasters = facultysubjects[11]
         facultysubjectdepartmentid = facultysubjects[13]
-        
-        if facultysubjectmatch(subjectschedulesubjectid, facultysubjectfsubjectid, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
+        print(subjectschedulesubjectname,facultysubjectfsubjectname)
+        if facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
             if facultyworkinghourscheck(facultyworkinghours[facultysubjectfacultyid], subjectschedulesubjecthours, facultysubjectfacultyid):
                 
-                # Assign the faculty member to the subject schedule
                 facultyworkinghours[facultysubjectfacultyid] -= subjectschedulesubjecthours
                 assignedsubjects[subjectscheduleid] = facultysubjectfacultyid
                 workinghoursleft[facultysubjectfacultyid] = facultyworkinghours[facultysubjectfacultyid]
@@ -77,11 +76,9 @@ def assign_subject(currentshubjectid):
                 cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[facultysubjectfacultyid]} WHERE `id` = {facultysubjectfacultyid}")
                 conn.commit()
 
-                # Recur to assign the next subject
                 if assign_subject(currentshubjectid + 1):
                     return True
 
-                # Backtrack if the assignment fails for the next subject
                 print(f"Backtracking subject {currentshubjectid}/{len(subjectschedule)}")
                 facultyworkinghours[facultysubjectfacultyid] += subjectschedulesubjecthours
                 del assignedsubjects[subjectscheduleid]
@@ -104,7 +101,6 @@ else:
 
 end_time = time.time()
 
-# Calculating the total time taken
 total_time = end_time - start_time
 print(f"Backtracking Algorithm")
 print(f"Utilizing 2 processor")
