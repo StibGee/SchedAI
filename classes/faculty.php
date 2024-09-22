@@ -30,13 +30,24 @@ class Faculty {
         }
     }
     public function addfacultysubject($subjectname, $facultyid) {
-        foreach($subjectname as $subjectnames){
-            $stmt = "INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid,:subjectname)";
+        foreach($subjectname as $subjectnames) {
+            $sql = "INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid, :subjectname)";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':facultyid', $facultyid);
-            $stmt->bindParam(':subjectname', $subjectnames);
-            return $stmt->execute();
+            $stmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT);
+            $stmt->bindParam(':subjectname', $subjectnames, PDO::PARAM_STR);
+            $stmt->execute(); 
         }
+        return true;
+    }
+    
+    public function addtimepreference($facultyid, $day, $starttime,$endtime){
+        $sql ="INSERT INTO facultypreferences (facultyid, day, starttime, endtime) VALUES (:facultyid, :day, :starttime, :endtime)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':day', $day);
+        $stmt->bindParam(':facultyid', $facultyid);
+        $stmt->bindParam(':starttime', $starttime);
+        $stmt->bindParam(':endtime', $endtime);
+        return $stmt->execute();
     }
     
 
@@ -70,6 +81,15 @@ class Faculty {
         $stmt->execute(); 
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
+    
+    public function getfacultysubjects($facultyid) {
+        $sql = "SELECT * FROM facultysubject WHERE facultyid=:facultyid";
+        $stmt = $this->pdo->prepare($sql); 
+        $stmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT); 
+        $stmt->execute(); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
+    
     
 }
 ?>
