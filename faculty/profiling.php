@@ -119,8 +119,8 @@
                                 <label class="form-label" for="position">Type</label>
                                 <select class="form-select" id="position" name="type" required="">
                                     <option selected="" disabled="" value="">Choose...</option>
-                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Regular'){ echo 'selected'; } ?> value="regular">Regular </option>
-                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="contractual">Contractual</option>
+                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Regular'){ echo 'selected'; } ?> value="Regular">Regular </option>
+                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>  
                                 </select>
                                 <div class="invalid-feedback">Please select a type</div>
                             </div>
@@ -167,7 +167,7 @@
                             <label for="">Preferred Subject Selection</label>
                             <div class="wrap p-3 m-3">
                                 <div class="table-sub1 table-sub my-3 p-3">
-                                <table id="subjects1" class="table table-sm fs-9 mb-0 text-center">
+                                <table id="subjects1" class="table table-sm fs-9 mb-0">
                                     <thead>
                                         <tr>
                                             
@@ -210,16 +210,17 @@
                                 <label class="form-label" for="degree">Highest Degree Obtained</label>
                                 <select class="form-select" name="highestdegree" id="degree" name="degree" required>
                                     <option selected disabled value="">Choose...</option>
-                                    <option value="PhD">PhD</option>
-                                    <option value="MD">MD</option>
+                                    <option value="PhD" <?php if($facultyinfo['rank']=='PhD'){ echo 'selected';}?>>PhD</option>
+                                    <option value="Masteral" <?php if($facultyinfo['rank']=='Masteral'){ echo 'selected';}?>>Masteral</option>
+                                    <option value="None" <?php if($facultyinfo['rank']=='None'){ echo 'selected';}?>>None</option>
                                 </select>
                             </div>
-                            <div class="table-load my-2 p-3 col-6" id="specialization-container" style="display: none;">
+                            <!--<div class="table-load my-2 p-3 col-6" id="specialization-container" style="display: none;">
                                 <label class="form-label" for="specialization">Specialization</label>
                                 <select class="form-select" id="specialization" name="specialization" required>
                                     <option selected disabled value="">Choose...</option>
                                 </select>
-                            </div>
+                            </div>-->
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
@@ -309,17 +310,14 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Add event listener to checkboxes in the "Preferred Subject Selection" table
         document.querySelectorAll('.load-subject-checkbox1').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 const subjectName = this.getAttribute('data-subjectname1');
                 const subjectType = this.getAttribute('data-type1');
 
                 if (this.checked) {
-                    // Add the selected subject to the "Teaching Specialization" table
                     addToSpecialization(subjectName, subjectType, this);
                 } else {
-                    // Remove the subject from the "Teaching Specialization" table
                     removeFromSpecialization(subjectName);
                 }
             });
@@ -329,7 +327,6 @@
     function addToSpecialization(subjectName, subjectType, checkbox) {
         const tbody = document.getElementById('loadedSubjects1');
 
-        // Create a new row for the specialization table
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
             <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
@@ -340,34 +337,39 @@
             </td>
         `;
 
-        // Add remove button functionality
         newRow.querySelector('.remove-subject').addEventListener('click', function() {
-            // Remove the row from the specialization table
             newRow.remove();
             
-            // Uncheck the corresponding checkbox
             checkbox.checked = false;
         });
 
-        // Append the new row to the specialization table
         tbody.appendChild(newRow);
     }
 
     function removeFromSpecialization(subjectName) {
         const tbody = document.getElementById('loadedSubjects1');
         const rows = tbody.querySelectorAll('tr');
-
-        // Loop through all rows to find the one with the matching subject name
+   
         rows.forEach(function(row) {
-            const subjectCell = row.querySelector('td:first-child');
-
-            if (subjectCell && subjectCell.textContent.trim() === subjectName) {
-                // Remove the matching row
+            const subjectInput = row.querySelector('input[name="subjectname[]"]');
+           
+            if (subjectInput && subjectInput.value.trim() === subjectName) {
+                
                 row.remove();
             }
         });
     }
 
+
+</script>
+<script>
+$(document).ready(function() {
+    $('#subjects1').DataTable({
+        "pageLength": 10, 
+        "searching": true,
+        "lengthChange": false   
+    });
+});
 </script>
 
 

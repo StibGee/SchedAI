@@ -29,6 +29,18 @@ class Faculty {
         
         }
     }
+    
+    public function checkfacultyday($facultyid, $day) {
+        $sql = "SELECT COUNT(*) FROM facultypreferences WHERE facultyid = :facultyid AND day = :day";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':facultyid', $facultyid);
+        $stmt->bindParam(':day', $day);
+        $stmt->execute();
+        $facultydayexists = $stmt->fetchColumn();
+        
+        return $facultydayexists > 0;
+    }
+    
     public function addfacultysubject($subjectname, $facultyid) {
         foreach($subjectname as $subjectnames) {
             $sql = "INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid, :subjectname)";
@@ -49,9 +61,24 @@ class Faculty {
         $stmt->bindParam(':endtime', $endtime);
         return $stmt->execute();
     }
-
+    public function edittimepreference($facultyid, $day, $starttime, $endtime) {
+        $sql = "UPDATE facultypreferences SET starttime = :starttime, endtime = :endtime WHERE facultyid = :facultyid AND day = :day";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':day', $day);
+        $stmt->bindParam(':facultyid', $facultyid);
+        $stmt->bindParam(':starttime', $starttime);
+        $stmt->bindParam(':endtime', $endtime);
+        return $stmt->execute();
+    }
+    public function deletetimepreference($facultyid, $day){
+        $sql = "DELETE FROM facultypreferences WHERE facultyid =:facultyid AND day=:day";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':facultyid', $facultyid);
+        $stmt->bindParam(':day', $day);
+        return $stmt->execute();
+    }
     public function editfacultyinfo($fname, $lname, $mname, $contactno, $bday, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid) {
-        $sql = "UPDATE faculty SET fname = :fname, lname = :lname, mname = :mname, contactno = :contactno, bday = :bday, gender = :gender, type = :type, startdate = :startdate, teachinghours = :teachinghours, highestdegree = :highestdegree WHERE id = :facultyid";
+        $sql = "UPDATE faculty SET fname = :fname, lname = :lname, mname = :mname, contactno = :contactno, bday = :bday, gender = :gender, type = :type, startdate = :startdate, teachinghours = :teachinghours, rank = :rank WHERE id = :facultyid";
         $stmt = $this->pdo->prepare($sql);
     
         $stmt->bindParam(':fname', $fname);
@@ -63,7 +90,7 @@ class Faculty {
         $stmt->bindParam(':type', $type);
         $stmt->bindParam(':startdate', $startdate);
         $stmt->bindParam(':teachinghours', $teachinghours);
-        $stmt->bindParam(':highestdegree', $highestdegree);
+        $stmt->bindParam(':rank', $highestdegree);
         $stmt->bindParam(':facultyid', $facultyid);
     
         return $stmt->execute();
@@ -76,6 +103,8 @@ class Faculty {
         $stmt->bindParam(':facultyid', $facultyid);
         return $stmt->execute();
     }
+
+    
 
     public function getroombyid($id) {
         $sql = "SELECT * FROM rooms WHERE id = :id";

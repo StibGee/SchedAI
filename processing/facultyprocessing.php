@@ -106,7 +106,7 @@ function addfacultypreferences() {
     $saturdaystartTime = isset($_POST['saturdaystartTime']) ? $_POST['saturdaystartTime'] : null;
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
-    $facultysubject= $faculty->addfacultysubject($subjectname, $facultyid);
+    $facultysubject = $faculty->addfacultysubject($subjectname, $facultyid);
 
     if (isset($_POST['monday'])){
         $monday = $faculty->addtimepreference($facultyid, '1',$mondaystartTime,$mondayendTime);
@@ -176,35 +176,84 @@ function editfacultyprofiling() {
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
     //edit faculty info
-    $faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $bday, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $subjectname);
+    $editfaculty=$faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $bday, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $subjectname);
+
+    //reset facultysubject 
+    $resetfacultysubject= $faculty->resetfacultysubject($facultyid);
 
     //update facultysubject 
-    $facultysubject= $faculty->resetfacultysubject($facultyid);
-    $facultysubject= $faculty->addfacultysubject($subjectname, $facultyid);
+    $addfacultysubject= $faculty->addfacultysubject($subjectname, $facultyid);
 
     if (isset($_POST['monday'])){
-        $monday = $faculty->addtimepreference($facultyid, '1',$mondaystartTime,$mondayendTime);
-    }
-    if (isset($_POST['tuesday'])){
-        $tuesday = $faculty->addtimepreference($facultyid, '2',$tuesdaystartTime,$tuesdayendTime);
-    }
-    if (isset($_POST['wednesday'])){
-        $wednesday = $faculty->addtimepreference($facultyid, '3',$wednesdaystartTime,$wednesdayendTime);
-    }
-    if (isset($_POST['thursday'])){
-        $thursday = $faculty->addtimepreference($facultyid, '4',$thursdaystartTime,$thursdayendTime);
-    }
-    if (isset($_POST['friday'])){
-        $friday = $faculty->addtimepreference($facultyid, '5',$fridaystartTime,$fridayendTime);
-    }
-    if (isset($_POST['saturday'])){
-        $saturday = $faculty->addtimepreference($facultyid, '6',$saturdaystartTime,$saturdayendTime);
+        $dayexisting = $faculty->checkfacultyday($facultyid, '1');
+        if (!$dayexisting){
+            $monday = $faculty->addtimepreference($facultyid, '1',$mondaystartTime,$mondayendTime);
+        }else{
+            $monday = $faculty->edittimepreference($facultyid, '1',$mondaystartTime,$mondayendTime);
+        }
+    }else{
+        $monday = $faculty->deletetimepreference($facultyid, '1');
     }
 
-    if ($facultysubject && ($monday || $tuesday || $wednesday || $thursday || $friday || $saturday)) {
-        header("Location: ../admin/academic-plan.php?curriculum=added");
+    if (isset($_POST['tuesday'])){
+        $dayexisting = $faculty->checkfacultyday($facultyid, '2');
+        if (!$dayexisting){
+            $tuesday = $faculty->addtimepreference($facultyid, '2',$tuesdaystartTime,$tuesdayendTime);
+        }else{
+            $tuesday = $faculty->edittimepreference($facultyid, '2',$mondaystartTime,$mondayendTime);
+        }
+    }else{
+        $tuesday = $faculty->deletetimepreference($facultyid, '2');
+    }
+
+    if (isset($_POST['wednesday'])){
+        $dayexisting = $faculty->checkfacultyday($facultyid, '3');
+        if (!$dayexisting){
+            $wednesday = $faculty->addtimepreference($facultyid, '3',$wednesdaystartTime,$wednesdayendTime);
+        }else{
+            $wednesday = $faculty->edittimepreference($facultyid, '3',$mondaystartTime,$mondayendTime);
+        }
+     }else{
+        $wednesday = $faculty->deletetimepreference($facultyid, '3');
+    }
+
+    if (isset($_POST['thursday'])){
+        $dayexisting = $faculty->checkfacultyday($facultyid, '4');
+        if (!$dayexisting){
+            $thursday = $faculty->addtimepreference($facultyid, '4',$thursdaystartTime,$thursdayendTime);
+        }else{
+            $thursday = $faculty->edittimepreference($facultyid, '4',$mondaystartTime,$mondayendTime);
+        }
+    }else{
+        $thursday = $faculty->deletetimepreference($facultyid, '4');
+    }
+
+    if (isset($_POST['friday'])){
+        $dayexisting = $faculty->checkfacultyday($facultyid, '5');
+        if (!$dayexisting){
+            $friday = $faculty->addtimepreference($facultyid, '5',$fridaystartTime,$fridayendTime);
+        }else{
+            $friday = $faculty->edittimepreference($facultyid, '5',$mondaystartTime,$mondayendTime);
+        }
+    }else{
+        $friday = $faculty->deletetimepreference($facultyid, '5');
+    }
+
+    if (isset($_POST['saturday'])){
+        $dayexisting = $faculty->checkfacultyday($facultyid, '6');
+        if (!$dayexisting){
+            $saturday = $faculty->addtimepreference($facultyid, '6',$saturdaystartTime,$saturdayendTime);
+        }else{
+            $saturday = $faculty->edittimepreference($facultyid, '6',$mondaystartTime,$mondayendTime);
+        }
+    }else{
+        $saturday = $faculty->deletetimepreference($facultyid, '6');
+    }
+
+    if ($editfaculty && $resetfacultysubject && $addfacultysubject && ($monday || $tuesday || $wednesday || $thursday || $friday || $saturday)) {
+        header("Location: ../admin/faculty.php?curriculum=added");
     } else {
-        header("Location: ../admin/academic-plan.php?curriculum=error");
+        header("Location: ../admin/faculty.php?curriculum=error");
     }    
     exit();
 }
