@@ -15,4 +15,9 @@ room
     - delete functionality done
     - design action button
 
-
+profiling: admin side
+    -display faculty info done
+    -edit faculty 
+        -subject specialization
+        -day time preference
+    

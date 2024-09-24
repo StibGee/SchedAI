@@ -134,7 +134,7 @@ function addfacultypreferences() {
     }    
     exit();
 }
-function editfacultypreferences() {
+function editfacultyprofiling() {
     global $faculty;
 
     $fname = isset($_POST['fname']) ? filter_var($_POST['fname'], FILTER_SANITIZE_STRING) : '';
@@ -175,8 +175,11 @@ function editfacultypreferences() {
     $saturdaystartTime = isset($_POST['saturdaystartTime']) ? $_POST['saturdaystartTime'] : null;
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
+    //edit faculty info
     $faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $bday, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $subjectname);
 
+    //update facultysubject 
+    $facultysubject= $faculty->resetfacultysubject($facultyid);
     $facultysubject= $faculty->addfacultysubject($subjectname, $facultyid);
 
     if (isset($_POST['monday'])){

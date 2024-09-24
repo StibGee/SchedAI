@@ -71,39 +71,39 @@
                     <input type="number" name="facultyid" value="<?php echo $_SESSION['id'];?>" hidden>
                     <div class="step-content active p-4" id="step1">
                         <h5>Personal Information</h5>
-                        <?php foreach($facultyinfo as $facultyinfos){ ?>
+                        <?php if($facultyinfo){ ?>
 
                         <div class="row mt-2">
                             <div class="col-md-5">
                                 <label class="form-label" for="firstname">First name</label>
-                                <input class="form-control" id="firstname" type="text" name="fname" value="<?php if(isset($facultyinfos['fname'])){ echo $facultyinfos['fname'];} ?>" required>
+                                <input class="form-control" id="firstname" type="text" name="fname" value="<?php if(isset($facultyinfo['fname'])){ echo $facultyinfo['fname'];} ?>" required>
                             </div>
                             <div class="col-md-5">
                                 <label class="form-label" for="lastname">Last name</label>
-                                <input class="form-control" id="lastname" type="text" name="lname" value="<?php if(isset($facultyinfos['lname'])){ echo $facultyinfos['lname'];} ?>" required>
+                                <input class="form-control" id="lastname" type="text" name="lname" value="<?php if(isset($facultyinfo['lname'])){ echo $facultyinfo['lname'];} ?>" required>
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label" for="midleinit">MI</label>
-                                <input class="form-control" id="midleinit" type="text" name="mname" value="<?php if(isset($facultyinfos['mname'])){ echo $facultyinfos['mname'];} ?>" required />
+                                <input class="form-control" id="midleinit" type="text" name="mname" value="<?php if(isset($facultyinfo['mname'])){ echo $facultyinfo['mname'];} ?>" required />
                             </div>
                         </div>
                         <div class="row mt-5">
                             <div class="col-md-5">
                                 <label class="form-label" for="contactnumber">Contact Number</label>
-                                <input class="form-control" id="contactnumber" name="contactno" type="tel" value="<?php if(isset($facultyinfos['contactno'])){ echo $facultyinfos['contactno'];} ?>" required />
+                                <input class="form-control" id="contactnumber" name="contactno" type="tel" value="<?php if(isset($facultyinfo['contactno'])){ echo $facultyinfo['contactno'];} ?>" required />
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label" for="birthdate">Birthdate</label>
-                                <input class="form-control" id="birthdate" name="bday" type="date" value="<?php if(isset($facultyinfos['bday'])){ echo $facultyinfos['bday'];} ?>"required />
+                                <input class="form-control" id="birthdate" name="bday" type="date" value="<?php if(isset($facultyinfo['bday'])){ echo $facultyinfo['bday'];} ?>"required />
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label" for="gender">Gender</label>
                                 <select class="form-select" id="gender" name="gender" required="">
                                     <option selected="" disabled="">Choose...</option>
-                                    <option <?php if(isset($facultyinfos['gender']) && $facultyinfos['gender'] == 'Male'){ echo 'selected'; } ?> value="Male">Male</option>
-                                    <option <?php if(isset($facultyinfos['gender']) && $facultyinfos['gender'] == 'Female'){ echo 'selected'; } ?> value="Female">Female</option>
+                                    <option <?php if(isset($facultyinfo['gender']) && $facultyinfo['gender'] == 'Male'){ echo 'selected'; } ?> value="Male">Male</option>
+                                    <option <?php if(isset($facultyinfo['gender']) && $facultyinfo['gender'] == 'Female'){ echo 'selected'; } ?> value="Female">Female</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a Gender</div>
                             </div>
@@ -119,8 +119,8 @@
                                 <label class="form-label" for="position">Type</label>
                                 <select class="form-select" id="position" name="type" required="">
                                     <option selected="" disabled="" value="">Choose...</option>
-                                    <option <?php if(isset($facultyinfos['type']) && $facultyinfos['type'] == 'Regular'){ echo 'selected'; } ?> value="regular">Regular </option>
-                                    <option <?php if(isset($facultyinfos['type']) && $facultyinfos['type'] == 'Contractual'){ echo 'selected'; } ?> value="contractual">Contractual</option>
+                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Regular'){ echo 'selected'; } ?> value="regular">Regular </option>
+                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="contractual">Contractual</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a type</div>
                             </div>
@@ -129,13 +129,13 @@
                         <div class="row mt-2">
                             <div class="col-6">
                                 <label class="form-label" for="startdate">Start Date</label>
-                                <input class="form-control" id="startdate" type="date" name="startdate" value="<?php if(isset($facultyinfos['startdate'])){ echo $facultyinfos['startdate'];} ?>" required />
+                                <input class="form-control" id="startdate" type="date" name="startdate" value="<?php if(isset($facultyinfo['startdate'])){ echo $facultyinfo['startdate'];} ?>" required />
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
 
                             <div class="col-6">
                                 <label class="form-label" for="teachinghours">Teaching Hours</label>
-                                <input class="form-control" id="teachinghours" type="number" name="teachinghours" value="<?php if(isset($facultyinfos['teachinghours'])){ echo $facultyinfos['teachinghours'];} ?>" required placeholder="Hours/Week" />
+                                <input class="form-control" id="teachinghours" type="number" name="teachinghours" value="<?php if(isset($facultyinfo['teachinghours'])){ echo $facultyinfo['teachinghours'];} ?>" required placeholder="Hours/Week" />
                             </div>
                         </div>
 

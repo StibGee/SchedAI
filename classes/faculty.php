@@ -49,7 +49,33 @@ class Faculty {
         $stmt->bindParam(':endtime', $endtime);
         return $stmt->execute();
     }
+
+    public function editfacultyinfo($fname, $lname, $mname, $contactno, $bday, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid) {
+        $sql = "UPDATE faculty SET fname = :fname, lname = :lname, mname = :mname, contactno = :contactno, bday = :bday, gender = :gender, type = :type, startdate = :startdate, teachinghours = :teachinghours, highestdegree = :highestdegree WHERE id = :facultyid";
+        $stmt = $this->pdo->prepare($sql);
     
+        $stmt->bindParam(':fname', $fname);
+        $stmt->bindParam(':lname', $lname);
+        $stmt->bindParam(':mname', $mname);
+        $stmt->bindParam(':contactno', $contactno);
+        $stmt->bindParam(':bday', $bday);
+        $stmt->bindParam(':gender', $gender);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':startdate', $startdate);
+        $stmt->bindParam(':teachinghours', $teachinghours);
+        $stmt->bindParam(':highestdegree', $highestdegree);
+        $stmt->bindParam(':facultyid', $facultyid);
+    
+        return $stmt->execute();
+    }
+    
+    
+    public function resetfacultysubject($facultyid){
+        $sql = "DELETE FROM facultysubject WHERE facultyid = :facultyid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':facultyid', $facultyid);
+        return $stmt->execute();
+    }
 
     public function getroombyid($id) {
         $sql = "SELECT * FROM rooms WHERE id = :id";
@@ -79,11 +105,18 @@ class Faculty {
         $stmt = $this->pdo->prepare($sql); 
         $stmt->bindParam(':id', $id, PDO::PARAM_INT); 
         $stmt->execute(); 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
     public function getfacultysubjects($facultyid) {
         $sql = "SELECT * FROM facultysubject WHERE facultyid=:facultyid";
+        $stmt = $this->pdo->prepare($sql); 
+        $stmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT); 
+        $stmt->execute(); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
+    public function getfacultydaytime($facultyid) {
+        $sql = "SELECT * FROM facultypreferences WHERE facultyid=:facultyid";
         $stmt = $this->pdo->prepare($sql); 
         $stmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT); 
         $stmt->execute(); 
