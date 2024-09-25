@@ -8,7 +8,18 @@
 
     <?php
         require_once('../include/nav.php');
-        require_once('../database/datafetch.php');
+        require_once('../classes/db.php');
+        require_once('../classes/faculty.php');
+        require_once('../classes/department.php');
+
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $faculty = new Faculty($pdo);
+        $department = new Department($pdo);
+        $facultyall = $faculty->getallfaculty();
+        $departmentall = $department->getalldepartment();
+
     ?>
 
     <main>
@@ -58,7 +69,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tabularTableBody">
-                                <?php foreach ($faculty AS $facultys){ ?>
+                                <?php foreach ($facultyall AS $facultys){ ?>
                                 <tr>
                                     <td><?php echo $facultys['facultyid']; ?></td>
                                     <td><?php echo $facultys['fname']." ".$facultys['mname']." ".$facultys['lname']; ?></td>
@@ -82,7 +93,13 @@
                                             </li>
 
                                             <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                                            <li>
+                                                <form action="../processing/facultyprocessing.php" method="post" style="display:inline;">
+                                                    <input type="hidden" name="action" value="delete">
+                                                    <input type="hidden" name="id" value="<?php echo $facultys['facultyid']; ?>">
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -114,7 +131,7 @@
                                             <label class="form-label" for="department">Deparment</label>
                                             <select class="form-select" id="department" name="departmentid" required>
                                                 <option selected="" disabled="" value="">Choose...</option>
-                                                <?php foreach($department as $departments){ ?>
+                                                <?php foreach($departmentall as $departments){ ?>
                                                 <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
                                                 <?php } ?>
                                             </select>

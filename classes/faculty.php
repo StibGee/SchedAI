@@ -123,8 +123,8 @@ class Faculty {
         ]);
     }
 
-    public function deleteroom($id) {
-        $sql = "DELETE FROM room WHERE id = :id";
+    public function deletefaculty($id) {
+        $sql = "DELETE FROM faculty WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
@@ -136,7 +136,11 @@ class Faculty {
         $stmt->execute(); 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
+    public function getallfaculty() {
+        $sql = "SELECT *,faculty.id AS facultyid, department.name AS departmentname FROM faculty JOIN department ON department.id = faculty.departmentid";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function getfacultysubjects($facultyid) {
         $sql = "SELECT * FROM facultysubject WHERE facultyid=:facultyid";
         $stmt = $this->pdo->prepare($sql); 

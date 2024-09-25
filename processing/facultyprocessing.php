@@ -25,7 +25,7 @@ switch ($action) {
         updateRoom();
         break;
     case 'delete':
-        deletecurriculum();
+        deletefaculty();
         break;
     case 'list':
         listRooms();
@@ -279,16 +279,16 @@ function updateroom() {
     exit();
 }
 
-function deletecurriculum() {
-    global $curriculum;
+function deletefaculty() {
+    global $faculty;
     $id = isset($_POST['id']) ? filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT) : 0;
-    $result = $curriculum->deletecurriculum($id);
+    $result = $faculty->deletefaculty($id);
 
 
     if ($result) {
-        header("Location: ../admin/academic-plan.php?curriculum=deleted");
+        header("Location: ../admin/faculty.php?faculty=deleted");
     } else {
-        header("Location: ../admin//academic-plan.php?curriculum=error");
+        header("Location: ../admin//faculty.php?faculty=error");
     }
     exit();
 }

@@ -30,7 +30,6 @@ class Department {
         }
     }
     
-
     public function getroombyid($id) {
         $sql = "SELECT * FROM rooms WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
