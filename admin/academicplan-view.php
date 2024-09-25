@@ -16,7 +16,7 @@
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        echo $_SESSION['yearlvl'];
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['academicplanyear']) && isset($_POST['academicplansem']) && isset($_POST['academicplancalendarid'])) {
                 $year = htmlspecialchars($_POST['academicplanyear']);

@@ -1,4 +1,4 @@
-academicplan-view
+-academicplan-view
 	- add + button done
 	- add link to school years done
     - fetch data
@@ -7,17 +7,25 @@ academicplan-view
 academic-plan
     - remove the + button done 
 schedule
-    - move the generate to inside the final-sched
+    - move the generate to inside the final-sched DONE
+    - loading/progree bar
 general-subject
     - make it wizard 
 room
     - edit functionality
     - delete functionality done
     - design action button
-
-profiling: admin side
+faculty: admin side
     -display faculty info done
-    -edit faculty 
-        -subject specialization
-        -day time preference
-    
+    -edit faculty DONE
+        -subject specialization done
+        -day time preference done
+    -delete
+
+profiling: faculty side
+    -view
+    -edit
+    -dashboard
+
+Algorithm
+    -fallback mechanism
