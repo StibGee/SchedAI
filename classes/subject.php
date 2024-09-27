@@ -98,7 +98,7 @@ class Subject {
    
     //fetch distinct subjects
     public function getdistinctsubjects() {
-        $sql = "SELECT distinct name, type FROM subject WHERE focus!='Minor'";
+        $sql = "SELECT DISTINCT commonname AS name FROM subject WHERE focus != 'Minor'";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

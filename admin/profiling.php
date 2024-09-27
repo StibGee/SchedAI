@@ -28,7 +28,7 @@
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
         if ($facultyinfo) {
             // Assuming getfacultyinfo returns an associative array for one row
-            echo htmlspecialchars($facultyinfo['fname']); // Display the first name
+            echo htmlspecialchars($facultyinfo['id']); // Display the first name
         } else {
             echo 'No faculty information found.';
         }
@@ -110,7 +110,7 @@
             <div class="col-md-9 scrollable-content mt-4">
                 <form id="wizardForm" method="POST" action="../processing/facultyprocessing.php">
                     <input type="hidden" name="action" value="editprofiling">
-                    <input type="number" name="facultyid" value="<?php echo $_SESSION['id'];?>" hidden>
+                    <input type="number" name="facultyid" value="<?php echo $facultyinfo['id'];?>" hidden>
                     <div class="step-content active p-4" id="step1">
                         <h5>Personal Information</h5>
                         <?php if($facultyinfo){ ?>
@@ -195,7 +195,6 @@
                                     <thead>
                                         <tr>
                                             <th data-sort="subcode">Subject Name</th>
-                                            <th data-sort="desc">Type</th>
                                             
                                             <th>action</th>
                                         </tr>
@@ -213,7 +212,7 @@
                                         <tr>
                                             
                                             <th data-sort="desc">Subject Name</th>
-                                            <th data-sort="type">Type</th>
+                                         
                                             <th>Select</th>
                                         </tr>
                                     </thead>
@@ -232,11 +231,11 @@
                                         ?>
                                         <tr>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
-                                            <td class="align-middle subtype"><?php echo htmlspecialchars($subjects['type']); ?></td>
+                                           
                                             <td class="align-middle">
                                                 <input type="checkbox" class="form-check-input load-subject-checkbox1" 
                                                     data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>" 
-                                                    data-type1="<?php echo htmlspecialchars($subjects['type']); ?>" 
+                                                     
                                                     <?php echo $checked; ?>>
                                             </td>
                                         </tr>
@@ -365,19 +364,19 @@
        
         document.querySelectorAll('.load-subject-checkbox1:checked').forEach(function(checkbox) {
             const subjectName = checkbox.getAttribute('data-subjectname1');
-            const subjectType = checkbox.getAttribute('data-type1');
+         
 
-            addToSpecialization(subjectName, subjectType, checkbox);
+            addToSpecialization(subjectName,checkbox);
         });
 
     
         document.querySelectorAll('.load-subject-checkbox1').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 const subjectName = this.getAttribute('data-subjectname1');
-                const subjectType = this.getAttribute('data-type1');
+              
 
                 if (this.checked) {
-                    addToSpecialization(subjectName, subjectType, this);
+                    addToSpecialization(subjectName,  this);
                 } else {
                  
                     removeFromSpecialization(subjectName);
@@ -386,14 +385,14 @@
         });
     });
 
-    function addToSpecialization(subjectName, subjectType, checkbox) {
+    function addToSpecialization(subjectName, checkbox) {
         const tbody = document.getElementById('loadedSubjects1');
 
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
             <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
             <td class="align-middle">${subjectName}</td>
-            <td class="align-middle">${subjectType}</td>
+          
             <td class="align-middle">
                 <button type="button" class="btn btn-danger btn-sm remove-subject">Remove</button>
             </td>

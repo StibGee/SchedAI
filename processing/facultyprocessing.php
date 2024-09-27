@@ -176,7 +176,7 @@ function editfacultyprofiling() {
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
     //edit faculty info
-    $editfaculty=$faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $bday, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $subjectname);
+    $editfaculty=$faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $bday, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid);
 
     //reset facultysubject 
     $resetfacultysubject= $faculty->resetfacultysubject($facultyid);
@@ -251,7 +251,7 @@ function editfacultyprofiling() {
     }
 
     if ($editfaculty && $resetfacultysubject && $addfacultysubject && ($monday || $tuesday || $wednesday || $thursday || $friday || $saturday)) {
-        header("Location: ../admin/faculty.php?curriculum=added");
+        header("Location: ../admin/faculty.php?curriculum=edited");
     } else {
         header("Location: ../admin/faculty.php?curriculum=error");
     }    

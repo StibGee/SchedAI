@@ -28,7 +28,7 @@ class Schedule {
         $stmt->bindParam(':calendarid', $calendarid);
         return $stmt->execute();
     }
-    public function addschedule($yrlvl, $academicyear, $departmentid, $semester, $sectionnum, $curriculumyrlvl, $calendarid) {
+    public function addschedule($yrlvl, $academicyear, $departmentid, $semester, $sectionnum, $curriculumyrlvl, $calendarid, $yrlvlreference) {
         $curriculum = new Curriculum($this->pdo);
         $calendaridsub = $curriculum->findcurriculumid($curriculumyrlvl, $semester);
         
@@ -40,16 +40,17 @@ class Schedule {
             foreach ($sections as $section) {
                 $stmt = $this->pdo->prepare("
                     INSERT INTO subjectschedule (subjectid, calendarid, yearlvl, section, departmentid)
-                    SELECT id, :calendarid, :yearlvl, :section, :departmentid
+                    SELECT id, :calendarid, :yrlvl, :section, :departmentid
                     FROM subject
-                    WHERE calendarid = :calendaridsub AND departmentid = :departmentid AND yearlvl = :yearlvl
+                    WHERE calendarid = :calendaridsub AND departmentid = :departmentid AND yearlvl = :yrlvlreference
                 ");
                 
                 $stmt->bindValue(':section', $section, PDO::PARAM_STR);  
                 $stmt->bindValue(':calendarid', $calendarid, PDO::PARAM_INT); 
                 $stmt->bindValue(':calendaridsub', $calendaridsub, PDO::PARAM_INT); 
                 $stmt->bindValue(':departmentid', $departmentid, PDO::PARAM_INT);
-                $stmt->bindValue(':yearlvl', $yrlvl, PDO::PARAM_INT);  
+                $stmt->bindValue(':yrlvl', $yrlvl, PDO::PARAM_STR); 
+                $stmt->bindValue(':yrlvlreference', $yrlvlreference, PDO::PARAM_INT);  
 
                 if (!$stmt->execute()) {
                     $errorInfo = $stmt->errorInfo();

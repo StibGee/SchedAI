@@ -96,19 +96,27 @@
                         <div class="nav d-flex align-items-center mt-3 text-center">
                             <form action="academicplan-view.php" method="POST">
                                 <input type="hidden" name="academicplanyearlvl" value="1">
-                                <button type="submit" class="<?php if ($yearlvl==1){echo 'currentyearlvl';}?>">First Year</button>
+                                <button type="submit" class="<?php if ($yearlvl=='1'){echo 'currentyearlvl';}?>">First Year</button>
                             </form>
                             <form action="academicplan-view.php" method="POST">
                                 <input type="hidden" name="academicplanyearlvl" value="2">
-                                <button type="submit" class="<?php if ($yearlvl==2){echo 'currentyearlvl';}?>">Second Year</button>
+                                <button type="submit" class="<?php if ($yearlvl=='2'){echo 'currentyearlvl';}?>">Second Year</button>
                             </form>
                             <form action="academicplan-view.php" method="POST">
                                 <input type="hidden" name="academicplanyearlvl" value="3">
-                                <button type="submit" class="<?php if ($yearlvl==3){echo 'currentyearlvl';}?>">Third Year</button>
+                                <button type="submit" class="<?php if ($yearlvl=='3'){echo 'currentyearlvl';}?>">Third Year</button>
                             </form>
                             <form action="academicplan-view.php" method="POST">
                                 <input type="hidden" name="academicplanyearlvl" value="4">
-                                <button type="submit" class="<?php if ($yearlvl==4){echo 'currentyearlvl';}?>">Fourth Year</button>
+                                <button type="submit" class="<?php if ($yearlvl=='4'){echo 'currentyearlvl';}?>">Fourth Year</button>
+                            </form>
+                            <form action="academicplan-view.php" method="POST">
+                                <input type="hidden" name="academicplanyearlvl" value="ACT AD 1">
+                                <button type="submit" class="<?php if ($yearlvl=='ACT AD 1'){echo 'currentyearlvl';}?>">ACT AD 1</button>
+                            </form>
+                            <form action="academicplan-view.php" method="POST">
+                                <input type="hidden" name="academicplanyearlvl" value="ACT AD 2">
+                                <button type="submit" class="<?php if ($yearlvl=='ACT AD 2'){echo 'currentyearlvl';}?>">ACT AD 2</button>
                             </form>
                         </div>
 

@@ -97,7 +97,7 @@
                                                 <form action="../processing/facultyprocessing.php" method="post" style="display:inline;">
                                                     <input type="hidden" name="action" value="delete">
                                                     <input type="hidden" name="id" value="<?php echo $facultys['facultyid']; ?>">
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this faculty?');">Delete</button>
                                                 </form>
                                             </li>
                                         </ul>
