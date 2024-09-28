@@ -21,3 +21,10 @@ button{
     border: none;
     background: none;
 }
+.form-control{
+    border-radius: 12px;
+}
+.form-select{
+    border-radius: 12px;
+    height: 38px;
+}

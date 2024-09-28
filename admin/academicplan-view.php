@@ -11,8 +11,8 @@
         $pdo = $db->connect();
 
         $subject = new Subject($pdo);
-        
-        
+
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -27,12 +27,12 @@
                 $calendarid = htmlspecialchars($_POST['academicplancalendarid']);
                 $_SESSION['calendarid']=$calendarid;
 
-                
+
             } else {
                 $calendarid=$_SESSION['calendarid'];
                 $sem=$_SESSION['sem'];
                 $year=$_SESSION['year'];
-                
+
             }
             if (isset($_SESSION['academicplandepartmentid'])){
                 $departmentid = htmlspecialchars($_SESSION['academicplandepartmentid']);
@@ -46,6 +46,7 @@
             }else{
                 $yearlvl= 1;
                 $_SESSION['yearlvl']=$yearlvl;
+
             }
         } else {
             $year=$_SESSION['year'];
@@ -58,29 +59,25 @@
 
     ?>
     <main>
-        <div class="container mb-1">
-            <div class="row">
-                <div  class="col-4">
-                    <div class="row ">
-                        <h5>
-                        <button onclick="window.location.href='academic-plan.php'">
-                                <i class="fa-solid fa-circle-arrow-left"></i>
-                            </button>
-                            Academic Plan for <span><?php if ($departmentid==1){echo 'BSCS ';}elseif($departmentid==2){echo 'IT ';}elseif($departmentid==3){echo 'ACT ';};?><?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
-                        </h5>
-                    </div>
-                </div>
-            </div>
+    <div class="mb-1">
+    <div class="row">
+        <h5>
+            <button class="button" onclick="window.location.href='academic-plan.php'">
+                <i class="fa-solid fa-circle-arrow-left"></i>
+            </button>
+            Academic Plan for <span><?php if ($departmentid==1){echo 'BSCS ';}elseif($departmentid==2){echo 'IT ';}elseif($departmentid==3){echo 'ACT ';};?><?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
+        </h5>
+    </div>
 
-            <div class="container py-3">
-                <div class="row d-flex justify-content-end">
-                    <div class="col-1">
-                        <select class="form-select  form-select-sm " id="select-position">
-                            <option>all</option>
-                            <option>Dean</option>
-                            <option>Visiting</option>
-                        </select>
-                    </div>
+    <div class="container py-3">
+        <div class="row d-flex justify-content-end">
+            <div class="col-1">
+                <select class="form-select  form-select-sm " id="select-position">
+                    <option>all</option>
+                    <option>Lec</option>
+                    <option>Lab</option>
+                </select>
+            </div>
 
                     <div class="searchbar col-3 ">
                         <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
@@ -317,17 +314,17 @@
             const lecHoursInput = document.getElementById("subhours");
             const labHoursInput = document.getElementById("subhourslab");
 
-        
+
             labSection.style.display = "none";
 
-         
+
             labCheckbox.addEventListener("change", function () {
                 if (this.checked) {
-                    labSection.style.display = "flex"; 
-                    labHoursInput.value = "3hrs"; 
+                    labSection.style.display = "flex";
+                    labHoursInput.value = "3hrs";
                 } else {
-                    labSection.style.display = "none"; 
-                    labHoursInput.value = ""; 
+                    labSection.style.display = "none";
+                    labHoursInput.value = "";
                 }
             });
 
@@ -338,7 +335,7 @@
                 } else if (lecUnitValue === 2.0) {
                     lecHoursInput.value = "2hrs";
                 } else {
-                    lecHoursInput.value = ""; 
+                    lecHoursInput.value = "";
                 }
             });
 
@@ -352,7 +349,9 @@
     <?php
         require_once('../include/js.php')
     ?>
-    
 
 
+<style>
+
+</style>
 </html>

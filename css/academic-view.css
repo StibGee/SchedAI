@@ -1,26 +1,24 @@
-.academic-view{
-    background-color: #E4EFE7;
-    border-radius: 16px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-
+.fixed-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding-right: 15px;
 }
 
-h5 button{
-    background-color: none;
-    border: none;
-}
-.searchbar .form-control{
-    border-radius: 16px;
-}
-.form-select{
-    border-radius: 16px;
-}
-.nav li{
-    background-color: #afafaf;
-    padding: 4px;
-    width: 45%;
+.fixed-sidebar .navs button {
+    width: 70%; /* Ensure each button takes full width */
+    margin-bottom: 16px; /* Set the gap between buttons to 16px */
+    padding: 10px; /* Add padding for better appearance */
     border-radius: 4px;
+    background-color: #afafaf;
     color: #ffffff;
+    border: none;
+    text-align: center;
+}
+
+.fixed-sidebar .navs button.currentyearlvl {
+    background-color: #80AF81 !important;
 }
 
 .scrollable-content {
@@ -28,64 +26,40 @@ h5 button{
     overflow-y: auto;
 }
 
-.table-sub {
-    border-radius: 12px;
-    background-color: #eeeeee;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.table-load{
+.table-load {
     border-radius: 12px;
     background-color: #E4EFE7;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-.form-control{
-    border-radius: 16px;
-}
-.btn{
-    width: 100px;
-    padding: 5px;
-}
-.next-step{
-    border:none;
-    background-color: #80AF81;
-    border-radius: 16px;
-}
-.next-step:hover{
-    border: 2px solid #80AF81;
-    background-color: #ffffff;
-    border-radius: 16px;
-    color: #198754;
-}
-.prev-step{
-    border-radius: 16px;
-}
-.btn-submit{
-    border:none;
-    background-color: #80AF81;
-    border-radius: 16px;
-}
-.btn-submit:hover{
-    border: 2px solid #80AF81;
-    background-color: #ffffff;
-    border-radius: 16px;
-    color: #B0EBB4;
-}
-#subjects1,#subjects2,#subjects3,#subjects4{
-    min-width: 100% !important;
-}
-.add{
-    background-color: #ffffff;
+
+.button{
+    background-color: none;
     border: none;
 }
-#hiddenForm {
-    margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+.form-select{
+    border-radius: 14px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 32px;
 }
-.currentyearlvl{
-    background-color: greenyellow !important;
-    
+
+
+
+.form-control{
+    border-radius:  16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 32px;
+}
+button.cancel{
+    background-color: #aa0202;
+    border: none;
+    color: #ffffff;
+}
+button.confirm{
+    background-color: #119e0e;
+    border: none;
+}
+.modal-footer button{
+    width: 90px;
+    border-radius: 14px;
+    padding: 3px;
 }

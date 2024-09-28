@@ -99,47 +99,49 @@
         <!-- Modal Form -->
         <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg mt-6" role="document">
-                <div class="modal-content border-0">
-                    <div class="modal-body p-3">
-                        <div class="position-absolute top-0 end-0 mt-3 me-3 z-1">
-
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form action="../processing/curriculumprocessing.php" method="POST">
-                            <input type="text" value="add" name="action" hidden>
-                            <div class="academic-year ">
-                                <div class="form-group academic-year">
-                                    <label for="">Enter Year</label>
-                                    <div class="col-6">
-                                        <span><input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" style="width: 120px;">-<input type="number" name="" id="endyear" class="form-control form-control-sm" style="width: 120px;"></span>
-                                        
-                                    </div>
+            <div class="modal-content border-0">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title" id="formModalLabel">Add New Curriculum</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-5">
+                    <form action="../processing/curriculumprocessing.php" method="POST">
+                        <input type="text" value="add" name="action" hidden>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="startyear">Enter Year</label>
+                                <div class="input-group mt-2">
+                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" style="width: 120px;">
+                                    <span class="input-group-text">-</span>
+                                    <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" style="width: 120px;">
                                 </div>
                             </div>
-                            <!--<div class="department ">
-                                <label for="">Select Department</label>
-                                <select class="form-select form-select-sm mt-2" id="select-department" name="departmentid">
-                                    <option value="1">Computer Science</option>
-                                    <option value="2">Information</option>
-                                </select>
-                            </div>-->
-                            <div class="col-6">
-                                <span><input type="checkbox" name="curriculumplan" id="" value="yes"><label for="">New curriculum plan</label></span>
-                                        
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="select-department">Select Department</label>
+                                    <select class="form-select form-select-sm mt-2" id="select-department" name="departmentid">
+                                        <option value="1">Computer Science</option>
+                                        <option value="2">Information</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="semester">
-                                <label for="">Select Semester</label>
-                                <select name="semester" class="form-select form-select-sm mt-2" id="select-department">
-                                    <option value="1">First Semester</option>
-                                    <option value="2">Second Semester</option>
-                                </select>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="select-semester">Select Semester</label>
+                                    <select name="semester" class="form-select form-select-sm mt-2" id="select-semester">
+                                        <option value="1">First Semester</option>
+                                        <option value="2">Second Semester</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="modal-footer d-flex justify-content-between">
-                                <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                                <button type="submit" class="confirm">Done</button>
-                            </div>
-                        </form>
-                    
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Done</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -148,6 +150,7 @@
 
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/academic-plan.css">
+    <script src="../js/main.js"></script>
     <script src="../js/schedule.js"></script>
     <script>
         function submitcurriculumform(year, sem, calendarid) {
@@ -158,7 +161,7 @@
         }
         document.querySelector('.btn-close').addEventListener('click', function() {
         console.log('Modal is being closed');
-    }); 
+    });
     </script>
     <script>
         const startYearInput = document.getElementById('startyear');
@@ -178,11 +181,11 @@
         });
     </script>
     <script src="../js/main.js"></script>
-    
+
     <?php
         require_once('../include/js.php')
     ?>
-    
+
 
 
 </html>

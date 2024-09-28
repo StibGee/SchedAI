@@ -1,7 +1,4 @@
-<?php if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-?>
+<?php session_start();?>
 <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
@@ -12,7 +9,7 @@
             <div class="dropdown">
                 <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="../SuperAdmin/profile.php">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Logout</a></li>
                 </ul>
             </div>
@@ -25,29 +22,18 @@
                     <img src="../img/logo/Sched-logo1.png" width="100">
                 </a>
                 <div class="nav_list">
-                    <a href="../admin/facultyloading.php" class="nav_link active">
-                    <img src="../img/icons/load.png" alt="" width="24">
-                        <span class="nav_name">Faculty Loading</span>
+                <a href="../SuperAdmin/landing.php" class="nav_link active">
+                    <img src="../img/icons/dashboard.png" alt="" width="24">
+                        <span class="nav_name">Dashboard</span>
                     </a>
-                    <a href="../admin/schedule.php" class="nav_link">
-                    <img src="../img/icons/sched.png" alt="" width="24">
-                        <span class="nav_name">Schedule</span>
-                    </a>
-                    <a href="../admin/academic-plan.php" class="nav_link">
-                    <img src="../img/icons/files.png" alt="" width="24">
-                        <span class="nav_name">Curriculum Plan</span>
-                    </a>
-                    <a href="../admin/faculty.php" class="nav_link">
+                    <a href="../SuperAdmin/users.php" class="nav_link active">
                     <img src="../img/icons/faculty.png" alt="" width="24">
-                        <span class="nav_name">Faculty</span>
+                        <span class="nav_name">Users</span>
                     </a>
-                    <a href="../admin/room.php" class="nav_link">
+                    </a>
+                    <a href="../SuperAdmin/colleges.php" class="nav_link">
                     <img src="../img/icons/home.png" alt="" width="24">
-                        <span class="nav_name">Rooms</span>
-                    </a>
-                    <a href="../admin/account.php" class="nav_link">
-                    <img src="../img/icons/settings.png" alt="" width="24">
-                        <span class="nav_name">Accounts</span>
+                        <span class="nav_name">Colleges</span>
                     </a>
                 </div>
             </div>
