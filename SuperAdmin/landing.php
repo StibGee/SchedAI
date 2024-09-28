@@ -9,7 +9,6 @@
     <?php
 
         require_once('../include/admin-nav.php');
-        require_once('../database/datafetch.php');
     ?>
 <main>
 <div class="container dashboard">
