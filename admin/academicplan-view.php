@@ -46,13 +46,12 @@
             }else{
                 $yearlvl= 1;
                 $_SESSION['yearlvl']=$yearlvl;
-                
             }
         } else {
             $year=$_SESSION['year'];
             $sem=$_SESSION['sem'];
             $calendarid = $_SESSION['calendarid'];
-            $departmentid = $_SESSION['departmentid'];
+            $departmentid = $_SESSION['academicplandepartmentid'];
             $yearlvl=$_SESSION['yearlvl'];
         }
         $filteredsubject = $subject->filteredsubjects($calendarid, $departmentid, $yearlvl);
@@ -335,7 +334,7 @@
             lecUnitSelect.addEventListener("change", function () {
                 const lecUnitValue = parseFloat(this.value);
                 if (lecUnitValue === 3.0) {
-                    lecHoursInput.value = "1.5hrs 2x";
+                    lecHoursInput.value = "2days daw sabi ni steve";
                 } else if (lecUnitValue === 2.0) {
                     lecHoursInput.value = "2hrs";
                 } else {
