@@ -9,7 +9,6 @@
     <?php
 
         require_once('../include/admin-nav.php');
-        require_once('../database/datafetch.php');
     ?>
 <main>
 <div class="container mb-1">
@@ -22,7 +21,7 @@
                         College of Computing Studies
                     </h3>
                 </div>
-                <div class="col-3 d-flex align-items-center justify-content-start">
+                <div class="col-3 d-flex align-items-center justify-content-center">
                         <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
                         </div>
             </div>
