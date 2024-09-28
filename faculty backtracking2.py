@@ -7,7 +7,7 @@ conn = mysql.connector.connect(
     host="localhost",
     user="root",
     password="",
-    database="facultyscheduling"
+    database="schedai"
 )
 
 cursor = conn.cursor()
@@ -36,7 +36,8 @@ conn.commit()
 def facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
     return (subjectschedulesubjectname == facultysubjectfsubjectname and (
         subjectschedulesubjectmasters == facultysubjectmasters or subjectschedulesubjectmasters == 'No'
-    ) and (subjectscheduledepartmentid == facultysubjectdepartmentid or facultysubjectdepartmentid == 3))
+    ) and (subjectscheduledepartmentid == facultysubjectdepartmentid or facultysubjectdepartmentid == 3) or 
+    (facultysubjectmasters == 'Yes' and subjectschedulesubjectmasters == 'No'))
 
 def facultyworkinghourscheck(facultyworkinghours, subjectschedulesubjecthours, facultysubjectfacultyid):
     if facultyworkinghours < subjectschedulesubjecthours:
@@ -47,7 +48,7 @@ def facultyworkinghourscheck(facultyworkinghours, subjectschedulesubjecthours, f
 
 workinghoursleft={}
 unassigned_subjects=[]
-unassigned_subjects = []  # Track unassigned subjects
+unassigned_subjects = []  
 facultyworkinghours = {faculties[0]: faculties[12] for faculties in faculty}
 assignedsubjects = {}
 noassignment=[]
@@ -58,7 +59,7 @@ def greedyassign():
     for subjectschedules in subjectschedule:
         assignedgreedy = False  
         subjectscheduleid = subjectschedules[0]
-        subjectschedulesubjectname = subjectschedules[13]
+        subjectschedulesubjectname = subjectschedules[22]
         subjectschedulesubjecthours = subjectschedules[15]
         subjectschedulesubjectmasters = subjectschedules[17]
         subjectscheduledepartmentid = subjectschedules[10]
@@ -89,7 +90,7 @@ def greedyassign():
             noassignment.append(subjectscheduleid)
 
 
-    # Commit the assignments
+  
     conn.commit()
 
 def assign_subject(currentshubjectid):
@@ -100,7 +101,7 @@ def assign_subject(currentshubjectid):
     subjectschedules = subjectschedule[currentshubjectid]
     subjectscheduleid = subjectschedules[0]
    
-    subjectschedulesubjectname = subjectschedules[13]
+    subjectschedulesubjectname = subjectschedules[22]
     subjectschedulesubjecthours = subjectschedules[15]
     subjectschedulesubjectmasters = subjectschedules[17]
     subjectscheduledepartmentid = subjectschedules[10]
@@ -110,7 +111,7 @@ def assign_subject(currentshubjectid):
         facultysubjectfsubjectname = facultysubjects[2]
         facultysubjectmasters = facultysubjects[11]
         facultysubjectdepartmentid = facultysubjects[13]
-        print(subjectschedulesubjectname,facultysubjectfsubjectname)
+        print(subjectschedulesubjectname,facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid)
         if facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
             if facultyworkinghourscheck(facultyworkinghours[facultysubjectfacultyid], subjectschedulesubjecthours, facultysubjectfacultyid):
                 
@@ -149,26 +150,17 @@ if assign_subject(0):
 else:
     print("No valid assignment found for all subjects. Applying Greedy Fallback.")
     
-    # Apply Greedy Algorithm for unassigned subjects
     greedyassign()
 
-    # After greedy fallback, check if some subjects are still unassigned
+   
     if len(noassignment) > 0:
-        # Apply final fallback (assign "TBH")
+
         print("Fallback failed, assigning 'TBH' to unassigned subjects.")
         for subjectscheduleid in set(noassignment):
             print(f"Assigning TBH to subject {subjectscheduleid}")
             cursor.execute(f"UPDATE `subjectschedule` SET `facultyid` = 21 WHERE `id` = {subjectscheduleid}")
         
         conn.commit()
-
-
-
-
-
-
-
-
 
 conn.commit()
 

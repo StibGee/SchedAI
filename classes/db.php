@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = 'localhost';
-    private $dbname = 'facultyscheduling';
+    private $dbname = 'schedai';
     private $username = 'root';
     private $password = '';
     private $pdo;

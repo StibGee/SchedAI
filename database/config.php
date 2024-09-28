@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'facultyscheduling';
+$dbname = 'schedai';
 $username = 'root';
 $password = '';
 if(!isset($_SESSION)){
