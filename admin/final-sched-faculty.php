@@ -35,7 +35,7 @@
                 TIME_FORMAT(subjectschedule.timeend, '%H:%i') AS timeend, 
                 subjectschedule.id as subjectidno,
                 subject.subjectcode as subjectname,
-                yearlvl,
+                subjectschedule.yearlvl as yearlvl,
                 section,
                 faculty.lname as facultyname,
                 room.name as roomname
