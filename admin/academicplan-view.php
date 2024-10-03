@@ -70,7 +70,7 @@
     </div>
 
     <div class="container py-3">
-        <div class="row d-flex justify-content-end">
+        <div class="row d-flex justify-content-end align-items-center">
             <div class="col-1">
                 <select class="form-select  form-select-sm " id="select-position">
                     <option>all</option>
@@ -79,17 +79,17 @@
                 </select>
             </div>
 
-                    <div class="searchbar col-3 ">
+                    <div class="searchbar col-4 ">
                         <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
                     </div>
-                    <div class="col-3 d-flex align-items-center justify-content-start">
+                    <div class="col-1 d-flex align-items-center justify-content-end">
                         <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 steps sticky-sidebar ">
+                    <div class="col-md-3 steps fixed-sidebar">
                         <h5>Year Level</h5>
-                        <div class="nav d-flex align-items-center mt-3 text-center">
+                        <div class="navs d-flex align-items-center mt-3 text-center">
                             <form action="academicplan-view.php" method="POST">
                                 <input type="hidden" name="academicplanyearlvl" value="1">
                                 <button type="submit" class="<?php if ($yearlvl=='1'){echo 'currentyearlvl';}?>">First Year</button>
@@ -115,8 +115,6 @@
                                 <button type="submit" class="<?php if ($yearlvl=='ACT AD 2'){echo 'currentyearlvl';}?>">ACT AD 2</button>
                             </form>
                         </div>
-
-
                     </div>
                     <div class="col-md-9 scrollable-content">
                             <div class="row">
