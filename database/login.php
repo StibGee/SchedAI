@@ -20,10 +20,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     if ($user && password_verify($password, $user['password'])) {
         
         $role = $user['role'];
+        $collegeid = $user['collegeid'];
         $id = $user['id'];
         $name = $user['fname'];
 
         $_SESSION['id']=$id;
+        $_SESSION['collegeid']=$collegeid;
         $_SESSION['fname']=$name;
 
         if (!isset($_SESSION['role'])){
@@ -31,7 +33,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         }
        
         
-        if ($role=='Admin'){
+        if ($role=='collegesecretary'){
             header('Location: ../admin/facultyloading.php');
         }else{
             header('Location: ../faculty/profiling.php');
