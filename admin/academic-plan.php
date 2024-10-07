@@ -10,33 +10,46 @@
         require_once('../include/nav.php');
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
-
-        if(isset($_POST['departmentid'])){
-            $_SESSION['academicplandepartmentid'] = $_POST['departmentid'];
-            $academicplandepartmentid=$_SESSION['academicplandepartmentid'];
-        }elseif(isset($_SESSION['academicplandepartmentid'])){
-            $academicplandepartmentid=$_SESSION['academicplandepartmentid'];
-        }else{
-            $academicplandepartmentid=1;
-            $_SESSION['academicplandepartmentid'] = $academicplandepartmentid;
-        }
+        require_once('../classes/department.php');
+        
+        
+        $collegeid=$_SESSION['collegeid'];
+        
         $db = new Database();
         $pdo = $db->connect();
 
         $curriculum = new Curriculum($pdo);
-        $calendar = $curriculum->getallcurriculums();
+        $department = new Department($pdo);
+        $collegedepartment = $department->getcollegedepartment($collegeid);
+        $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
+
+        
+        $calendar = $curriculum->getcollegecurriculum($collegeid);
+        $collegeid=$_SESSION['collegeid'];
+        
+        if(isset($_POST['departmentid'])){
+            $_SESSION['departmentid'] = $_POST['departmentid'];
+        }elseif(isset($_SESSION['departmentid'])){
+            $_SESSION['departmentid']=$_SESSION['departmentid'];
+        } else {
+            $_SESSION['departmentid'] = $initialcollegedepartment;
+        }
+        echo $_SESSION['departmentid'];
+        $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
     ?>
     <main>
         <div class="container mb-1">
             <div class="row d-flex align-items-center">
                 <div class="col-5">
-                    <h3><?php echo ($_SESSION['academicplandepartmentid'] == 1) ? "BSCS" : "BSIT"; ?> Curriculum Plan</h3>
+                    <h3><?php echo $departmentinfo['abbreviation']; ?> Curriculum Plan</h3>
                 </div>
                 <div class="col-3">
                     <form class="mb-0" action="academic-plan.php" method="POST">
                         <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()">
-                            <option value="1">BSCS</option>
-                            <option value="2">IT</option>
+                            <?php foreach ($collegedepartment as $collegedepartments){ ?> 
+                                <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
+                            <?php } ?>
+                           
                             <option value="" selected>Choose a department</option>
                         </select>
                     </form>
@@ -107,6 +120,8 @@
                 <div class="modal-body px-5">
                     <form action="../processing/curriculumprocessing.php" method="POST">
                         <input type="text" value="add" name="action" hidden>
+                        <input type="hidden" value="<?php echo $collegeid;?>" name="collegeid" >
+                        <input type="hidden" value="1" name="curriculumplan" >
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="startyear">Enter Year</label>
@@ -122,8 +137,10 @@
                                 <div class="form-group">
                                     <label for="select-department">Select Department</label>
                                     <select class="form-select form-select-sm mt-2" id="select-department" name="departmentid">
-                                        <option value="1">Computer Science</option>
-                                        <option value="2">Information</option>
+                                        <?php foreach ($collegedepartment as $collegedepartments){ ?> 
+                                        <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
+                                  
+                                        <?php } ?>
                                     </select>
                                 </div>
                             </div>

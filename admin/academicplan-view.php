@@ -6,17 +6,18 @@
         require_once('../include/nav.php');
         require_once('../classes/subject.php');
         require_once('../classes/db.php');
-
+        require_once('../classes/department.php');
         $db = new Database();
         $pdo = $db->connect();
 
         $subject = new Subject($pdo);
+        $department = new Department($pdo);
 
 
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
+        $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['academicplanyear']) && isset($_POST['academicplansem']) && isset($_POST['academicplancalendarid'])) {
                 $year = htmlspecialchars($_POST['academicplanyear']);
@@ -34,11 +35,11 @@
                 $year=$_SESSION['year'];
 
             }
-            if (isset($_SESSION['academicplandepartmentid'])){
-                $departmentid = htmlspecialchars($_SESSION['academicplandepartmentid']);
+            if (isset($_SESSION['departmentid'])){
+                $departmentid = htmlspecialchars($_SESSION['departmentid']);
             }else{
                 $departmentid =1;
-                $_SESSION['academicplandepartmentid']=$departmentid;
+                $_SESSION['departmentid']=$departmentid;
             }
             if (isset($_POST['academicplanyearlvl'])){
                 $yearlvl= htmlspecialchars($_POST['academicplanyearlvl']);
@@ -52,7 +53,7 @@
             $year=$_SESSION['year'];
             $sem=$_SESSION['sem'];
             $calendarid = $_SESSION['calendarid'];
-            $departmentid = $_SESSION['academicplandepartmentid'];
+            $departmentid = $_SESSION['departmentid'];
             $yearlvl=$_SESSION['yearlvl'];
         }
         $filteredsubject = $subject->filteredsubjects($calendarid, $departmentid, $yearlvl);
@@ -65,7 +66,7 @@
             <button class="button" onclick="window.location.href='academic-plan.php'">
                 <i class="fa-solid fa-circle-arrow-left"></i>
             </button>
-            Academic Plan for <span><?php if ($departmentid==1){echo 'BSCS ';}elseif($departmentid==2){echo 'IT ';}elseif($departmentid==3){echo 'ACT ';};?><?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
+            Academic Plan for <span><?php echo $departmentinfo['name'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
         </h5>
     </div>
 
@@ -90,30 +91,14 @@
                     <div class="col-md-3 steps fixed-sidebar">
                         <h5>Year Level</h5>
                         <div class="navs d-flex align-items-center mt-3 text-center">
-                            <form action="academicplan-view.php" method="POST">
-                                <input type="hidden" name="academicplanyearlvl" value="1">
-                                <button type="submit" class="<?php if ($yearlvl=='1'){echo 'currentyearlvl';}?>">First Year</button>
-                            </form>
-                            <form action="academicplan-view.php" method="POST">
-                                <input type="hidden" name="academicplanyearlvl" value="2">
-                                <button type="submit" class="<?php if ($yearlvl=='2'){echo 'currentyearlvl';}?>">Second Year</button>
-                            </form>
-                            <form action="academicplan-view.php" method="POST">
-                                <input type="hidden" name="academicplanyearlvl" value="3">
-                                <button type="submit" class="<?php if ($yearlvl=='3'){echo 'currentyearlvl';}?>">Third Year</button>
-                            </form>
-                            <form action="academicplan-view.php" method="POST">
-                                <input type="hidden" name="academicplanyearlvl" value="4">
-                                <button type="submit" class="<?php if ($yearlvl=='4'){echo 'currentyearlvl';}?>">Fourth Year</button>
-                            </form>
-                            <form action="academicplan-view.php" method="POST">
-                                <input type="hidden" name="academicplanyearlvl" value="ACT AD 1">
-                                <button type="submit" class="<?php if ($yearlvl=='ACT AD 1'){echo 'currentyearlvl';}?>">ACT AD 1</button>
-                            </form>
-                            <form action="academicplan-view.php" method="POST">
-                                <input type="hidden" name="academicplanyearlvl" value="ACT AD 2">
-                                <button type="submit" class="<?php if ($yearlvl=='ACT AD 2'){echo 'currentyearlvl';}?>">ACT AD 2</button>
-                            </form>
+                            <?php for ($i = 1; $i <= $departmentinfo['yearlvl']; $i++) { ?>
+                                <form action="academicplan-view.php" method="POST">
+                                    <input type="hidden" name="academicplanyearlvl" value="<?php echo $i;?>">
+                                    <button type="submit" class="<?php if ($i==$yearlvl){echo 'currentyearlvl';}?>">Year Level <?php echo $i;?></button>
+                                </form>
+                            <?php } ?>
+                            
+                            
                         </div>
                     </div>
                     <div class="col-md-9 scrollable-content">
