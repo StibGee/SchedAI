@@ -11,16 +11,19 @@
         //require_once('../database/datafetch.php');
         require_once('../classes/room.php');
         require_once('../classes/department.php');
+        require_once('../classes/college.php');
         require_once('../classes/db.php');
         $db = new Database();
         $pdo = $db->connect();
-
+        $collegeid=$_SESSION['collegeid'];
         // Initialize Room class
         $room = new Room($pdo);
+        $college = new College($pdo);
         $roomsall = $room->getAllRooms();
 
         $department = new Department($pdo);
-        $departmentsall = $department->getalldepartment();
+        $collegedepartment = $department->getcollegedepartment($collegeid);
+        $collegemaxyearlvl = $college->getcollegemaxyearlvl($collegeid)
         
     ?>
     <main>
@@ -106,6 +109,7 @@
                                 <div class="container form ">
                                     <form id="facultyForm" method="POST"  action="../processing/roomprocessing.php" class="row g-3 mt-4 needs-validation" novalidate="">
                                     <input type="hidden" name="action" value="add">
+                                    <input type="hidden" name="collegeid" value="<?php echo $collegeid;?>">
                                     <h5>Room Details</h5>
                                         <div class="row mt-2">
                                             <div class="col-md-4">
@@ -134,10 +138,30 @@
                                                     <div class="col-md-8">
                                                         <select class="form-select" id="room-type" required name="departmentid">
                                                             <option selected="" disabled="">Choose...</option>
-                                                            <?php foreach($departmentsall as $departments){ ?>
-                                                            <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
+                                                            <?php foreach($collegedepartment as $collegedepartments){ ?>
+                                                            <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
                                                             <?php } ?>
                                                         </select>
+                                                    </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="firstname">Year Level</label>
+                                                <select name="yearlvl" id="">
+                                                    <?php for($i=1; $i<=$collegemaxyearlvl; $i++){?>
+                                                        <option value="<?php echo $i;?> ">Year level <?php echo $i;?></option>
+                                                    <?php } ?>
+                                                    <option value="0">All Year level</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="firstname">Is Exclusive</label>
+
+                                                    <div class="col-md-8">
+                                                        <input type="checkbox" name="isexclusive" id="">
                                                     </div>
 
                                             </div>

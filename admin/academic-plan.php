@@ -34,7 +34,7 @@
         } else {
             $_SESSION['departmentid'] = $initialcollegedepartment;
         }
-        echo $_SESSION['departmentid'];
+    
         $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
     ?>
     <main>
