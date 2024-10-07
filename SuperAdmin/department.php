@@ -9,6 +9,15 @@
     <?php
 
         require_once('../include/admin-nav.php');
+        require_once('../classes/db.php');
+        require_once('../classes/department.php');
+        $collegeid=$_SESSION['collegeid'];
+
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $department = new Department($pdo);
+        $collegedepartment = $department->getcollegedepartment($collegeid);
     ?>
 <main>
 <div class="container mb-1">
@@ -31,20 +40,21 @@
                     <thead>
                         <tr>
                             <th>Seal</th>
-                            <th>College</th>
+                            <th>Department Abbreviation</th>
                             <th>Department</th>
-                            <th>Year Created</th>
-                            <th>Schedule</th>
+                        
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <?php foreach($collegedepartment as $collegedepartments){ ?>
                         <tr data-href="college_details.html">
                             <td class="seal-cell">img</td>
-                            <td>College of Computing Studies</td>
-                            <td>Computer Science</td>
-                            <td>2023</td>
-                            <td></td>
+                            <td><?php echo $collegedepartments['abbreviation'];?></td>
+                            <td><?php echo $collegedepartments['name'];?></td>
+                          
+                    
+            
                             <td>
                                 <div class="action-dropdown">
                                     <button class="action-button">...</button>
@@ -53,8 +63,14 @@
                                         <a href="#">View Schedule</a>
                                     </div>
                                 </div>
+                                <form action="../processing/departmentprocessing.php" method="post" style="display:inline;">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<?php echo $collegedepartments['id']; ?>">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this department?');">Delete</button>
+                                </form>
                             </td>
                         </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -68,27 +84,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
-                    <form action="../processing/curriculumprocessing.php" method="POST">
+                    <form action="../processing/departmentprocessing.php" method="POST">
                         <input type="text" value="add" name="action" hidden>
+                        <input type="number" value="<?php echo $collegeid;?>" name="collegeid" hidden>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="subname">Input College Name</label>
-                                    <input class="form-control" id="subname" type="text" name="subjectname" required />
+                                    <label class="form-label" for="subname">Input Department Name</label>
+                                    <input class="form-control" id="subname" type="text" name="departmentname" required />
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="dept">Enter Department</label>
-                                <div class="input-group mt-2">
-                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" style="width: 120px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="subname">Input College Abbreviation</label>
+                                    <input class="form-control" id="subname" type="text" name="abbreviation" required />
                                 </div>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="abbriviation">Year Created</label>
-                                    <input class="form-control" id="subname" type="number" name="subjectname" required />
+                                    <label class="form-label" for="subname">How many years</label>
+                                    <input class="form-control" id="yearlvl" type="number" name="yearlvl" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
