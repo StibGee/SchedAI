@@ -31,13 +31,12 @@
                 <table class="mb-0 table table-hover">
                     <thead>
                         <tr>
+                            <th>Name</th>
                             <th>College</th>
                             <th>Department</th>
                             <th>Role</th>
-                            <th>Name</th>
                             <th>Email</th>
                             <th>Password</th>
-                            <th>Gender</th>
                             <th>Contact No.</th>
                             <th>Action</th>
                         </tr>
@@ -66,12 +65,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body px-5">
-                        <form action="../processing/curriculumprocessing.php" method="POST">
+                        <form action="../processing/rootprocessing.php" method="POST">
                             <input type="text" value="add" name="action" hidden>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label class="form-label" for="college">College</label>
-                                    <select class="form-select" id="college" name="college" required="">
+                                    <label class="form-label" for="collegeid">College</label>
+                                    <select class="form-select" id="college" name="collegeid" required="">
                                         <option selected="" disabled="">Select College</option>
                                         <option>College of Computer Science</option>
                                         <option>College of Engineering</option>
@@ -79,8 +78,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label class="form-label" for="department">Select Department</label>
-                                    <select class="form-select" id="department" name="department" required="">
+                                    <label class="form-label" for="departmentid">Select Department</label>
+                                    <select class="form-select" id="departmentid" name="departmentid" required="">
                                         <option selected="" disabled="">Select Department</option>
                                         <option>Computer Science</option>
                                         <option>Information Technology</option>
@@ -94,13 +93,13 @@
                                     <select class="form-select" id="role" name="role" required="">
                                         <option selected="" disabled="">Select Role</option>
                                         <option>Department Head</option>
-                                        <option>College Head</option>
+                                        <option>College Secretary</option>
                                         <!-- Add more options as needed -->
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label" for="contactNo">Contact No.</label>
-                                    <input type="text" class="form-control" id="contactNo" name="contactNo" required>
+                                    <label class="form-label" for="contactno">Contact No.</label>
+                                    <input type="text" class="form-control" id="contactno" name="contactno" required>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label" for="gender">Gender</label>
@@ -114,23 +113,23 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-5">
-                                    <label class="form-label" for="familyName">Family Name</label>
-                                    <input type="text" class="form-control" id="familyName" name="familyName" required>
+                                    <label class="form-label" for="fname">First Name</label>
+                                    <input type="text" class="form-control" id="fname" name="fname" required>
                                 </div>
                                 <div class="col-md-5">
-                                    <label class="form-label" for="firstName">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                    <label class="form-label" for="lname">Last Name</label>
+                                    <input type="text" class="form-control" id="lname" name="lname" required>
                                 </div>
                                 <div class="col-md-2">
-                                    <label class="form-label" for="middleName">MI (Optional)</label>
-                                    <input type="text" class="form-control" id="middleName" name="middleName">
+                                    <label class="form-label" for="mname">MI (Optional)</label>
+                                    <input type="text" class="form-control" id="mname" name="mname">
                                 </div>
 
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-6">
-                                    <label class="form-label" for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <label class="form-label" for="email">Username</label>
+                                    <input type="email" class="form-control" id="username" name="username" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="password">Password</label>
@@ -157,13 +156,3 @@
         require_once('../include/js.php')
     ?>
 </html>
-<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const rows = document.querySelectorAll("tbody tr[data-href]");
-            rows.forEach(row => {
-                row.addEventListener("click", function() {
-                    window.location.href = this.getAttribute("data-href");
-                });
-            });
-        });
-    </script>
