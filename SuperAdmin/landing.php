@@ -9,6 +9,18 @@
     <?php
 
         require_once('../include/admin-nav.php');
+        require_once('../include/admin-nav.php');
+        require_once('../classes/db.php');
+        require_once('../classes/college.php');
+        require_once('../classes/faculty.php');
+
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $college = new College($pdo);
+        $countcollege = $college->countallcollege();
+        $faculty = new Faculty($pdo);
+        $countfaculty = $faculty->countallfaculty();
     ?>
 <main>
 <div class="container dashboard">
@@ -24,7 +36,7 @@
                     <div class="card" onclick="window.location.href='../SuperAdmin/colleges.php'">
                         <div class="card-body">
                             <h5 class="card-title">Number of Colleges</h5>
-                            <p class="card-text">120</p>
+                            <p class="card-text"><?php echo $countcollege;?></p>
                         </div>
                     </div>
                 </div>
@@ -32,8 +44,8 @@
                 <div class="col-md-4" onclick="window.location.href='../SuperAdmin/users.php'">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Number of Users</h5>
-                            <p class="card-text">5000</p>
+                            <h5 class="card-title">Number of Faculty</h5>
+                            <p class="card-text"><?php echo $countfaculty;?></p>
                         </div>
                     </div>
                 </div>

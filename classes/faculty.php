@@ -141,6 +141,11 @@ class Faculty {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function countallfaculty() {
+        $sql = "SELECT count(*) from faculty";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchColumn();
+    }
     public function getfacultysubjects($facultyid) {
         $sql = "SELECT * FROM facultysubject WHERE facultyid=:facultyid";
         $stmt = $this->pdo->prepare($sql); 
