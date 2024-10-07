@@ -9,7 +9,15 @@
     <?php
 
         require_once('../include/admin-nav.php');
+        require_once('../classes/db.php');
+        require_once('../classes/college.php');
 
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $college = new College($pdo);
+        $allcollege = $college->getallcollege();
+        
     ?>
 <main>
 <div class="container mb-1">
@@ -39,18 +47,26 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php foreach ($allcollege as $allcolleges){ ?>
                         <tr data-href="../SuperAdmin/department.php">
-                            <td>College of Computing Studies</td>
-                            <td>CCS</td>
-                            <td>2023</td>
-                            <td ><img src="../img/icons/view.png" alt=""><img src="../img/icons/delete.png" alt=""> </td>
+                            <td><?php echo $allcolleges['name'];?></td>
+                            <td><?php echo $allcolleges['abbreviation'];?></td>
+                            <td><?php echo $allcolleges['year'];?></td>
+                            <td ><img src="../img/icons/view.png" alt="">
+                                <form action="../processing/collegeprocessing.php" method="post" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?php echo $allcolleges['id']; ?>">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this college?');">Delete</button>
+                                </form>
+                            </td>
+
                         </tr>
-                        <!-- Add more rows as needed -->
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
         </div>
-        <!-- Modal Form -->
+        
         <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg mt-6" role="document">
             <div class="modal-content border-0">
@@ -59,27 +75,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
-                    <form action="../processing/curriculumprocessing.php" method="POST">
+                    <form action="../processing/collegeprocessing.php" method="POST">
                         <input type="text" value="add" name="action" hidden>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="startyear">Enter Year Created</label>
                                 <div class="input-group mt-2">
-                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" style="width: 120px;">
+                                    <input type="date" name="year" id="startyear" class="form-control form-control-sm" style="width: 120px;">
                                 </div>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="subname">Input College Name</label>
-                                    <input class="form-control" id="subname" type="text" name="subjectname" required />
+                                    <label class="form-label" for="collegename">Input College Name</label>
+                                    <input class="form-control" id="collegename" type="text" name="collegename" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="abbriviation">Abbreviation</label>
-                                    <input class="form-control" id="subname" type="text" name="subjectname" required />
+                                    <input class="form-control" id="abbreviation" type="text" name="abbreviation" required />
                                 </div>
                             </div>
                         </div>
