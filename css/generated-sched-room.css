@@ -100,11 +100,31 @@ th {
     background-color: #f2f2f2;
 }
 td {
+    border-bottom:1px solid black ;
+    border-right:1px solid black ;
     height: 30px;
     position: relative;
 }
-.occupied {
-    border: none; /* Remove the border for occupied cells */
+.occupiedmiddle {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: 1px solid black !important;
+    border-right: 1px solid black !important;
+    position: relative;
+    font-weight:500;
+}
+.occupiedfirst {
+    border:none;
+    border-top: 1px solid black !important; /* Remove the border for occupied cells */
+    border-left: 1px solid black !important;
+    border-right: 1px solid black !important;
+    position: relative;
+}
+.occupiedlast {
+    border:none;
+    border-right: 1px solid black !important; /* Remove the border for occupied cells */
+    border-left: 1px solid black !important;
+    border-bottom: 1px solid black !important; /* Remove the border for occupied cells */
     position: relative;
 }
 .occupied::before {

@@ -1,19 +1,39 @@
 
 <?php
     require_once('../include/head.php');
-    require_once('../database/datafetch.php');
+   
+    require_once('../include/nav.php');
+
+    require_once('../classes/room.php');
+    $db = new Database();
+    $pdo = $db->connect();
+
+    $room = new Room($pdo);
+
+    $collegeid=$_SESSION['collegeid'];
+    $inititialcollegeroom = $room->getinitialcollegeroom($collegeid);
+    $collegeroom=$room->getcollegerooms($collegeid);
+    
+    
 
     if (isset($_POST['roomid'])) {
         $roomids = $_POST['roomid'];
-        foreach ($room as $rooms){
-            if ($rooms['roomid']== $roomids){
-                $_SESSION['roomname']=$rooms['roomname'];
+        foreach ($collegeroom as $collegerooms){
+            if ($collegerooms['id']== $roomids){
+                $roomname=$collegerooms['name'];
+               
             }
         }
     } else {
-        $roomids = 10000;
-        $_SESSION['roomname']='Default';
+        $roomids = $inititialcollegeroom;
+        foreach ($collegeroom as $collegerooms){
+            if ($collegerooms['id']== $roomids){
+                $roomname=$collegerooms['name'];
+            }
+        }
+        
     }
+
         // Define days and intervals
     $days = ['M', 'T', 'W', 'Th', 'F', 'S'];
     $intervals = [];
@@ -37,11 +57,14 @@
                 subject.subjectcode as subjectname,
                 subjectschedule.yearlvl as yearlvl,
                 section,
-                faculty.lname as facultyname
+                faculty.lname as facultyname,
+                subject.type as subjecttype,
+                department.abbreviation as departmentname
             FROM 
                 subjectschedule 
                 JOIN subject ON subject.id = subjectschedule.subjectid
                 JOIN faculty ON faculty.id = subjectschedule.facultyid
+                JOIN department ON subjectschedule.departmentid = department.id
             WHERE roomid = $roomids";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -52,14 +75,17 @@
         $daysArray = preg_split('/(?<=[a-zA-Z])(?=[A-Z])/', $row['day']); // Split multi-day entries
         $starttime = $row['timestart'];
         $endtime = $row['timeend'];
-        $subjectid = (int)$row['subjectidno']; // Convert subjectid to an integer for color mapping
+
+        $subjectid = (int)$row['subjectidno']; 
         $subjectname = htmlspecialchars($row['subjectname']);
+        $departmentname = htmlspecialchars($row['departmentname']);
+        $subjecttype = htmlspecialchars($row['subjecttype']);
         $yearlvl = htmlspecialchars($row['yearlvl']);
         $section = htmlspecialchars($row['section']);
         $facultyname = htmlspecialchars($row['facultyname']);
         
         // Include year, section, and place faculty name below the subject name
-        $subjectLabel = "$subjectname $yearlvl$section ($facultyname)"; 
+        $subjectLabel = "$subjectname $subjecttype $departmentname $yearlvl$section ($facultyname)"; 
         $color = generateColor($subjectid); // Generate a color for the subject ID
         
         // Convert start and end times to minutes since midnight
@@ -83,22 +109,36 @@
                 if (!isset($schedule[$day][$interval])) {
                     $schedule[$day][$interval] = [];
                 }
+                
+              // Determine if this is the top, bottom, or middle cell for the subject
+                $isTop = ($i == 0);
+                $isBottom = ($i == $intervalCount - 1);
+                $isMiddle = ($i != 0 && $i != $intervalCount - 1);
+
+        
                 // Center subject name in the middle cell(s)
                 if ($i >= $startIndex && $i <= $startIndex + ($intervalCount % 2 ? 0 : 1)) {
                     $schedule[$day][$interval][] = [
                         'color' => $color,
                         'subjectname' => $subjectLabel,
-                        'is_center' => true // Mark this as the center cell for the subject
+                        'is_center' => true, // Mark this as the center cell for the subject
+                        'is_top' => $isTop,   // Assign is_top based on condition
+                        'is_middle' => $isMiddle,
+                        'is_bottom' => $isBottom // Assign is_bottom based on condition
                     ];
                 } else {
                     $schedule[$day][$interval][] = [
                         'color' => $color,
                         'subjectname' => '',
-                        'is_center' => false
+                        'is_center' => false,
+                        'is_top' => $isTop,     // Not the top for empty cells
+                        'is_middle' => $isMiddle,
+                        'is_bottom' => $isBottom   // Not the bottom for empty cells
                     ];
                 }
             }
         }
+        
     }
 
 
@@ -139,25 +179,25 @@
                 <div class="col-1">
                     <form class="mb-0" action="final-sched-room.php" method="POST">
                         <select class="form-select  form-select-sm " id="select-classtype" name="roomid" onchange="this.form.submit()">
-                            <?php foreach ($room as $rooms): 
-                                if ($rooms['departmentid']==$_SESSION['departmentid']){?>
+                            <?php foreach ($collegeroom as $collegerooms): 
+                                //if ($collegerooms['departmentid']==$_SESSION['departmentid']){?>
                                 
-                                <option value="<?php echo $rooms['roomid']; ?>" 
+                                <option value="<?php echo $collegerooms['id']; ?>" 
                                     <?php 
-                                        if (isset($_SESSION['roomid']) && $_SESSION['roomid'] == $rooms['roomid']) {
+                                        if (isset($roomids) && $roomids == $collegerooms['id']) {
                                            
-                                            $_SESSION['roomname'] = isset($rooms['roomname']) ? $rooms['roomname'] : ''; 
+                                            $roomname = isset($collegerooms['name']) ? $collegerooms['name'] : ''; 
                                             echo 'selected'; 
                                         }
                                     ?>>
-                                    <?php echo isset($rooms['roomname']) ? htmlspecialchars($rooms['roomname']) : ''; ?>
+                                    <?php echo isset($collegerooms['name']) ? htmlspecialchars($collegerooms['name']) : ''; ?>
                                 </option>
 
                                 
 
 
                                 
-                            <?php } endforeach; ?>
+                            <?php /*}*/ endforeach; ?>
                             <option value="" selected>Choose a room</option>
                         </select>
                     </form>
@@ -171,7 +211,7 @@
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3><?php echo $_SESSION['roomname'];?></h3>
+                    <h3><?php echo $roomname;?></h3>
                     <button id="viewToggleButton">
                         Toggle View
                     </button>
@@ -207,11 +247,22 @@
                                                 if (isset($schedule[$day][$interval])) {
                                                     $subjectData = $schedule[$day][$interval];
                                                     $colors = array_column($subjectData, 'color');
-                                                    $subjectNames = array_column($subjectData, 'subjectname');
-                                                    $isCenters = array_column($subjectData, 'is_center');
+                                                    //$subjectNames = array_column($subjectData, 'subjectname');
+                                                    //$isCenters = array_column($subjectData, 'is_center');
                                                     $color = $colors[0]; // Use the first color if multiple subjects
                                                     echo 'style="background-color: ' . htmlspecialchars($color) . ';"';
-                                                    echo ' class="occupied"';
+                                                    foreach ($schedule[$day][$interval] as $data) {
+                                                        if ($data['is_middle']==1 ){
+                                                            echo ' class="occupiedmiddle"';
+                                                        }elseif ($data['is_top']==1 ){
+                                                            echo ' class="occupiedfirst"';
+                                                        }else{
+                                                            echo ' class="occupiedlast"';
+                                                        }
+                                                    }
+                                                    
+                                                 
+                                                    
                                                     //echo ' data-subject="' . htmlspecialchars(implode(' and ', array_unique($subjectNames))) . '"';
                                                 }
                                                 ?>
@@ -223,6 +274,7 @@
                                                         if ($data['is_center']) {
                                                             echo htmlspecialchars($data['subjectname']);
                                                         }
+                                                       
                                                     }
                                                 }
                                                 ?>
