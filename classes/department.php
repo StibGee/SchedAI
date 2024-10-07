@@ -8,35 +8,48 @@ class Department {
         $this->pdo = $pdo;
     }
 
-    public function adddepartment($name, $type, $departmentid, $timestart, $timeend) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM room WHERE name = :name");
-        $stmt->bindParam(':name', $name);
+    public function adddepartment($abbreviation, $departmentname, $yearlvl, $collegeid){
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM department WHERE abbreviation = :departmentname");
+        $stmt->bindParam(':departmentname', $departmentname);
         $stmt->execute();
         $roomExists = $stmt ->fetchColumn();
     
         if ($roomExists) {
-            header("Location: ../admin/room.php?room=exist");
+            header("Location: ../superadmin/department.php?department=exist");
             exit();
         } else {
-            $sql = "INSERT INTO room (name, type, departmentid, timestart, timeend) VALUES (:name, :type, :departmentid, :timestart, :timeend)";
+            $sql = "INSERT INTO department (name, yearlvl, collegeid, abbreviation) VALUES (:name, :yearlvl, :collegeid, :abbreviation)";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':type', $type);
-            $stmt->bindParam(':departmentid', $departmentid);
-            $stmt->bindParam(':timestart', $timestart);
-            $stmt->bindParam(':timeend', $timeend);
+            $stmt->bindParam(':name', $departmentname);
+            $stmt->bindParam(':yearlvl', $yearlvl);
+            $stmt->bindParam(':collegeid', $collegeid);
+            $stmt->bindParam(':abbreviation', $abbreviation);
             return $stmt->execute();
         
         }
     }
     
-    public function getroombyid($id) {
-        $sql = "SELECT * FROM rooms WHERE id = :id";
+    public function getcollegedepartment($collegeid) {
+        $sql = "SELECT * FROM department WHERE collegeid = :collegeid";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([':collegeid' => $collegeid]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
+    public function getinitialcollegedepartment($collegeid) {
+        $sql = "SELECT id FROM department WHERE collegeid = :collegeid LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['id'] : null;
+    }
+    
+    public function getdepartmentinfo($departmentid) {
+        $sql = "SELECT * FROM department WHERE id = :departmentid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':departmentid' => $departmentid]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
+    
     public function updatedepartment($id, $name, $capacity) {
         $sql = "UPDATE rooms SET name = :name, capacity = :capacity WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
@@ -47,8 +60,8 @@ class Department {
         ]);
     }
 
-    public function deleteroom($id) {
-        $sql = "DELETE FROM room WHERE id = :id";
+    public function deletedepartment($id){
+        $sql = "DELETE FROM department WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }

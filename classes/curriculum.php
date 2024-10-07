@@ -8,29 +8,32 @@ class Curriculum {
         $this->pdo = $pdo;
     }
 
-    public function addcurriculum($academicyear, $semester, $curriculumplan) {
+    public function addcurriculum($academicyear, $semester, $curriculumplan, $collegeid) {
         $name = $academicyear . "-" . ($academicyear + 1); 
 
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM calendar WHERE year = :year AND sem = :sem");
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM calendar WHERE year = :year AND sem = :sem AND collegeid=:collegeid");
         $stmt->bindParam(':year', $academicyear); 
-        $stmt->bindParam(':sem', $semester);      
+        $stmt->bindParam(':sem', $semester); 
+        $stmt->bindParam(':collegeid', $collegeid);         
         $stmt->execute();
         $curriculumexists = $stmt->fetchColumn();
 
         if ($curriculumexists) {
-            $sql = "UPDATE calendar SET curriculumplan = :curriculumplan WHERE year = :year AND sem = :sem";
+            $sql = "UPDATE calendar SET curriculumplan = :curriculumplan WHERE year = :year AND sem = :sem AND collegeid=:collegeid";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':year', $academicyear);
             $stmt->bindParam(':sem', $semester);
             $stmt->bindParam(':curriculumplan', $curriculumplan);
+            $stmt->bindParam(':collegeid', $collegeid); 
             return $stmt->execute();
         } else {
-            $sql = "INSERT INTO calendar (sem, year, name, curriculumplan) VALUES (:sem, :year, :name, :curriculumplan)";
+            $sql = "INSERT INTO calendar (sem, year, name, curriculumplan,collegeid) VALUES (:sem, :year, :name, :curriculumplan, :collegeid)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':year', $academicyear);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':sem', $semester);
             $stmt->bindParam(':curriculumplan', $curriculumplan);
+            $stmt->bindParam(':collegeid', $collegeid);  
             return $stmt->execute();
         }
     }
@@ -65,6 +68,13 @@ class Curriculum {
         $stmt = $this->pdo->query($sqlcalendar);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getcollegecurriculum($collegeid) {
+        $sqlcalendar = "SELECT * FROM calendar WHERE curriculumplan=1 AND collegeid=:collegeid ORDER BY year";
+        $stmt = $this->pdo->prepare($sqlcalendar); 
+        $stmt->execute([':collegeid' => $collegeid]); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
+    
     public function getallcurriculumsschedule() {
         $sqlcalendar = "SELECT * FROM calendar ORDER BY year";
         $stmt = $this->pdo->query($sqlcalendar);

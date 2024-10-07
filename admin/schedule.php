@@ -9,20 +9,31 @@
         require_once('../include/nav.php');
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
+        require_once('../classes/department.php');
         
-        if(isset($_POST['departmentid'])){
-            $_SESSION['departmentid'] = $_POST['departmentid'];
-        } else {
-            $_SESSION['departmentid'] = 1;
-        }
+        
+        $collegeid=$_SESSION['collegeid'];
         
         $db = new Database();
         $pdo = $db->connect();
 
         $curriculum = new Curriculum($pdo);
+        $department = new Department($pdo);
+        $collegedepartment = $department->getcollegedepartment($collegeid);
+        $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
+        
         $calendar = $curriculum->getallcurriculumsschedule();
         $calendardistinct = $curriculum->getdistinctcurriculumsschedule();
         $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();
+        
+        if(isset($_POST['departmentid'])){
+            $_SESSION['departmentid'] = $_POST['departmentid'];
+        }elseif(isset($_SESSION['departmentid'])){
+            $_SESSION['departmentid']=$_SESSION['departmentid'];
+        } else {
+            $_SESSION['departmentid'] = $initialcollegedepartment;
+        }
+        $departmentinfo=$department->getinitialcollegedepartment($collegeid);
     ?>
     <main>
         <div class="container mb-1">
@@ -33,8 +44,10 @@
                 <div class="col-3">
                     <form class="mb-0" action="schedule.php" method="POST">
                         <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()">
-                            <option value="1">BSCS</option>
-                            <option value="2">IT</option>
+                            <?php foreach ($collegedepartment as $collegedepartments){?>
+                                <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
+                            <?php } ?>
+                            
                             <option value="" selected>Choose a department</option>
                         </select>
                     </form>
