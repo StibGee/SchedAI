@@ -94,7 +94,7 @@
                         ?>
                             <tr onclick="submitcurriculumform('<?php echo htmlspecialchars($calendars['year']); ?>', '<?php echo htmlspecialchars($calendars['sem']); ?>', '<?php echo htmlspecialchars($calendars['id']); ?>')">
                                 <th scope="row"><?php echo htmlspecialchars($displayyear); ?></th>
-                                <td><?php echo htmlspecialchars($calendars['sem']); ?></td>
+                                <td><?php echo htmlspecialchars($calendars['sem'] == 1 ? '1st Semester' : ($calendars['sem'] == 2 ? '2nd Semester' : ($calendars['sem'] == 3 ? '3rd Semester' : $calendars['sem'] . 'th'))); ?></td>
                                 <td>
                                         <a href="edit_room.php?id=<?php echo $calendars['id']; ?>" class="btn btn-warning">Edit</a>
                                         <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;">

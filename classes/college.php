@@ -67,6 +67,12 @@ class College {
         $stmt->execute([':collegeid' => $collegeid]);
         return $stmt->fetchColumn();
     }
+    public function getcollegeinfo($collegeid) {
+        $sql = "SELECT * FROM college WHERE id = :collegeid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public function countallcollege() {
         $sql = "SELECT count(*) FROM college";
         $stmt = $this->pdo->query($sql);

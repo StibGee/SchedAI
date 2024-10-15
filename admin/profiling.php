@@ -22,13 +22,13 @@
         if (isset($_POST['facultyid'])){
             $facultyid=$_POST['facultyid'];
         }
-
+        
         $distinctsubjects = $subject->getdistinctsubjects();
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
         if ($facultyinfo) {
-            // Assuming getfacultyinfo returns an associative array for one row
-            echo htmlspecialchars($facultyinfo['id']); // Display the first name
+            
+            echo htmlspecialchars($facultyinfo['id']); 
         } else {
             echo 'No faculty information found.';
         }
@@ -36,7 +36,7 @@
         $mondaychecked=$tuesdaychecked=$wednesdaychecked=$thursdaychecked=$fridaychecked=$saturdaychecked='';
 
         foreach($facultydaytime as $facultydaytimes){
-            echo $facultydaytimes['day'];
+          
             if($facultydaytimes['day']==1){
                 $mondaychecked='checked';
                 $mondaystarttime=$facultydaytimes['starttime'];
