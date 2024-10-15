@@ -48,9 +48,9 @@ function addschedule() {
     $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
     $request = $schedule->addrequest($departmentid, $calendarid);
     $result1 = $schedule->addschedule('1',$academicyear, $departmentid, $semester, $section1, $curriculum1, $calendarid, '1');
-    $result11 = $schedule->addschedule('ACT AD 1',$academicyear, $departmentid, $semester, $section1, $curriculum1, $calendarid, '1');
+
     $result2 = $schedule->addschedule('2',$academicyear, $departmentid, $semester, $section2, $curriculum2, $calendarid, '2');
-    $result22 = $schedule->addschedule('ACT AD 2',$academicyear, $departmentid, $semester, $section1, $curriculum2, $calendarid, '2');
+
     $result3 = $schedule->addschedule('3',$academicyear, $departmentid, $semester, $section3, $curriculum3, $calendarid, '3');
     $result4 = $schedule->addschedule('4',$academicyear, $departmentid, $semester, $section4, $curriculum4, $calendarid, '4');
 

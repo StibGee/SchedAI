@@ -35,8 +35,11 @@ function addroom() {
     $departmentid = isset($_POST['departmentid']) ? filter_var($_POST['departmentid'], FILTER_SANITIZE_STRING) : '';
     $timestart = isset($_POST['timestart']) ? filter_var($_POST['timestart'], FILTER_SANITIZE_STRING) : '';
     $timeend = isset($_POST['timeend']) ? filter_var($_POST['timeend'], FILTER_SANITIZE_STRING) : '';
-
-    $result = $room->addroom($name, $type, $departmentid, $timestart, $timeend);
+    $isexclusive = isset($_POST['isexclusive']) ? 1 : 0;
+    $collegeid = isset($_POST['collegeid']) ? filter_var($_POST['collegeid'], FILTER_SANITIZE_STRING) : '';
+    $yearlvl = isset($_POST['yearlvl']) ? filter_var($_POST['yearlvl'], FILTER_SANITIZE_STRING) : '';
+   
+    $result = $room->addroom($name, $type, $departmentid, $timestart, $timeend,$isexclusive ,$collegeid ,$yearlvl);
 
     if ($result) {
         header("Location: ../admin/room.php?room=added");
