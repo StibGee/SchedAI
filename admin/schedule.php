@@ -125,7 +125,7 @@
                     </div>
                     <div class="modal-body p-3">
                         <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
-                            <input type="hidden" name="action" value="add">
+                            
                             <div class="rounded-top-3 bg-body-tertiary p-2">
                                 <h2 class="head-label">Generate New Schedule</h2>
                                 <div class="container mt-4">
@@ -178,94 +178,95 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group num-of-section">
-                                        <div class="row">
-                                            <h5>Student Sections</h5>
-                                            <table class="table mx-2">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="border: none;">Year</th>
-                                                        <th style="border: none;">Number of Sections</th>
-                                                        <th style="border: none;">Select Curriculum</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php if ($_POST['departmentid']!=0){
-                                                        for ($i=1; $i<=$departmentinfo['yearlvl']; $i++){ ?>
-                                                            <tr>
-                                                                <td style="border: none;">Year Level <?php echo $i;?></td>
-                                                                <td style="border: none;">
-                                                                    <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>" class="form-control form-control-sm" style="width: 200px;">
-                                                                </td>
-                                                                <td style="border: none;">
-                                                                    <select class="form-select form-select-sm m-0" name="curriculum1">
-                                                                        <?php 
-                                                                        foreach ($calendardistinct as $calendardistincts) {?>
-                                                                        <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
-                                                                            
-                                                                        <?php
-                                                                        }
-                                                                        ?>
-                                                                    </select>
-                                                                </td>
-                                                            </tr><?php } ?>
-                                                    <?php } ?>
-                                                    
-                                                    <tr>
-                                                        <td style="border: none;">Second Year</td>
-                                                        <td style="border: none;">
-                                                            <input placeholder="Input No. of Sections" type="number" name="section2" class="form-control form-control-sm" style="width: 200px;">
-                                                        </td>
-                                                        <td style="border: none;">
-                                                        <select class="form-select form-select-sm m-0" name="curriculum2">
-                                                                <?php 
-                                                                foreach ($calendardistinct as $calendardistincts) {?>
-                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
-                                                                    
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="border: none;">Third Year</td>
-                                                        <td style="border: none;">
-                                                            <input placeholder="Input No. of Sections" type="number" name="section3" class="form-control form-control-sm" style="width: 200px;">
-                                                        </td>
-                                                        <td style="border: none;">
-                                                        <select class="form-select form-select-sm m-0" name="curriculum3">
-                                                                <?php 
-                                                                foreach ($calendardistinct as $calendardistincts) {?>
-                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
-                                                                    
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="border: none;">Fourth Year</td>
-                                                        <td style="border: none;">
-                                                            <input placeholder="Input No. of Sections" type="number" name="section4" class="form-control form-control-sm" style="width: 200px;">
-                                                        </td>
-                                                        <td style="border: none;">
-                                                        <select class="form-select form-select-sm m-0" name="curriculum4">
-                                                                <?php 
-                                                                foreach ($calendardistinct as $calendardistincts) {?>
-                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
-                                                                    
-                                                                <?php
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                    <?php if ($_POST['departmentid']!=0){ ?>
+                                        <input type="hidden" name="action" value="adddepartment">
+                                        <div class="form-group num-of-section">
+                                            <div class="row">
+                                                <h5>Student Sections</h5>
+
+                                                <table class="table mx-2">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="border: none;">Year</th>
+                                                            <th style="border: none;">Number of Sections</th>
+                                                            <th style="border: none;">Select Curriculum</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                                <?php for ($i=1; $i<=$departmentinfo['yearlvl']; $i++){ ?>
+                                                                    <tr>
+                                                                        <td style="border: none;">Year Level <?php echo $i;?></td>
+                                                                        <td style="border: none;">
+                                                                            <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>" class="form-control form-control-sm" style="width: 200px;">
+                                                                        </td>
+                                                                        <td style="border: none;">
+                                                                            <select class="form-select form-select-sm m-0" name="curriculum1">
+                                                                                <?php 
+                                                                                foreach ($calendardistinct as $calendardistincts) {?>
+                                                                                <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
+                                                                                    
+                                                                                <?php
+                                                                                }
+                                                                                ?>
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php } ?>
+                                                        
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
+                                    <?php } ?>
+                                  
+                                    <?php if($_POST['departmentid']==0){ ?>
+                                        <input type="hidden" name="action" value="addcollege">
+                                        <div class="form-group num-of-section">
+                                            <div class="row">
+                                                <h5>Student Sections</h5>
+                                                <?php foreach($collegedepartment AS $collegedepartments){ 
+                                                echo $collegedepartments['abbreviation'];?>
+                                                    <table class="table mx-2">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="border: none;">Year</th>
+                                                                <th style="border: none;">Number of Sections</th>
+                                                                <th style="border: none;">Select Curriculum</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php $departmentinfo2=$department->getdepartmentinfo($collegedepartments['id']);
+                                                            for ($i=1; $i<=$departmentinfo2['yearlvl']; $i++){ ?>
+                                                                <tr>
+                                                                    <td style="border: none;">Year Level <?php echo $i;?></td>
+                                                                    <td style="border: none;">
+                                                                        <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>" class="form-control form-control-sm" style="width: 200px;">
+                                                                    </td>
+                                                                    <td style="border: none;">
+                                                                        <select class="form-select form-select-sm m-0" name="curriculum1">
+                                                                            <?php 
+                                                                            foreach ($calendardistinct as $calendardistincts) {?>
+                                                                            <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
+                                                                                
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                
+                                                        
+                                                        
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                               <?php } ?>
+                                            </div>
+                                        </div>
+                                    <?php }?>
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
