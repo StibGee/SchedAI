@@ -12,8 +12,8 @@ $curriculum = new Curriculum ($pdo);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 switch ($action) {
-    case 'add':
-        addschedule();
+    case 'addcollege':
+        addschedulecollege();
         break;
     case 'update':
         updateRoom();
@@ -53,6 +53,51 @@ function addschedule() {
 
     $result3 = $schedule->addschedule('3',$academicyear, $departmentid, $semester, $section3, $curriculum3, $calendarid, '3');
     $result4 = $schedule->addschedule('4',$academicyear, $departmentid, $semester, $section4, $curriculum4, $calendarid, '4');
+
+    if ($result1 && $result11 && $result2 && $result22 && $result3 && $result4) {
+        header("Location: ../admin/academic-plan.php?curriculum=addeds");
+    } else {
+        header("Location: ../admin/academic-plan.php?curriculum=errors");
+    }    
+    exit();
+}
+
+function addschedulecollege() {
+    global $schedule;
+    global $curriculum;
+
+    $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
+    $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
+    //$request = $schedule->addrequest($departmentid, $calendarid);
+    
+    foreach ($_POST['departmentid'] as $index => $deptId) {
+        $departmentid = htmlspecialchars($deptId, ENT_QUOTES, 'UTF-8');
+
+        foreach ($_POST as $key => $value) {
+            if (strpos($key, 'section') === 0 && is_array($value)) {
+                $yearlvl = substr($key, 7); 
+                
+                $curriculumindex = "curriculum" . $yearlvl;
+
+                if (isset($value[$index]) && isset($_POST[$curriculumindex][$index])) {
+                    $section = htmlspecialchars($value[$index], ENT_QUOTES, 'UTF-8');
+                    $curriculum = htmlspecialchars($_POST[$curriculumindex][$index], ENT_QUOTES, 'UTF-8');
+                    
+                    $result = $schedule->addschedule($yearlvl,$academicyear, $departmentid, $semester, $section, $curriculum, $calendarid, $yearlvl);
+                  
+                  
+                }
+            }
+        }
+    echo "<br>\n"; 
+    }
+
+   
+    
+    $result = $schedule->addschedule('1',$academicyear, $departmentid, $semester, $section1, $curriculum1, $calendarid, '1');
+
+    
 
     if ($result1 && $result11 && $result2 && $result22 && $result3 && $result4) {
         header("Location: ../admin/academic-plan.php?curriculum=addeds");

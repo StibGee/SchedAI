@@ -226,8 +226,10 @@
                                         <div class="form-group num-of-section">
                                             <div class="row">
                                                 <h5>Student Sections</h5>
-                                                <?php foreach($collegedepartment AS $collegedepartments){ 
+                                                <?php foreach($collegedepartment AS $collegedepartments){  
                                                 echo $collegedepartments['abbreviation'];?>
+                                                <input type="number" name="departmentid[]" id="" value="<?php echo $collegedepartments['id'];?>">    
+                                                
                                                     <table class="table mx-2">
                                                         <thead>
                                                             <tr>
@@ -242,10 +244,10 @@
                                                                 <tr>
                                                                     <td style="border: none;">Year Level <?php echo $i;?></td>
                                                                     <td style="border: none;">
-                                                                        <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>" class="form-control form-control-sm" style="width: 200px;">
+                                                                        <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>[]" class="form-control form-control-sm" style="width: 200px;">
                                                                     </td>
                                                                     <td style="border: none;">
-                                                                        <select class="form-select form-select-sm m-0" name="curriculum1">
+                                                                        <select class="form-select form-select-sm m-0" name="curriculum<?php echo $i;?>[]">
                                                                             <?php 
                                                                             foreach ($calendardistinct as $calendardistincts) {?>
                                                                             <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
