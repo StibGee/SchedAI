@@ -71,6 +71,9 @@ facultyall = cursor.fetchall()
 cursor.execute("SELECT * FROM facultysubject JOIN faculty ON faculty.id=facultysubject.facultyid")
 facultysubject = cursor.fetchall()
 
+cursor.execute("SELECT * FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid WHERE subject.focus='Minor'")
+subjectscheduleminor = cursor.fetchall()
+
 try:
     cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
 
@@ -95,6 +98,8 @@ assignments={}
 assignedsubjects = set()
 facultyoccupied={} 
 workinghoursleft={}
+sectionminor={}
+
 
 facultyworkinghours = {faculties[0]: faculties[12] for faculties in facultyall}
 assignedsubjectsmatching = {}
