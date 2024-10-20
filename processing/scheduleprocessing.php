@@ -15,8 +15,8 @@ switch ($action) {
     case 'addcollege':
         addschedulecollege();
         break;
-    case 'update':
-        updateRoom();
+    case 'updateminorcollege':
+        updateminor();
         break;
     case 'delete':
         deletecurriculum();
@@ -63,14 +63,19 @@ function addschedule() {
 }
 
 function addschedulecollege() {
+    session_start();
     global $schedule;
     global $curriculum;
-
+    
+    $collegeid = $_SESSION['collegeid'];
     $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
     $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
+    $_SESSION['semester']=$semester;
     $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
+    $_SESSION['calendarid']=$calendarid;
+   
     //$request = $schedule->addrequest($departmentid, $calendarid);
-    
+    $deleteschedulecollege = $schedule->deleteschedulecollege($calendarid, $collegeid);
     foreach ($_POST['departmentid'] as $index => $deptId) {
         $departmentid = htmlspecialchars($deptId, ENT_QUOTES, 'UTF-8');
 
@@ -85,28 +90,53 @@ function addschedulecollege() {
                     $curriculum = htmlspecialchars($_POST[$curriculumindex][$index], ENT_QUOTES, 'UTF-8');
                     
                     $result = $schedule->addschedule($yearlvl,$academicyear, $departmentid, $semester, $section, $curriculum, $calendarid, $yearlvl);
-                  
+                    if ($result){
+                        $assigned=1;
+                    }else{
+                        $assigned=0;
+                    }
                   
                 }
             }
         }
-    echo "<br>\n"; 
+     
     }
 
-   
-    
-    $result = $schedule->addschedule('1',$academicyear, $departmentid, $semester, $section1, $curriculum1, $calendarid, '1');
 
-    
+    if ($deleteschedulecollege) {
 
-    if ($result1 && $result11 && $result2 && $result22 && $result3 && $result4) {
-        header("Location: ../admin/academic-plan.php?curriculum=addeds");
+        header("Location: ../admin/general-sub.php");
+
     } else {
-        header("Location: ../admin/academic-plan.php?curriculum=errors");
+        header("Location: ../admin/schedule.php?curriculum=$assigned");
     }    
     exit();
 }
+function updateminor() {
+   
+    global $schedule;
+    global $curriculum;
+  
+    foreach ($_POST['subjectscheduleid'] as $index => $subjectscheduleid) {
+       
+        $day = isset($_POST['day'][$index]) ? $_POST['day'][$index] : 'N/A';
+        $timestart = isset($_POST['timestart'][$index]) ? $_POST['timestart'][$index] : 'N/A'; 
+        $timeend = isset($_POST['timeend'][$index]) ? $_POST['timeend'][$index] : 'N/A'; 
 
+        $updateminor=$schedule->updateminor($subjectscheduleid, $day, $timestart, $timeend); 
+    }
+
+
+
+    if ($updateminor) {
+
+        header("Location: ../admin/schedule.php?assigned");
+
+    } else {
+        header("Location: ../admin/schedule.php?curriculum");
+    }    
+    exit();
+}
 function updateroom() {
     global $room;
 

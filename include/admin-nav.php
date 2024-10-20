@@ -18,7 +18,7 @@
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div>
-                <a href="#" class="nav_logo d-flex justify-content-center ">
+                <a href="#" class="nav_logo d-flex justify-content-center">
                     <img src="../img/logo/Sched-logo1.png" width="100">
                 </a>
                 <div class="nav_list">

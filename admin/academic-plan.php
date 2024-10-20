@@ -26,11 +26,11 @@
         
         $calendar = $curriculum->getcollegecurriculum($collegeid);
         $collegeid=$_SESSION['collegeid'];
-        
+       
         if(isset($_POST['departmentid'])){
             $_SESSION['departmentid'] = $_POST['departmentid'];
         }elseif(isset($_SESSION['departmentid'])){
-            $_SESSION['departmentid']=$_SESSION['departmentid'];
+            $_SESSION['departmentid']= $_SESSION['departmentid'];
         } else {
             $_SESSION['departmentid'] = $initialcollegedepartment;
         }

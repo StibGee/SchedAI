@@ -30,11 +30,8 @@
         $collegeinfo=$college->getcollegeinfo($collegeid);
 
         if(isset($_POST['departmentid'])){
-            if ($_POST['departmentid']!=0){
-                $_SESSION['departmentid'] = $_POST['departmentid'];
-            }else{
-
-            }
+            $_SESSION['departmentid'] = $_POST['departmentid'];
+            
             
         }elseif(isset($_SESSION['departmentid'])){
             $_SESSION['departmentid']=$_SESSION['departmentid'];
@@ -42,6 +39,7 @@
             $_SESSION['departmentid'] = $initialcollegedepartment;
         }
         $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
+        
     ?>
     <main>
         <div class="container mb-1">
@@ -178,7 +176,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <?php if ($_POST['departmentid']!=0){ ?>
+                                    <?php if ($_SESSION['departmentid']!=0){ ?>
                                         <input type="hidden" name="action" value="adddepartment">
                                         <div class="form-group num-of-section">
                                             <div class="row">
@@ -221,7 +219,7 @@
                                         </div>
                                     <?php } ?>
                                   
-                                    <?php if($_POST['departmentid']==0){ ?>
+                                    <?php if($_SESSION['departmentid']==0){ ?>
                                         <input type="hidden" name="action" value="addcollege">
                                         <div class="form-group num-of-section">
                                             <div class="row">

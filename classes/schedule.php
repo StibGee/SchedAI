@@ -64,6 +64,17 @@ class Schedule {
         }
     }
     
+    public function updateminor($subjectscheduleid, $day, $timestart, $timeend) {
+      
+        $sql = "UPDATE subjectschedule SET day = :day, timestart = :timestart, timeend = :timeend WHERE id = :subjectscheduleid";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':subjectscheduleid' => $subjectscheduleid,
+            ':day' => $day,
+            ':timestart' => $timestart,
+            ':timeend' => $timeend
+        ]);
+    }
     
     
     
@@ -90,6 +101,18 @@ class Schedule {
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
+    public function deleteschedulecollege($calendarid, $collegeid) {
+        $sql = "DELETE subjectschedule FROM subjectschedule 
+                JOIN department ON subjectschedule.departmentid = department.id 
+                WHERE subjectschedule.calendarid = :calendarid 
+                AND department.collegeid = :collegeid";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':calendarid', $calendarid, PDO::PARAM_INT);
+        $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+    
 
     public function filteredschedule($calendarid, $departmentid) {
         $sql = "SELECT subject.name as subjectname, subjectcode, subject.type as subjecttype, subject.unit as subjectunit, room.name as roomname, subjectschedule.timestart as starttime,subjectschedule.timeend as endtime,day, subjectschedule.yearlvl as yearlvl, section, faculty.fname as facultyfname, faculty.mname as facultymname, faculty.lname as facultylname FROM subjectschedule LEFT JOIN faculty ON subjectschedule.facultyid = faculty.id JOIN department ON department.id=subjectschedule.departmentid JOIN subject ON subject.id=subjectschedule.subjectid JOIN room ON room.id=subjectschedule.roomid WHERE subjectschedule.calendarid=:calendarid and subjectschedule.departmentid=:departmentid ORDER BY subjectcode,FIELD(subjecttype, 'Lec', 'Lab'),subjectunit DESC, section asc";
@@ -107,6 +130,47 @@ class Schedule {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getminorsubjectscollege($collegeid, $calendarid) {
+        $sql = "SELECT *, subjectschedule.id AS subjectscheduleid FROM `subjectschedule` 
+                JOIN department ON subjectschedule.departmentid = department.id 
+                JOIN subject ON subject.id=subjectschedule.subjectid
+                WHERE department.collegeid = :collegeid 
+                AND subjectschedule.calendarid = :calendarid 
+                AND subject.focus='Minor'
+                ORDER BY department.collegeid";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT);
+        $stmt->bindParam(':calendarid', $calendarid, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countminorsubjectdepartment($departmentid, $calendarid, $yearlvl) {
+        $sql = "SELECT COUNT(*) FROM `subjectschedule` 
+                JOIN department ON subjectschedule.departmentid = department.id 
+                JOIN subject ON subject.id = subjectschedule.subjectid
+                WHERE subjectschedule.departmentid = :departmentid 
+                AND subjectschedule.calendarid = :calendarid 
+                AND subjectschedule.yearlvl=:yearlvl
+                AND subject.focus = 'Minor'";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':departmentid', $departmentid, PDO::PARAM_INT);
+        $stmt->bindParam(':calendarid', $calendarid, PDO::PARAM_INT);
+        $stmt->bindParam(':yearlvl', $yearlvl, PDO::PARAM_INT);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    }
+    public function getcollegeminoryearlvl($collegeid) {
+        $sql = "SELECT DISTINCT subjectschedule.yearlvl AS minoryearlvl FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE collegeid=:collegeid AND subject.focus='Minor'";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     
 }
 ?>

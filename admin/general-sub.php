@@ -8,17 +8,51 @@
     <?php
         require_once('../include/nav.php');
         require_once('../database/datafetch.php');
+        require_once('../classes/db.php');
+        require_once('../classes/curriculum.php');
+        require_once('../classes/department.php');
+        require_once('../classes/college.php');
+        require_once('../classes/schedule.php');
 
-        $departmentid=1;
-        $semester=1;
-        $academicyear=1;
+        $collegeid=$_SESSION['collegeid'];
+        
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $curriculum = new Curriculum($pdo);
+        $college = new College($pdo);
+        $department = new Department($pdo);
+        $schedule = new Schedule($pdo);
+        $collegedepartment = $department->getcollegedepartment($collegeid);
+        $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
+        
+        $calendar = $curriculum->getallcurriculumsschedule();
+        $calendardistinct = $curriculum->getdistinctcurriculumsschedule();
+        $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();
+        $collegeinfo=$college->getcollegeinfo($collegeid);
+
+        
+
+        if(isset($_POST['departmentid'])){
+            $_SESSION['departmentid'] = $_POST['departmentid'];
+            
+            
+        }elseif(isset($_SESSION['departmentid'])){
+            $_SESSION['departmentid']=$_SESSION['departmentid'];
+        }else {
+            $_SESSION['departmentid'] = $initialcollegedepartment;
+        }
+        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
+        $collegemaxyrlvl= $college->getcollegemaxyearlvl($collegeid);
+        $collegeminoryearlvl= $schedule->getcollegeminoryearlvl($collegeid);
+        $getminorsubjectscollege=$schedule->getminorsubjectscollege($collegeid, $_SESSION['calendarid']);
 
     ?>
     <main>
         <div class="container mb-1">
             <div class="row d-flex align-items-center">
                 <div  class="col-4">
-                <h5>General Subjects for <?php echo ($departmentid == 1 ? 'BSCS ' : 'IT ') . ($semester == 1 ? '1st Sem' : '2nd Sem'); ?></h5>
+                <h5>General Subjects for <?php if ($_SESSION['departmentid'] !=0){ echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></h5>
                 </div>
             </div>
 
@@ -33,292 +67,107 @@
 
                     </div>
                     <div class="step-indicator mt-3">
-                        <div class="step active">
-                            1
-                            <span class="step-label">First Year</span>
-                        </div>
-                        <div class="step">
-                            2
-                            <span class="step-label">Second Year</span>
-                        </div>
-                        <div class="step">
-                            3
-                            <span class="step-label">Third Year</span>
-                        </div>
-                        <div class="step">
-                            4
-                            <span class="step-label">Fourth Year</span>
-                        </div>
+                        <?php $last = count($collegeminoryearlvl) - 1;?>
+                        <?php foreach ($collegeminoryearlvl AS $collegeminoryearlvls){ ?>
+                            <div class="step active">
+                                <?php echo $collegeminoryearlvls['minoryearlvl']; ?>
+                                <span class="step-label">Year Level <?php echo $collegeminoryearlvls['minoryearlvl']; ?></span>
+                            </div>
+                        
+                        <?php } ?>   
                     </div>
                 </div>
                     <div class="col-md-9 scrollable-content">
-                        <form action="../database/addacademicplan.php" method="POST" id="wizardForm">
-                            <input type="number" name="departmentid" value='<?php echo $departmentid;?>' hidden>
-                            <input type="number" name="semester" value='<?php echo $semester;?>' hidden>
-                            <input type="number" name="academicyear" value='<?php echo $academicyear;?>' hidden>
-                            <div class="step-content active" id="step1">
-                                <div class="row mt-3 d-flex justify-content-end my-2 p-3">
-                                    <label for="">Set up Schedule for General Subjects</label>
-                                    <div class="table-load my-3 p-3">
-                                    <table id="" class="table table-sm fs-9 mb-0 p-3 text-center">
-                                        <div class="generalsubjects">HIST101</div>
-                                        <thead>
-                                            <tr>
-                                                <th>Sections</th>
-                                                <th>Description</th>
-                                                <th>Unit</th>
-                                                <th>Day</th>
-                                                <th>Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="loadedSubjects1" class="list">
-                                            <tr>
-                                                <td>CS1A</td>
-                                                <td>Rizal Works</td>
-                                                <td>3.0</td>
-                                                <td>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="time" class="form-control"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>CS1B</td>
-                                                <td>Rizal Works</td>
-                                                <td>3.0</td>
-                                                <td>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="time" class="form-control"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>CS1C</td>
-                                                <td>Rizal Works</td>
-                                                <td>3.0</td>
-                                                <td>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="time" class="form-control"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                </div>
-                                <button type="button" class="btn btn-primary next-step">Next</button>
-                            </div>
-                            <div class="step-content" id="step2">
-                            <div class="row mt-3 d-flex justify-content-end my-2 p-3">
-                                    <label for="">Set up Schedule for General Subjects</label>
-                                    <div class="table-load my-3 p-3">
-                                    <table id="" class="table table-sm fs-9 mb-0 p-3 text-center">
-                                        <div class="generalsubjects">HIST101</div>
-                                        <thead>
-                                            <tr>
-                                                <th>Sections</th>
-                                                <th>Description</th>
-                                                <th>Unit</th>
-                                                <th>Day</th>
-                                                <th>Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="loadedSubjects1" class="list">
-                                            <tr>
-                                                <td>CS2A</td>
-                                                <td>Rizal Works</td>
-                                                <td>3.0</td>
-                                                <td>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="time" class="form-control"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                </div>
-                                <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                                <button type="button" class="btn next-step">Next</button>
-                            </div>
-                            <div class="step-content" id="step3">
-                            
-                            <div class="row mt-3 d-flex justify-content-end my-2 p-3">
-                                    <label for="">Set up Schedule for General Subjects</label>
-                                    <div class="table-load my-3 p-3">
-                                    <table id="" class="table table-sm fs-9 mb-0 p-3 text-center">
-                                        <div class="generalsubjects">HIST101</div>
-                                        <thead>
-                                            <tr>
-                                                <th>Sections</th>
-                                                <th>Description</th>
-                                                <th>Unit</th>
-                                                <th>Day</th>
-                                                <th>Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="loadedSubjects1" class="list">
-                                            <tr>
-                                                <td>CS3A</td>
-                                                <td>Rizal Works</td>
-                                                <td>3.0</td>
-                                                <td>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="time" class="form-control"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                </div>
-                                <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                                <button type="button" class="btn btn-primary next-step">Next</button>
-                            </div>
-                            <div class="step-content" id="step4">
-                            <div class="row mt-3 d-flex justify-content-end my-2 p-3">
-                                    <label for="">Set up Schedule for General Subjects</label>
-                                    <div class="table-load my-3 p-3">
-                                    <table id="" class="table table-sm fs-9 mb-0 p-3 text-center">
-                                        <div class="generalsubjects">HIST101</div>
-                                        <thead>
-                                            <tr>
-                                                <th>Sections</th>
-                                                <th>Description</th>
-                                                <th>Unit</th>
-                                                <th>Day</th>
-                                                <th>Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="loadedSubjects1" class="list">
-                                            <tr>
-                                                <td>CS4A</td>
-                                                <td>Rizal Works</td>
-                                                <td>3.0</td>
-                                                <td>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="time" class="form-control"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>CS4B</td>
-                                                <td>Rizal Works</td>
-                                                <td>3.0</td>
-                                                <td>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                    <select>
-                                                        <option value="monday">Monday</option>
-                                                        <option value="tuesday">Tuesday</option>
-                                                        <option value="wednesday">Wednesday</option>
-                                                        <option value="thursday">Thursday</option>
-                                                        <option value="friday">Friday</option>
-                                                        <option value="saturday">Saturday</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="time" class="form-control"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                </div>
-                                <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                                <button type="submit" class="btn btn-submit">Submit</button>
-                            </div>
+                        <?php if($_SESSION['departmentid']==0){ ?>
+                           
+                            <form action="../processing/scheduleprocessing.php" method="POST" id="wizardForm">
+                                <input type="text" name="action" value='updateminorcollege' hidden>
+                              
+                                <input type="number" name="calendarid" value='<?php echo $_SESSION['calendarid'];?>' hidden>
+                                <?php foreach ($collegeminoryearlvl AS $index => $collegeminoryearlvls){ ?>
+                                    <div class="step-content <?php if ($collegeminoryearlvls['minoryearlvl']==1){echo 'active';}?>" id="step<?php echo $collegeminoryearlvls['minoryearlvl'];?>">
+                                        <div class="row mt-3 d-flex justify-content-end my-2 p-3">
+                                            <label for="">Set up Schedule for General Subjects</label>
+                                            <div class="table-load my-3 p-3">
+                                            <?php foreach($collegedepartment AS $collegedepartments){
+                                                if(!$schedule->countminorsubjectdepartment($collegedepartments['id'], $_SESSION['calendarid'], $collegeminoryearlvls['minoryearlvl'])){
+                                                    continue;}?>
+                                                <table id="" class="table table-sm fs-9 mb-0 p-3 text-center">
+                                                
+                                                    
+                                                    <p class="generalsubjects fw-bold"><?php echo $collegedepartments['name']; ?></p>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sections</th>
+                                                            <th>Description</th>
+                                                            <th>Unit</th>
+                                                            <th>Day</th>
+                                                            <th>Time Start</th>
+                                                            <th>Time End</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="loadedSubjects<?php echo $collegeminoryearlvls['minoryearlvl'];?>" class="list">
+                                                        <?php foreach($getminorsubjectscollege AS $getminorsubjectscolleges){
+                                                            if ($collegedepartments['id']!=$getminorsubjectscolleges['departmentid'] || $getminorsubjectscolleges['yearlvl']!=$collegeminoryearlvls['minoryearlvl']){
+                                                                continue;
+                                                            }else{?>
+                                                                <tr>
+                                                                    
+                                                                    <td ><?php echo $collegedepartments['abbreviation'].$getminorsubjectscolleges['yearlvl'].$getminorsubjectscolleges['section'];?></td>
+                                                                    <td class="text-start"><input type="text" name="subjectscheduleid[]" id="" value="<?php echo $getminorsubjectscolleges['subjectscheduleid'];?>" hidden><?php echo $getminorsubjectscolleges['name'];?></td>
+                                                                    <td><?php echo $getminorsubjectscolleges['unit'];?></td>
+                                                                    <td class="text-center">
+                                                                        
+                                                                            <select name="day[]" class="form-select form-select-sm" id="select-classtype">
+                                                                                <?php if($getminorsubjectscolleges['unit']==3){?>
+                                                                                    <option value="MTh">Monday and Thursday</option>
+                                                                                    <option value="TF">Thursday and Friday</option>
+                                                                                    <option value="WS">Wednesday and Saturday</option>
+                                                                                    <option value="" selected disabled>Please select a day</option>
+                                                                                <?php }else{?>
+                                                                                    <option value="M">Monday</option>
+                                                                                    <option value="T">Tuesday</option>
+                                                                                    <option value="W">Wednesday</option>
+                                                                                    <option value="Th">Thursday</option>
+                                                                                    <option value="F">Friday</option>
+                                                                                    <option value="S">Saturday</option>
+                                                                                    <option value="" selected disabled>Please select a day</option>
+                                                                                <?php } ?>
+                                                                            </select>
+                                                                       
+                                                                    
+                                                                       
+                                                                    </td>
+                                                                    <td><input type="time" name="timestart[]" class="form-control"></td>
+                                                                    <td><input type="time" name="timeend[]" class="form-control"></td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                            
+                                                            
+                                                    
+                                                        <?php } ?>
+                                                    </tbody>
+                                                
+                                                </table>
+                                            <?php } ?>
+                                        </div>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary prev-step">Previous</button>
+                                        <?php if ($index!=$last){?>
+                                            <button type="button" class="btn next-step">Next</button>
+                                        <?php }else{ ?>
+                                            <button type="submit" class="btn next-step">Submit</button>
+                                        <?php } ?>
+                                        
+                                    </div>
+                                <?php } ?>
+                                
+                            </form>
+                    <?php }else{?>
 
+                    <?php } ?>    
                     </div>
-                    </form>
+                    
                 </div>
             </div>
 
