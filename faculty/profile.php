@@ -11,13 +11,17 @@
         require_once('../include/user-mainnav.php');
         require_once('../classes/subject.php');
         require_once('../classes/db.php');
-
+        require_once('../classes/faculty.php');
+        require_once('../classes/department.php');
         $db = new Database();
         $pdo = $db->connect();
 
         $subject = new Subject($pdo);
-        $distinctsubjects = $subject->getdistinctsubjhects();
-        
+        $faculty = new Faculty($pdo);
+        $department = new Department($pdo);
+        $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
+        $facultysubjects=$faculty->getfacultysubjects($_SESSION['id']);
+        $facultypreference=$faculty->getfacultydaytime($_SESSION['id']);
     ?>
             <main>
             <div class="container ">
@@ -43,10 +47,10 @@
                                 </form>
                             </div>
                             <div class="col-6">
-                                <h3>Name</h3>
+                                <h3><?php echo $facultyinfo['fname'].' '.$facultyinfo['lname'];?></h3>
                                 <div class="row">
-                                    <label for="">[degree]</label>
-                                    <label for="">[department]</label>
+                                    
+                                    <label for=""><?php $departmmentinfo=$department->getdepartmentinfo($facultyinfo['departmentid']); echo $departmmentinfo['name']?></label>
                                 </div>
                             </div>
                             <div class="col-5 d-flex justify-content-end align-items-center ">
@@ -59,32 +63,30 @@
                         <div class="p-4">
                             <div class="form-group">
                                 <label for="teachingHour">Teaching Hour</label>
-                                <input type="text" class="form-control" id="teachingHour">
+                                <input type="text" class="form-control" id="teachingHour" value="<?php echo $facultyinfo['teachinghours'];?>">
                             </div>
                             <div class="form-group">
                                 <label for="genderSelect">Gender</label>
                                 <div class="input-group">
-                                    <select class="form-control" id="genderSelect">
-                                        <option>male</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="" id="" value="<?php echo $facultyinfo['gender'];?>">
                                     <div class="input-group-append">
                                     <button class="btn "><i class="fa-solid fa-pen"></i></button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <!--<div class="form-group">
                                 <label for="email">Email</label>
                                 <div class="input-group">
-                                    <input type="email" class="form-control" id="email">
+                                    <input type="email" class="form-control" id="email" value="<?php echo $facultyinfo['email'];?>">
                                     <div class="input-group-append">
                                     <button class="btn "><i class="fa-solid fa-pen"></i></button>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <label for="contactNo">Contact No.</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="contactNo">
+                                    <input type="number" class="form-control" id="contactNo" value="<?php echo $facultyinfo['contactno'];?>">
                                     <button class="btn "><i class="fa-solid fa-pen"></i></button>
                                 </div>
                             </div>
@@ -97,42 +99,40 @@
                                     <div class="col-6">
                                         <label for="">Position/Rank</label>
                                         <div class="input-group">
-                                            <input type="text">
+                                            <input type="text" class="form-control"  value="<?php echo $facultyinfo['rank'];?>">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label for="">Start Of Service</label>
                                         <div class="input-group">
-                                            <input type="text">
+                                            <input type="text" class="form-control" value="<?php echo $facultyinfo['startdate'];?>">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row p-4">
-                                <div class="col-7 ">
-                                    <div class="row  p-3">
+                                <div class="col-12">
+                                    <div class="row p-3">
                                         <div class="table-load col-6">
-                                            <label class="form-label" for="degree">Highest Degree Obtained</label>
-                                            <select class="form-select" id="degree" name="degree" required>
-                                                <option selected disabled value="">Choose...</option>
-                                                <option value="PhD">PhD</option>
-                                                <option value="MD">MD</option>
-                                            </select>
+                                            <label class="form-label" for="degree">Employment Type</label>
+                                            
+                                            <input type="text" class="form-control" value="<?php echo $facultyinfo['type'];?>">
                                         </div>
-                                        <div class="table-load col-6" id="specialization-container">
+                                        <!--<div class="table-load col-6" id="specialization-container">
                                             <label class="form-label" for="specialization">Specialization</label>
                                             <select class="form-select" id="specialization" name="specialization" required>
                                                 <option selected disabled value="">Choose...</option>
                                             </select>
+                                        </div>-->
+                                        <div class="table-load col-6">
+                                            <label for="">Expertise</label>
+                                            <?php foreach ($facultysubjects AS $facultysubject){?>
+                                                <li><?php echo $facultysubject['subjectname'];?></li>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-5 p-3 ">
-                                    <label for="">Course Taught</label>
-                                    <li>suject1</li>
-                                    <li>subject2</li>
-                                    <li>subject3</li>
-                                </div>
+                                
                             </div>
                             <div class="row p-4 mb-4">
                                 <div class="preference-table p-3">
@@ -152,36 +152,19 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>Monday</td>
-                                                    <td>09:00</td>
-                                                    <td>17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Tuesday</td>
-                                                    <td>09:00</td>
-                                                    <td>17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Wednesday</td>
-                                                    <td>09:00</td>
-                                                    <td>17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Thursday</td>
-                                                    <td>09:00</td>
-                                                    <td>17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Friday</td>
-                                                    <td>09:00</td>
-                                                    <td>17:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Saturday</td>
-                                                    <td>09:00</td>
-                                                    <td>17:00</td>
-                                                </tr>
+                                               
+                                                <?php  $daysofweek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                                foreach ($facultypreference AS $facultypreferences){
+                                                    
+                                                    $dayindex = $facultypreferences['day'];
+                                                    $day = isset($daysofweek[$dayindex]) ? $daysofweek[$dayindex] : 'Unknown Day';?>
+                                                    <tr>
+                                                    <td><?php echo $day;?></td>
+                                                    <td><?php echo date("g:i A", strtotime($facultypreferences['starttime']));?></td>
+                                                    <td><?php echo date("g:i A", strtotime($facultypreferences['endtime']));?></td>
+                                                    </tr>
+                
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>

@@ -10,6 +10,30 @@
 
         require_once('../include/user-mainnav.php');
         require_once('../database/datafetch.php');
+       
+        require_once('../classes/db.php');
+        require_once('../classes/curriculum.php');
+        require_once('../classes/department.php');
+        require_once('../classes/college.php');
+        require_once('../classes/schedule.php');
+        require_once('../classes/faculty.php');
+
+        
+        
+
+        $db = new Database();
+        $pdo = $db->connect();
+
+        $curriculum = new Curriculum($pdo);
+        $faculty = new Faculty($pdo);
+        $schedule = new Schedule($pdo);
+        $college = new College($pdo);
+        $department = new Department($pdo);   
+
+        $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid'], $_SESSION['id']);
+     
+        $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
+        
     ?>
 <main>
     <div class="container ">
@@ -48,59 +72,62 @@
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex ">
-                    <button id="viewToggleButton">
+                    <a href="dashboard-toggle.php" id="viewToggleButton" class="btn">
                         Toggle View
-                    </button>
+                    </a>
                 </div>
                 <div class="sched-table mt-3">
-                    <div id="tabularView" class="mt-2">
+                    <div id="tabularViews" class="mt-2">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Deparment</th>
                                     <th>Subject Code</th>
                                     <th>Description</th>
                                     <th>Type</th>
                                     <th>Unit</th>
-                                    <th>Room</th>
+                                    <th>Year & Sec</th>
                                     <th>Time</th>
                                     <th>Day</th>
-                                    <th>Year & Sec</th>
-                                    <th>Lecturer</th>
+                                    <th>Room</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody id="tabularTableBody">
+                            <?php $seenSubjectCodes = [];
+                                $number=1;
+                                foreach ($filteredschedules as $subjectschedules) {
+                                    if (!in_array($subjectschedules['subjectcode'], $seenSubjectCodes)) {
+                                    
+                                        $seenSubjectCodes[] = $subjectschedules['subjectcode'];
+                                        $displaySubjectCode = $subjectschedules['subjectcode'];
+                                    } else {
+                                        $displaySubjectCode = '';
+                                    }
+                                ?>
                                 <tr>
-                                    <td>1</td>
-                                    <td>Computer Science</td>
-                                    <td>CS101</td>
-                                    <td>Intro to Computer Science</td>
-                                    <td>Lecture</td>
-                                    <td>3</td>
-                                    <td>R101</td>
-                                    <td>8:00 AM - 9:00 AM</td>
-                                    <td>Monday</td>
-                                    <td>1A</td>
-                                    <td>Dr. Smith</td>
+                                    <td><?php echo $number;?></td>
+                                    <td><?php echo $displaySubjectCode;?></td>
+                                    <td><?php echo $subjectschedules['subjectname'];?></td>
+                                    <td><?php echo $subjectschedules['subjecttype'];?></td>
+                                    <td><?php echo $subjectschedules['subjectunit'];?></td>
+                                    <td><?php echo $subjectschedules['abbreviation'].' '.$subjectschedules['yearlvl'].$subjectschedules['section'];?></td>
+                                    <td><?php
+                                    if (!empty($subjectschedules['starttime']) && !empty($subjectschedules['endtime'])) {
+                                        echo date("g:i A", strtotime($subjectschedules['starttime'])) . " - " . date("g:i A", strtotime($subjectschedules['endtime']));
+                                    }
+                                    ?>
+                                    </td>
+                                    <td><?php echo $subjectschedules['day'];?></td>
+                                    <td><?php echo $subjectschedules['roomname'];?></td>
+                                
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Mathematics</td>
-                                    <td>MATH101</td>
-                                    <td>Calculus I</td>
-                                    <td>Lecture</td>
-                                    <td>4</td>
-                                    <td>R102</td>
-                                    <td>9:00 AM - 10:00 AM</td>
-                                    <td>Tuesday</td>
-                                    <td>1B</td>
-                                    <td>Prof. Johnson</td>
-                                </tr>
+                                
+                               <?php $number+=1; } ?>
                             </tbody>
                         </table>
                     </div>
-                        <!-- Calendar View -->
+                       
                         <table id="calendarView" class="table mt-2" style="display: none;">
                             <thead>
                                 <tr>
@@ -114,7 +141,7 @@
                                 </tr>
                             </thead>
                             <tbody id="scheduleTableBody">
-                                <!-- Time slots will be added here -->
+                               
                             </tbody>
                         </table>
                     </div>

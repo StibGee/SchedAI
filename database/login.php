@@ -28,9 +28,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $_SESSION['collegeid']=$collegeid;
         $_SESSION['fname']=$name;
 
-        if (!isset($_SESSION['role'])){
-            $_SESSION['role']=$role;
-        }
+        
+        $_SESSION['role']=$role;
+        
        
         
         if ($role=='collegesecretary'){

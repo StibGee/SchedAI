@@ -30,6 +30,9 @@ switch ($action) {
     case 'list':
         listRooms();
         break;
+    case 'logout':
+        logout();
+        break;    
     default:
         header("Location: ../admin/room.php");
         exit();
@@ -67,7 +70,7 @@ function addschedule() {
 }
 function addfacultypreferences() {
     global $faculty;
-
+    
     $fname = isset($_POST['fname']) ? filter_var($_POST['fname'], FILTER_SANITIZE_STRING) : '';
     $lname = isset($_POST['lname']) ? filter_var($_POST['lname'], FILTER_SANITIZE_STRING) : '';
     $mname =  isset($_POST['mname']) ? filter_var($_POST['mname'], FILTER_SANITIZE_STRING) : '';
@@ -128,7 +131,11 @@ function addfacultypreferences() {
     }
 
     if ($facultysubject && ($monday || $tuesday || $wednesday || $thursday || $friday || $saturday)) {
-        header("Location: ../admin/academic-plan.php?curriculum=added");
+        if($_SESSION['role']=='faculty'){
+            header("Location: ../faculty/dasboard.php");
+        }else{
+            header("Location: ../admin/faculty.php?curriculum=edited");
+        }
     } else {
         header("Location: ../admin/academic-plan.php?curriculum=error");
     }    
@@ -136,7 +143,7 @@ function addfacultypreferences() {
 }
 function editfacultyprofiling() {
     global $faculty;
-
+    session_start();
     $fname = isset($_POST['fname']) ? filter_var($_POST['fname'], FILTER_SANITIZE_STRING) : '';
     $lname = isset($_POST['lname']) ? filter_var($_POST['lname'], FILTER_SANITIZE_STRING) : '';
     $mname =  isset($_POST['mname']) ? filter_var($_POST['mname'], FILTER_SANITIZE_STRING) : '';
@@ -200,7 +207,7 @@ function editfacultyprofiling() {
         if (!$dayexisting){
             $tuesday = $faculty->addtimepreference($facultyid, '2',$tuesdaystartTime,$tuesdayendTime);
         }else{
-            $tuesday = $faculty->edittimepreference($facultyid, '2',$mondaystartTime,$mondayendTime);
+            $tuesday = $faculty->edittimepreference($facultyid, '2',$tuesdaystartTime,$tuesdayendTime);
         }
     }else{
         $tuesday = $faculty->deletetimepreference($facultyid, '2');
@@ -211,7 +218,7 @@ function editfacultyprofiling() {
         if (!$dayexisting){
             $wednesday = $faculty->addtimepreference($facultyid, '3',$wednesdaystartTime,$wednesdayendTime);
         }else{
-            $wednesday = $faculty->edittimepreference($facultyid, '3',$mondaystartTime,$mondayendTime);
+            $wednesday = $faculty->edittimepreference($facultyid, '3',$wednesdaystartTime,$wednesdayendTime);
         }
      }else{
         $wednesday = $faculty->deletetimepreference($facultyid, '3');
@@ -222,7 +229,7 @@ function editfacultyprofiling() {
         if (!$dayexisting){
             $thursday = $faculty->addtimepreference($facultyid, '4',$thursdaystartTime,$thursdayendTime);
         }else{
-            $thursday = $faculty->edittimepreference($facultyid, '4',$mondaystartTime,$mondayendTime);
+            $thursday = $faculty->edittimepreference($facultyid, '4',$thursdaystartTime,$thursdayendTime);
         }
     }else{
         $thursday = $faculty->deletetimepreference($facultyid, '4');
@@ -233,7 +240,7 @@ function editfacultyprofiling() {
         if (!$dayexisting){
             $friday = $faculty->addtimepreference($facultyid, '5',$fridaystartTime,$fridayendTime);
         }else{
-            $friday = $faculty->edittimepreference($facultyid, '5',$mondaystartTime,$mondayendTime);
+            $friday = $faculty->edittimepreference($facultyid, '5',$fridaystartTime,$fridayendTime);
         }
     }else{
         $friday = $faculty->deletetimepreference($facultyid, '5');
@@ -244,14 +251,21 @@ function editfacultyprofiling() {
         if (!$dayexisting){
             $saturday = $faculty->addtimepreference($facultyid, '6',$saturdaystartTime,$saturdayendTime);
         }else{
-            $saturday = $faculty->edittimepreference($facultyid, '6',$mondaystartTime,$mondayendTime);
+            $saturday = $faculty->edittimepreference($facultyid, '6',$saturdaystartTime,$saturdayendTime);
         }
     }else{
         $saturday = $faculty->deletetimepreference($facultyid, '6');
     }
 
     if ($editfaculty && $resetfacultysubject && $addfacultysubject && ($monday || $tuesday || $wednesday || $thursday || $friday || $saturday)) {
-        header("Location: ../admin/faculty.php?curriculum=edited");
+        
+        if($_SESSION['role']=='faculty'){
+            header("Location: ../faculty/dashboard.php");
+        }else{
+            header("Location: ../admin/faculty.php?curriculum=edited");
+        }
+       
+        
     } else {
         header("Location: ../admin/faculty.php?curriculum=error");
     }    
@@ -301,5 +315,15 @@ function listRooms() {
     header('Content-Type: application/json');
     echo json_encode($rooms);
     exit();
+}
+
+function logout() {
+    session_start();
+    $_SESSION = array();
+
+    session_destroy();
+
+    header("Location: ../index.php");
+    exit;
 }
 ?>

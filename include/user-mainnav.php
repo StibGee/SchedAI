@@ -10,7 +10,8 @@
                 <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="../faculty/profile.php">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                    
+
                 </ul>
             </div>
         </div>
@@ -22,7 +23,7 @@
                     <img src="../img/logo/Sched-logo1.png" width="100">
                 </a>
                 <div class="nav_list">
-                    <a href="../faculty/dashboard.php" class="nav_link active">
+                    <a href="../faculty/dashboard.php" class="nav_link activenav">
                     <i class="fa-solid fa-spinner"></i>
                         <span class="nav_name">Assigned Schedule</span>
                     </a>
@@ -52,5 +53,8 @@
             height: 40px;
             object-fit: cover; /* Ensures the image covers the area without stretching */
             border-radius: 50%; /* Optional: Makes the image circular */
+        }
+        .activenav{
+            
         }
 </style>

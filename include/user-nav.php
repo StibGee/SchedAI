@@ -15,7 +15,14 @@
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="../admin/facultyloading.php">Profile</a></li>
                     <li><a class="dropdown-item" href="../faculty/profiling.php">user(temporary)</a></li>
-                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                    <li>
+                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
+                            <input type="text" name="action" value="logout" hidden>
+                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -104,8 +104,18 @@ function addschedulecollege() {
 
 
     if ($deleteschedulecollege) {
-
-        header("Location: ../admin/general-sub.php");
+        if ($_SESSION['departmentid']!=0){
+            
+        }else{
+            $minornofacultycount=$schedule->minorfacultycountcollege($_SESSION['collegeid'], $_SESSION['calendarid']);
+            if($minornofacultycount==0){
+                
+                header("Location: ../admin/general-sub.php");
+            }else{
+                header("Location: ../admin/final-sched.php?subject=nofaculty");
+            }
+        }
+        
 
     } else {
         header("Location: ../admin/schedule.php?curriculum=$assigned");
@@ -129,7 +139,7 @@ function updateminor() {
 
 
     if ($updateminor) {
-
+        
         header("Location: ../admin/schedule.php?assigned");
 
     } else {

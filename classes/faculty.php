@@ -160,6 +160,13 @@ class Faculty {
         $stmt->execute(); 
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
+    public function collegefaculty($collegeid) {
+        $sql = "SELECT *, faculty.id AS facultyid FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=:collegeid";
+        $stmt = $this->pdo->prepare($sql); 
+        $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT); 
+        $stmt->execute(); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
     
     
 }

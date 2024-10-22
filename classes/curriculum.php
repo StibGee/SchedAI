@@ -98,6 +98,13 @@ class Curriculum {
         $stmt->execute();
         return $stmt->fetchColumn();
     }
+    public function calendarinfo($collegelatestyear) {
+        $query = "SELECT * FROM calendar WHERE id = :calendarid";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':calendarid', $collegelatestyear);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     
     
 }

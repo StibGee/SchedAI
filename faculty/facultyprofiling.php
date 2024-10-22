@@ -15,19 +15,63 @@
 
         $db = new Database();
         $pdo = $db->connect();
-
+        echo $_SESSION['role'];
         $subject = new Subject($pdo);
         $faculty = new Faculty($pdo);
 
-        if (isset($_SESSION['id'])){
+        if (isset($_POST['facultyid'])){
+            $facultyid=$_POST['facultyid'];
+        }else{
             $facultyid=$_SESSION['id'];
         }
-
+        
         $distinctsubjects = $subject->getdistinctsubjects();
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
-        
-        
+        if ($facultyinfo) {
+            
+            echo htmlspecialchars($facultyinfo['id']); 
+        } else {
+            echo 'No faculty information found.';
+        }
+        $facultydaytime=$faculty->getfacultydaytime($facultyid);
+        $mondaychecked=$tuesdaychecked=$wednesdaychecked=$thursdaychecked=$fridaychecked=$saturdaychecked='';
+
+        foreach($facultydaytime as $facultydaytimes){
+          
+            if($facultydaytimes['day']==1){
+                $mondaychecked='checked';
+                $mondaystarttime=$facultydaytimes['starttime'];
+                $mondayendtime=$facultydaytimes['endtime'];
+            }
+            if($facultydaytimes['day']==2){
+                $tuesdaychecked='checked';
+                $tuesdaystarttime=$facultydaytimes['starttime'];
+                $tuesdayendtime=$facultydaytimes['endtime'];
+            }
+            
+            if($facultydaytimes['day']==3){
+                $wednesdaychecked='checked';
+                $wednesdaystarttime=$facultydaytimes['starttime'];
+                $wednesdayendtime=$facultydaytimes['endtime'];
+            }
+            if($facultydaytimes['day']==4){
+                $thursdaychecked='checked';
+                $thursdaystarttime=$facultydaytimes['starttime'];
+                $thursdayendtime=$facultydaytimes['endtime'];
+            }
+            if($facultydaytimes['day']==5){
+                $fridaychecked='checked';
+                $fridaystarttime=$facultydaytimes['starttime'];
+                $fridayendtime=$facultydaytimes['endtime'];
+            }  
+            if($facultydaytimes['day']==6){
+                $saturdaychecked='checked';
+                $saturdaystarttime=$facultydaytimes['starttime'];
+                $saturdayendtime=$facultydaytimes['endtime'];
+            }
+
+        }
             
     ?>
 
@@ -67,8 +111,8 @@
             </div>
             <div class="col-md-9 scrollable-content mt-4">
                 <form id="wizardForm" method="POST" action="../processing/facultyprocessing.php">
-                    <input type="hidden" name="action" value="addprofiling">
-                    <input type="number" name="facultyid" value="<?php echo $_SESSION['id'];?>" hidden>
+                    <input type="hidden" name="action" value="editprofiling">
+                    <input type="number" name="facultyid" value="<?php echo $facultyinfo['id'];?>" hidden>
                     <div class="step-content active p-4" id="step1">
                         <h5>Personal Information</h5>
                         <?php if($facultyinfo){ ?>
@@ -147,8 +191,7 @@
                     <?php } ?>
                     <div class="step-content p-4" id="step3">
                         <h5>Teaching Details</h5>
-                        <div class="container ">
-                            <label for="">Teaching Specialization</label>
+                        <div class="container "><label for="">Teaching Specialization</label>
                             <div class="wrap p-3 m-3">
                                 <table class="table table-sm fs-9 mb-0 text-center ">
                                     <thead>
@@ -171,7 +214,7 @@
                                         <tr>
                                             
                                             <th data-sort="desc">Subject Name</th>
-                                        
+                                         
                                             <th>Select</th>
                                         </tr>
                                     </thead>
@@ -200,7 +243,9 @@
                                         </tr>
                                         <?php } ?>
                                        
-                                    </tbody>
+                                </tbody>
+
+
                                 </table>
                                 </div>
                             </div>
@@ -250,40 +295,40 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><input type="checkbox" name="monday"></td>
+                                            <td><input type="checkbox" name="monday" <?php echo $mondaychecked;?>></td>
                                             <td>Monday</td>
-                                            <td><input type="time" name="mondaystartTime"></td>
-                                            <td><input type="time" name="mondayendTime"></td>
+                                            <td><input type="time" name="mondaystartTime" value="<?php if($mondaystarttime){echo $mondaystarttime;}?>"></td>
+                                            <td><input type="time" name="mondayendTime" value="<?php if($mondayendtime){echo $mondayendtime;}?>"></td>
                                         </tr>
                                         <tr>
-                                            <td><input type="checkbox" name="tuesday"></td>
+                                            <td><input type="checkbox" name="tuesday" <?php echo $tuesdaychecked;?>></td>
                                             <td>Tuesday</td>
-                                            <td><input type="time" name="tuesdaystartTime"></td>
-                                            <td><input type="time" name="tuesdayendTime"></td>
+                                            <td><input type="time" name="tuesdaystartTime" value="<?php if($tuesdaystarttime){echo $tuesdaystarttime;}?>"></td>
+                                            <td><input type="time" name="tuesdayendTime" value="<?php if($tuesdayendtime){echo $tuesdayendtime;}?>"></td>
                                         </tr>
                                         <tr>
-                                            <td><input type="checkbox" name="wednesday"></td>
+                                            <td><input type="checkbox" name="wednesday" <?php echo $wednesdaychecked;?>></td>
                                             <td>Wednesday</td>
-                                            <td><input type="time" name="wednesdaystartTime"></td>
-                                            <td><input type="time" name="wednesdayendTime"></td>
+                                            <td><input type="time" name="wednesdaystartTime" value="<?php if($wednesdaystarttime){echo $wednesdaystarttime;}?>"></td>
+                                            <td><input type="time" name="wednesdayendTime" value="<?php if($wednesdayendtime){echo $wednesdayendtime;}?>"></td>
                                         </tr>
                                         <tr>
-                                            <td><input type="checkbox" name="thursday"></td>
+                                            <td><input type="checkbox" name="thursday" <?php echo $thursdaychecked;?>></td>
                                             <td>Thursday</td>
-                                            <td><input type="time" name="thursdaystartTime"></td>
-                                            <td><input type="time" name="thursdayendTime"></td>
+                                            <td><input type="time" name="thursdaystartTime" value="<?php if($thursdaystarttime){echo $thursdaystarttime;}?>"></td>
+                                            <td><input type="time" name="thursdayendTime" value="<?php if($thursdayendtime){echo $thursdayendtime;}?>"></td>
                                         </tr>
                                         <tr>
-                                            <td><input type="checkbox" name="friday"></td>
+                                            <td><input type="checkbox" name="friday" <?php echo $fridaychecked;?>></td>
                                             <td>Friday</td>
-                                            <td><input type="time" name="fridaystartTime"></td>
-                                            <td><input type="time" name="fridayendTime"></td>
+                                            <td><input type="time" name="fridaystartTime" value="<?php if($fridaystarttime){echo $fridaystarttime;}?>"></td>
+                                            <td><input type="time" name="fridayendTime" value="<?php if($fridayendtime){echo $fridayendtime;}?>"></td>
                                         </tr>
                                         <tr>
-                                            <td><input type="checkbox" name="saturday"></td>
+                                            <td><input type="checkbox" name="saturday" <?php echo $saturdaychecked;?>></td>
                                             <td>Saturday</td>
-                                            <td><input type="time" name="saturdaystartTime"></td>
-                                            <td><input type="time" name="saturdayendTime"></td>
+                                            <td><input type="time" name="saturdaystartTime" value="<?php if($saturdaystarttime){echo $saturdaystarttime;}?>"></td>
+                                            <td><input type="time" name="saturdayendTime" value="<?php if($saturdayendtime){echo $saturdayendtime;}?>"></td>
                                         </tr>
 
                                     </tbody>
@@ -318,21 +363,31 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+       
+        document.querySelectorAll('.load-subject-checkbox1:checked').forEach(function(checkbox) {
+            const subjectName = checkbox.getAttribute('data-subjectname1');
+         
+
+            addToSpecialization(subjectName,checkbox);
+        });
+
+    
         document.querySelectorAll('.load-subject-checkbox1').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 const subjectName = this.getAttribute('data-subjectname1');
-                const subjectType = this.getAttribute('data-type1');
+              
 
                 if (this.checked) {
-                    addToSpecialization(subjectName, subjectType, this);
+                    addToSpecialization(subjectName,  this);
                 } else {
+                 
                     removeFromSpecialization(subjectName);
                 }
             });
         });
     });
 
-    function addToSpecialization(subjectName, subjectType, checkbox) {
+    function addToSpecialization(subjectName, checkbox) {
         const tbody = document.getElementById('loadedSubjects1');
 
         const newRow = document.createElement('tr');
@@ -350,24 +405,22 @@
             
             checkbox.checked = false;
         });
-
         tbody.appendChild(newRow);
     }
 
     function removeFromSpecialization(subjectName) {
         const tbody = document.getElementById('loadedSubjects1');
         const rows = tbody.querySelectorAll('tr');
-   
+
         rows.forEach(function(row) {
             const subjectInput = row.querySelector('input[name="subjectname[]"]');
-           
+
+      
             if (subjectInput && subjectInput.value.trim() === subjectName) {
-                
                 row.remove();
             }
         });
     }
-
 
 </script>
 <script>

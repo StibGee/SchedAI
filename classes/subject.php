@@ -102,5 +102,14 @@ class Subject {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function addfacultysubject($facultyid, $subjectname){
+        $sql="INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid, :subjectname)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':facultyid', $facultyid);
+        $stmt->bindParam(':subjectname', $subjectname);
+        return $stmt->execute(); 
+    }
+    
 }
 ?>

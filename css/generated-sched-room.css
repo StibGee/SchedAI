@@ -22,7 +22,7 @@
 }
 
 #tabularView{
-    font-size: 12px;
+    font-size: unset;
 }
 #viewToggleButton{
     font-size: 13px;
@@ -90,6 +90,7 @@
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed ;
 }
 th, td {
    
