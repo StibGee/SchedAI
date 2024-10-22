@@ -33,7 +33,7 @@
         $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid'], $_SESSION['id']);
      
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
-        
+        $calendarinfo=$curriculum->calendarinfo($collegelatestyear);
     ?>
 <main>
     <div class="container ">
@@ -44,9 +44,10 @@
         </div>
         <div class="row mt-4">
                 <div class="header-table">
-                    <h5>
-                        Semester <span>Department</span> <span>SY-</span> <span>Year</span>
-                    </h5>
+                    <h4>
+                        
+                        Your Schedule for<span> S.Y: </span><span><?php echo $calendarinfo['name'].' ';?></span><?php echo ($calendarinfo['sem'] == 1) ? "1st sem" : (($calendarinfo['sem'] == 2) ? "2nd sem" : "Unknown semester");?><span></span>
+                    </h4>
                 </div>
             </div>
             <div class="row d-flex justify-content-end align-items-center">
