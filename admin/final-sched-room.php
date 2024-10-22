@@ -34,7 +34,6 @@
         
     }
 
-        // Define days and intervals
     $days = ['M', 'T', 'W', 'Th', 'F', 'S'];
     $intervals = [];
     for ($i = 7; $i <= 18; $i++) {
@@ -42,13 +41,11 @@
         $intervals[] = sprintf("%02d:30-%02d:00", $i, $i + 1);
     }
 
-    // Function to generate a color based on subject ID
     function generateColor($id) {
-        $hue = ($id * 137.508) % 360; // Generate a hue value based on subject ID
-        return "hsl($hue, 70%, 80%)"; // Return a color in HSL format
+        $hue = ($id * 137.508) % 360; 
+        return "hsl($hue, 70%, 80%)";
     }
 
-    // Fetch timetable data from the database
     $sql = "SELECT 
                 day, 
                 TIME_FORMAT(timestart, '%H:%i') AS timestart, 
@@ -69,10 +66,9 @@
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 
-    // Initialize an empty array to store schedule data
     $schedule = [];
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $daysArray = preg_split('/(?<=[a-zA-Z])(?=[A-Z])/', $row['day']); // Split multi-day entries
+        $daysArray = preg_split('/(?<=[a-zA-Z])(?=[A-Z])/', $row['day']);
         $starttime = $row['timestart'];
         $endtime = $row['timeend'];
 
@@ -84,22 +80,20 @@
         $section = htmlspecialchars($row['section']);
         $facultyname = htmlspecialchars($row['facultyname']);
         
-        // Include year, section, and place faculty name below the subject name
-        $subjectLabel = "$subjectname $subjecttype $departmentname $yearlvl$section ($facultyname)"; 
-        $color = generateColor($subjectid); // Generate a color for the subject ID
         
-        // Convert start and end times to minutes since midnight
+        $subjectLabel = "$subjectname $subjecttype $departmentname $yearlvl$section ($facultyname)";
+        $color = generateColor($subjectid); 
+        
+        
         $startMinutes = (int)date('H', strtotime($starttime)) * 60 + (int)date('i', strtotime($starttime));
         $endMinutes = (int)date('H', strtotime($endtime)) * 60 + (int)date('i', strtotime($endtime));
         
-        // Calculate the number of 30-minute intervals needed
+      
         $intervalCount = ($endMinutes - $startMinutes) / 30;
 
-        // Determine the middle index for centering the subject
         $middleIndex = (int)floor($intervalCount / 2);
-        $startIndex = $intervalCount % 2 === 0 ? $middleIndex - 1 : $middleIndex; // Adjust starting index for even intervals
+        $startIndex = $intervalCount % 2 === 0 ? $middleIndex - 1 : $middleIndex; 
 
-        // Populate schedule array with subject names and colors based on day and interval
         for ($i = 0; $i < $intervalCount; $i++) {
             $currentStart = date('H:i', strtotime($starttime) + ($i * 30 * 60));
             $currentEnd = date('H:i', strtotime($currentStart) + (30 * 60));
@@ -110,30 +104,27 @@
                     $schedule[$day][$interval] = [];
                 }
                 
-              // Determine if this is the top, bottom, or middle cell for the subject
                 $isTop = ($i == 0);
                 $isBottom = ($i == $intervalCount - 1);
                 $isMiddle = ($i != 0 && $i != $intervalCount - 1);
 
-        
-                // Center subject name in the middle cell(s)
-                if ($i >= $startIndex && $i <= $startIndex + ($intervalCount % 2 ? 0 : 1)) {
+                if ($i >= $startIndex && $i <= $startIndex + ($intervalCount % 2 ? 0 : 0)) {
                     $schedule[$day][$interval][] = [
                         'color' => $color,
                         'subjectname' => $subjectLabel,
-                        'is_center' => true, // Mark this as the center cell for the subject
-                        'is_top' => $isTop,   // Assign is_top based on condition
+                        'is_center' => true, 
+                        'is_top' => $isTop,   
                         'is_middle' => $isMiddle,
-                        'is_bottom' => $isBottom // Assign is_bottom based on condition
+                        'is_bottom' => $isBottom 
                     ];
                 } else {
                     $schedule[$day][$interval][] = [
                         'color' => $color,
                         'subjectname' => '',
                         'is_center' => false,
-                        'is_top' => $isTop,     // Not the top for empty cells
+                        'is_top' => $isTop,
                         'is_middle' => $isMiddle,
-                        'is_bottom' => $isBottom   // Not the bottom for empty cells
+                        'is_bottom' => $isBottom  
                     ];
                 }
             }
@@ -243,13 +234,13 @@
                                         <?php foreach ($days as $day): ?>
                                             <td 
                                                 <?php
-                                                // Apply background color and subject name based on the schedule
+                                               
                                                 if (isset($schedule[$day][$interval])) {
                                                     $subjectData = $schedule[$day][$interval];
                                                     $colors = array_column($subjectData, 'color');
                                                     //$subjectNames = array_column($subjectData, 'subjectname');
                                                     //$isCenters = array_column($subjectData, 'is_center');
-                                                    $color = $colors[0]; // Use the first color if multiple subjects
+                                                    $color = $colors[0];
                                                     echo 'style="background-color: ' . htmlspecialchars($color) . ';"';
                                                     foreach ($schedule[$day][$interval] as $data) {
                                                         if ($data['is_middle']==1 ){
@@ -268,7 +259,6 @@
                                                 ?>
                                             >
                                                 <?php
-                                                // Display subject name only in the center cell
                                                 if (isset($schedule[$day][$interval])) {
                                                     foreach ($schedule[$day][$interval] as $data) {
                                                         if ($data['is_center']) {
@@ -293,8 +283,9 @@
 
     </main>
 </body>
-    <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/generated-sched-room.css">
+    <link rel="stylesheet" href="../css/main.css">
+    
     <script src="../js/facultyloading.js"></script>
     <?php
         require_once('../include/js.php')

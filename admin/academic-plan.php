@@ -29,12 +29,12 @@
        
         if(isset($_POST['departmentid'])){
             $_SESSION['departmentid'] = $_POST['departmentid'];
-        }elseif(isset($_SESSION['departmentid'])){
+        }elseif(isset($_SESSION['departmentid']) && $_SESSION['departmentid']!=0){
             $_SESSION['departmentid']= $_SESSION['departmentid'];
         } else {
             $_SESSION['departmentid'] = $initialcollegedepartment;
         }
-    
+        
         $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
     ?>
     <main>

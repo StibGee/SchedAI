@@ -38,7 +38,9 @@
         }else {
             $_SESSION['departmentid'] = $initialcollegedepartment;
         }
-        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
+        if($_SESSION['departmentid']!=0){
+            $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
+        }
         
     ?>
     <main>
@@ -65,10 +67,10 @@
                         <option>lab</option>
                     </select>
                 </div>
-                <div class="col-2 d-flex justify-content-end">
+                <!--<div class="col-2 d-flex justify-content-end">
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Generate</button>
 
-                </div>
+                </div>-->
             </div>
             <div class="curriculum-sched mt-4">
                 <form id="schedule-form" class="mb-0" action="final-sched.php" method="POST">

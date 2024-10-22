@@ -22,6 +22,10 @@ switch ($action) {
     case 'list':
         listsubjects();
         break;
+    case 'addfacultysubject':
+        addfacultysubject();
+        break;
+        
     default:
         header("Location: ../academicplan-view.php.php");
         exit();
@@ -108,6 +112,29 @@ function listRooms() {
     $rooms = $room->getRooms();
     header('Content-Type: application/json');
     echo json_encode($rooms);
+    exit();
+}
+
+function addfacultysubject() {
+    
+    global $schedule;
+    global $curriculum;
+    global $subject;
+
+    $subjectnames = $_POST['subjectname']; 
+    $facultyids = $_POST['facultyid'];
+   
+    foreach ($subjectnames as $index => $subjectname) {
+        $facultyid = $facultyids[$index];
+        $result = $subject->addfacultysubject($facultyid, $subjectname);
+    }
+
+    if ($result) { 
+        header("Location: ../admin/final-sched.php");
+        
+    } else {
+        header("Location: ../admin/schedule.php?curriculum=$assigned");
+    }    
     exit();
 }
 ?>
