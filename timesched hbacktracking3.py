@@ -2,6 +2,10 @@ import mysql.connector
 from datetime import timedelta
 import time as timer
 
+collegeid = 3
+departmentid = 0
+calendarid = 7
+
 def timetominutes(timestr):
     hours, minutes = map(int, timestr.split(':'))
     return hours * 60 + minutes
@@ -53,23 +57,28 @@ conn = mysql.connector.connect(
 )
 
 cursor = conn.cursor()
+if (departmentid==0):
+    cursor.execute("""SELECT subjectschedule.id, subjectschedule.subjectid, subjectschedule.calendarid, subjectschedule.yearlvl, subjectschedule.section, subjectschedule.timestart,subjectschedule.timeend,subjectschedule.day, subjectschedule.roomname, subjectschedule. departmentid, subjectschedule. facultyid, subject.subjectcode, subject.name, subject.unit, subject.hours, subject.type, subject.masters, subject.focus, faculty.masters, faculty.startdate, subject.requirelabroom FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s  ORDER BY subject.unit DESC, faculty.startdate ASC """, (calendarid, collegeid))
+    subjectschedule = cursor.fetchall()
 
-cursor.execute("SELECT subjectschedule.id, subjectschedule.subjectid, subjectschedule.calendarid, subjectschedule.yearlvl, subjectschedule.section, subjectschedule.timestart,subjectschedule.timeend,subjectschedule.day, subjectschedule.roomname, subjectschedule. departmentid, subjectschedule. facultyid, subject.subjectcode, subject.name, subject.unit, subject.hours, subject.type, subject.masters, subject.focus, faculty.masters, faculty.startdate, subject.requirelabroom FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid WHERE subject.focus='Major' ORDER BY subject.unit DESC, faculty.startdate ASC ")
-subjectschedule = cursor.fetchall()
+    cursor.execute("""SELECT * FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=%s""",(collegeid,))
+    facultyall = cursor.fetchall()
 
+    cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=%s AND faculty.id!=0 ORDER BY starttime ASC""",(collegeid,))
+    facultypreference = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Minor' AND department.collegeid=%s AND subjectschedule.calendarid=%s""",(collegeid,calendarid))
+    subjectscheduleminor = cursor.fetchall()
 
 cursor.execute("SELECT * FROM room ORDER BY departmentid ASC")
 room = cursor.fetchall()
 
 
-cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid WHERE (faculty.departmentid=1 OR faculty.departmentid=3) AND faculty.id!=0 ORDER BY starttime ASC")
-facultypreference = cursor.fetchall()
 
-cursor.execute("SELECT * FROM faculty WHERE departmentid=1")
-facultyall = cursor.fetchall()
 
-cursor.execute("SELECT * FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid WHERE subject.focus='Minor'")
-subjectscheduleminor = cursor.fetchall()
+
+
+
 
 try:
     cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
@@ -359,7 +368,7 @@ def assigntimeslot(currentsubjectid):
     subjectfacultyid = int(subject[10]) 
     departmentid=int(subject[9]) 
     yearlvl=int(subject[3]) 
-    section=int(subject[4])
+    section=subject[4]
     requirelab = int(subject[20])  
     '''print(f"subject {subname} (id: {subjectid}, type: {subjecttype}, unit: {units}, faculty: {subjectfacultyid} )")'''
 
@@ -899,6 +908,11 @@ def assigntimeslot(currentsubjectid):
                         
                         
                         for time_slotlab in range(start_minuteslab, start_minuteslab+180, 30):
+                            
+                            if (time_slotlab>=1140):
+                                dayfreelab = False
+                                print(subjectid)
+                                break
                             if facultyassignmentcounter[faculty_idlab][daylab] == 3:
                           
                                 continue
@@ -907,7 +921,7 @@ def assigntimeslot(currentsubjectid):
                             
 
                                 '''print(f"room {roomid} {daylab} {time_slotlab} is free")'''
-                            if roomoccupied[roomid][daylab][time_slotlab] == 'occupied' and minorfree(departmentid, yearlvl, section, daylec2, time):
+                            if roomoccupied[roomid][daylab][time_slotlab] == 'occupied' and minorfree(departmentid, yearlvl, section, daylab, time):
                                 '''print(f"room {roomid} {daylab} {time_slotlab} is occupied")'''
                                 dayfreelab = False
                                 break 

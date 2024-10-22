@@ -2,6 +2,11 @@ import mysql.connector
 from datetime import timedelta
 import time as time2
 
+collegeid = 3
+departmentid = 0
+calendarid = 8
+
+
 def timetominutes(time_str):
     hours, minutes = map(int, time_str.split(':'))
     return hours * 60 + minutes
@@ -77,7 +82,7 @@ subjectscheduleminor = cursor.fetchall()
 try:
     cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
 
-    cursor.execute("UPDATE `subjectschedule` SET `timestart` = NULL, `timeend` = NULL,`day` = NULL,  `roomname` = NULL, `roomid` = NULL,`facultyfname` = NULL, `facultylname` = NULL, `facultyid` = NULL;")
+    cursor.execute("UPDATE `subjectschedule` SET `timestart` = NULL, `timeend` = NULL,`day` = NULL,  `roomname` = NULL, `roomid` = NULL;")
     conn.commit() 
 
 finally:
@@ -441,11 +446,15 @@ def assigntimeslot(currentsubjectid, facultyidnew):
             if roomtype != subject_type:
                 continue    
             for facultyidpair, slots in facultypairdaystime.items():
+                print
                 if facultyidpair not in facultyassignmentcounter:
                     facultyassignmentcounter[facultyidpair] = {}
                 
                 if subjectfacultyid != facultyidpair:
                     continue  
+                else:
+                    print(facultyidpair, subjectfacultyid)
+                    time2.sleep(5)
 
                 for day1, day2, starttime, endtime in slots:
                     
