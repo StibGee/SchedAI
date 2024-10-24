@@ -16,10 +16,8 @@
         require_once('../classes/department.php');
         require_once('../classes/college.php');
         require_once('../classes/schedule.php');
+        require_once('../classes/room.php');
         require_once('../classes/faculty.php');
-
-        
-        
 
         $db = new Database();
         $pdo = $db->connect();
@@ -28,18 +26,26 @@
         $faculty = new Faculty($pdo);
         $schedule = new Schedule($pdo);
         $college = new College($pdo);
-        $department = new Department($pdo);   
-
-        $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid'], $_SESSION['id']);
-     
+        $department = new Department($pdo);  
+        $room = new Room($pdo); 
+        
+        $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid']);
+        $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
         $calendarinfo=$curriculum->calendarinfo($collegelatestyear);
+        $facultysubjects=$faculty->getfacultysubjects($_SESSION['id']);
+        if (empty($facultysubjects)) {
+            header("Location: ../faculty/facultyprofiling.php");
+            exit();
+        }
+        $collegeroom=$room->getcollegerooms($_SESSION['collegeid']);
+        
     ?>
 <main>
-    <div class="container ">
+    <div class="container">
         <div class="row">
             <div class="text d-flex align-items-center" >
-                <h2> Hola !!! </h2> <span> Role</span>
+                <h2> Hola !!! </h2> <span><?php echo  $facultyinfo['fname'];?></span>
             </div>
         </div>
         <div class="row mt-4">
@@ -51,22 +57,24 @@
                 </div>
             </div>
             <div class="row d-flex justify-content-end align-items-center">
-                <div class="col-1">
-                    <select class="form-select  form-select-sm " id="select-year&sec">
-                        <option>all</option>
-                        <option>CS4A</option>
-                        <option>CS4B</option>
+                <div class="col-2">
+                    <select class="form-select  form-select-sm " id="select-roomtype">
+                        <option value="">All Room</option> 
+                        <?php foreach($collegeroom as $collegerooms) { ?>
+                            <option value="<?php echo $collegerooms['name']; ?>"><?php echo $collegerooms['name']; ?></option>
+                        <?php } ?>
                     </select>
                 </div>
-                <div class="col-1">
-                    <select class="form-select  form-select-sm " id="select-classtype">
-                        <option>all</option>
-                        <option>lec</option>
-                        <option>lab</option>
+                <div class="col-2">
+                    
+                    <select class="form-select form-select-sm" id="select-classtype">
+                        <option value="">All Type</option> 
+                        <option value="Lec">Lec</option>
+                        <option value="Lab">Lab</option>
                     </select>
                 </div>
                 <div class="searchbar col-3 ">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
+                    <input type="search" class="form-control" id="customSearch" placeholder="Search..." aria-label="Search" data-last-active-input="">
                 </div>
 
 
@@ -79,7 +87,7 @@
                 </div>
                 <div class="sched-table mt-3">
                     <div id="tabularViews" class="mt-2">
-                        <table class="table">
+                        <table id="subjectTable" class="table">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -151,6 +159,47 @@
     </div>
 </main>
 </body>
+<script>
+    $(document).ready(function() {
+        // Initialize the DataTable and store the instance in a variable
+        var table = $('#subjectTable').DataTable({
+            "paging": false,          // Enable pagination
+            "searching": true,       // Enable search filter
+            "ordering": true,        // Enable column sorting
+            "info": true,  
+            "lengthChange": false,  
+            "pageLength": 100  
+        });
+
+        // Event listener for the select filter
+        $('#select-classtype').on('change', function() {
+            var selectedType = $(this).val();  // Get selected value from the dropdown
+
+            if (selectedType === "All") {
+                table.column(3).search('').draw();  // If 'All' is selected, show all rows
+            } else {
+                table.column(3).search(selectedType).draw();  // Filter by the selected value (Lec or Lab)
+            }
+        });
+        $('#select-roomtype').on('change', function() {
+            var selectedType = $(this).val();  // Get selected value from the dropdown
+
+            if (selectedType === "All") {
+                table.column(8).search('').draw();  // If 'All' is selected, show all rows
+            } else {
+                table.column(8).search(selectedType).draw();  // Filter by the selected value (Lec or Lab)
+            }
+        });
+        $('#customSearch').on('keyup', function() {
+            table.search(this.value).draw();  // Perform search on DataTable when user types
+        });
+    });
+</script>
+<style>
+    .dataTables_filter {
+    display: none; /* Hide the default search input */
+    }
+</style>
 <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/generated-sched.css">
     <script src="../js/facultyloading.js"></script>

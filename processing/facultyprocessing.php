@@ -32,7 +32,11 @@ switch ($action) {
         break;
     case 'logout':
         logout();
+        break;
+    case 'changepass':
+        facultychangepass();
         break;    
+          
     default:
         header("Location: ../admin/room.php");
         exit();
@@ -325,5 +329,19 @@ function logout() {
 
     header("Location: ../index.php");
     exit;
+}
+function facultychangepass() {
+    global $faculty; 
+
+    $facultyid = isset($_POST['facultyid']) ? filter_var($_POST['facultyid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+    $oldpass= isset($_POST['oldpass']) ? filter_var($_POST['oldpass'], FILTER_SANITIZE_STRING) : '';
+    $newpass= isset($_POST['newpass']) ? filter_var($_POST['newpass'], FILTER_SANITIZE_STRING) : '';
+
+    $result=$faculty->changepass($facultyid, $oldpass, $newpass);
+    if ($result){
+        header("Location: ../faculty/user-account.php?password=changed");
+    }else{
+        header("Location: ../faculty/user-account.php?password=error");
+    }
 }
 ?>

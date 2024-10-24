@@ -5,15 +5,20 @@
     require_once('../include/nav.php');
 
     require_once('../classes/room.php');
+    require_once('../classes/college.php');
+    require_once('../classes/department.php');
+    require_once('../classes/schedule.php');
     $db = new Database();
     $pdo = $db->connect();
 
     $room = new Room($pdo);
-
+    $college = new College($pdo);
+    $department = new Department($pdo);
+    $schedule = new Schedule($pdo);
     $collegeid=$_SESSION['collegeid'];
     $inititialcollegeroom = $room->getinitialcollegeroom($collegeid);
     $collegeroom=$room->getcollegerooms($collegeid);
-    
+    $collegeinfo=$college->getcollegeinfo($collegeid);
     
 
     if (isset($_POST['roomid'])) {
@@ -33,7 +38,19 @@
         }
         
     }
-
+    if ($_SESSION['departmentid']!=0){
+        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
+        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
+        $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+    }else{
+        $minorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
+        $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
+        $collegeinfo=$college->getcollegeinfo($collegeid);
+        
+        $filteredschedules=$schedule->filteredschedulecollege($_SESSION['calendarid'], $_SESSION['collegeid']);
+      
+    }
     $days = ['M', 'T', 'W', 'Th', 'F', 'S'];
     $intervals = [];
     for ($i = 7; $i <= 18; $i++) {
@@ -45,7 +62,7 @@
         $hue = ($id * 137.508) % 360; 
         return "hsl($hue, 70%, 80%)";
     }
-
+    if ($_SESSION['departmentid']==0){
     $sql = "SELECT 
                 day, 
                 TIME_FORMAT(timestart, '%H:%i') AS timestart, 
@@ -62,7 +79,27 @@
                 JOIN subject ON subject.id = subjectschedule.subjectid
                 JOIN faculty ON faculty.id = subjectschedule.facultyid
                 JOIN department ON subjectschedule.departmentid = department.id
-            WHERE roomid = $roomids";
+            WHERE roomid = $roomids AND department.collegeid=$collegeid";
+    }else{
+        $departmentid=$_SESSION['departmentid'];
+        $sql = "SELECT 
+                day, 
+                TIME_FORMAT(timestart, '%H:%i') AS timestart, 
+                TIME_FORMAT(timeend, '%H:%i') AS timeend, 
+                subjectschedule.id as subjectidno,
+                subject.subjectcode as subjectname,
+                subjectschedule.yearlvl as yearlvl,
+                section,
+                faculty.lname as facultyname,
+                subject.type as subjecttype,
+                department.abbreviation as departmentname
+            FROM 
+                subjectschedule 
+                JOIN subject ON subject.id = subjectschedule.subjectid
+                JOIN faculty ON faculty.id = subjectschedule.facultyid
+                JOIN department ON subjectschedule.departmentid = department.id
+            WHERE roomid = $roomids  AND subjectschedule.departmentid=$departmentid";
+    }
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 
@@ -154,19 +191,19 @@
                         <button onclick="window.location.href='schedule.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if(($_SESSION['departmentid'])==1){echo "BSCS";}else{echo "BSIT";}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
+                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentid']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
                     </h5>
                 </div>
             </div>
             <div class="row d-flex justify-content-end align-items-center">
-                <div class="col-1">
+                <!--<div class="col-1">
                         <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
                             <option value="">Select an option</option>
                             <option value="final-sched-room.php">By Rooms</option>
                             <option value="final-sched-faculty.php">By Faculty</option>
                             <option value="final-sched-subject.php">By Subject</option>
                         </select>
-                </div>
+                </div>-->
                 <div class="col-1">
                     <form class="mb-0" action="final-sched-room.php" method="POST">
                         <select class="form-select  form-select-sm " id="select-classtype" name="roomid" onchange="this.form.submit()">
@@ -203,9 +240,9 @@
             <div class="sched-container my-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3><?php echo $roomname;?></h3>
-                    <button id="viewToggleButton">
+                    <a href="final-sched.php" id="viewToggleButton" class="btn">
                         Toggle View
-                    </button>
+                    </a>
                 </div>
 
                 <div class="sched-table mt-3">

@@ -1,4 +1,330 @@
 import mysql.connector
+import time
+import sys
+
+departmentid = 0
+collegeid = 3
+calendarid = 7
+minor = False
+
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="schedai"
+)
+
+cursor = conn.cursor()
+
+
+if (departmentid==0):
+    cursor.execute("""
+        SELECT * FROM `subjectschedule` 
+        JOIN `subject` ON subjectschedule.subjectid = subject.id 
+        JOIN department ON department.id=subjectschedule.departmentid
+        WHERE subject.focus !='Minor'  
+        AND subjectschedule.calendarid = %s 
+        AND department.collegeid = %s 
+        
+        ORDER BY subjectschedule.departmentid ASC
+    """, (calendarid, collegeid))
+    subjectschedule = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT COUNT(*) FROM `subjectschedule` 
+        JOIN `subject` ON subjectschedule.subjectid = subject.id 
+        JOIN department ON department.id=subjectschedule.departmentid
+        WHERE subject.focus !='Minor' 
+        AND subjectschedule.calendarid = %s 
+        AND department.collegeid = %s 
+    
+        ORDER BY subjectschedule.departmentid ASC
+    """, (calendarid, collegeid))
+    subjectschedulecount = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT * 
+    FROM facultysubject
+    JOIN faculty ON faculty.id = facultysubject.facultyid 
+    WHERE faculty.collegeid = %s 
+    ORDER BY faculty.teachinghours DESC, faculty.departmentid ASC
+    """, (collegeid,))
+    facultysubject = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM faculty WHERE faculty.collegeid = %s""", (collegeid,))
+    faculty = cursor.fetchall()
+
+
+    cursor.execute("""SELECT * FROM subject JOIN department ON department.id=subject.departmentid WHERE department.collegeid = %s""", (collegeid,))
+    subject = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM room WHERE collegeid=%s""", (collegeid,))
+    room = cursor.fetchall()
+
+    cursor.execute("""SELECT faculty.*, facultypreferences.*, COUNT(facultysubject.facultyid) AS subject_count FROM facultypreferences JOIN faculty ON faculty.id = facultypreferences.facultyid LEFT JOIN facultysubject ON facultysubject.facultyid = facultypreferences.facultyid WHERE faculty.collegeid=%s GROUP BY faculty.id, facultypreferences.id ORDER BY faculty.teachinghours ASC, subject_count ASC""",(collegeid,))
+    facultypreference = cursor.fetchall()
+else:
+    cursor.execute("""
+        SELECT * FROM `subjectschedule` 
+        JOIN `subject` ON subjectschedule.subjectid = subject.id 
+        JOIN department ON department.id=subjectschedule.departmentid
+        WHERE subject.focus !='Minor' 
+        AND subjectschedule.calendarid = %s 
+        AND department.id = %s 
+        ORDER BY 
+        FIELD(subject.focus, 'Major1') DESC,  
+        subjectschedule.departmentid ASC
+    """, (calendarid, departmentid))
+    subjectschedule = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT COUNT(*) FROM `subjectschedule` 
+        JOIN `subject` ON subjectschedule.subjectid = subject.id 
+        JOIN department ON department.id=subjectschedule.departmentid
+        WHERE subject.focus !='Minor' 
+        AND subjectschedule.calendarid = %s 
+        AND department.id = %s 
+        ORDER BY subjectschedule.departmentid ASC
+    """, (calendarid, departmentid))
+    subjectschedulecount = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT * 
+    FROM facultysubject 
+    JOIN faculty ON faculty.id = facultysubject.facultyid 
+    WHERE faculty.departmentid = %s 
+    ORDER BY faculty.masters = 'Yes' DESC, faculty.teachinghours DESC, faculty.departmentid ASC
+    """, (departmentid,))
+    facultysubject = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM faculty WHERE faculty.departmentid = %s""", (departmentid,))
+    faculty = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM subject WHERE subject.departmentid = %s""", (departmentid,))
+    subject = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM room WHERE departmentid=%s""", (departmentid,))
+    room = cursor.fetchall()
+
+    cursor.execute("""SELECT faculty.*, facultypreferences.*, COUNT(facultysubject.facultyid) AS subject_count FROM facultypreferences JOIN faculty ON faculty.id = facultypreferences.facultyid LEFT JOIN facultysubject ON facultysubject.facultyid = facultypreferences.facultyid WHERE faculty.departmentid=%s GROUP BY faculty.id, facultypreferences.id ORDER BY faculty.teachinghours ASC, subject_count ASC""",(departmentid,))
+    facultypreference = cursor.fetchall()
+
+
+try:
+    cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
+
+    cursor.execute("UPDATE `subjectschedule` SET `facultyid` = NULL, `facultyfname` = NULL,`facultylname` = NULL;")
+    conn.commit() 
+
+finally:
+    cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
+
+def facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
+    subject_name_match = (subjectschedulesubjectname.strip().lower() == facultysubjectfsubjectname.strip().lower())
+    master_match = (subjectschedulesubjectmasters == facultysubjectmasters or (subjectschedulesubjectmasters == 'No' and facultysubjectmasters == 'Yes'))
+    '''department_match = (subjectscheduledepartmentid == facultysubjectdepartmentid or facultysubjectdepartmentid == 3)'''
+
+    '''if subject_name_match:
+        print(f"Subject name matches", subjectschedulesubjectname, facultysubjectfsubjectname)
+    else:
+        print(f"Subject not matches", subjectschedulesubjectname, facultysubjectfsubjectname)
+    
+    if master_match:
+        print("Master's status matches.")
+   
+    if department_match:
+        print("Department ID matches.")'''
+
+    return subject_name_match and master_match 
+
+
+
+
+def facultyworkinghourscheck(facultyworkinghours, subjectschedulesubjecthours, facultysubjectfacultyid):
+    if facultyworkinghours < subjectschedulesubjecthours:
+        '''print(f"{facultysubjectfacultyid} does not have enough working hours")'''
+        return False
+    '''print(f"{facultysubjectfacultyid} has enough working hours")'''
+    return True
+
+workinghoursleft={}
+unassigned_subjects=[]
+unassigned_subjects = []  
+facultyworkinghours = {faculties[0]: faculties[12] for faculties in faculty}
+assignedsubjects = {}
+noassignment=[]
+tbh=[]
+backtrackcounters={}
+maxdepth=10
+assignedsubjectscount=0
+
+def assign_subject(currentshubjectid):
+    global assignedsubjectscount
+
+    if currentshubjectid == len(subjectschedule):
+       
+        return True  
+    
+    if currentshubjectid not in backtrackcounters:
+        backtrackcounters[currentshubjectid] = 0
+            
+    subjectschedules = subjectschedule[currentshubjectid]
+    subjectscheduleid = subjectschedules[0]
+   
+    subjectschedulesubjectname = subjectschedules[25]
+    subjectschedulesubjecthours = subjectschedules[18]
+    subjectschedulesubjectmasters = subjectschedules[20]
+    subjectscheduledepartmentid = subjectschedules[9]
+    
+    if (backtrackcounters[currentshubjectid] >= maxdepth):
+        
+        lowesthoursfaculty = None
+        lowesthours = float('inf')
+
+        for facultysubjects in facultysubject:
+            facultysubjectfacultyid = facultysubjects[1]
+            facultysubjectfsubjectname = facultysubjects[2]
+            facultysubjectmasters = facultysubjects[11]
+            facultysubjectdepartmentid = facultysubjects[13]
+            facultysubjectfname = facultysubjects[4]
+            facultysubjectlname = facultysubjects[6]
+            
+            master_match = (subjectschedulesubjectmasters == facultysubjectmasters or 
+                            (subjectschedulesubjectmasters == 'No' and facultysubjectmasters == 'Yes'))
+
+            if master_match:
+                
+                if facultyworkinghours[facultysubjectfacultyid] >= subjectschedulesubjecthours:
+                    if facultyworkinghours[facultysubjectfacultyid] < lowesthours:
+                        lowesthours = facultyworkinghours[facultysubjectfacultyid]
+                        lowesthoursfaculty = facultysubjectfacultyid
+
+        if lowesthoursfaculty is not None:
+            
+            assignedsubjectscount+= 1
+            facultyworkinghours[lowesthoursfaculty] -= subjectschedulesubjecthours
+            assignedsubjects[subjectscheduleid] = facultysubjectfacultyid
+            workinghoursleft[lowesthoursfaculty] = facultyworkinghours[lowesthoursfaculty]
+            query = """
+                UPDATE `subjectschedule`
+                SET `facultyfname` = %s, `facultylname` = %s, `facultyid` = %s
+                WHERE `id` = %s
+            """
+            faculty_info = next(f for f in facultysubject if f[1] == lowesthoursfaculty)
+            values = (faculty_info[4], faculty_info[6], lowesthoursfaculty, subjectscheduleid)
+            cursor.execute(query, values)
+
+            conn.commit()
+            cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[lowesthoursfaculty]} WHERE `id` = {lowesthoursfaculty}")
+            conn.commit()
+            progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+            print(f"{progress-1:.2f}%: {facultysubjectfsubjectname} assigned to {facultysubjectfname} {facultysubjectlname}")
+            
+            sys.stdout.flush()
+            
+            if assign_subject(currentshubjectid + 1):
+                return True
+            
+            '''print(f"Backtracking subject {currentshubjectid}/{len(subjectschedule)} {subjectschedulesubjectname}")'''
+            assignedsubjectscount-= 1
+            facultyworkinghours[lowesthoursfaculty] += subjectschedulesubjecthours
+            del assignedsubjects[subjectscheduleid]
+            cursor.execute(f"UPDATE `subjectschedule` SET `facultyid` = NULL WHERE `id` = {subjectscheduleid}")
+            cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[lowesthoursfaculty]} WHERE `id` = {facultysubjectfacultyid}")
+            
+        else:
+            
+            query = """
+                UPDATE `subjectschedule`
+                SET `facultyfname` = %s, `facultylname` = %s, `facultyid` = %s
+                WHERE `id` = %s
+            """
+            values = ("New", "Faculty", 0, subjectscheduleid)
+
+           
+            cursor.execute(query, values)
+            conn.commit()
+        
+            assignedsubjectscount += 1
+            assignedsubjects[subjectscheduleid]=0
+            progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+            print(f"{progress-1:.2f}%: {facultysubjectfsubjectname} assigned to {facultysubjectfname} {facultysubjectlname}")
+                
+            sys.stdout.flush()
+            if assign_subject(currentshubjectid + 1):
+                return True
+            assignedsubjectscount -= 1
+            del assignedsubjects[subjectscheduleid]
+        
+    sortedfaculty = sorted(facultysubject, key=lambda x: -facultyworkinghours[x[1]])
+    
+    for facultysubjects in sortedfaculty:
+        facultysubjectfacultyid = facultysubjects[1]
+        facultysubjectfsubjectname = facultysubjects[2]
+        facultysubjectmasters = facultysubjects[11]
+        facultysubjectdepartmentid = facultysubjects[13]
+        facultysubjectfname = facultysubjects[4]
+        facultysubjectlname = facultysubjects[6]
+
+        
+
+        if facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
+            
+            if facultyworkinghourscheck(facultyworkinghours[facultysubjectfacultyid], subjectschedulesubjecthours, facultysubjectfacultyid):
+                assignedsubjectscount+= 1
+                
+                facultyworkinghours[facultysubjectfacultyid] -= subjectschedulesubjecthours
+                assignedsubjects[subjectscheduleid] = facultysubjectfacultyid
+                workinghoursleft[facultysubjectfacultyid] = facultyworkinghours[facultysubjectfacultyid]
+                '''print(f"Assigned {facultysubjectfacultyid} to {subjectscheduleid}")'''
+                
+                query = """
+                    UPDATE `subjectschedule`
+                    SET `facultyfname` = %s, `facultylname` = %s, `facultyid` = %s
+                    WHERE `id` = %s
+                """
+                values = (facultysubjectfname, facultysubjectlname, facultysubjectfacultyid,subjectscheduleid)
+                cursor.execute(query, values)
+
+                cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[facultysubjectfacultyid]} WHERE `id` = {facultysubjectfacultyid}")
+                conn.commit()
+                progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+                print(f"{progress-1:.2f}%: {facultysubjectfsubjectname} assigned to {facultysubjectfname} {facultysubjectlname}")
+                
+                sys.stdout.flush()
+                if assign_subject(currentshubjectid + 1):
+                    return True
+
+                '''print(f"Backtracking subject {currentshubjectid}/{len(subjectschedule)} {subjectschedulesubjectname}")'''
+                assignedsubjectscount-= 1
+                facultyworkinghours[facultysubjectfacultyid] += subjectschedulesubjecthours
+                del assignedsubjects[subjectscheduleid]
+                cursor.execute(f"UPDATE `subjectschedule` SET `facultyid` = NULL WHERE `id` = {subjectscheduleid}")
+                cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[facultysubjectfacultyid]} WHERE `id` = {facultysubjectfacultyid}")
+                conn.commit()
+   
+    print(f"failed assigning {currentshubjectid}/{len(subjectschedule)} {subjectschedulesubjectname}, trying previous assignment.")
+    backtrackcounters[currentshubjectid] += 1   
+    return False
+
+
+facultyworkinghours = {faculties[0]: faculties[12] for faculties in faculty}
+assignedsubjects = {}
+
+
+
+if assign_subject(0):
+        print("all subjects are assigned")
+conn.commit()
+
+cursor.close()
+conn.close()
+
+
+
+'''START TIMESLOT'''
+import mysql.connector
 from datetime import timedelta
 import time as timer
 import sys
@@ -56,7 +382,7 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 if (departmentid==0):
-    cursor.execute("""SELECT subjectschedule.id, subjectschedule.subjectid, subjectschedule.calendarid, subjectschedule.yearlvl, subjectschedule.section, subjectschedule.timestart,subjectschedule.timeend,subjectschedule.day, subjectschedule.roomname, subjectschedule. departmentid, subjectschedule. facultyid, subject.subjectcode, subject.name, subject.unit, subject.hours, subject.type, subject.masters, subject.focus, faculty.masters, faculty.startdate, subject.requirelabroom FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3,1,2), faculty.startdate ASC """, (calendarid, collegeid))
+    cursor.execute("""SELECT subjectschedule.id, subjectschedule.subjectid, subjectschedule.calendarid, subjectschedule.yearlvl, subjectschedule.section, subjectschedule.timestart,subjectschedule.timeend,subjectschedule.day, subjectschedule.roomname, subjectschedule. departmentid, subjectschedule. facultyid, subject.subjectcode, subject.name, subject.unit, subject.hours, subject.type, subject.masters, subject.focus, faculty.masters, faculty.startdate, subject.requirelabroom FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3,1,2), subjectschedule.departmentid ASC, faculty.startdate ASC """, (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
     cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, collegeid))
@@ -71,9 +397,26 @@ if (departmentid==0):
     cursor.execute("SELECT * FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Minor' AND department.collegeid=%s AND subjectschedule.calendarid=%s""",(collegeid,calendarid))
     subjectscheduleminor = cursor.fetchall()
 
-    cursor.execute("""SELECT * FROM room WHERE collegeid=%s ORDER BY departmentid ASC""",(collegeid,))
+    cursor.execute("""SELECT * FROM room WHERE collegeid=%s ORDER BY type ASC, departmentid ASC""",(collegeid,))
     room = cursor.fetchall()
+else:
+    cursor.execute("""SELECT subjectschedule.id, subjectschedule.subjectid, subjectschedule.calendarid, subjectschedule.yearlvl, subjectschedule.section, subjectschedule.timestart,subjectschedule.timeend,subjectschedule.day, subjectschedule.roomname, subjectschedule. departmentid, subjectschedule. facultyid, subject.subjectcode, subject.name, subject.unit, subject.hours, subject.type, subject.masters, subject.focus, faculty.masters, faculty.startdate, subject.requirelabroom FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.id = %s ORDER BY FIELD(unit, 3,1,2), subjectschedule.departmentid ASC, faculty.startdate ASC """, (calendarid, departmentid))
+    subjectschedule = cursor.fetchall()
 
+    cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.id = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, departmentid))
+    subjectschedulecount = cursor.fetchone()
+
+    cursor.execute("""SELECT * FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.id=%s""",(departmentid,))
+    facultyall = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.id=%s AND faculty.id!=0 ORDER BY starttime ASC""",(departmentid,))
+    facultypreference = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Minor' AND department.id=%s AND subjectschedule.calendarid=%s""",(departmentid,calendarid))
+    subjectscheduleminor = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM room WHERE departmentid=%s ORDER BY departmentid ASC""",(departmentid,))
+    room = cursor.fetchall()
 
 
 
@@ -204,48 +547,48 @@ for dayput in range(1, 7):
         if dayput not in facultyassignmentcounter[facultyid]:
             facultyassignmentcounter[facultyid][dayput] = 0
 
+if minor:
+    for minorsub in subjectscheduleminor:
+        departmentid=minorsub[9]
+        yearlvl=minorsub[3]
+        section=minorsub[4]
+        day=minorsub[7]
+        timestart=timetominutes(minorsub[5])
+        timeend=timetominutes(minorsub[6])
 
-'''for minorsub in subjectscheduleminor:
-    departmentid=minorsub[9]
-    yearlvl=minorsub[3]
-    section=minorsub[4]
-    day=minorsub[7]
-    timestart=timetominutes(minorsub[5])
-    timeend=timetominutes(minorsub[6])
 
+        dayslist = []
+        daymap = {'M': 1, 'T': 2, 'W': 3, 'Th': 4, 'F': 5, 'S': 6}
+        daynum = daymap[day[0]]
+        dayslist.append(daynum) 
 
-    dayslist = []
-    daymap = {'M': 1, 'T': 2, 'W': 3, 'Th': 4, 'F': 5, 'S': 6}
-    daynum = daymap[day[0]]
-    dayslist.append(daynum) 
+        if len(day) == 3:
+    
+            daytwo = day[1:]
+            daynum = daymap[daytwo]
+            dayslist.append(daynum)  
+        elif len(day) == 2 and day not in daymap: 
+            daytwo2 = day[1]  
+            daynum2 = daymap[daytwo2]
+            dayslist.append(daynum2)  
 
-    if len(day) == 3:
-   
-        daytwo = day[1:]
-        daynum = daymap[daytwo]
-        dayslist.append(daynum)  
-    elif len(day) == 2 and day not in daymap: 
-        daytwo2 = day[1]  
-        daynum2 = daymap[daytwo2]
-        dayslist.append(daynum2)  
+        if departmentid not in minoroccupied:
+            minoroccupied[departmentid] = {}
 
-    if departmentid not in minoroccupied:
-        minoroccupied[departmentid] = {}
+        if yearlvl not in minoroccupied[departmentid]:
+            minoroccupied[departmentid][yearlvl] = {}
 
-    if yearlvl not in minoroccupied[departmentid]:
-        minoroccupied[departmentid][yearlvl] = {}
+        if section not in minoroccupied[departmentid][yearlvl]:
+            minoroccupied[departmentid][yearlvl][section] = {}
 
-    if section not in minoroccupied[departmentid][yearlvl]:
-        minoroccupied[departmentid][yearlvl][section] = {}
+        for days in dayslist:
+            if days not in minoroccupied[departmentid][yearlvl]:
+                minoroccupied[departmentid][yearlvl][section][days] = {}
 
-    for days in dayslist:
-        if days not in minoroccupied[departmentid][yearlvl]:
-            minoroccupied[departmentid][yearlvl][section][days] = {}
-
-        for time in range(timestart, timeend, 30):
-        
-            if time not in minoroccupied[departmentid][yearlvl][section][days]:
-                minoroccupied[departmentid][yearlvl][section][days][time] = 'occupied'''
+            for time in range(timestart, timeend, 30):
+            
+                if time not in minoroccupied[departmentid][yearlvl][section][days]:
+                    minoroccupied[departmentid][yearlvl][section][days][time] = 'occupied'
 
 
       
@@ -295,6 +638,13 @@ def findlastfacultyasslec3(facultyid, day):
                             '''print(f"Updated last assigned time to {lastassignedtime}")'''
 
     return lastassignedtime
+
+def roomchecker(roomid):
+    for rooms in room: 
+        if rooms[0] == roomid:  # Check if the room ID matches
+            roomtypelol = rooms[2]  # Get the room type from index 5
+            break
+    return roomtypelol
 
 def findlastfacultyasslec2(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
@@ -379,6 +729,7 @@ def assigntimeslot(currentsubjectid):
     subjecttype = subject[15]
     subjectfacultyid = int(subject[10]) 
     departmentid=int(subject[9]) 
+    subdept=int(subject[9]) 
     yearlvl=int(subject[3]) 
     section=subject[4]
     requirelab = int(subject[20])  
@@ -399,7 +750,7 @@ def assigntimeslot(currentsubjectid):
     
 
     for rm in room:
-        roomid, roomname, roomtype, roomstart, roomend = rm[0], rm[1], rm[2], rm[3], rm[4]
+        roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
 
         
 
@@ -413,18 +764,23 @@ def assigntimeslot(currentsubjectid):
         if units == 3.0:
            
             if backtrackcounters[currentsubjectid] >= maxdepth:
-                
+    
                 '''print(f"no valid solution found for subject {currentsubjectid} after {maxdepth} backtracks.")'''
                 
                 for roomid in roomoccupied:
                    
                     day1 = False
                     day2 = False
+                    if subjectfacultyid in facultypreferencedays:
+                        preferreddays = list(facultypreferencedays[subjectfacultyid]) 
                     
-                    
-                    for dayin3 in range(1,3): 
-                        day2in3 = (day1 + 3) 
+                    for dayin3 in preferreddays: 
+                        day2in3 = (dayin3 + 1)
 
+                       
+                        if day2in3 == 7:
+                            day2in3 = 1 
+                        
                         for time in range(420, 1140, 30):
                             if time==1140:
                                 day1free=False
@@ -508,8 +864,10 @@ def assigntimeslot(currentsubjectid):
                                 assignedsubjects.remove(subjectid)
                     
             
-            if roomtype != subjecttype:
-                continue    
+            if roomtype != subjecttype:  
+
+                continue 
+            
             
             for facultyidpair, slots in facultypairdaystime.items():
                 if facultyidpair not in facultyassignmentcounter:
@@ -537,7 +895,7 @@ def assigntimeslot(currentsubjectid):
 
                     startminutes = timetominutes(starttime)
                     end_minutes = timetominutes(endtime)
-                    if facultyassignmentcounter[facultyidpair][day1] == 3:
+                    if facultyassignmentcounter[facultyidpair][day1] == 4:
                         continue
                     if facultyassignmentcounter[facultyidpair][day1] == 2:
                        
@@ -645,6 +1003,7 @@ def assigntimeslot(currentsubjectid):
         elif(units==2.0):
             if backtrackcounters[currentsubjectid] >= maxdepth:
                 assignmentfoundlec2=False
+                assignmentfoundlec3=False
                 assignmentfound=False
                 if subjectfacultyid in facultypreferencedays:
                     preferreddays = list(facultypreferencedays[subjectfacultyid]) 
@@ -652,14 +1011,14 @@ def assigntimeslot(currentsubjectid):
                     
                 for roomid in roomoccupied:
                     for daylabbacktrack in preferreddays: 
-                        if facultyassignmentcounter[subjectfacultyid][daylabbacktrack] == 3:
+                        if facultyassignmentcounter[subjectfacultyid][daylabbacktrack] == 4:
                             continue
                         facultyday1free = False
                         day1free = False
                         for timebacktrack in range(420, 1140, 30):
                             if timebacktrack>=1140:
                                 day1free=False
-                                timer.sleep(100)
+                              
                                 break
                             if (roomoccupied[roomid][daylabbacktrack].get(timebacktrack) == 'free' and
                                 roomoccupied[roomid][daylabbacktrack].get(timebacktrack + 30) == 'free' and
@@ -730,7 +1089,8 @@ def assigntimeslot(currentsubjectid):
                                 assignedsubjects.remove(subjectid)   
 
                 if not assignmentfoundlec2:
-                    
+                    assignmentfoundlec3=False
+            
                     for roomid in roomoccupied:
                         for daybacktracklec2 in range(1,7): 
                             day1true = None
@@ -763,7 +1123,7 @@ def assigntimeslot(currentsubjectid):
                                     continue
 
                                 if day1true and facultyday1true: 
-                                    assignmentfound2=True
+                                    assignmentfoundlec3=True
                                     '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {daybacktracklec2} w/ time slot starting at {minutestotime(time)} upto {minutestotime(time+180)}")
                                     print('')'''
                                     assignmentfound = True
@@ -800,9 +1160,28 @@ def assigntimeslot(currentsubjectid):
                                     if subjectid in assignments:
                                         del assignments[subjectid]
                                     assignedsubjects.remove(subjectid)
+
+                if not assignmentfoundlec3:
+                    assignments[subjectid] = (0, 0, (0), 0)
+                    assignedsubjects.add(subjectid)
+                    assignedsubjectscount=assignedsubjectscount+1
+                    progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+                    print(f"{progress:.2f}%: {subname}")
+                    sys.stdout.flush()
+                    if assigntimeslot(currentsubjectid+1):
+                        return True 
+                    
+                    '''print("Backtracking h.0")'''
+                    assignedsubjectscount=assignedsubjectscount-1
+                    
+                    
+                    if subjectid in assignments:
+                        del assignments[subjectid]
+                    assignedsubjects.remove(subjectid)
                                 
-            if roomtype != subjecttype:
-                continue   
+            if roomtype != subjecttype and subjecttype != 'Lec':  
+                continue  
+            
             for facultyidlec2, slots in facultydaystimelec2.items():
                 
                     
@@ -832,7 +1211,7 @@ def assigntimeslot(currentsubjectid):
                     print(f"start time: {startminutes}")
                     print(f"end time: {end_minutes}")'''
 
-                    if facultyassignmentcounter[facultyidlec2][daylec2] == 3:
+                    if facultyassignmentcounter[facultyidlec2][daylec2] == 4:
                         continue
                     
                     if roomid not in roomoccupied:
@@ -927,8 +1306,11 @@ def assigntimeslot(currentsubjectid):
                 if subjectfacultyid in facultydaystimelab:
                     preferreddays = list(set(entry[0] for entry in facultydaystimelab[subjectfacultyid]))
                    
-                for roomid in roomoccupied:
+                for roomid in roomoccupied:  
                     
+                    if roomchecker(roomid)=='Lec' and requirelab==1: 
+                        continue
+                      
                     for day1 in preferreddays: 
                         day1true = None
                         facultyday1true = None
@@ -1001,8 +1383,8 @@ def assigntimeslot(currentsubjectid):
 
                 if not assignmentfound: 
                     assignmentfound2=False
-                    for roomid in roomoccupied:
-                    
+                    for roomid in roomoccupied:  
+                          
                         for day1 in range(1,7): 
                             day1true = None
                             facultyday1true = None
@@ -1082,7 +1464,10 @@ def assigntimeslot(currentsubjectid):
                     if assigntimeslot(currentsubjectid+1):
                         return True'''
             
-
+            if roomtype != subjecttype and  requirelab==1: 
+                continue   
+            if departmentid!=roomdeptid:
+                continue   
             for faculty_idlab, slotslab in facultydaystimelab.items():
                 
                 
@@ -1116,7 +1501,7 @@ def assigntimeslot(currentsubjectid):
 
                     if daylab not in facultyoccupied[faculty_idlab]:
                         facultyoccupied[faculty_idlab][daylab] = {}
-                    if facultyassignmentcounter[faculty_idlab][daylab] == 3:
+                    if facultyassignmentcounter[faculty_idlab][daylab] == 4:
                         continue
                     
                     for time_slotlab in range(start_minuteslab, start_minuteslab+180, 30):
@@ -1181,7 +1566,7 @@ def assigntimeslot(currentsubjectid):
                         assignedsubjects.remove(subjectid)
                     
                         
-    print(f"Failed to assign subject {currentsubjectid} {subname} {subjectfacultyid}, trying previous assignment.") 
+    '''print(f"Failed to assign subject {currentsubjectid} {subname} {subjectfacultyid}, trying previous assignment.") '''
     backtrackcounters[currentsubjectid] += 1
   
     print(f"")                   

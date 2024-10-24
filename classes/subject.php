@@ -18,7 +18,7 @@ class Subject {
             header("Location: ../adminacademicplan-view.php?subject=exist");
             exit();
         } else {
-            $sql="INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus, calendarid, departmentid, yearlvl) VALUES (:subjectcode, :name, :unit, :hours, 'Lec', :masters,  :focus, :calendarid, :departmentid, :yearlvl)";
+            $sql="INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus, calendarid, departmentid, yearlvl, commonname) VALUES (:subjectcode, :name, :unit, :hours, 'Lec', :masters,  :focus, :calendarid, :departmentid, :yearlvl, :commonname)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':subjectcode', $subjectcode);
             $stmt->bindParam(':name', $subjectname);
@@ -29,6 +29,7 @@ class Subject {
             $stmt->bindParam(':calendarid', $calendarid);
             $stmt->bindParam(':departmentid', $departmentid);
             $stmt->bindParam(':yearlvl', $yearlvl);
+            $stmt->bindParam(':commonname', $subjectname);
             return $stmt->execute();        
         }
     }
@@ -42,7 +43,7 @@ class Subject {
             header("Location: ../adminacademicplan-view.php?subject=exist");
             exit();
         } else {
-            $sql="INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus, calendarid, departmentid, yearlvl) VALUES (:subjectcode, :name, :unit, 3, 'Lab', :masters,  :focus, :calendarid, :departmentid, :yearlvl)";
+            $sql="INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus, calendarid, departmentid, yearlvl, commonname) VALUES (:subjectcode, :name, :unit, 3, 'Lab', :masters,  :focus, :calendarid, :departmentid, :yearlvl, :commonname)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':subjectcode', $subjectcode);
             $stmt->bindParam(':name', $labname);
@@ -51,7 +52,7 @@ class Subject {
             $stmt->bindParam(':focus', $focus);
             $stmt->bindParam(':calendarid', $calendarid);
             $stmt->bindParam(':departmentid', $departmentid);
-            $stmt->bindParam(':yearlvl', $yearlvl);
+            $stmt->bindParam(':commonname', $subjectname);
             return $stmt->execute(); 
         }
     }

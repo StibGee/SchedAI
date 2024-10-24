@@ -54,4 +54,7 @@
             object-fit: cover; /* Ensures the image covers the area without stretching */
             border-radius: 50%; /* Optional: Makes the image circular */
         }
+        a{
+            text-decoration: none !important;
+        }
 </style>

@@ -29,21 +29,21 @@
                     <h3>Instructors</h3>
                 </div>
                     <div class="col-3">
-                        <select class="form-select form-select-sm col" id="select-department">
+                        <!--<select class="form-select form-select-sm col" id="select-department">
                             <option>Institute of Technology</option>
                             <option>Computer Science</option>
-                        </select>
+                        </select>-->
                     </div>
                     <div class="col-1">
-                        <select class="form-select  form-select-sm " id="select-position">
+                        <!--<select class="form-select  form-select-sm " id="select-position">
                             <option>all</option>
                             <option>Dean</option>
                             <option>Visiting</option>
-                        </select>
+                        </select>-->
                     </div>
 
                     <div class="searchbar col-3 ">
-                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
+                        <!--<input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">-->
                     </div>
                     <div class="col-2 add-faculty d-flex justify-content-end">
                     <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
@@ -252,9 +252,11 @@
         require_once('../include/js.php')
     ?>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthChange": false  // Disable the "Show entries" dropdown
         });
-    </script>
+    });
+</script>
 </html>
 

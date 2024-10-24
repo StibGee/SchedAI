@@ -31,11 +31,11 @@
         $department = new Department($pdo);   
         $curriculum = new Curriculum($pdo); 
 
-        $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid'], $_SESSION['id']);
+        $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid']);
      
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
         $calendarinfo=$curriculum->calendarinfo($collegelatestyear);
-    
+        $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
        
         require_once('../database/datafetch.php');
 
@@ -153,7 +153,7 @@
     <div class="container containersched">
         <div class="row">
             <div class="text d-flex align-items-center" >
-                <h2> Hola !!! </h2> <span> Role</span>
+            <h2> Hola !!! </h2> <span><?php echo  $facultyinfo['fname'];?></span>
             </div>
         </div>
         <div class="row mt-4">

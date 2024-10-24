@@ -3,7 +3,7 @@
     <header class="header px-5" id="header">
             <div class="row">
                 <div class="text d-flex align-items-center justify-content-center m-0">
-                    <h2> Hola !!! </h2> <span> Role</span>
+                    <h2> Hola !!! </h2><span></span>
                 </div>
             </div>
         <div class="user d-flex justify-content-center align-items-center">
@@ -41,5 +41,8 @@
             height: 40px;
             object-fit: cover; /* Ensures the image covers the area without stretching */
             border-radius: 50%; /* Optional: Makes the image circular */
+        }
+        a{
+            text-decoration: none !important;
         }
 </style>

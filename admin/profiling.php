@@ -27,8 +27,7 @@
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
         if ($facultyinfo) {
-            
-            echo htmlspecialchars($facultyinfo['id']); 
+           
         } else {
             echo 'No faculty information found.';
         }

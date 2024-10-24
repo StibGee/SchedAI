@@ -10,7 +10,14 @@
                 <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="../faculty/profile.php">Profile</a></li>
-                    
+                    <li class="ms-3"> 
+                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
+                            <input type="text" name="action" value="logout" hidden>
+                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
 
                 </ul>
             </div>
@@ -54,7 +61,7 @@
             object-fit: cover; /* Ensures the image covers the area without stretching */
             border-radius: 50%; /* Optional: Makes the image circular */
         }
-        .activenav{
-            
+        a{
+            text-decoration: none !important;
         }
 </style>

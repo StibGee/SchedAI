@@ -15,7 +15,7 @@
 
         $db = new Database();
         $pdo = $db->connect();
-        echo $_SESSION['role'];
+       
         $subject = new Subject($pdo);
         $faculty = new Faculty($pdo);
 
@@ -28,12 +28,7 @@
         $distinctsubjects = $subject->getdistinctsubjects();
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
-        if ($facultyinfo) {
-            
-            echo htmlspecialchars($facultyinfo['id']); 
-        } else {
-            echo 'No faculty information found.';
-        }
+        
         $facultydaytime=$faculty->getfacultydaytime($facultyid);
         $mondaychecked=$tuesdaychecked=$wednesdaychecked=$thursdaychecked=$fridaychecked=$saturdaychecked='';
 
@@ -153,7 +148,7 @@
                             </div>
                         </div>
                         <div class="form-footer mt-4 d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn btn-success next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step2">
@@ -185,7 +180,8 @@
 
                         <div class="form-footer mt-5 d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn btn-success next-step">Next</button>
+
                         </div>
                     </div>
                     <?php } ?>
@@ -253,7 +249,7 @@
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn btn-success next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step4">
@@ -278,7 +274,7 @@
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn btn-success next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step5">
@@ -339,7 +335,7 @@
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="submit" class="btn btn-primary">Finish</button>
+                            <button type="button" class="btn btn-success next-step">Next</button>
                         </div>
                     </div>
             </div>

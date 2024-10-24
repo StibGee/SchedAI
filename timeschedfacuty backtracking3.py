@@ -286,7 +286,7 @@ def assign_subject(current_subject_id):
 def assigntimeslot(currentsubjectid, facultyidnew):
     
     for roomid, schedule in roomoccupied.items():  # Loop through each room and its schedule
-        print(f"Room {roomid}:")  # Print room identifier
+        print(f"Room {roomid}:")  
         for day in range(1, 7):  # Assuming days are numbered from 1 to 5
             free_times = []  # List to collect free times for the day
             if day in schedule:  # Check if the day exists in the schedule
@@ -454,7 +454,7 @@ def assigntimeslot(currentsubjectid, facultyidnew):
                     continue  
                 else:
                     print(facultyidpair, subjectfacultyid)
-                    time2.sleep(5)
+                    
 
                 for day1, day2, starttime, endtime in slots:
                     

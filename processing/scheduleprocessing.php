@@ -15,9 +15,13 @@ switch ($action) {
     case 'addcollege':
         addschedulecollege();
         break;
+    case 'adddepartment':
+        addscheduledepartment();
+        break;
     case 'updateminorcollege':
         updateminor();
         break;
+    
     case 'delete':
         deletecurriculum();
         break;
@@ -122,6 +126,83 @@ function addschedulecollege() {
     }    
     exit();
 }
+function addscheduledepartment() {
+    session_start();
+    global $schedule;
+    global $curriculum;
+    
+    $departmentid = $_SESSION['departmentid'];
+    $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
+    $_SESSION['semester']=$semester;
+    $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
+    $_SESSION['calendarid']=$calendarid;
+   
+    //$request = $schedule->addrequest($departmentid, $calendarid);
+    $deletescheduledepartment = $schedule->deletescheduledepartment($calendarid, $departmentid);
+
+    foreach ($_POST as $key => $value) {
+        // Check if the key starts with 'section' and that value is an array
+        if (strpos($key, 'section') === 0 && is_array($value)) {
+            // Extract year level from the key (e.g., "section1" -> year level = 1)
+            $yearlvl = substr($key, 7); 
+            
+            // Build curriculum index for the corresponding year level
+            $curriculumindex = "curriculum" . $yearlvl;
+    
+            // Check if the curriculum index exists in POST and is an array
+            if (isset($_POST[$curriculumindex]) && is_array($_POST[$curriculumindex])) {
+                // Sanitize the curriculum value (first element of the array)
+                $curriculum = htmlspecialchars($_POST[$curriculumindex][0], ENT_QUOTES, 'UTF-8');
+    
+                // Access the section value (first element of the array)
+                $section = htmlspecialchars($value[0], ENT_QUOTES, 'UTF-8');
+    
+                // Add the schedule entry
+                $result = $schedule->addschedule(
+                    $yearlvl,
+                    $academicyear,
+                    $departmentid,
+                    $semester,
+                    $section,
+                    $curriculum,
+                    $calendarid,
+                    $yearlvl
+                );
+            }
+        }
+    }
+    
+    
+    
+    
+
+
+    if ($deletescheduledepartment) {
+        if ($_SESSION['departmentid']!=0){
+            $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+            if($minornofacultycount==0){
+                
+                header("Location: ../admin/general-sub.php");
+            }else{
+                header("Location: ../admin/final-sched.php?subject=nofaculty");
+            }
+        }else{
+            $minornofacultycount=$schedule->minorfacultycountcollege($_SESSION['collegeid'], $_SESSION['calendarid']);
+            if($minornofacultycount==0){
+                
+                header("Location: ../admin/general-sub.php");
+            }else{
+                header("Location: ../admin/final-sched.php?subject=nofaculty");
+            }
+        }
+        
+
+    } else {
+        header("Location: ../admin/schedule.php?curriculum=$assigned");
+    }    
+    exit();
+}
 function updateminor() {
    
     global $schedule;
@@ -140,10 +221,10 @@ function updateminor() {
 
     if ($updateminor) {
         
-        header("Location: ../admin/schedule.php?assigned");
+        header("Location: ../admin/final-sched.php?scheduling=loading");
 
     } else {
-        header("Location: ../admin/schedule.php?curriculum");
+        header("Location: ../admin/final-sched.php?minor=failed");
     }    
     exit();
 }

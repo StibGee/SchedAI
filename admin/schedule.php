@@ -55,7 +55,7 @@
                             <?php foreach ($collegedepartment as $collegedepartments){?>
                                 <option value="<?php echo $collegedepartments['id'];?>" <?php if ($_SESSION['departmentid']==$collegedepartments['id']){echo 'selected';} ?>><?php echo $collegedepartments['name'];?></option>
                             <?php } ?>
-                            <option value="0" >All Departments</option>
+                            <option value="0" <?php if ($_SESSION['departmentid']==0){echo 'selected';} ?>>All Departments</option>
                             <option value="" >Choose a department</option>
                         </select>
                     </form>

@@ -167,6 +167,38 @@ class Faculty {
         $stmt->execute(); 
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
+    public function changepass($facultyid, $oldpass, $newpass) {
+       
+    
+        $sql = "SELECT password FROM faculty WHERE id = :facultyid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($result) {
+            $currenthashedpassword = $result['password'];
+
+            if (password_verify($oldpass, $currenthashedpassword)) {
+                $hashednewpass = password_hash($newpass, PASSWORD_DEFAULT);
+    
+                $updateSql = "UPDATE faculty SET password = :newpass WHERE id = :facultyid";
+                $updateStmt = $this->pdo->prepare($updateSql);
+                $updateStmt->bindParam(':newpass', $hashednewpass);
+                $updateStmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT);
+    
+                if ($updateStmt->execute()) {
+                    return true; 
+                } else {
+                    return false; 
+                }
+            } else {
+                return false; 
+            }
+        } else {
+            return false; 
+        }
+    }
     
     
 }

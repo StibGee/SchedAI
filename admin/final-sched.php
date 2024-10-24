@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+<script src="../js/facultyloading.js"></script>
 <?php
+    ini_set('max_execution_time', 130);
+    
     require_once('../include/nav.php');
     require_once('../classes/db.php');
     require_once('../classes/curriculum.php');
@@ -9,11 +13,12 @@
     require_once('../classes/college.php');
     require_once('../classes/schedule.php');
     require_once('../classes/faculty.php');
-
-    $collegeid=$_SESSION['collegeid'];
     
+    $collegeid=$_SESSION['collegeid'];
+    $scheduling=False;
     $db = new Database();
     $pdo = $db->connect();
+    
 
     $curriculum = new Curriculum($pdo);
     $faculty = new Faculty($pdo);
@@ -43,7 +48,10 @@
     if ($_SESSION['departmentid']!=0){
         $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
         $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
+        $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
     }else{
+        $minorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
         $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
         $collegeinfo=$college->getcollegeinfo($collegeid);
         
@@ -56,13 +64,97 @@
                 myModal.show();
               </script>';
     }
-    $collegeminorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
+    
 ?>
+<link href="../css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/generated-sched.css">
 <body >
-    <?php
-        require_once('../include/nav.php');
+<?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading'){?>
+    <div class="progresspopupdiv">
         
+    
+        <div class="progresspopup">
+        
+            <div class="progress">
+                <div id="progress-bar" class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                    <span id="progress-text">0%</span>
+                </div>
+            </div>
+            <div id="outputstatus" class="outputstatus"></div>
+
+        </div>
+    </div>
+    
+    <script>
+        document.body.classList.add('blur-background');
+        window.addEventListener('beforeunload', function (e) {
+            
+            e.preventDefault(); 
+            e.returnValue = ''; 
+        });
+    </script>
+
+    <?php
+    $deptid = ($_SESSION['departmentid']);
+    $colid = ($collegeid);
+    $calid = ($_SESSION['calendarid']);
+    while (ob_get_level()) {
+        ob_end_flush();
+    }
+    $command = escapeshellcmd('python .././finalmerge.py ' .  $deptid . ' ' . $colid . ' ' . $calid);
+    $handle = popen($command, 'r');
+
+
+    if ($handle) {
+        while (!feof($handle)) {
+            $line = fgets($handle);
+            if ($line !== false) {
+                if (preg_match('/(\d+\.\d+%)\s*:\s*(.*)/', $line, $matches)) {
+                    $percentage = $matches[1];
+                    $message = $matches[2];
+                    $percentage = str_replace('%', '', $percentage);
+
+                    ?>
+                    <script>
+                        
+                        
+                        document.getElementById('outputstatus').innerText = "<?php echo $message; ?>\n";
+                    </script>
+                    <script>
+                        var percentage = <?php echo json_encode($percentage); ?>;
+                        document.getElementById('progress-bar').style.width = '<?php echo $percentage; ?>%';
+                        document.getElementById('progress-bar').setAttribute('aria-valuenow', percentage);
+                        document.getElementById('progress-bar').setAttribute('aria-valuenow', '<?php echo $percentage; ?>');
+                        document.getElementById('progress-text').innerText = '<?php echo $percentage; ?>%';
+
+                        if (percentage>= 100) {
+                            window.location.href = './final-sched.php';
+                        }
+                    </script>
+                    <?php
+                } else {
+                    ?>
+                    <script>
+                        //document.getElementById('outputstatus').innerText += <?php echo json_encode($line); ?>;
+                    </script>
+                    <?php
+                }
+                
+                flush();
+            }
+        }
+        pclose($handle);
+    } else {
+        echo "Unable to execute the Python script.";
+    }
     ?>
+    <?php } else { ?>
+    <script>
+        document.body.classList.remove('blur-background');
+    </script>
+    <?php } ?>
+  
     <main>
         <div class="container mb-5">
             <div class="row mt-4">
@@ -90,14 +182,14 @@
                     </form>
                 </div>-->
                 
-                <div class="col-1">
+                <!--<div class="col-1">
                     <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
                         <option value="">Select an option</option>
                         <option value="final-sched-room.php">By Rooms</option>
                         <option value="final-sched-faculty.php">By Faculty</option>
                         <option value="final-sched-subject.php">By Subject</option>
                     </select>
-                </div>
+                </div>-->
                 <div class="col-1">
                     <select class="form-select  form-select-sm " id="select-classtype">
                         <option>all</option>
@@ -116,9 +208,9 @@
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex ">
-                    <button id="viewToggleButton">
+                    <a href="final-sched-room.php" id="viewToggleButton" class="btn">
                         Toggle View
-                    </button>
+                    </a>
                 </div>
                 <div class="sched-table mt-3">
                     <div id="tabularView" class="mt-2">
@@ -271,10 +363,10 @@
                                                                     <tr>
                                                                         <td style="border: none;">Year Level <?php echo $i;?></td>
                                                                         <td style="border: none;">
-                                                                            <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>" class="form-control form-control-sm" style="width: 200px;">
+                                                                            <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>[]" class="form-control form-control-sm" style="width: 200px;">
                                                                         </td>
                                                                         <td style="border: none;">
-                                                                            <select class="form-select form-select-sm m-0" name="curriculum1">
+                                                                            <select class="form-select form-select-sm m-0"  name="curriculum<?php echo $i;?>[]">
                                                                                 <?php 
                                                                                 foreach ($calendardistinct as $calendardistincts) {?>
                                                                                 <option value="<?php echo $calendardistincts['year'];?>"><?php echo $calendardistincts['name'];?></option>
@@ -372,7 +464,7 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($collegeminorsubjectsnofaculty as $subject) { ?>
+                                    foreach ($minorsubjectsnofaculty as $subject) { ?>
                                         <tr>
                                             <td>
                                                 <input type="hidden" name="subjectname[]" value="<?php echo $subject['commonname']; ?>">
@@ -403,12 +495,11 @@
             </div>
         </div>
 
-
+    
     </main>
+    
 </body>
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/generated-sched.css">
-    <script src="../js/facultyloading.js"></script>
+    
     <script>
         function handleOptionChange() {
             var selectElement = document.getElementById('filter');

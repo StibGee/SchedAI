@@ -27,7 +27,7 @@
             <div class="container ">
                 <div class="row">
                     <div class="text d-flex align-items-center" >
-                        <h2> Hola !!! </h2> <span> Role</span>
+                        <h2> Hola !!! </h2> <span><?php echo  $facultyinfo['fname'];?></span>
                     </div>
                 </div>
                 <h5>My Profile</h5>
@@ -52,25 +52,31 @@
                                     
                                     <label for=""><?php $departmmentinfo=$department->getdepartmentinfo($facultyinfo['departmentid']); echo $departmmentinfo['name']?></label>
                                 </div>
+                                </div>
+                                <div class="col-5 d-flex flex-column justify-content-center align-items-end">
+                                    <a href="facultyprofiling.php" class="save text-center mb-2 custom-link">Edit Profile</a>
+                                
+                                </div>
+
+                            
+                                    
+                                
                             </div>
-                            <div class="col-5 d-flex justify-content-end align-items-center ">
-                                <button class="save">save</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="profile-info col-3 ">
                         <div class="p-4">
                             <div class="form-group">
                                 <label for="teachingHour">Teaching Hour</label>
-                                <input type="text" class="form-control" id="teachingHour" value="<?php echo $facultyinfo['teachinghours'];?>">
+                                <input readonly type="text" class="form-control" id="teachingHour" value="<?php echo $facultyinfo['teachinghours'];?>">
                             </div>
                             <div class="form-group">
                                 <label for="genderSelect">Gender</label>
+                                <input readonly type="text" class="form-control" name="" id="" value="<?php echo $facultyinfo['gender'];?>">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="" id="" value="<?php echo $facultyinfo['gender'];?>">
+                                    
                                     <div class="input-group-append">
-                                    <button class="btn "><i class="fa-solid fa-pen"></i></button>
+                                    <!--<button class="btn "><i class="fa-solid fa-pen"></i></button>-->
                                     </div>
                                 </div>
                             </div>
@@ -85,10 +91,11 @@
                             </div>-->
                             <div class="form-group">
                                 <label for="contactNo">Contact No.</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="contactNo" value="<?php echo $facultyinfo['contactno'];?>">
+                                <input readonly type="number" class="form-control" id="contactNo" value="<?php echo $facultyinfo['contactno'];?>">
+                                <!--<div class="input-group">
+                                    
                                     <button class="btn "><i class="fa-solid fa-pen"></i></button>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         </div>
@@ -99,13 +106,13 @@
                                     <div class="col-6">
                                         <label for="">Position/Rank</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control"  value="<?php echo $facultyinfo['rank'];?>">
+                                            <input readonly type="text" class="form-control"  value="<?php echo $facultyinfo['rank'];?>">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label for="">Start Of Service</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" value="<?php echo $facultyinfo['startdate'];?>">
+                                            <input readonly type="text" class="form-control" value="<?php echo $facultyinfo['startdate'];?>">
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +123,7 @@
                                         <div class="table-load col-6">
                                             <label class="form-label" for="degree">Employment Type</label>
                                             
-                                            <input type="text" class="form-control" value="<?php echo $facultyinfo['type'];?>">
+                                            <input readonly type="text" class="form-control" value="<?php echo $facultyinfo['type'];?>">
                                         </div>
                                         <!--<div class="table-load col-6" id="specialization-container">
                                             <label class="form-label" for="specialization">Specialization</label>
@@ -137,9 +144,9 @@
                             <div class="row p-4 mb-4">
                                 <div class="preference-table p-3">
                                     <label for="">Preferencess</label>
-                                    <div class="d-flex justify-content-end">
+                                    <!--<div class="d-flex justify-content-end">
                                     <button class="btn "><i class="fa-solid fa-pen"></i></button>
-                                    </div>
+                                    </div>-->
 
                                     <div class="pref p-3 m-4">
                                         <table id="editableTable" class="table table-sm fs-9 mb-0">

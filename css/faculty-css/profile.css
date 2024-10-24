@@ -63,16 +63,20 @@ label{
 
 .save{
     border-radius: 12px;
-    width: 18%;
+    width: 25%;
     background-color: #80AF81;
     border: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .save:hover{
     border-radius: 12px;
-    width: 18%;
+    width: 25%;
     background-color: #ffffff;
     border: 2px solid #80AF81;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     color: #80AF81;
+}
+a{
+    text-decoration: none !important;
+    color: white;
 }

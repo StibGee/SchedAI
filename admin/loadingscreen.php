@@ -1,5 +1,13 @@
+<?php
+    require_once('../include/nav.php');
+    
+    ini_set('max_execution_time', 20);
+?>
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/facultyloading.css">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +27,7 @@
             </div>
         </div>
         <div id="outputstatus" class="outputstatus"></div>
-        
+
     </div>
     
 
@@ -75,4 +83,6 @@
     }
     ?>
 </body>
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/generated-sched.css">
 </html>

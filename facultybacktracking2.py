@@ -2,9 +2,10 @@ import mysql.connector
 import time
 import sys
 
-collegeid = 3
 departmentid = 0
+collegeid = 3
 calendarid = 7
+
 
 conn = mysql.connector.connect(
     host="localhost",
@@ -15,16 +16,56 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 
-cursor.execute("SELECT * FROM faculty")
-faculty = cursor.fetchall()
-
-cursor.execute("SELECT * FROM facultysubject JOIN faculty ON faculty.id=facultysubject.facultyid ORDER BY faculty.teachinghours DESC, faculty.departmentid ASC")
-facultysubject = cursor.fetchall()
-
-cursor.execute("SELECT * FROM subject")
-subject = cursor.fetchall()
 
 if (departmentid==0):
+    cursor.execute("""
+        SELECT COUNT(*) 
+        FROM `subjectschedule`
+        JOIN `subject` ON subjectschedule.subjectid = subject.id 
+        JOIN department ON department.id = subjectschedule.departmentid
+        WHERE subject.focus != 'Minor' 
+        AND subjectschedule.calendarid = %s 
+        AND department.collegeid = %s 
+        ORDER BY 
+        FIELD(subject.focus, 'Major1') DESC,  
+        subjectschedule.departmentid ASC
+    """, (calendarid, collegeid))
+    subjectschedule = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT COUNT(*) FROM `subjectschedule` 
+        JOIN `subject` ON subjectschedule.subjectid = subject.id 
+        JOIN department ON department.id=subjectschedule.departmentid
+        WHERE subject.focus !='Minor' 
+        AND subject.focus != 'Major1' 
+        AND subjectschedule.calendarid = %s 
+        AND department.collegeid = %s 
+        ORDER BY subjectschedule.departmentid ASC
+    """, (calendarid, collegeid))
+    subjectschedulecount = cursor.fetchone()
+
+    cursor.execute("""
+    SELECT * 
+    FROM facultysubject
+    JOIN faculty ON faculty.id = facultysubject.facultyid 
+    WHERE faculty.collegeid = %s 
+    ORDER BY faculty.teachinghours DESC, faculty.departmentid ASC
+    """, (collegeid,))
+    facultysubject = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM faculty WHERE faculty.collegeid = %s""", (collegeid,))
+    faculty = cursor.fetchall()
+
+
+    cursor.execute("""SELECT * FROM subject JOIN department ON department.id=subject.departmentid WHERE department.collegeid = %s""", (collegeid,))
+    subject = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM room WHERE collegeid=%s""", (collegeid,))
+    room = cursor.fetchall()
+
+    cursor.execute("""SELECT faculty.*, facultypreferences.*, COUNT(facultysubject.facultyid) AS subject_count FROM facultypreferences JOIN faculty ON faculty.id = facultypreferences.facultyid LEFT JOIN facultysubject ON facultysubject.facultyid = facultypreferences.facultyid WHERE faculty.collegeid=%s GROUP BY faculty.id, facultypreferences.id ORDER BY faculty.teachinghours ASC, subject_count ASC""",(collegeid,))
+    facultypreference = cursor.fetchall()
+else:
     cursor.execute("""
         SELECT * FROM `subjectschedule` 
         JOIN `subject` ON subjectschedule.subjectid = subject.id 
@@ -49,12 +90,27 @@ if (departmentid==0):
     """, (calendarid, collegeid))
     subjectschedulecount = cursor.fetchone()
 
+    cursor.execute("""
+    SELECT * 
+    FROM facultysubject 
+    JOIN faculty ON faculty.id = facultysubject.facultyid 
+    WHERE faculty.departmentid = %s 
+    ORDER BY faculty.teachinghours DESC, faculty.departmentid ASC
+    """, (departmentid,))
+    facultysubject = cursor.fetchall()
 
-cursor.execute("SELECT * FROM room WHERE departmentid=1")
-room = cursor.fetchall()
+    cursor.execute("""SELECT * FROM faculty WHERE faculty.departmentid = %s""", (departmentid,))
+    faculty = cursor.fetchall()
 
-cursor.execute("SELECT faculty.*, facultypreferences.*, COUNT(facultysubject.facultyid) AS subject_count FROM facultypreferences JOIN faculty ON faculty.id = facultypreferences.facultyid LEFT JOIN facultysubject ON facultysubject.facultyid = facultypreferences.facultyid GROUP BY faculty.id, facultypreferences.id ORDER BY faculty.teachinghours ASC, subject_count ASC")
-facultypreference = cursor.fetchall()
+    cursor.execute("""SELECT * FROM subject WHERE subject.departmentid = %s""", (departmentid,))
+    subject = cursor.fetchall()
+
+    cursor.execute("""SELECT * FROM room WHERE departmentid=%s""", (departmentid,))
+    room = cursor.fetchall()
+
+    cursor.execute("""SELECT faculty.*, facultypreferences.*, COUNT(facultysubject.facultyid) AS subject_count FROM facultypreferences JOIN faculty ON faculty.id = facultypreferences.facultyid LEFT JOIN facultysubject ON facultysubject.facultyid = facultypreferences.facultyid WHERE faculty.departmentid=%s GROUP BY faculty.id, facultypreferences.id ORDER BY faculty.teachinghours ASC, subject_count ASC""",(departmentid,))
+    facultypreference = cursor.fetchall()
+
 
 try:
     cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
@@ -101,19 +157,19 @@ assignedsubjects = {}
 noassignment=[]
 tbh=[]
 backtrackcounters={}
-maxdepth=2000
+maxdepth=1
 assignedsubjectscount=0
 
 def assign_subject(currentshubjectid):
     global assignedsubjectscount
 
-    if currentshubjectid >= len(subjectschedule):
+    if currentshubjectid == len(subjectschedule):
+       
         return True  
     
     if currentshubjectid not in backtrackcounters:
         backtrackcounters[currentshubjectid] = 0
             
-    print("currentshubjectid", currentshubjectid)
     subjectschedules = subjectschedule[currentshubjectid]
     subjectscheduleid = subjectschedules[0]
    
@@ -121,33 +177,103 @@ def assign_subject(currentshubjectid):
     subjectschedulesubjecthours = subjectschedules[18]
     subjectschedulesubjectmasters = subjectschedules[20]
     subjectscheduledepartmentid = subjectschedules[9]
-
-    if (backtrackcounters[currentshubjectid]>=maxdepth):
-        query = """
-            UPDATE `subjectschedule`
-            SET `facultyfname` = %s, `facultylname` = %s, `facultyid` = %s
-            WHERE `id` = %s
-        """
-        values = ("New", "Faculty", "0",subjectscheduleid)
-        cursor.execute(query, values)
-
-        conn.commit()
-
-        if assign_subject(currentshubjectid + 1):
-            return True
+    
+    if (backtrackcounters[currentshubjectid] >= maxdepth):
         
-    for facultysubjects in facultysubject:
+        lowesthoursfaculty = None
+        lowesthours = float('inf')
+
+        for facultysubjects in facultysubject:
+            facultysubjectfacultyid = facultysubjects[1]
+            facultysubjectfsubjectname = facultysubjects[2]
+            facultysubjectmasters = facultysubjects[11]
+            facultysubjectdepartmentid = facultysubjects[13]
+            facultysubjectfname = facultysubjects[4]
+            facultysubjectlname = facultysubjects[6]
+            
+            master_match = (subjectschedulesubjectmasters == facultysubjectmasters or 
+                            (subjectschedulesubjectmasters == 'No' and facultysubjectmasters == 'Yes'))
+
+            if master_match:
+                
+                if facultyworkinghours[facultysubjectfacultyid] >= subjectschedulesubjecthours:
+                    if facultyworkinghours[facultysubjectfacultyid] < lowesthours:
+                        lowesthours = facultyworkinghours[facultysubjectfacultyid]
+                        lowesthoursfaculty = facultysubjectfacultyid
+
+        if lowesthoursfaculty is not None:
+            
+            assignedsubjectscount+= 1
+            facultyworkinghours[lowesthoursfaculty] -= subjectschedulesubjecthours
+            assignedsubjects[subjectscheduleid] = facultysubjectfacultyid
+            workinghoursleft[lowesthoursfaculty] = facultyworkinghours[lowesthoursfaculty]
+            query = """
+                UPDATE `subjectschedule`
+                SET `facultyfname` = %s, `facultylname` = %s, `facultyid` = %s
+                WHERE `id` = %s
+            """
+            faculty_info = next(f for f in facultysubject if f[1] == lowesthoursfaculty)
+            values = (faculty_info[4], faculty_info[6], lowesthoursfaculty, subjectscheduleid)
+            cursor.execute(query, values)
+
+            conn.commit()
+            cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[lowesthoursfaculty]} WHERE `id` = {lowesthoursfaculty}")
+            conn.commit()
+            progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+            print(f"{progress:.2f}%: {facultysubjectfsubjectname} assigned to {facultysubjectfname} {facultysubjectlname}")
+            
+            sys.stdout.flush()
+            
+            if assign_subject(currentshubjectid + 1):
+                return True
+            
+            '''print(f"Backtracking subject {currentshubjectid}/{len(subjectschedule)} {subjectschedulesubjectname}")'''
+            assignedsubjectscount-= 1
+            facultyworkinghours[lowesthoursfaculty] += subjectschedulesubjecthours
+            del assignedsubjects[subjectscheduleid]
+            cursor.execute(f"UPDATE `subjectschedule` SET `facultyid` = NULL WHERE `id` = {subjectscheduleid}")
+            cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[lowesthoursfaculty]} WHERE `id` = {facultysubjectfacultyid}")
+            
+        else:
+            
+            query = """
+                UPDATE `subjectschedule`
+                SET `facultyfname` = %s, `facultylname` = %s, `facultyid` = %s
+                WHERE `id` = %s
+            """
+            values = ("New", "Faculty", 0, subjectscheduleid)
+
+           
+            cursor.execute(query, values)
+            conn.commit()
+        
+            assignedsubjectscount += 1
+            assignedsubjects[subjectscheduleid]=0
+            progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+            print(f"{progress:.2f}%: {facultysubjectfsubjectname} assigned to {facultysubjectfname} {facultysubjectlname}")
+                
+            sys.stdout.flush()
+            if assign_subject(currentshubjectid + 1):
+                return True
+            assignedsubjectscount -= 1
+            del assignedsubjects[subjectscheduleid]
+        
+    sortedfaculty = sorted(facultysubject, key=lambda x: -facultyworkinghours[x[1]])
+    
+    for facultysubjects in sortedfaculty:
         facultysubjectfacultyid = facultysubjects[1]
         facultysubjectfsubjectname = facultysubjects[2]
         facultysubjectmasters = facultysubjects[11]
         facultysubjectdepartmentid = facultysubjects[13]
         facultysubjectfname = facultysubjects[4]
         facultysubjectlname = facultysubjects[6]
+
         
+
         if facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, subjectschedulesubjectmasters, facultysubjectmasters, subjectscheduledepartmentid, facultysubjectdepartmentid):
             
             if facultyworkinghourscheck(facultyworkinghours[facultysubjectfacultyid], subjectschedulesubjecthours, facultysubjectfacultyid):
-                
+                assignedsubjectscount+= 1
                 facultyworkinghours[facultysubjectfacultyid] -= subjectschedulesubjecthours
                 assignedsubjects[subjectscheduleid] = facultysubjectfacultyid
                 workinghoursleft[facultysubjectfacultyid] = facultyworkinghours[facultysubjectfacultyid]
@@ -163,12 +289,10 @@ def assign_subject(currentshubjectid):
 
                 cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[facultysubjectfacultyid]} WHERE `id` = {facultysubjectfacultyid}")
                 conn.commit()
-                progress = (currentshubjectid+1) / subjectschedulecount[0] * 100
-                print(f"{progress:.2f}%: {subjectscheduleid} assigned to {facultysubjectfacultyid}")
-                time.sleep(0.3)
+                progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+                print(f"{progress:.2f}%: {facultysubjectfsubjectname} assigned to {facultysubjectfname} {facultysubjectlname}")
+                
                 sys.stdout.flush()
-                assignedsubjectscount+= 1
-
                 if assign_subject(currentshubjectid + 1):
                     return True
 
