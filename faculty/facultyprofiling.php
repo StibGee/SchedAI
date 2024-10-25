@@ -333,10 +333,10 @@
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-success next-step">Next</button>
+                            <button type="submit" class="btn btn-success next-step">Finish</button>
                         </div>
                     </div>
-            </div>
+                </div>
             </form>
 
         </div>

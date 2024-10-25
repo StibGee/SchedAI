@@ -115,9 +115,10 @@ function addschedulecollege() {
             $minornofacultycount=$schedule->minorfacultycountcollege($_SESSION['collegeid'], $_SESSION['calendarid']);
             if($minornofacultycount==0){
                 if ($includegensub){
-                    
+                    $_SESSION['minor']=1;
                     header("Location: ../admin/general-sub.php");
                 }else{
+                    $_SESSION['minor']=0;
                     header("Location: ../admin/final-sched.php?scheduling=loading");
                 }
             

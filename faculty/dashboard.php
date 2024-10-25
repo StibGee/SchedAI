@@ -30,11 +30,7 @@
         $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
         $calendarinfo=$curriculum->calendarinfo($collegelatestyear);
-        $facultysubjects=$faculty->getfacultysubjects($_SESSION['id']);
-        if (empty($facultysubjects)) {
-            header("Location: ../faculty/facultyprofiling.php");
-            exit();
-        }
+       
         $collegeroom=$room->getcollegerooms($_SESSION['collegeid']);
         
     ?>

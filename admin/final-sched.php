@@ -99,10 +99,11 @@
     $deptid = ($_SESSION['departmentid']);
     $colid = ($collegeid);
     $calid = ($_SESSION['calendarid']);
+    $minor = ($_SESSION['minor']);
     while (ob_get_level()) {
         ob_end_flush();
     }
-    $command = escapeshellcmd('python .././finalmerge.py ' .  $deptid . ' ' . $colid . ' ' . $calid);
+    $command = escapeshellcmd("python .././finalmerge.py") . " " . escapeshellarg($deptid) . " " . escapeshellarg($colid) . " " . escapeshellarg($calid) . " " . escapeshellarg($minor);
     $handle = popen($command, 'r');
 
 

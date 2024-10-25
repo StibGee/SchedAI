@@ -32,7 +32,8 @@
                 <div id="loginModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <form id="loginForm" action="./database/login.php" method="POST" onsubmit="return validateForm()">
+                        <form id="loginForm" action="./processing/facultyprocessing.php" method="POST" onsubmit="return validateForm()">
+                            <input type="text" name="action" id="" value="login" hidden>
                             <h2><span class="entypo-login"><i class="fa fa-sign-in"></i></span> Login</h2>
                             <button type="submit" class="submit"><span class="entypo-lock"><i class="fa fa-lock"></i></span></button>
                             <span class="entypo-user inputUserIcon">

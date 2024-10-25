@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-
-=======
 import mysql.connector
 import time
 
