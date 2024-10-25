@@ -9,7 +9,7 @@
             <div class="dropdown">
                 <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="../faculty/profile.php">Profile</a></li>
+                   
                     <li class="ms-3"> 
                         <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
                             <input type="text" name="action" value="logout" hidden>

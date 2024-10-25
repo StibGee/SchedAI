@@ -382,7 +382,7 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 if (departmentid==0):
-    cursor.execute("""SELECT subjectschedule.id, subjectschedule.subjectid, subjectschedule.calendarid, subjectschedule.yearlvl, subjectschedule.section, subjectschedule.timestart,subjectschedule.timeend,subjectschedule.day, subjectschedule.roomname, subjectschedule. departmentid, subjectschedule. facultyid, subject.subjectcode, subject.name, subject.unit, subject.hours, subject.type, subject.masters, subject.focus, faculty.masters, faculty.startdate, subject.requirelabroom FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3,1,2), subjectschedule.departmentid ASC, faculty.startdate ASC """, (calendarid, collegeid))
+    cursor.execute("""SELECT subjectschedule.id, subjectschedule.subjectid, subjectschedule.calendarid, subjectschedule.yearlvl, subjectschedule.section, subjectschedule.timestart,subjectschedule.timeend,subjectschedule.day, subjectschedule.roomname, subjectschedule. departmentid, subjectschedule. facultyid, subject.subjectcode, subject.name, subject.unit, subject.hours, subject.type, subject.masters, subject.focus, faculty.masters, faculty.startdate, subject.requirelabroom FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 1,2,3), subjectschedule.departmentid ASC, faculty.startdate ASC """, (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
     cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, collegeid))
@@ -606,7 +606,7 @@ def minorfree(departmentid, yearlvl, section, day, time):
 
 subjectiteration={}
 backtrackcounters={}
-maxdepth=100
+maxdepth=1000
 
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
@@ -1230,7 +1230,7 @@ def assigntimeslot(currentsubjectid):
                        
                         lastfacultyass= findlastfacultyasslec2(facultyidlec2, daylec2)
                         if lastfacultyass:
-                            startminutes = lastfacultyass + 30
+                            startminutes = lastfacultyass + 120
                         else:
                             '''print(f"No prior assignments for day {daylec2}")'''
 
@@ -1297,9 +1297,6 @@ def assigntimeslot(currentsubjectid):
 
         elif (units == 1.0):
             
-            
-           
-
             if backtrackcounters[currentsubjectid] >= maxdepth:
             
                 assignmentfound=False
@@ -1566,7 +1563,8 @@ def assigntimeslot(currentsubjectid):
                         assignedsubjects.remove(subjectid)
                     
                         
-    '''print(f"Failed to assign subject {currentsubjectid} {subname} {subjectfacultyid}, trying previous assignment.") '''
+    print(f"Failed to assign subject {currentsubjectid} {subname} {subjectfacultyid}, trying previous assignment.") 
+    timer.sleep(222)
     backtrackcounters[currentsubjectid] += 1
   
     print(f"")                   

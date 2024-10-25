@@ -35,13 +35,16 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         
         if ($role=='collegesecretary'){
             header('Location: ../admin/facultyloading.php');
+            exit();
         }else{
             header('Location: ../faculty/dashboard.php');
+            exit();
         }
          
     } else {
-        $_SESSION['error']='incorrect';
+        $_SESSION['error']='wrongpassword';
         header('Location: ../index.php');
+        exit();
     }
 }
 ?>

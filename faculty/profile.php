@@ -131,16 +131,34 @@
                                                 <option selected disabled value="">Choose...</option>
                                             </select>
                                         </div>-->
-                                        <div class="table-load col-6">
-                                            <label for="">Expertise</label>
-                                            <?php foreach ($facultysubjects AS $facultysubject){?>
-                                                <li><?php echo $facultysubject['subjectname'];?></li>
-                                            <?php } ?>
-                                        </div>
                                     </div>
                                 </div>
                                 
                             </div>
+                            <div class="row p-4 m-2">
+                                <label for="">Expertise</label>
+                                <?php
+                                 
+                                    $totalSubjects = count($facultysubjects);
+            
+                                    $half = ceil($totalSubjects / 2);
+
+                      
+                                    $leftColumn = array_slice($facultysubjects, 0, $half);
+                                    $rightColumn = array_slice($facultysubjects, $half);
+                                ?>
+                                <div class="table-load col-6">
+                                    <?php foreach ($leftColumn as $subject) { ?>
+                                        <li><?php echo $subject['subjectname']; ?></li>
+                                    <?php } ?>
+                                </div>
+                                <div class="table-load col-6">
+                                    <?php foreach ($rightColumn as $subject) { ?>
+                                        <li><?php echo $subject['subjectname']; ?></li>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
                             <div class="row p-4 mb-4">
                                 <div class="preference-table p-3">
                                     <label for="">Preferencess</label>

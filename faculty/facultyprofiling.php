@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-        require_once('../include/head.php');
-    ?>
+
 
 <body >
 
@@ -115,21 +113,21 @@
                         <div class="row mt-2">
                             <div class="col-md-5">
                                 <label class="form-label" for="firstname">First name</label>
-                                <input class="form-control" id="firstname" type="text" name="fname" value="<?php if(isset($facultyinfo['fname'])){ echo $facultyinfo['fname'];} ?>" required>
+                                <input class="form-control nonumber" id="firstname" type="text" name="fname" value="<?php if(isset($facultyinfo['fname'])){ echo $facultyinfo['fname'];} ?>" required>
                             </div>
                             <div class="col-md-5">
                                 <label class="form-label" for="lastname">Last name</label>
-                                <input class="form-control" id="lastname" type="text" name="lname" value="<?php if(isset($facultyinfo['lname'])){ echo $facultyinfo['lname'];} ?>" required>
+                                <input class="form-control nonumber" id="lastname" type="text" name="lname" value="<?php if(isset($facultyinfo['lname'])){ echo $facultyinfo['lname'];} ?>" required>
                             </div>
                             <div class="col-md-2">
-                                <label class="form-label" for="midleinit">MI</label>
-                                <input class="form-control" id="midleinit" type="text" name="mname" value="<?php if(isset($facultyinfo['mname'])){ echo $facultyinfo['mname'];} ?>" required />
+                                <label class="form-label" for="midleinit">M.I (optional)</label>
+                                <input class="form-control nonumber" id="midleinit" type="text" name="mname" value="<?php if(isset($facultyinfo['mname'])){ echo $facultyinfo['mname'];} ?>"  />
                             </div>
                         </div>
                         <div class="row mt-5">
                             <div class="col-md-5">
                                 <label class="form-label" for="contactnumber">Contact Number</label>
-                                <input class="form-control" id="contactnumber" name="contactno" type="tel" value="<?php if(isset($facultyinfo['contactno'])){ echo $facultyinfo['contactno'];} ?>" required />
+                                <input class="form-control" id="contactnumber" name="contactno" type="number" value="<?php if(isset($facultyinfo['contactno'])){ echo $facultyinfo['contactno'];} ?>" required />
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-4">
@@ -139,7 +137,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label" for="gender">Gender</label>
-                                <select class="form-select" id="gender" name="gender" required="">
+                                <select class="form-select" id="gender" name="gender" required="" required>
                                     <option selected="" disabled="">Choose...</option>
                                     <option <?php if(isset($facultyinfo['gender']) && $facultyinfo['gender'] == 'Male'){ echo 'selected'; } ?> value="Male">Male</option>
                                     <option <?php if(isset($facultyinfo['gender']) && $facultyinfo['gender'] == 'Female'){ echo 'selected'; } ?> value="Female">Female</option>
@@ -156,7 +154,7 @@
                         <div class="row mt-2">
                             <div class="col-6">
                                 <label class="form-label" for="position">Type</label>
-                                <select class="form-select" id="position" name="type" required="">
+                                <select class="form-select" id="position" name="type" required>
                                     <option selected="" disabled="" value="">Choose...</option>
                                     <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Regular'){ echo 'selected'; } ?> value="Regular">Regular </option>
                                     <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>  
@@ -427,6 +425,74 @@ $(document).ready(function() {
         "lengthChange": false   
     });
 });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function toggleTimeInputs(day) {
+            const checkbox = document.querySelector(`input[name="${day}"]`);
+            const startTimeInput = document.querySelector(`input[name="${day}startTime"]`);
+            const endTimeInput = document.querySelector(`input[name="${day}endTime"]`);
+            
+            if (checkbox && startTimeInput && endTimeInput) {
+                startTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+                endTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+
+                checkbox.addEventListener("change", () => {
+                    startTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+                    endTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+                });
+
+                startTimeInput.addEventListener("change", () => {
+                    if (endTimeInput.value && startTimeInput.value >= endTimeInput.value) {
+                        endTimeInput.value = ""; 
+                        alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} should be later than start time.`);
+                    }
+                });
+
+                endTimeInput.addEventListener("change", () => {
+                    if (startTimeInput.value && endTimeInput.value <= startTimeInput.value) {
+                        endTimeInput.value = ""; 
+                        alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} should be later than start time.`);
+                    }
+                });
+            }
+        }
+
+
+        const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+        days.forEach(day => toggleTimeInputs(day));
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const nonumberInputs = document.querySelectorAll('.nonumber');
+        nonumberInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                this.value = this.value.replace(/[0-9]/g, '');
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const steps = document.querySelectorAll(".step-content");
+        steps.forEach((step, index) => {
+            const requiredInputs = step.querySelectorAll("input[required], select[required]");
+            const nextButton = step.querySelector(".next-step");
+
+            function checkRequiredFields() {
+                const allFilled = Array.from(requiredInputs).every(input => input.value.trim() !== "");
+                nextButton.disabled = !allFilled;
+            }
+
+            requiredInputs.forEach(input => {
+                input.addEventListener("input", checkRequiredFields);
+            });
+            checkRequiredFields();
+        });
+    });
 </script>
 
 

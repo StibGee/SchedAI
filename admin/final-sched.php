@@ -4,7 +4,7 @@
 
 <script src="../js/facultyloading.js"></script>
 <?php
-    ini_set('max_execution_time', 130);
+    ini_set('max_execution_time', 10000);
     
     require_once('../include/nav.php');
     require_once('../classes/db.php');
@@ -293,6 +293,13 @@
                             
                             <div class="rounded-top-3 bg-body-tertiary p-2">
                                 <h2 class="head-label">Generate Schedule for <?php if($_SESSION['departmentid']==0){echo $collegeinfo['abbreviation'];}else{echo $departmentinfo['abbreviation'];}?><?php if($_SESSION['sem']==1){echo ' '.$_SESSION['sem'].'st sem';}else{echo ' '.$_SESSION['sem'].'nd sem';}?><?php echo ' S.Y-'.$_SESSION['year'];?></h2>
+                                <div class="form-check d-flex justify-content-end">
+                                <input class="form-check-input" type="checkbox" id="generalSubjects" name="includegensub">
+                                <label class="form-check-label" for="generalSubjects">
+                                     Include General Subjects
+                                </label>
+                                </div>
+
                                 <div class="container mt-4">
                                     <div class="row" hidden>
                                         <div class="col-6">
@@ -437,8 +444,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
-                                <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="confirm">Done</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                                <button type="submit" class="confirm btn btn-primary">Done</button>
                             </div>
                         </form>
                     </div>
@@ -453,7 +461,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form id="assignFacultyForm" method="POST" action="../processing/subjectprocessing.php">
-                        <input type="text" name="action" value="addfacultysubject">
+                        <input type="text" name="action" value="addfacultysubject" hidden>
                         <div class="modal-body">
                             <table class="table">
                                 <thead>

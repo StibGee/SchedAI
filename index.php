@@ -8,12 +8,13 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="./css/login.css">
+    <?php session_start();?>
 
 </head>
 <body>
     <main>
         <div class="row landing  m-0">
-            <div class="col-5 p-0">
+            <div class="col-lg-5 col-md-6 col-12 p-0 text-center">
                 <div class="carousel">
                     <img src="./img/logo/Sched-logo1.png" alt="">
                 </div>
@@ -22,10 +23,10 @@
                 <h2> College Of Computing Studies</h2>
                 <h4> Western Mindanao State University</h4>
                 <div class="admin-login">
-                    <button id="admin-log"><img src="./assets/img/icons/admin.png" width="25" alt=""> Admin</button>
+                    <button id="admin-log"><img src="./assets/img/icons/admin.png" width="25" alt=""> Login</button>
 
                 </div>
-                <div class="faculty-login">
+                <div class="faculty-login" hidden>
                     <button id="faculty-log"><img src="./assets/img/icons/faculty.PNG" width="25" alt=""> faculty</button>
                 </div>
                 <div id="loginModal" class="modal">
@@ -42,7 +43,14 @@
                                 <i class="fa fa-eye" id="eyeIcon"></i>
                             </span>
                             <input type="password" class="pass" id="password" name="password" placeholder="password" required/>
+                            
+                            <?php if (isset($_SESSION['error']) && $_SESSION['error'] == 'wrongpassword'): ?>
+                                <p class="text-danger pl-4">Wrong Password!</p>
+
+                                
+                            <?php endif; ?>
                         </form>
+                        
                     </div>
                 </div>
             </div>
@@ -51,5 +59,15 @@
 
 
 </body>
+<?php if (isset($_SESSION['error']) && $_SESSION['error'] == 'wrongpassword'): ?>
+    <script>                                                        
+    window.onload = function() {
+        document.getElementById("loginModal").style.display = "block";
+    };
+</script>
+                                
+    <?php endif; ?>
+
+  
 <script src="./js/login.js"></script>
 </html>

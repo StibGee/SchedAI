@@ -73,6 +73,7 @@ function addschedulecollege() {
     
     $collegeid = $_SESSION['collegeid'];
     $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $includegensub= isset($_POST['includegensub']) ? filter_var($_POST['includegensub'], FILTER_SANITIZE_STRING) : '';
     $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
     $_SESSION['semester']=$semester;
     $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
@@ -113,8 +114,14 @@ function addschedulecollege() {
         }else{
             $minornofacultycount=$schedule->minorfacultycountcollege($_SESSION['collegeid'], $_SESSION['calendarid']);
             if($minornofacultycount==0){
+                if ($includegensub){
+                    
+                    header("Location: ../admin/general-sub.php");
+                }else{
+                    header("Location: ../admin/final-sched.php?scheduling=loading");
+                }
+            
                 
-                header("Location: ../admin/general-sub.php");
             }else{
                 header("Location: ../admin/final-sched.php?subject=nofaculty");
             }
@@ -134,6 +141,7 @@ function addscheduledepartment() {
     $departmentid = $_SESSION['departmentid'];
     $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
     $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
+    $includegensub= isset($_POST['includegensub']) ? filter_var($_POST['includegensub'], FILTER_SANITIZE_STRING) : '';
     $_SESSION['semester']=$semester;
     $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
     $_SESSION['calendarid']=$calendarid;
@@ -183,7 +191,12 @@ function addscheduledepartment() {
             $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
             if($minornofacultycount==0){
                 
-                header("Location: ../admin/general-sub.php");
+                if ($includegensub){
+                    
+                    header("Location: ../admin/general-sub.php");
+                }else{
+                    header("Location: ../admin/final-sched.php?scheduling=loading");
+                }
             }else{
                 header("Location: ../admin/final-sched.php?subject=nofaculty");
             }

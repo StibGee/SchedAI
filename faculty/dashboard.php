@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-        require_once('../include/head.php');
-    ?>
-
+    <?php  require_once('../include/head.php');?>
 <body>
 
     <?php
-
+       
         require_once('../include/user-mainnav.php');
         require_once('../database/datafetch.php');
        
@@ -86,7 +83,7 @@
                     </a>
                 </div>
                 <div class="sched-table mt-3">
-                    <div id="tabularViews" class="mt-2">
+                    <div id="tabularViews" class="mt-2 table-responsive">
                         <table id="subjectTable" class="table">
                             <thead>
                                 <tr>
@@ -202,6 +199,7 @@
 </style>
 <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/generated-sched.css">
+    <link rel="stylesheet" href="../css/faculty/dashboard.css">
     <script src="../js/facultyloading.js"></script>
     <?php
         require_once('../include/js.php')
