@@ -4,7 +4,7 @@
         require_once('../include/head.php');
     ?>
 
-<body>
+
 
     <?php
 
@@ -203,7 +203,7 @@
                 </div>
             </div>
         </main>
-</body>
+
 <script src="../js/facultyloading.js"></script>
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/facultyloading.css">

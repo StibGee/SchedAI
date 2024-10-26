@@ -13,18 +13,18 @@
                 <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li class="ms-3">
-                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
-                            <input type="text" name="action" value="logout" hidden>
-                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
+                    <li><a class="dropdown-item" href="#">Logout</a></li>
                 </ul>
             </div>
         </div>
     </header>
+    <div id="loading-screen" class="loading-screen visible">
+        <svg>
+            <text x="50%" y="50%" dy=".35em">
+                SchedAi
+            </text>
+        </svg>
+    </div>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div>
@@ -49,7 +49,7 @@
                         <span class="nav_name">Faculty</span>
                     </a>
                     <a href="../admin/room.php" class="nav_link">
-                    <img src="../img/icons/home.png" alt="" width="24">
+                    <img src="../img/icons/room.png" alt="" width="24">
                         <span class="nav_name">Rooms</span>
                     </a>
                     <a href="../admin/account.php" class="nav_link">
@@ -76,3 +76,47 @@
             border-radius: 50%; /* Optional: Makes the image circular */
         }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const navToggle = document.querySelector('.header_toggle');
+    const navNames = document.querySelectorAll('.nav_logo-name, .nav_name');
+
+    navToggle.addEventListener('click', function() {
+        navNames.forEach(navName => {
+            navName.classList.toggle('hide-on-minimize');
+            navName.classList.toggle('show-on-minimize');
+        });
+    });
+    window.addEventListener('load', function() {
+            // Simulate a delay (e.g., 3 seconds)
+            setTimeout(function() {
+                // Hide the loading screen
+                document.getElementById('loading-screen').style.display = 'none';
+                // Show the content
+                document.getElementById('content').style.display = 'block';
+
+                // Fetch content from PHP (optional)
+                fetch('content.php')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('content').innerHTML = data;
+                    });
+            }, 1500); // 3000 milliseconds = 3 seconds
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get all navigation links
+            const navLinks = document.querySelectorAll('.nav_link');
+
+            // Loop through each link
+            navLinks.forEach(link => {
+                // Check if the link's href matches the current page's URL
+                if (link.href === window.location.href) {
+                    link.classList.add('active-link');
+                }
+            });
+        });
+
+});
+
+</script>

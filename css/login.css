@@ -3,10 +3,16 @@
 
 }
 .landing{
-    background-color: #064420;
+    --scale: 1em;
+	background-color: #000;
+	background-image: radial-gradient(circle at 0 5%, #265432, #227c49 12%, #1a9e4c 25%, #006a30 39%, #005f26 50%, #005f26 50%, #007b3f 60%, #00430d 76%, #00430d 91%, #000);
+	background-repeat: no-repeat;
 }
+
+
 .carousel{
     background-color: #ffff;
+
     margin:20px;
     height: 95%;
     border-radius: 10px 10px 60px 10px;

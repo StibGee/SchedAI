@@ -6,19 +6,12 @@
     --z-fixed: 100;
 }
 
-
-*, ::before, ::after {
-    box-sizing: border-box;
-}
-
 body {
     position: relative;
     margin: var(--header-height) 0 0 0;
     padding: 0 1rem;
     font-family: var(--body-font);
     font-size: var(--normal-font-size);
-
-
 }
 
 a {
@@ -37,7 +30,7 @@ a {
     padding: 0 1rem;
     background-color: #ffff;
     z-index: var(--z-fixed);
-    transition: .5s;
+
 }
 
 .header_toggle {
@@ -71,6 +64,10 @@ a {
     z-index: var(--z-fixed);
 }
 
+.l-navbar.nav-minimized {
+    width: var(--nav-width);
+}
+
 .nav {
     height: 100%;
     display: flex;
@@ -84,7 +81,7 @@ a {
     grid-template-columns: max-content max-content;
     align-items: center;
     column-gap: 1rem;
-    padding: .5rem 0 .5rem 1.5rem;
+    padding: .5rem 0 .5rem 1rem;
 }
 
 .nav_logo {
@@ -105,7 +102,7 @@ a {
     position: relative;
     color: var(--first-color-light);
     margin-bottom: 1.5rem;
-    transition: .3s;
+
 }
 
 .nav_link:hover {
@@ -163,7 +160,7 @@ a {
 
     .l-navbar {
         left: 0;
-        padding: 1rem 1rem 0 0;
+        padding: 1rem .5rem 0 1rem;
     }
 
     .show {
@@ -175,8 +172,7 @@ a {
     }
 
     /* Ensure Modal Styles are Specific and Take Precedence */
-      /* Ensure Modal Styles are Specific and Take Precedence */
-      .modal {
+    .modal {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -199,7 +195,6 @@ a {
         background-color: #d8e4db;
         border-radius: 24px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
     }
 
     .modal-header {
@@ -230,37 +225,129 @@ a {
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 1040; /* Ensure backdrop is below modal but above other content */
     }
-
 }
 
-.header-text{
+.header-text {
     margin-right: 15px;
     text-align: end;
 }
 
-.header-text h5{
+.header-text h5 {
     color: #1A5319;
-    font-weight:500;
+    font-weight: 500;
 }
-span{
+
+span {
     padding: 0;
     margin: 0;
 }
 
-.text{
+.text {
     margin-bottom: 30px;
     gap: 20px;
 }
-.text span{
+
+.text span {
     font-size: 24px;
     font-weight: 500;
     color: #ADBC9F;
 }
-.text h2{
+
+.text h2 {
     font-weight: 700;
     color: #1A5319;
 }
-.button-modal{
+
+.button-modal {
     background: none;
     border: none;
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(15px); /* Apply blur effect */
+    z-index: 9999;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.1s linear;
+}
+
+.loading-screen.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.loading-screen svg {
+    font-family: "Poppins", sans-serif;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-screen svg text {
+    font-size: 70px;
+    animation: stroke 5s infinite alternate;
+    stroke-width: 2;
+    stroke: #7BB883;
+    text-anchor: middle;
+}
+
+@keyframes stroke {
+    0% {
+        fill: rgba(176, 217, 177, 0);
+        stroke: rgba(123, 184, 131, 1);
+        stroke-dashoffset: 25%;
+        stroke-dasharray: 0 50%;
+        stroke-width: 2;
+    }
+    70% {
+        fill: rgba(176, 217, 177, 0);
+        stroke: rgba(123, 184, 131, 1);
+    }
+    80% {
+        fill: rgba(176, 217, 177, 0);
+        stroke: rgba(123, 184, 131, 1);
+        stroke-width: 3;
+    }
+    100% {
+        fill: rgba(176, 217, 177, 1);
+        stroke: rgba(123, 184, 131, 0);
+        stroke-dashoffset: -25%;
+        stroke-dasharray: 50% 0;
+        stroke-width: 0;
+    }
+}
+
+.dropdown img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover; /* Ensures the image covers the area without stretching */
+    border-radius: 50%; /* Optional: Makes the image circular */
+}
+
+/* New CSS to hide .nav_logo and .nav_name when nav is minimized */
+.l-navbar.nav-minimized .nav_logo,
+.l-navbar.nav-minimized .nav_name {
+    display: none;
+}
+
+.nav_link.active {
+    background-color: #7BB883; /* Highlight color */
+    color: #fff; /* Text color */
+    border-radius: 5px; /* Optional: Rounded corners */
+}
+
+.nav_link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background-color: #fff; /* Highlight color for the left border */
 }

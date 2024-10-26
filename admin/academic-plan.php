@@ -11,10 +11,10 @@
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
         require_once('../classes/department.php');
-        
-        
+
+
         $collegeid=$_SESSION['collegeid'];
-        
+
         $db = new Database();
         $pdo = $db->connect();
 
@@ -23,10 +23,10 @@
         $collegedepartment = $department->getcollegedepartment($collegeid);
         $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
 
-        
+
         $calendar = $curriculum->getcollegecurriculum($collegeid);
         $collegeid=$_SESSION['collegeid'];
-       
+
         if(isset($_POST['departmentid'])){
             $_SESSION['departmentid'] = $_POST['departmentid'];
         }elseif(isset($_SESSION['departmentid']) && $_SESSION['departmentid']!=0){
@@ -34,7 +34,7 @@
         } else {
             $_SESSION['departmentid'] = $initialcollegedepartment;
         }
-        
+
         $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
     ?>
     <main>
@@ -46,10 +46,10 @@
                 <div class="col-3">
                     <form class="mb-0" action="academic-plan.php" method="POST">
                         <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()">
-                            <?php foreach ($collegedepartment as $collegedepartments){ ?> 
+                            <?php foreach ($collegedepartment as $collegedepartments){ ?>
                                 <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
                             <?php } ?>
-                           
+
                             <option value="" selected>Choose a department</option>
                         </select>
                     </form>
@@ -137,9 +137,9 @@
                                 <div class="form-group">
                                     <label for="select-department">Select Department</label>
                                     <select class="form-select form-select-sm mt-2" id="select-department" name="departmentid">
-                                        <?php foreach ($collegedepartment as $collegedepartments){ ?> 
+                                        <?php foreach ($collegedepartment as $collegedepartments){ ?>
                                         <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
-                                  
+
                                         <?php } ?>
                                     </select>
                                 </div>
