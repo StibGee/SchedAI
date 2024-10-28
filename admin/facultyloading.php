@@ -7,7 +7,7 @@
 
 
     <?php
-
+        
         require_once('../include/nav.php');
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
@@ -32,6 +32,7 @@
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
     ?>
             <main>
+            
             <div class="container">
                 <div class="row">
                     <div class="text d-flex align-items-center" >
@@ -66,6 +67,21 @@
                     <li>Specialization :</li>
                 
                 </div>
+               
+                <audio id="audio-element" preload="auto" src="../audio/schedai.wav" muted></audio>
+
+                <script>
+                    const audio = document.getElementById('audio-element');
+
+                    audio.addEventListener('canplaythrough', () => {
+                        audio.play().then(() => {
+                            audio.muted = false;
+                        }).catch(error => {
+                            console.log('Audio playback failed:', error);
+                        });
+                    });
+                    audio.load();
+                </script>
                 <div class="row mt-4">
                     <div class="col-9 subload-title">
                         <h5>Subject Loaded</h5>
