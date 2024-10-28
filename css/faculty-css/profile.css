@@ -1,28 +1,37 @@
-.profile-table{
-    border: 1px solid black;
+
+
+.profile-table {
     border-radius: 16px;
-
-}
-.table-header{
-    border-bottom: 1px solid black ;
-}
-.profile-info{
-    border-right: 1px solid black ;
+    box-shadow: 0px 0px 3px 1px rgba(127,127,127,0.7);
+-webkit-box-shadow: 0px 0px 3px 1px rgba(127,127,127,0.7);
+-moz-box-shadow: 0px 0px 3px 1px rgba(127,127,127,0.7);
+    margin: 16px;
+    background-color: #ffffff;
 }
 
-.form-group{
+.table-header {
+    border-bottom: 1px solid black;
+}
+
+.profile-info {
+    border-right: 1px solid black;
+}
+
+.form-group {
     margin: 16px 0 12px 0;
 }
-.pref{
+
+.pref {
     border-radius: 12px;
     background-color: #E4EFE7;
 }
-label{
+
+label {
     font-size: 14px;
     font-weight: 600;
-    color:#1A5319;
-    ;
+    color: #1A5319;
 }
+
 .img-upload {
     position: relative;
     display: inline-block;
@@ -35,6 +44,8 @@ label{
 
 .circle-image {
     display: block;
+    height: 70px;
+    width: 70px;
 }
 
 .custom-file-upload {
@@ -56,27 +67,108 @@ label{
 .img {
     display: none; /* Hide the actual file input */
 }
-.form-control{
+
+.form-control {
     height: 32px;
     border-radius: 12px;
 }
 
-.save{
-    border-radius: 12px;
-    width: 25%;
+.save:hover {
+    color: black;
+    border-radius: 6px;
+    width: 18%;
+    padding: 4px;
     background-color: #80AF81;
     border: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.save:hover{
-    border-radius: 12px;
-    width: 25%;
+
+.save {
+    border-radius: 6px;
+    width: 18%;
+    padding: 4px;
     background-color: #ffffff;
     border: 2px solid #80AF81;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     color: #80AF81;
 }
-a{
+
+a {
     text-decoration: none !important;
     color: white;
+}
+.btm{
+    align-items: end;
+}
+
+/* Responsive CSS */
+@media (max-width: 767.98px) {
+    .faculty-info, .row, .profile-info, .info, .table-load, .preference-table, .pref {
+
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    .profile-table {
+        margin: 0px;
+        border: none;
+
+    }
+
+    .table-header, .profile-info {
+        border: none;
+    }
+
+    .profile-info {
+        border-bottom: 1px solid black;
+    }
+
+    .col-1, .col-6, .col-5 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .img-upload {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .name{
+        text-align: center;
+    }
+
+    .btm {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .faculty-info, .preference-table {
+        padding: 1rem;
+    }
+
+    .table-load {
+        width: 100%;
+    }
+    .circle-image {
+        display: block;
+        height: 60px;
+        width: 60px;
+    }
+    .profile-info {
+        border: none;
+    }
+    .info{
+        padding: 0px;
+    }
+    .exp{
+        width: 100%;
+    }
+    .save{
+        width: 50%;
+    }
+    .save:hover{
+        width: 50%;
+    }
+
 }

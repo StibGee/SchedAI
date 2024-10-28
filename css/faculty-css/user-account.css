@@ -1,3 +1,69 @@
+body{
+    height: 100vh;
+}
+aside {
+/* border: 1px yellow solid; */
+position: fixed;
+overflow: auto;
+height: 100vh;
+justify-content: flex-start;
+align-self: flex-start;
+background-color: #B0D9B1;
+box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+}
+
+nav {
+position: sticky;
+top: 0;
+z-index: 1000;
+}
+
+main {
+position: relative;
+overflow: visible;
+margin-left: auto;
+justify-content: flex-end;
+align-self: flex-end;
+height: auto;
+    background-color: #f8f8f8;
+}
+
+#sidebarshow {
+display: none;
+}
+
+
+.header-text {
+    margin-right: 15px;
+    text-align: end;
+}
+
+.header-text h5 {
+    color: #1A5319;
+    font-weight: 500;
+}
+
+span {
+    padding: 0;
+    margin: 0;
+}
+
+.text {
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.text span {
+    font-size: 24px;
+    font-weight: 500;
+    color: #ADBC9F;
+}
+
+.text h2 {
+    font-weight: 700;
+    color: #1A5319;
+}
+
 .forgot-password {
     text-align: right;
 }
@@ -5,10 +71,97 @@
     color: rgb(196, 0, 0);
 }
 .form-group {
-    margin-top: 24px;
+
     width: 40%;
 
 }
 .form-control{
     border-radius: 16px;
 }
+
+.header-text{
+    margin-right: 15px;
+    text-align: end;
+    margin-bottom: 0 ;
+}
+
+.header-text h5{
+    color: #1A5319;
+    font-weight:500;
+}
+span{
+    padding: 0;
+    margin: 0;
+}
+
+
+
+/*--- add account*/
+
+.add{
+    background-color: #119e0e;
+    border: none;
+    color: #ffffff;
+    border-radius: 16px;
+    width: 11%;
+}
+.cancel{
+    background-color: #aa0202;
+    border: none;
+    color: #ffffff;
+    border-radius: 16px;
+    width: 11%;
+}
+
+.form-select{
+    border-radius: 24px;
+    height: 32px;
+}
+.form-control{
+    border-radius: 24px;
+    height: 32px;
+    width: 40%;
+}
+
+
+  @media screen and (max-width: 575px) {
+    *{
+        font-size: 12px;
+    }
+    .custom-container {
+        margin: 0 !important;
+    }
+    .form-group {
+
+        width: auto;
+
+    }
+    #sidebarshow {
+      display: inline;
+    }
+
+    #sidebartoggle {
+      display: none;
+    }
+
+    aside {
+      display: none;
+    }
+    .row > div {
+        margin-bottom: 10px;
+    }
+    .form-select{
+        border-radius: 14px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .searchbar .form-control{
+        height: 24px;
+        border-radius: 14px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .container h5{
+        display: none;
+    }
+
+  }

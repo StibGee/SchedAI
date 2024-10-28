@@ -10,7 +10,7 @@
 
         require_once('../include/user-mainnav.php');
         require_once('../database/datafetch.php');
-       
+
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
         require_once('../classes/department.php');
@@ -18,8 +18,8 @@
         require_once('../classes/schedule.php');
         require_once('../classes/faculty.php');
 
-        
-        
+
+
 
         $db = new Database();
         $pdo = $db->connect();
@@ -28,15 +28,15 @@
         $faculty = new Faculty($pdo);
         $schedule = new Schedule($pdo);
         $college = new College($pdo);
-        $department = new Department($pdo);   
-        $curriculum = new Curriculum($pdo); 
+        $department = new Department($pdo);
+        $curriculum = new Curriculum($pdo);
 
         $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid']);
-     
+
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
         $calendarinfo=$curriculum->calendarinfo($collegelatestyear);
         $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
-       
+
         require_once('../database/datafetch.php');
 
         if (isset($_POST['facultyid'])) {
@@ -50,7 +50,7 @@
             $facultyid = $_SESSION['id'];
             $_SESSION['facultyname']='Default';
         }
-        
+
         $days = ['M', 'T', 'W', 'Th', 'F', 'S'];
         $intervals = [];
         for ($i = 7; $i <= 18; $i++) {
@@ -58,25 +58,28 @@
             $intervals[] = sprintf("%02d:30-%02d:00", $i, $i + 1);
         }
 
-        
+
         function generateColor($id) {
-            $hue = ($id * 137.508) % 360; 
-            return "hsl($hue, 70%, 80%)"; 
+            $hue = ($id * 137.508) % 360;
+            return "hsl($hue, 70%, 80%)";
         }
 
-        $sql = "SELECT 
-                    day, 
-                    TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart, 
-                    TIME_FORMAT(subjectschedule.timeend, '%H:%i') AS timeend, 
+        $sql = "SELECT
+                    day,
+                    TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,
+                    TIME_FORMAT(subjectschedule.timeend, '%H:%i') AS timeend,
                     subjectschedule.id as subjectidno,
                     subject.subjectcode as subjectname,
                     subjectschedule.yearlvl as yearlvl,
                     section,
                     faculty.lname as facultyname,
+                    room.name as roomname
+                FROM
+                    subjectschedule
                     room.name as roomname,
                     department.abbreviation as departmentname
-                FROM 
-                    subjectschedule 
+                FROM
+                    subjectschedule
                     JOIN subject ON subject.id = subjectschedule.subjectid
                     JOIN department ON subjectschedule.departmentid = department.id
                     JOIN faculty ON faculty.id = subjectschedule.facultyid
@@ -96,27 +99,27 @@
             $yearlvl = htmlspecialchars($row['yearlvl']);
             $section = htmlspecialchars($row['section']);
             $roomname = htmlspecialchars($row['roomname']);
-            $departmentname = htmlspecialchars($row['departmentname']);
-          
-            $subjectLabel = "$subjectname $departmentname $yearlvl$section ($roomname)"; 
-            $color = generateColor($subjectid); 
-            
-           
+
+
+            $subjectLabel = "$subjectname $yearlvl$section ($roomname)";
+            $color = generateColor($subjectid);
+
+
             $startMinutes = (int)date('H', strtotime($starttime)) * 60 + (int)date('i', strtotime($starttime));
             $endMinutes = (int)date('H', strtotime($endtime)) * 60 + (int)date('i', strtotime($endtime));
-            
-          
+
+
             $intervalCount = ($endMinutes - $startMinutes) / 30;
 
-          
+
             $middleIndex = (int)floor($intervalCount / 2);
-            $startIndex = $intervalCount % 2 === 0 ? $middleIndex - 1 : $middleIndex; 
+            $startIndex = $intervalCount % 2 === 0 ? $middleIndex - 1 : $middleIndex;
 
             for ($i = 0; $i < $intervalCount; $i++) {
                 $currentStart = date('H:i', strtotime($starttime) + ($i * 30 * 60));
                 $currentEnd = date('H:i', strtotime($currentStart) + (30 * 60));
                 $interval = sprintf("%s-%s", $currentStart, $currentEnd);
-            
+
                 foreach ($daysArray as $day) {
                     if (!isset($schedule[$day][$interval])) {
                         $schedule[$day][$interval] = [];
@@ -124,22 +127,22 @@
                     $isTop = ($i == 0);
                     $isBottom = ($i == $intervalCount - 1);
                     $isMiddle = ($i != 0 && $i != $intervalCount - 1);
-            
+
                     if ($i >= $startIndex && $i <= $startIndex + ($intervalCount % 2 ? 0 : 0)) {
                         $schedule[$day][$interval][] = [
                             'color' => $color,
                             'subjectname' => $subjectLabel,
                             'is_center' => true,
-                            'is_top' => $isTop,  
+                            'is_top' => $isTop,
                             'is_middle' => $isMiddle,
-                            'is_bottom' => $isBottom, 
+                            'is_bottom' => $isBottom,
                         ];
                     } else {
                         $schedule[$day][$interval][] = [
                             'color' => $color,
                             'subjectname' => '',
                             'is_center' => false,
-                            'is_top' => $isTop,   
+                            'is_top' => $isTop,
                             'is_middle' => $isMiddle,
                             'is_bottom' => $isBottom,
                         ];
@@ -149,128 +152,179 @@
         }
 
 
-        
+
     ?>
-<main>
-    <div class="container containersched">
-        <div class="row">
-            <div class="text d-flex align-items-center" >
-            <h2> Hola !!! </h2> <span><?php echo  $facultyinfo['fname'];?></span>
+<main class="col-sm-10 pb-5" id="main">
+    <!-- NavBar -->
+    <nav class="navbar sticky-top navbar-expand-lg border-bottom bg-body d-flex">
+    <div class="container-fluid ">
+        <div class="button col-4 col-sm-4">
+            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseWidthExample" aria-expanded="true" aria-controls="collapseWidthExample"
+                style="margin-right: 10px; padding: 0px 5px 0px 5px;" id="sidebartoggle" onclick="changeclass()">
+                <i class="bi bi-arrows-expand-vertical"></i>
+            </button>
+            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
+                style="margin-right: 10px; padding: 2px 6px 2px 6px;" id="sidebarshow">
+                <i class="bi bi-arrow-bar-right"></i>
+            </button>
+        </div>
+
+    <!-- Cambair Tema -->
+        <div class="user col-8 col-sm-6 d-flex justify-content-end">
+
+            <!-- Mobile Image -->
+            <div class="mobile-image-container col-5">
+                <img src="../img/logo/Sched-logo1.png" alt="Mobile Image" class="mobile-image">
+            </div>
+            <div class="dropdown col-6 d-flex justify-content-end">
+                <div class="header-text ">
+                    <h5><?php echo $_SESSION['fname'];?></h5>
+                </div>
+                <img src="../img/icons/user.png" width="30" height="30" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                    <li class="ms-3">
+                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
+                            <input type="text" name="action" value="logout" hidden>
+                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="row mt-4">
-                <div class="header-table">
-                    <h4>
-                        
-                        Your Schedule for<span> S.Y: </span><span><?php echo $calendarinfo['name'].' ';?></span><?php echo ($calendarinfo['sem'] == 1) ? "1st sem" : (($calendarinfo['sem'] == 2) ? "2nd sem" : "Unknown semester");?><span></span>
-                    </h4>
-                </div>
+    </div>
+    </nav>
+    <div class="container containersched p-4">
+    <div class="row py-2 ">
+            <span class="text-head">Schedule</span>
+        </div>
+        <div class="row d-flex justify-content-end align-items-center">
+            <div class="col-12 col-md-6">
+                <h5>
+                    Your Schedule for<span> S.Y: </span><span><?php echo $calendarinfo['name'].' ';?></span><?php echo ($calendarinfo['sem'] == 1) ? "1st sem" : (($calendarinfo['sem'] == 2) ? "2nd sem" : "Unknown semester");?><span></span>
+                </h5>
             </div>
-            <div class="row d-flex justify-content-end align-items-center">
-                <div class="col-1">
-                    <select class="form-select  form-select-sm " id="select-year&sec">
-                        <option>all</option>
-                        <option>CS4A</option>
-                        <option>CS4B</option>
+            <div class="col-12 col-md-3">
+            <div class="row">
+                <div class="col-6">
+                    <select class="form-select form-select-sm" id="select-roomtype">
+                        <option value="">All Room</option>
+                        <?php foreach($collegeroom as $collegerooms) { ?>
+                            <option value="<?php echo $collegerooms['name']; ?>"><?php echo $collegerooms['name']; ?></option>
+                        <?php } ?>
                     </select>
                 </div>
-                <div class="col-1">
-                    <select class="form-select  form-select-sm " id="select-classtype">
-                        <option>all</option>
-                        <option>lec</option>
-                        <option>lab</option>
+                <div class="col-6">
+                    <select class="form-select form-select-sm" id="select-classtype">
+                        <option value="">All Type</option>
+                        <option value="Lec">Lec</option>
+                        <option value="Lab">Lab</option>
                     </select>
                 </div>
-                <div class="searchbar col-3 ">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
-                </div>
-
-
             </div>
-            <div class="sched-container my-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    
-                <a href="dashboard.php" id="viewToggleButton" class="btn">
-                    Toggle View
-                </a>
+        </div>
+        <div class="col-12 col-md-3">
+            <input type="search" class="form-control" id="customSearch" placeholder="Search..." aria-label="Search" data-last-active-input="">
+        </div>
+    </div>
+    <div class="sched-container my-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="dashboard.php" id="viewToggleButton" class="btn">
+            Toggle View
+        </a>
+    </div>
 
-                </div>
-                <div class="sched-table mt-3">
-                    <div id="tabularView" class="mt-2">
-                        <table class="table tablesched">
-                            <thead>
-                                <tr>
-                                    <th>Interval</th>
-                                    <?php foreach ($days as $day): ?>
-                                        <th><?php echo htmlspecialchars($day); ?></th>
-                                    <?php endforeach; ?>
-                                </tr>
-                            </thead>
-                            <tbody tbody id="tabularTableBody">
-                                <?php foreach ($intervals as $interval): ?>
-                                    <?php
-                                        
-                                        list($start, $end) = explode('-', $interval);
-                                        $start = date('g:i A', strtotime($start));
-                                        $end = date('g:i A', strtotime($end));
-                                        $printinterval = "$start-$end";
-                                    ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($printinterval); ?></td>
-
-                                        <?php foreach ($days as $day): ?>
-                                            <td 
-                                                <?php
-                                               
-                                                if (isset($schedule[$day][$interval])) {
-                                                    $subjectData = $schedule[$day][$interval];
-                                                    $colors = array_column($subjectData, 'color');
-                                                    $subjectNames = array_column($subjectData, 'subjectname');
-                                                    $isCenters = array_column($subjectData, 'is_center');
-                                                    $color = $colors[0]; 
-                                                    echo 'style="background-color: ' . htmlspecialchars($color) . ';"';
-                                                    foreach ($schedule[$day][$interval] as $data) {
-                                                        if ($data['is_middle']==1 ){
-                                                            echo ' class="occupiedmiddle"';
-                                                        }elseif ($data['is_top']==1 ){
-                                                            echo ' class="occupiedfirst"';
-                                                        }else{
-                                                            echo ' class="occupiedlast"';
-                                                        }
-                                                    }
-                                                
-                                                }
-                                                ?>
-                                            >
-                                                <?php
-                                               
-                                                if (isset($schedule[$day][$interval])) {
-                                                    foreach ($schedule[$day][$interval] as $data) {
-                                                        if ($data['is_center']) {
-                                                            echo htmlspecialchars($data['subjectname']);
-                                                        }
+    <div class="sched-table mt-3">
+        <div id="tabularView" class="mt-2">
+            <div class="table-responsive">
+                <table class="table tablesched">
+                    <thead>
+                        <tr>
+                            <th>Interval</th>
+                            <?php foreach ($days as $day): ?>
+                                <th><?php echo htmlspecialchars($day); ?></th>
+                            <?php endforeach; ?>
+                        </tr>
+                    </thead>
+                    <tbody id="tabularTableBody">
+                        <?php foreach ($intervals as $interval): ?>
+                            <?php
+                                list($start, $end) = explode('-', $interval);
+                                $start = date('g:i A', strtotime($start));
+                                $end = date('g:i A', strtotime($end));
+                                $printinterval = "$start-$end";
+                            ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($printinterval); ?></td>
+                                <?php foreach ($days as $day): ?>
+                                    <td
+                                        <?php
+                                            if (isset($schedule[$day][$interval])) {
+                                                $subjectData = $schedule[$day][$interval];
+                                                $colors = array_column($subjectData, 'color');
+                                                $subjectNames = array_column($subjectData, 'subjectname');
+                                                $isCenters = array_column($subjectData, 'is_center');
+                                                $color = $colors[0];
+                                                echo 'style="background-color: ' . htmlspecialchars($color) . ';"';
+                                                foreach ($schedule[$day][$interval] as $data) {
+                                                    if ($data['is_middle'] == 1) {
+                                                        echo ' class="occupiedmiddle"';
+                                                    } elseif ($data['is_top'] == 1) {
+                                                        echo ' class="occupiedfirst"';
+                                                    } else {
+                                                        echo ' class="occupiedlast"';
                                                     }
                                                 }
-                                                ?>
-                                            </td>
-                                        <?php endforeach; ?>
-                                    </tr>
+                                            }
+                                        ?>
+                                    >
+                                        <?php
+                                            if (isset($schedule[$day][$interval])) {
+                                                foreach ($schedule[$day][$interval] as $data) {
+                                                    if ($data['is_center']) {
+                                                        echo htmlspecialchars($data['subjectname']);
+                                                    }
+                                                }
+                                            }
+                                        ?>
+                                    </td>
                                 <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                        
-                    </div>
-                </div>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
+        </div>
+    </div>
+</div>
+</div>
     </div>
 </main>
 </body>
 <link rel="stylesheet" href="../css/generated-sched-room.css">
-<link rel="stylesheet" href="../css/main.css">
-    
+<link rel="stylesheet" href="../css/faulty-css/dashboard.css">
+
     <script src="../js/facultyloading.js"></script>
     <?php
         require_once('../include/js.php')
     ?>
 </html>
+<script>
+    function changeclass() {
+      $("#main").toggleClass('col-sm-10 col-sm-12');
+    }
+  </script>
+<script src="color-modes.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

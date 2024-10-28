@@ -5,15 +5,15 @@
 <body >
 
     <?php
-        require_once('../include/user-nav.php');
-    
+        require_once('../include/user-mainnav.php');
+
         require_once('../classes/subject.php');
         require_once('../classes/db.php');
         require_once('../classes/faculty.php');
 
         $db = new Database();
         $pdo = $db->connect();
-       
+
         $subject = new Subject($pdo);
         $faculty = new Faculty($pdo);
 
@@ -22,16 +22,16 @@
         }else{
             $facultyid=$_SESSION['id'];
         }
-        
+
         $distinctsubjects = $subject->getdistinctsubjects();
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
-        
+
         $facultydaytime=$faculty->getfacultydaytime($facultyid);
         $mondaychecked=$tuesdaychecked=$wednesdaychecked=$thursdaychecked=$fridaychecked=$saturdaychecked='';
 
         foreach($facultydaytime as $facultydaytimes){
-          
+
             if($facultydaytimes['day']==1){
                 $mondaychecked='checked';
                 $mondaystarttime=$facultydaytimes['starttime'];
@@ -42,7 +42,7 @@
                 $tuesdaystarttime=$facultydaytimes['starttime'];
                 $tuesdayendtime=$facultydaytimes['endtime'];
             }
-            
+
             if($facultydaytimes['day']==3){
                 $wednesdaychecked='checked';
                 $wednesdaystarttime=$facultydaytimes['starttime'];
@@ -57,7 +57,7 @@
                 $fridaychecked='checked';
                 $fridaystarttime=$facultydaytimes['starttime'];
                 $fridayendtime=$facultydaytimes['endtime'];
-            }  
+            }
             if($facultydaytimes['day']==6){
                 $saturdaychecked='checked';
                 $saturdaystarttime=$facultydaytimes['starttime'];
@@ -65,10 +65,52 @@
             }
 
         }
-            
+
     ?>
 
     <main>
+            <!-- NavBar -->
+    <nav class="navbar sticky-top navbar-expand-lg border-bottom bg-body d-flex">
+    <div class="container-fluid ">
+        <div class="button col-4 col-sm-4">
+            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseWidthExample" aria-expanded="true" aria-controls="collapseWidthExample"
+                style="margin-right: 10px; padding: 0px 5px 0px 5px;" id="sidebartoggle" onclick="changeclass()">
+                <i class="bi bi-arrows-expand-vertical"></i>
+            </button>
+            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
+                style="margin-right: 10px; padding: 2px 6px 2px 6px;" id="sidebarshow">
+                <i class="bi bi-arrow-bar-right"></i>
+            </button>
+        </div>
+
+    <!-- Cambair Tema -->
+        <div class="user col-8 col-sm-6 d-flex justify-content-end">
+
+            <!-- Mobile Image -->
+            <div class="mobile-image-container col-5">
+                <img src="../img/logo/Sched-logo1.png" alt="Mobile Image" class="mobile-image">
+            </div>
+            <div class="dropdown col-6 d-flex justify-content-end">
+                <div class="header-text ">
+                    <h5><?php echo $_SESSION['fname'];?></h5>
+                </div>
+                <img src="../img/icons/user.png" width="30" height="30" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                    <li class="ms-3">
+                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
+                            <input type="text" name="action" value="logout" hidden>
+                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </nav>
     <div class="container py-2">
         <div class="row ">
             <div class="g-3 row year-level">
@@ -98,7 +140,7 @@
                         <span class="step-label">Preferences</span>
                     </div>
                 </div>
-                <div class="mt-3">
+                <div class="mt-3 logo-display">
                     <img src="../img/logo/Sched-logo1.png" width="300">
                 </div>
             </div>
@@ -157,7 +199,7 @@
                                 <select class="form-select" id="position" name="type" required>
                                     <option selected="" disabled="" value="">Choose...</option>
                                     <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Regular'){ echo 'selected'; } ?> value="Regular">Regular </option>
-                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>  
+                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a type</div>
                             </div>
@@ -191,7 +233,7 @@
                                     <thead>
                                         <tr>
                                             <th data-sort="subcode">Subject Name</th>
-                                            
+
                                             <th>action</th>
                                         </tr>
                                     </thead>
@@ -206,37 +248,37 @@
                                 <table id="subjects1" class="table table-sm fs-9 mb-0">
                                     <thead>
                                         <tr>
-                                            
+
                                             <th data-sort="desc">Subject Name</th>
-                                         
+
                                             <th>Select</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list">
                                         <?php
                                         foreach ($distinctsubjects as $subjects) {
-                                           
+
                                             $checked = '';
 
                                             foreach ($existingsubjects as $existingsubject) {
                                                 if ($existingsubject['subjectname'] == $subjects['name']) {
                                                     $checked = 'checked';
-                                                    break; 
+                                                    break;
                                                 }
                                             }
                                         ?>
                                         <tr>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
-                                           
+
                                             <td class="align-middle">
-                                                <input type="checkbox" class="form-check-input load-subject-checkbox1" 
-                                                    data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>" 
-                                                     
+                                                <input type="checkbox" class="form-check-input load-subject-checkbox1"
+                                                    data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>"
+
                                                     <?php echo $checked; ?>>
                                             </td>
                                         </tr>
                                         <?php } ?>
-                                       
+
                                 </tbody>
 
 
@@ -328,7 +370,7 @@
                                     </tbody>
                                 </table>
 
-                            
+
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
@@ -357,24 +399,24 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-       
+
         document.querySelectorAll('.load-subject-checkbox1:checked').forEach(function(checkbox) {
             const subjectName = checkbox.getAttribute('data-subjectname1');
-         
+
 
             addToSpecialization(subjectName,checkbox);
         });
 
-    
+
         document.querySelectorAll('.load-subject-checkbox1').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 const subjectName = this.getAttribute('data-subjectname1');
-              
+
 
                 if (this.checked) {
                     addToSpecialization(subjectName,  this);
                 } else {
-                 
+
                     removeFromSpecialization(subjectName);
                 }
             });
@@ -388,7 +430,7 @@
         newRow.innerHTML = `
             <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
             <td class="align-middle">${subjectName}</td>
-          
+
             <td class="align-middle">
                 <button type="button" class="btn btn-danger btn-sm remove-subject">Remove</button>
             </td>
@@ -396,7 +438,7 @@
 
         newRow.querySelector('.remove-subject').addEventListener('click', function() {
             newRow.remove();
-            
+
             checkbox.checked = false;
         });
         tbody.appendChild(newRow);
@@ -409,7 +451,7 @@
         rows.forEach(function(row) {
             const subjectInput = row.querySelector('input[name="subjectname[]"]');
 
-      
+
             if (subjectInput && subjectInput.value.trim() === subjectName) {
                 row.remove();
             }
@@ -420,9 +462,9 @@
 <script>
 $(document).ready(function() {
     $('#subjects1').DataTable({
-        "pageLength": 10, 
+        "pageLength": 10,
         "searching": true,
-        "lengthChange": false   
+        "lengthChange": false
     });
 });
 </script>
@@ -433,7 +475,7 @@ $(document).ready(function() {
             const checkbox = document.querySelector(`input[name="${day}"]`);
             const startTimeInput = document.querySelector(`input[name="${day}startTime"]`);
             const endTimeInput = document.querySelector(`input[name="${day}endTime"]`);
-            
+
             if (checkbox && startTimeInput && endTimeInput) {
                 startTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
                 endTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
@@ -445,14 +487,14 @@ $(document).ready(function() {
 
                 startTimeInput.addEventListener("change", () => {
                     if (endTimeInput.value && startTimeInput.value >= endTimeInput.value) {
-                        endTimeInput.value = ""; 
+                        endTimeInput.value = "";
                         alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} should be later than start time.`);
                     }
                 });
 
                 endTimeInput.addEventListener("change", () => {
                     if (startTimeInput.value && endTimeInput.value <= startTimeInput.value) {
-                        endTimeInput.value = ""; 
+                        endTimeInput.value = "";
                         alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} should be later than start time.`);
                     }
                 });
@@ -497,4 +539,20 @@ $(document).ready(function() {
 
 
 </html>
+<link rel="stylesheet" href="../css/faculty-css/dashboard.css">
+<script>
+    function changeclass() {
+      $("#main").toggleClass('col-sm-10 col-sm-12');
+    }
+  </script>
+<script src="color-modes.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
