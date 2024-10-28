@@ -71,19 +71,20 @@ function addschedulecollege() {
     global $schedule;
     global $curriculum;
     
-    $collegeid = $_SESSION['collegeid'];
-    $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $collegeid = $_POST['collegeid'];
+    $academicyear= $_SESSION['year'];
     $includegensub= isset($_POST['includegensub']) ? filter_var($_POST['includegensub'], FILTER_SANITIZE_STRING) : '';
     $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
     $_SESSION['semester']=$semester;
-    $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
+    $calendarid=$curriculum->findcurriculumidcollege($academicyear, $semester,$collegeid);
     $_SESSION['calendarid']=$calendarid;
-   
-    //$request = $schedule->addrequest($departmentid, $calendarid);
+  
     $deleteschedulecollege = $schedule->deleteschedulecollege($calendarid, $collegeid);
-    foreach ($_POST['departmentid'] as $index => $deptId) {
+    
+    foreach ($_POST['departmentid1'] as $index => $deptId) {
+        
         $departmentid = htmlspecialchars($deptId, ENT_QUOTES, 'UTF-8');
-
+        
         foreach ($_POST as $key => $value) {
             if (strpos($key, 'section') === 0 && is_array($value)) {
                 $yearlvl = substr($key, 7); 
@@ -94,7 +95,7 @@ function addschedulecollege() {
                     $section = htmlspecialchars($value[$index], ENT_QUOTES, 'UTF-8');
                     $curriculum = htmlspecialchars($_POST[$curriculumindex][$index], ENT_QUOTES, 'UTF-8');
                     
-                    $result = $schedule->addschedule($yearlvl,$academicyear, $departmentid, $semester, $section, $curriculum, $calendarid, $yearlvl);
+                    $result = $schedule->addschedule($yearlvl,$academicyear, $departmentid, $semester, $section, $curriculum, $calendarid, $yearlvl, $collegeid);
                     if ($result){
                         $assigned=1;
                     }else{
@@ -106,7 +107,7 @@ function addschedulecollege() {
         }
      
     }
-
+    
 
     if ($deleteschedulecollege) {
         if ($_SESSION['departmentid']!=0){
@@ -134,62 +135,51 @@ function addschedulecollege() {
     }    
     exit();
 }
+
 function addscheduledepartment() {
     session_start();
     global $schedule;
     global $curriculum;
     
-    $departmentid = $_SESSION['departmentid'];
-    $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $collegeid = $_POST['collegeid'];
+    $departmentid = $_POST['departmentid2'];
+    $academicyear= $_SESSION['year'];
     $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
     $includegensub= isset($_POST['includegensub']) ? filter_var($_POST['includegensub'], FILTER_SANITIZE_STRING) : '';
-    $_SESSION['semester']=$semester;
-    $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
+    $calendarid=$curriculum->findcurriculumidcollege($academicyear, $semester,$collegeid);
     $_SESSION['calendarid']=$calendarid;
-   
-    //$request = $schedule->addrequest($departmentid, $calendarid);
+    
+    
+    
     $deletescheduledepartment = $schedule->deletescheduledepartment($calendarid, $departmentid);
-
+    
     foreach ($_POST as $key => $value) {
-        // Check if the key starts with 'section' and that value is an array
         if (strpos($key, 'section') === 0 && is_array($value)) {
-            // Extract year level from the key (e.g., "section1" -> year level = 1)
-            $yearlvl = substr($key, 7); 
+            $yearlvl = substr($key, 7); // Extract year level
             
-            // Build curriculum index for the corresponding year level
-            $curriculumindex = "curriculum" . $yearlvl;
-    
-            // Check if the curriculum index exists in POST and is an array
-            if (isset($_POST[$curriculumindex]) && is_array($_POST[$curriculumindex])) {
-                // Sanitize the curriculum value (first element of the array)
-                $curriculum = htmlspecialchars($_POST[$curriculumindex][0], ENT_QUOTES, 'UTF-8');
-    
-                // Access the section value (first element of the array)
+            // Construct the corresponding curriculum index
+            $curriculumIndex = "curriculum" . $yearlvl;
+            
+            // Check if the section and curriculum exist
+            if (isset($value[0]) && isset($_POST[$curriculumIndex][0])) {
+                // Sanitize section and curriculum
                 $section = htmlspecialchars($value[0], ENT_QUOTES, 'UTF-8');
+                $curriculum = htmlspecialchars($_POST[$curriculumIndex][0], ENT_QUOTES, 'UTF-8');
+                
+                // Call the addschedule method
+                $result = $schedule->addschedule($yearlvl, $academicyear, $departmentid, $semester, $section, $curriculum, $calendarid, $yearlvl, $collegeid);
     
-                // Add the schedule entry
-                $result = $schedule->addschedule(
-                    $yearlvl,
-                    $academicyear,
-                    $departmentid,
-                    $semester,
-                    $section,
-                    $curriculum,
-                    $calendarid,
-                    $yearlvl
-                );
+                // Determine if the schedule was successfully assigned
+                $assigned = $result ? 1 : 0;
             }
         }
     }
     
     
-    
-    
-
 
     if ($deletescheduledepartment) {
         if ($_SESSION['departmentid']!=0){
-            $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+            $minornofacultycount=$schedule->minorfacultycountdepartment($departmentid, $_SESSION['calendarid']);
             if($minornofacultycount==0){
                 
                 if ($includegensub){
@@ -205,7 +195,12 @@ function addscheduledepartment() {
             $minornofacultycount=$schedule->minorfacultycountcollege($_SESSION['collegeid'], $_SESSION['calendarid']);
             if($minornofacultycount==0){
                 
-                header("Location: ../admin/general-sub.php");
+                if ($includegensub){
+                    
+                    header("Location: ../admin/general-sub.php");
+                }else{
+                    header("Location: ../admin/final-sched.php?scheduling=loading");
+                }
             }else{
                 header("Location: ../admin/final-sched.php?subject=nofaculty");
             }

@@ -55,7 +55,7 @@ function addsubject() {
     $result1 = $subject->addsubjectlec($subjectcode, $subjectname, $lecunit, $focus, $masters, $calendarid, $departmentid, $yearlvl);
 
     if (isset($_POST['lab'])) {
-        $result2 = $subject->addsubjectlab($subjectcode, $labname, $labunit, $focus, $masters, $calendarid, $departmentid, $yearlvl);
+        $result2 = $subject->addsubjectlab($subjectcode, $labname, $labunit, $focus, $masters, $calendarid, $departmentid, $yearlvl, $subjectname);
         if ($result1 && $result2) {
             header("Location: ../admin/academicplan-view.php?subject=added");
         } else {

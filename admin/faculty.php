@@ -17,8 +17,18 @@
 
         $faculty = new Faculty($pdo);
         $department = new Department($pdo);
-        $facultyall = $faculty->getallfaculty();
-        $departmentall = $department->getalldepartment();
+       
+        if($_SESSION['departmentid']==0){
+            $departmentall = $department->getalldepartment();
+            $facultyall = $faculty->getallfacultycollege($_SESSION['collegeid']);
+        }else{
+            $departmentall = $department->getalldepartment();
+            $facultyall = $faculty->getallfacultydepartment($_SESSION['departmentid']);
+        }
+        $collegedepartment = $department->getcollegedepartment($_SESSION['collegeid']);
+            
+        
+        
 
     ?>
 
@@ -129,11 +139,11 @@
                                     <form id="facultyForm" action="../database/addfaculty.php" method="POST" class="row g-3 needs-validation" novalidate="">
                                         <div class="col-6">
                                             <label class="form-label" for="department">Deparment</label>
-                                            <select class="form-select" id="department" name="departmentid" required>
-                                                <option selected="" disabled="" value="">Choose...</option>
-                                                <?php foreach($departmentall as $departments){ ?>
-                                                <option value="<?php echo $departments['id'];?>"><?php echo $departments['name'];?></option>
+                                            <select class="form-select form-select-sm" id="select-classtype" name="departmentid"  <?php if ($_SESSION['departmentid']!=0){echo 'readonly';} ?>>
+                                                <?php foreach ($collegedepartment as $collegedepartments){?>
+                                                    <option value="<?php echo $collegedepartments['id'];?>" <?php if ($_SESSION['departmentid']==$collegedepartments['id']){echo 'selected';} ?>><?php echo $collegedepartments['name'];?></option>
                                                 <?php } ?>
+                                                <option value="" >Choose a department</option>
                                             </select>
                                             <div class="invalid-feedback">Please select Department</div>
                                         </div>

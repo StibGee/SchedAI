@@ -47,22 +47,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($allcollege as $allcolleges){ ?>
-                        <tr data-href="../SuperAdmin/department.php">
-                            <td><?php echo $allcolleges['name'];?></td>
-                            <td><?php echo $allcolleges['abbreviation'];?></td>
-                            <td><?php echo $allcolleges['year'];?></td>
-                            <td ><img src="../img/icons/view.png" alt="">
-                                <form action="../processing/collegeprocessing.php" method="post" style="display:inline;">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="id" value="<?php echo $allcolleges['id']; ?>">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this college?');">Delete</button>
-                                </form>
-                            </td>
+                    <?php foreach ($allcollege as $allcolleges): ?>
+                        <!-- Wrap each row with a form to handle row click and POST submission -->
+                        <form id="form_<?php echo $allcolleges['id']; ?>" action="../SuperAdmin/department.php" method="post">
+                            <input type="hidden" name="collegeid" value="<?php echo $allcolleges['id']; ?>">
 
-                        </tr>
-                        <?php } ?>
-                    </tbody>
+                            <!-- Table row that submits the form on click -->
+                            <tr onclick="document.getElementById('form_<?php echo $allcolleges['id']; ?>').submit();">
+                                <td><?php echo $allcolleges['name']; ?></td>
+                                <td><?php echo $allcolleges['abbreviation']; ?></td>
+                                <td><?php echo $allcolleges['year']; ?></td>
+                                <td>
+                                    <img src="../img/icons/view.png" alt="View Details">
+                                    
+                                    <!-- Separate delete form to avoid nested form tags -->
+                                    <form action="../processing/collegeprocessing.php" method="post" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="<?php echo $allcolleges['id']; ?>">
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this college?');">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </form>
+                    <?php endforeach; ?>
+                </tbody>
+
                 </table>
             </div>
         </div>

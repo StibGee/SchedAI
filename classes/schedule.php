@@ -28,23 +28,25 @@ class Schedule {
         $stmt->bindParam(':calendarid', $calendarid);
         return $stmt->execute();
     }
-    public function addschedule($yrlvl, $academicyear, $departmentid, $semester, $sectionnum, $curriculumyrlvl, $calendarid, $yrlvlreference) {
+    public function addschedule($yrlvl, $academicyear, $departmentid, $semester, $sectionnum, $curriculumyrlvl, $calendarid, $yrlvlreference, $collegeid) {
         $curriculum = new Curriculum($this->pdo);
-        $calendaridsub = $curriculum->findcurriculumid($curriculumyrlvl, $semester);
+        $calendaridsub = $curriculum->findcurriculumidcollege ($curriculumyrlvl, $semester, $collegeid);
         
         $sections = generateSectionLetters($sectionnum);
-      
+        
         $this->pdo->beginTransaction();
         
+       
         try {
             foreach ($sections as $section) {
+                
                 $stmt = $this->pdo->prepare("
                     INSERT INTO subjectschedule (subjectid, calendarid, yearlvl, section, departmentid)
                     SELECT id, :calendarid, :yrlvl, :section, :departmentid
                     FROM subject
                     WHERE calendarid = :calendaridsub AND departmentid = :departmentid AND yearlvl = :yrlvlreference
                 ");
-                
+               
                 $stmt->bindValue(':section', $section, PDO::PARAM_STR);  
                 $stmt->bindValue(':calendarid', $calendarid, PDO::PARAM_INT); 
                 $stmt->bindValue(':calendaridsub', $calendaridsub, PDO::PARAM_INT); 
@@ -55,7 +57,9 @@ class Schedule {
                 if (!$stmt->execute()) {
                     $errorInfo = $stmt->errorInfo();
                     throw new Exception("error adding subject: " . $errorInfo[2]);
-                }
+                } 
+                
+
             }
             $this->pdo->commit();
         } catch (Exception $e) {
@@ -63,6 +67,7 @@ class Schedule {
             echo "Failed to add schedule: " . $e->getMessage();
         }
     }
+    
     
     public function updateminor($subjectscheduleid, $day, $timestart, $timeend) {
       
@@ -113,6 +118,7 @@ class Schedule {
         return $stmt->execute();
     }
     public function deletescheduledepartment($calendarid, $departmentid) {
+       
         $sql = "DELETE subjectschedule FROM subjectschedule 
                 JOIN department ON subjectschedule.departmentid = department.id 
                 WHERE subjectschedule.calendarid = :calendarid 

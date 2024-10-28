@@ -19,7 +19,7 @@
     $db = new Database();
     $pdo = $db->connect();
     
-
+    
     $curriculum = new Curriculum($pdo);
     $faculty = new Faculty($pdo);
     $schedule = new Schedule($pdo);
@@ -29,28 +29,31 @@
     $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
     
     $calendar = $curriculum->getallcurriculumsschedule();
-    $calendardistinct = $curriculum->getdistinctcurriculumsschedule();
-    $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();
+   
     
     $_SESSION['year'] = $_POST['year'] ?? $_SESSION['year'];
     $_SESSION['calendarid'] = $_POST['calendarid'] ?? $_SESSION['calendarid'];
     $_SESSION['sem'] = $_POST['sem'] ?? $_SESSION['sem'];
     
     if(isset($_POST['departmentid'])){
-        $_SESSION['departmentid'] = $_POST['departmentid'];
-        
-        
-    }elseif(isset($_SESSION['departmentid'])){
-        $_SESSION['departmentid']=$_SESSION['departmentid'];
+        $departmentid = $_POST['departmentid'];
+    }elseif(isset($_SESSION['departmentidbasis'])){
+        $departmentid=$_SESSION['departmentidbasis'];
+        $_SESSION['departmentidbasis']=$_SESSION['departmentidbasis'];
     }else {
-        $_SESSION['departmentid'] = $initialcollegedepartment;
+        $departmentid=$_SESSION['departmentid'];
+        
+    
     }
-    if ($_SESSION['departmentid']!=0){
-        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
-        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
-        $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
-        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+    if ($departmentid!=0){
+        $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
+        $departmentinfo=$department->getdepartmentinfo($departmentid);
+        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $departmentid);
+        $minornofacultycount=$schedule->minorfacultycountdepartment($departmentid, $_SESSION['calendarid']);
+        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($departmentid, $_SESSION['calendarid']);
+        $faculties=$faculty->departmentfaculty($departmentid);
     }else{
+        $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
         $minorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
         $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
         $collegeinfo=$college->getcollegeinfo($collegeid);
@@ -96,10 +99,10 @@
     </script>
 
     <?php
-    $deptid = ($_SESSION['departmentid']);
+    $deptid = ($departmentid);
     $colid = ($collegeid);
     $calid = ($_SESSION['calendarid']);
-    $minor = ($_SESSION['minor']);
+    $minor = 1;
     while (ob_get_level()) {
         ob_end_flush();
     }
@@ -164,7 +167,7 @@
                         <button onclick="window.location.href='schedule.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentid']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
+                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentidbasis']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
                     </h5>
                 </div>
             </div>
@@ -293,7 +296,7 @@
                         <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
                             
                             <div class="rounded-top-3 bg-body-tertiary p-2">
-                                <h2 class="head-label">Generate Schedule for <?php if($_SESSION['departmentid']==0){echo $collegeinfo['abbreviation'];}else{echo $departmentinfo['abbreviation'];}?><?php if($_SESSION['sem']==1){echo ' '.$_SESSION['sem'].'st sem';}else{echo ' '.$_SESSION['sem'].'nd sem';}?><?php echo ' S.Y-'.$_SESSION['year'];?></h2>
+                                <h2 class="head-label">Generate Schedule for <?php if($_SESSION['departmentidbasis']==0){echo $collegeinfo['abbreviation'];}else{echo $departmentinfo['abbreviation'];}?><?php if($_SESSION['sem']==1){echo ' '.$_SESSION['sem'].'st sem';}else{echo ' '.$_SESSION['sem'].'nd sem';}?><?php echo ' S.Y-'.$_SESSION['year'];?></h2>
                                 <div class="form-check d-flex justify-content-end">
                                 <input class="form-check-input" type="checkbox" id="generalSubjects" name="includegensub">
                                 <label class="form-check-label" for="generalSubjects">
@@ -320,9 +323,9 @@
                                         <div class="col-6">
                                             <div class="form-group department ">
                                                 <h5>Department</h5>
-                                                <select class="form-select form-select-sm" id="select-classtype" name="departmentid" disabled>
+                                                <select class="form-select form-select-sm" id="select-classtype" disabled>
                                                     <?php foreach ($collegedepartment as $collegedepartments){?>
-                                                        <option <?php if ($_SESSION['departmentid']==$collegedepartments['id']){echo 'selected';}?> value="<?php echo $collegedepartments['id'];?>" ><?php echo $collegedepartments['name'];?></option>
+                                                        <option <?php if ($departmentid==$collegedepartments['id']){echo 'selected';}?> value="<?php echo $collegedepartments['id'];?>" ><?php echo $collegedepartments['name'];?></option>
                                                     <?php } ?>
                                                     
                                                     <option value="" >Choose a department</option>
@@ -351,8 +354,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <?php if ($_SESSION['departmentid']!=0){ ?>
+                                    <?php if ($departmentid!=0){ ?>
+                                        <input type="hidden" name="collegeid" value="<?php echo $_SESSION['collegeid'];?>">
                                         <input type="hidden" name="action" value="adddepartment">
+                                        <input type="number" name="departmentid2" id="" value="<?php echo $departmentid;?>" hidden>
                                         <div class="form-group num-of-section">
                                             <div class="row">
                                                 <h5>Student Sections</h5>
@@ -389,19 +394,21 @@
                                                         
                                                         
                                                     </tbody>
+                                                    
                                                 </table>
                                             </div>
                                         </div>
                                     <?php } ?>
-                                  
-                                    <?php if($_SESSION['departmentid']==0){ ?>
+                                    
+                                    <?php if($departmentid==0){ ?>
                                         <input type="hidden" name="action" value="addcollege">
+                                        <input type="hidden" name="collegeid" value="<?php echo $_SESSION['collegeid'];?>">
                                         <div class="form-group num-of-section">
                                             <div class="row">
                                                 
                                                 <?php foreach($collegedepartment AS $collegedepartments){ ?> 
                                                 <h4><?php echo $collegedepartments['abbreviation'];?></h4> 
-                                                <input type="number" name="departmentid[]" id="" value="<?php echo $collegedepartments['id'];?>" hidden>    
+                                                <input type="number" name="departmentid1[]" id="" value="<?php echo $collegedepartments['id'];?>" hidden>    
                                                 
                                                     <table class="table mx-2">
                                                         <thead>
@@ -448,6 +455,7 @@
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
                                 <button type="submit" class="confirm btn btn-primary">Done</button>
+                                <input type="number" name="calendarid" id="" value="<?php echo $_SESSION['calendarid'];?>" hidden>
                             </div>
                         </form>
                     </div>

@@ -11,7 +11,13 @@
         require_once('../include/admin-nav.php');
         require_once('../classes/db.php');
         require_once('../classes/department.php');
-        $collegeid=$_SESSION['collegeid'];
+        if (isset($_POST['collegeid'])){
+            $collegeid=$_POST['id'];
+            $_SESSION['collegeid']=$collegeid;
+        }else{
+            $collegeid=$_SESSION['collegeid'];
+        }
+        
 
         $db = new Database();
         $pdo = $db->connect();
@@ -27,7 +33,7 @@
                         <button class="button" onclick="window.location.href='colleges.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        College of Computing Studies
+                        
                     </h3>
                 </div>
                 <div class="col-3 d-flex align-items-center justify-content-center">

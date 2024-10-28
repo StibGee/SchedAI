@@ -54,7 +54,7 @@
                     <select class="form-select  form-select-sm " id="select-roomtype">
                         <option value="">All Room</option> 
                         <?php foreach($collegeroom as $collegerooms) { ?>
-                            <option value="<?php echo $collegerooms['name']; ?>"><?php echo $collegerooms['name']; ?></option>
+                            <option value="<?php echo $collegerooms['roomname']; ?>"><?php echo $collegerooms['roomname']; ?></option>
                         <?php } ?>
                     </select>
                 </div>

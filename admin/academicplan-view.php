@@ -17,7 +17,7 @@
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
+        
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['academicplanyear']) && isset($_POST['academicplansem']) && isset($_POST['academicplancalendarid'])) {
                 $year = htmlspecialchars($_POST['academicplanyear']);
@@ -29,35 +29,38 @@
                 $_SESSION['calendarid']=$calendarid;
 
 
-            } else {
+            }else {
                 $calendarid=$_SESSION['calendarid'];
                 $sem=$_SESSION['sem'];
                 $year=$_SESSION['year'];
 
             }
-            if (isset($_SESSION['departmentid'])){
-                $departmentid = htmlspecialchars($_SESSION['departmentid']);
-            }else{
-                $departmentid =1;
-                $_SESSION['departmentid']=$departmentid;
-            }
-            if (isset($_POST['academicplanyearlvl'])){
-                $yearlvl= htmlspecialchars($_POST['academicplanyearlvl']);
-                $_SESSION['yearlvl']=$yearlvl;
-            }else{
-                $yearlvl= 1;
-                $_SESSION['yearlvl']=$yearlvl;
-
-            }
+            
         } else {
             $year=$_SESSION['year'];
             $sem=$_SESSION['sem'];
             $calendarid = $_SESSION['calendarid'];
-            $departmentid = $_SESSION['departmentid'];
+            $departmentid = $_SESSION['departmentidbasis'];
             $yearlvl=$_SESSION['yearlvl'];
         }
-        $filteredsubject = $subject->filteredsubjects($calendarid, $departmentid, $yearlvl);
+        
+        if ((isset($_SESSION['departmentid']) && $_SESSION['departmentid']!=0)){
+            $departmentid = htmlspecialchars($_SESSION['departmentid']);
+        }elseif(isset($_SESSION['departmentidbasis']) && $_SESSION['departmentidbasis']!=0){
+            $departmentid=$_SESSION['departmentidbasis'];
+        }
 
+        if (isset($_POST['academicplanyearlvl'])){
+            $yearlvl= htmlspecialchars($_POST['academicplanyearlvl']);
+            $_SESSION['yearlvl']=$yearlvl;
+        }else{
+            $yearlvl= 1;
+            $_SESSION['yearlvl']=$yearlvl;
+
+        }
+       
+        $filteredsubject = $subject->filteredsubjects($calendarid, $departmentid, $yearlvl);
+        $departmentinfo = $department->getdepartmentinfo($departmentid);
     ?>
     <main>
     <div class="mb-1">

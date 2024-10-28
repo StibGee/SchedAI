@@ -28,14 +28,22 @@
         $collegeid=$_SESSION['collegeid'];
 
         if(isset($_POST['departmentid'])){
-            $_SESSION['departmentid'] = $_POST['departmentid'];
-        }elseif(isset($_SESSION['departmentid']) && $_SESSION['departmentid']!=0){
-            $_SESSION['departmentid']= $_SESSION['departmentid'];
+            $departmentid = $_POST['departmentid'];
+            $_SESSION['departmentidbasis']=$departmentid;
+        }elseif($_SESSION['departmentid'] && $_SESSION['departmentid']!=0){
+            $departmentid = $_SESSION['departmentid'];
+            $_SESSION['departmentidbasis']=$departmentid;
         } else {
-            $_SESSION['departmentid'] = $initialcollegedepartment;
+            $departmentid = $initialcollegedepartment;
+            $_SESSION['departmentidbasis']=$departmentid;
         }
+<<<<<<< Updated upstream
 
         $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
+=======
+        
+        $departmentinfo = $department->getdepartmentinfo($departmentid);
+>>>>>>> Stashed changes
     ?>
     <main>
         <div class="container mb-1">

@@ -141,6 +141,30 @@ class Faculty {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getallfacultycollege($collegeid) {
+        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname 
+                FROM faculty 
+                JOIN department ON department.id = faculty.departmentid 
+                WHERE department.collegeid = :collegeid";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['collegeid' => $collegeid]);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getallfacultydepartment($departmentid) {
+        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname 
+                FROM faculty 
+                JOIN department ON department.id = faculty.departmentid 
+                WHERE department.id = :departmentid";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['departmentid' => $departmentid]);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function countallfaculty() {
         $sql = "SELECT count(*) from faculty";
         $stmt = $this->pdo->query($sql);
@@ -164,6 +188,13 @@ class Faculty {
         $sql = "SELECT *, faculty.id AS facultyid FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=:collegeid";
         $stmt = $this->pdo->prepare($sql); 
         $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT); 
+        $stmt->execute(); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
+    public function departmentfaculty($departmentid) {
+        $sql = "SELECT *, faculty.id AS facultyid FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.id=:departmentid";
+        $stmt = $this->pdo->prepare($sql); 
+        $stmt->bindParam(':departmentid', $departmentid, PDO::PARAM_INT); 
         $stmt->execute(); 
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }

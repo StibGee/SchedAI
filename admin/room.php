@@ -19,7 +19,12 @@
         // Initialize Room class
         $room = new Room($pdo);
         $college = new College($pdo);
-        $roomsall = $room->getAllRooms();
+        if ($_SESSION['departmentid']!=0){
+            $roomsall = $room->getdepartmentrooms($_SESSION['departmentid']);
+        }else{
+            $roomsall = $room->getcollegerooms($collegeid);
+        }
+        
 
         $department = new Department($pdo);
         $collegedepartment = $department->getcollegedepartment($collegeid);
@@ -126,8 +131,8 @@
                                                     <div class="col-md-8">
                                                         <select class="form-select" id="room-type" id="type" required name="type">
                                                             <option selected="" disabled="">Choose...</option>
-                                                            <option value="lab">Lecture</option>
-                                                            <option value="lec">Laboratory</option>
+                                                            <option value="Lab">Lecture</option>
+                                                            <option value="Lec">Laboratory</option>
                                                         </select>
                                                     </div>
 

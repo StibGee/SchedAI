@@ -10,30 +10,36 @@
     require_once('../classes/schedule.php');
     $db = new Database();
     $pdo = $db->connect();
-
+    
     $room = new Room($pdo);
     $college = new College($pdo);
     $department = new Department($pdo);
     $schedule = new Schedule($pdo);
     $collegeid=$_SESSION['collegeid'];
     $inititialcollegeroom = $room->getinitialcollegeroom($collegeid);
-    $collegeroom=$room->getcollegerooms($collegeid);
+    
+    if ($_SESSION['departmentid']==0){
+        $collegeroom=$room->getcollegerooms($collegeid);
+    }else{
+        $collegeroom=$room->getdepartmentrooms($_SESSION['departmentid']);
+    }
+    $calendarid=$_SESSION['calendarid'];
     $collegeinfo=$college->getcollegeinfo($collegeid);
     
 
     if (isset($_POST['roomid'])) {
         $roomids = $_POST['roomid'];
         foreach ($collegeroom as $collegerooms){
-            if ($collegerooms['id']== $roomids){
-                $roomname=$collegerooms['name'];
+            if ($collegerooms['roomid']== $roomids){
+                $roomname=$collegerooms['roomname'];
                
             }
         }
     } else {
         $roomids = $inititialcollegeroom;
         foreach ($collegeroom as $collegerooms){
-            if ($collegerooms['id']== $roomids){
-                $roomname=$collegerooms['name'];
+            if ($collegerooms['roomid']== $roomids){
+                $roomname=$collegerooms['roomname'];
             }
         }
         
@@ -71,7 +77,7 @@
                 subject.subjectcode as subjectname,
                 subjectschedule.yearlvl as yearlvl,
                 section,
-                faculty.lname as facultyname,
+                faculty.fname as facultyname,
                 subject.type as subjecttype,
                 department.abbreviation as departmentname
             FROM 
@@ -79,7 +85,7 @@
                 JOIN subject ON subject.id = subjectschedule.subjectid
                 JOIN faculty ON faculty.id = subjectschedule.facultyid
                 JOIN department ON subjectschedule.departmentid = department.id
-            WHERE roomid = $roomids AND department.collegeid=$collegeid";
+            WHERE roomid = $roomids AND department.collegeid=$collegeid AND subjectschedule.calendarid=$calendarid";
     }else{
         $departmentid=$_SESSION['departmentid'];
         $sql = "SELECT 
@@ -90,7 +96,7 @@
                 subject.subjectcode as subjectname,
                 subjectschedule.yearlvl as yearlvl,
                 section,
-                faculty.lname as facultyname,
+                faculty.fname as facultyname,
                 subject.type as subjecttype,
                 department.abbreviation as departmentname
             FROM 
@@ -98,7 +104,7 @@
                 JOIN subject ON subject.id = subjectschedule.subjectid
                 JOIN faculty ON faculty.id = subjectschedule.facultyid
                 JOIN department ON subjectschedule.departmentid = department.id
-            WHERE roomid = $roomids  AND subjectschedule.departmentid=$departmentid";
+            WHERE roomid = $roomids  AND subjectschedule.departmentid=$departmentid AND subjectschedule.calendarid=$calendarid";
     }
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -210,15 +216,15 @@
                             <?php foreach ($collegeroom as $collegerooms): 
                                 //if ($collegerooms['departmentid']==$_SESSION['departmentid']){?>
                                 
-                                <option value="<?php echo $collegerooms['id']; ?>" 
+                                <option value="<?php echo $collegerooms['roomid']; ?>" 
                                     <?php 
-                                        if (isset($roomids) && $roomids == $collegerooms['id']) {
+                                        if (isset($roomids) && $roomids == $collegerooms['roomid']) {
                                            
-                                            $roomname = isset($collegerooms['name']) ? $collegerooms['name'] : ''; 
+                                            $roomname = isset($collegerooms['roomname']) ? $collegerooms['roomname'] : ''; 
                                             echo 'selected'; 
                                         }
                                     ?>>
-                                    <?php echo isset($collegerooms['name']) ? htmlspecialchars($collegerooms['name']) : ''; ?>
+                                    <?php echo isset($collegerooms['roomname']) ? htmlspecialchars($collegerooms['roomname']) : ''; ?>
                                 </option>
 
                                 

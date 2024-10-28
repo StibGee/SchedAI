@@ -62,6 +62,28 @@ class Room {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getcollegerooms($collegeid) {
+        $sql = "SELECT *, department.name AS departmentname, room.name AS roomname, room.id as roomid 
+                FROM room 
+                JOIN department ON department.id = room.departmentid 
+                WHERE department.collegeid = :collegeid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT); 
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getdepartmentrooms($department) {
+        $sql = "SELECT *, department.name AS departmentname, room.name AS roomname, room.id as roomid 
+                FROM room 
+                JOIN department ON department.id = room.departmentid 
+                WHERE department.id = :departmentid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':departmentid', $department, PDO::PARAM_INT); 
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function getinitialcollegeroom($collegeid) {
         $sql = "SELECT id FROM room WHERE collegeid = :collegeid LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
@@ -69,12 +91,12 @@ class Room {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['id'] : null;
     }
-    public function getcollegerooms($collegeid) {
+    /*public function getcollegerooms($collegeid) {
         $sql = "SELECT * FROM room WHERE collegeid = :collegeid";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':collegeid' => $collegeid]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+    */
 }
 ?>

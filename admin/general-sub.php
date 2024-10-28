@@ -32,11 +32,9 @@
         $collegeinfo=$college->getcollegeinfo($collegeid);
 
     
-
+        
         if(isset($_POST['departmentid'])){
             $_SESSION['departmentid'] = $_POST['departmentid'];
-            
-            
         }elseif(isset($_SESSION['departmentid'])){
             $_SESSION['departmentid']=$_SESSION['departmentid'];
         }else {
@@ -53,6 +51,8 @@
             $getminorsubjects=$schedule->getminorsubjectscollege($collegeid, $_SESSION['calendarid']);
            
         }
+        echo $_SESSION['calendarid'];
+        $_SESSION['departmentid'];
         
     ?>
     <main>

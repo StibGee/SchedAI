@@ -21,25 +21,38 @@
         $curriculum = new Curriculum($pdo);
         $college = new College($pdo);
         $department = new Department($pdo);
-        $collegedepartment = $department->getcollegedepartment($collegeid);
-        $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
         
-        $calendar = $curriculum->getallcurriculumsschedule();
-        $calendardistinct = $curriculum->getdistinctcurriculumsschedule();
-        $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();
-        $collegeinfo=$college->getcollegeinfo($collegeid);
-
-        if(isset($_POST['departmentid'])){
-            $_SESSION['departmentid'] = $_POST['departmentid'];
-            
-            
-        }elseif(isset($_SESSION['departmentid'])){
+        if ($_SESSION['scheduling']=='college'){
+            $_SESSION['departmentid']=0;
+        }else{
             $_SESSION['departmentid']=$_SESSION['departmentid'];
-        }else {
-            $_SESSION['departmentid'] = $initialcollegedepartment;
         }
+        
+        /*$calendardistinct = $curriculum->getdistinctcurriculumsschedule();
+        $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();*/
+        
+       
+        if(isset($_POST['departmentid'])){
+            $departmentid = $_POST['departmentid'];
+            $_SESSION['departmentidbasis']=$departmentid;
+        }elseif(isset($_SESSION['departmentid']) && $_SESSION['departmentid']!=0){
+            $departmentid=$_SESSION['departmentid'];
+            $_SESSION['departmentidbasis']=$_SESSION['departmentid'];
+        }else{
+            $departmentid=0;
+            $_SESSION['departmentidbasis']=0;
+        }
+        
         if($_SESSION['departmentid']!=0){
-            $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
+            $collegedepartment = $department->getcollegedepartment($collegeid);
+            $calendar = $curriculum->getcollegecalendar($_SESSION['collegeid']);
+            $departmentinfo=$department->getdepartmentinfo($departmentid);
+        }else{
+            $calendar = $curriculum->getcollegecalendar($_SESSION['collegeid']);
+            $collegedepartment = $department->getcollegedepartment($collegeid);
+            $departmentinfo=$department->getdepartmentinfo($departmentid);
+            $collegeinfo=$college->getcollegeinfo($collegeid);
+            $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
         }
         
     ?>
@@ -47,15 +60,15 @@
         <div class="container mb-1">
             <div class="row d-flex align-items-center">
                 <div class="col-5">
-                    <h3><?php if ($_SESSION['departmentid']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?> Academic Schedules</h3>
+                    <h3><?php if ($departmentid!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?> Academic Schedules</h3>
                 </div>
                 <div class="col-3">
-                    <form class="mb-0" action="schedule.php" method="POST">
-                        <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()">
+                    <form class="mb-0" action="schedule.php" method="POST" >
+                        <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()" <?php if ($_POST['departmentidbasis']!=0 && $_SESSION['scheduling']=='college'){echo 'disabled';} ?>>
                             <?php foreach ($collegedepartment as $collegedepartments){?>
-                                <option value="<?php echo $collegedepartments['id'];?>" <?php if ($_SESSION['departmentid']==$collegedepartments['id']){echo 'selected';} ?>><?php echo $collegedepartments['name'];?></option>
+                                <option value="<?php echo $collegedepartments['id'];?>" <?php if ($departmentid==$collegedepartments['id']){echo 'selected';} ?>><?php echo $collegedepartments['name'];?></option>
                             <?php } ?>
-                            <option value="0" <?php if ($_SESSION['departmentid']==0){echo 'selected';} ?>>All Departments</option>
+                            <option value="0" <?php if ($departmentid==0){echo 'selected';} ?>>All Departments</option>
                             <option value="" >Choose a department</option>
                         </select>
                     </form>
@@ -98,7 +111,7 @@
                                 $displayyear = '';
                             }
                         ?>
-                            <tr onclick="submitForm('<?php echo htmlspecialchars($calendars['year']); ?>', '<?php echo htmlspecialchars($calendars['sem']); ?>', '<?php echo htmlspecialchars($calendars['id']); ?>')">
+                            <tr onclick="submitForm('<?php echo htmlspecialchars($calendars['year']); ?>', '<?php echo htmlspecialchars($calendars['sem']); ?>', '<?php echo htmlspecialchars($calendars['calendarid']); ?>')">
                                 <th scope="row"><?php echo htmlspecialchars($displayyear); ?></th>
                                 <td><?php echo htmlspecialchars($calendars['sem'] == 1 ? '1st Semester' : ($calendars['sem'] == 2 ? '2nd Semester' : ($calendars['sem'] == 3 ? '3rd Semester' : $calendars['sem'] . 'th'))); ?></td>
 

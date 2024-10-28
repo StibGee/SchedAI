@@ -68,13 +68,19 @@ class Curriculum {
         $stmt = $this->pdo->query($sqlcalendar);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     public function getcollegecurriculum($collegeid) {
-        $sqlcalendar = "SELECT * FROM calendar WHERE curriculumplan=1 AND collegeid=:collegeid ORDER BY year";
+        $sqlcalendar = "SELECT *,calendar.id as calendarid FROM calendar WHERE curriculumplan=1 AND collegeid=:collegeid ORDER BY year";
         $stmt = $this->pdo->prepare($sqlcalendar); 
         $stmt->execute([':collegeid' => $collegeid]); 
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
-    
+    public function getcollegecalendar($collegeid) {
+        $sqlcalendar = "SELECT *,calendar.id as calendarid FROM calendar WHERE collegeid=:collegeid ORDER BY year";
+        $stmt = $this->pdo->prepare($sqlcalendar); 
+        $stmt->execute([':collegeid' => $collegeid]); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
     public function getallcurriculumsschedule() {
         $sqlcalendar = "SELECT * FROM calendar ORDER BY year";
         $stmt = $this->pdo->query($sqlcalendar);
@@ -85,6 +91,17 @@ class Curriculum {
         $stmt = $this->pdo->query($sqlcalendar);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getdistinctcurriculumsschedulecollege($collegeid) {
+        $sqlcalendar = "SELECT DISTINCT year AS year, name AS name 
+                        FROM calendar 
+                        WHERE collegeid = :collegeid 
+                        ORDER BY year";
+        $stmt = $this->pdo->prepare($sqlcalendar);
+        $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT); 
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
     public function getdistinctcurriculumsscheduleall() {
         $sqlcalendar = "SELECT DISTINCT year as year,name as name FROM calendar ORDER BY year";
         $stmt = $this->pdo->query($sqlcalendar);
@@ -95,6 +112,15 @@ class Curriculum {
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':academicyear', $academicyear);
         $stmt->bindParam(':semester', $semester);
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+    public function findcurriculumidcollege($academicyear, $semester, $collegeid){
+        $query = "SELECT id FROM calendar WHERE year = :academicyear AND collegeid=:collegeid AND sem = :semester LIMIT 1";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':academicyear', $academicyear);
+        $stmt->bindParam(':semester', $semester);
+        $stmt->bindParam(':collegeid', $collegeid);
         $stmt->execute();
         return $stmt->fetchColumn();
     }

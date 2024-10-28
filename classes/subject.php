@@ -33,7 +33,7 @@ class Subject {
             return $stmt->execute();        
         }
     }
-    public function addsubjectlab($subjectcode, $labname, $labunit, $focus, $masters, $calendarid, $departmentid, $yearlvl){
+    public function addsubjectlab($subjectcode, $labname, $labunit, $focus, $masters, $calendarid, $departmentid, $yearlvl,$subjectname){
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM room WHERE name = :name");
         $stmt->bindParam(':name', $name);
         $stmt->execute();
@@ -43,15 +43,17 @@ class Subject {
             header("Location: ../adminacademicplan-view.php?subject=exist");
             exit();
         } else {
-            $sql="INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus, calendarid, departmentid, yearlvl, commonname) VALUES (:subjectcode, :name, :unit, 3, 'Lab', :masters,  :focus, :calendarid, :departmentid, :yearlvl, :commonname)";
+                                                                                                                                                    
+            $sql="INSERT INTO subject (subjectcode, name, unit, hours, type, masters, focus, calendarid, departmentid, yearlvl, commonname) VALUES (:subjectcode, :subname, :unit, 3, 'Lab', :masters,  :focus, :calendarid, :departmentid, :yearlvl, :commonname)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':subjectcode', $subjectcode);
-            $stmt->bindParam(':name', $labname);
+            $stmt->bindParam(':subname', $labname);
             $stmt->bindParam(':unit', $labunit);
             $stmt->bindParam(':masters', $masters);
             $stmt->bindParam(':focus', $focus);
             $stmt->bindParam(':calendarid', $calendarid);
             $stmt->bindParam(':departmentid', $departmentid);
+            $stmt->bindParam(':yearlvl', $yearlvl);
             $stmt->bindParam(':commonname', $subjectname);
             return $stmt->execute(); 
         }
@@ -103,6 +105,23 @@ class Subject {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getdistinctsubjectsdepartment($departmentId) {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT commonname AS name FROM subject WHERE departmentid = :departmentid AND focus='Major'");
+        $stmt->bindParam(':departmentid', $departmentId, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return $results;
+    }
+    public function getdistinctsubjectscollege($collegeid) {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT commonname AS name FROM subject WHERE departmentid = :departmentid AND focus='Major'");
+
+        $stmt->bindParam(':departmentid', $departmentId, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $results;
+    }
 
     public function addfacultysubject($facultyid, $subjectname){
         $sql="INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid, :subjectname)";
@@ -111,6 +130,7 @@ class Subject {
         $stmt->bindParam(':subjectname', $subjectname);
         return $stmt->execute(); 
     }
+    
     
 }
 ?>

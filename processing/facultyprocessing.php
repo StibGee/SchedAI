@@ -69,11 +69,13 @@ function login($pdo) {
             
             $role = $user['role'];
             $collegeid = $user['collegeid'];
+            $departmentid = $user['departmentid'];
             $id = $user['id'];
             $name = $user['fname'];
     
             $_SESSION['id']=$id;
             $_SESSION['collegeid']=$collegeid;
+            $_SESSION['departmentid']=$departmentid;
             $_SESSION['fname']=$name;
     
             
@@ -82,6 +84,12 @@ function login($pdo) {
            
             
             if ($role=='collegesecretary'){
+                $_SESSION['scheduling']='college';
+                header('Location: ../admin/facultyloading.php');
+
+                exit();
+            }elseif($role=='departmenthead'){
+                $_SESSION['scheduling']='department';
                 header('Location: ../admin/facultyloading.php');
                 exit();
             }else{
@@ -93,7 +101,6 @@ function login($pdo) {
                     header('Location: ../faculty/dashboard.php');
                     exit();
                 }
-                
             }
              
         } else {

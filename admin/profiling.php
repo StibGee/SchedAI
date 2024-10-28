@@ -22,8 +22,12 @@
         if (isset($_POST['facultyid'])){
             $facultyid=$_POST['facultyid'];
         }
+        if ($_SESSION['departmentid']!=0){
+            $distinctsubjects = $subject->getdistinctsubjectsdepartment($_SESSION['departmentid']);
+        }else{
+            $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid']);
+        }
         
-        $distinctsubjects = $subject->getdistinctsubjects();
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
         if ($facultyinfo) {

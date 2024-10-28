@@ -73,10 +73,12 @@
                     subjectschedule.yearlvl as yearlvl,
                     section,
                     faculty.lname as facultyname,
-                    room.name as roomname
+                    room.name as roomname,
+                    department.abbreviation as departmentname
                 FROM 
                     subjectschedule 
                     JOIN subject ON subject.id = subjectschedule.subjectid
+                    JOIN department ON subjectschedule.departmentid = department.id
                     JOIN faculty ON faculty.id = subjectschedule.facultyid
                     JOIN room ON room.id = subjectschedule.roomid
                 WHERE facultyid = $facultyid";
@@ -94,9 +96,9 @@
             $yearlvl = htmlspecialchars($row['yearlvl']);
             $section = htmlspecialchars($row['section']);
             $roomname = htmlspecialchars($row['roomname']);
-            
+            $departmentname = htmlspecialchars($row['departmentname']);
           
-            $subjectLabel = "$subjectname $yearlvl$section ($roomname)"; 
+            $subjectLabel = "$subjectname $departmentname $yearlvl$section ($roomname)"; 
             $color = generateColor($subjectid); 
             
            
