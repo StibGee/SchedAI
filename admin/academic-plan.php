@@ -37,13 +37,8 @@
             $departmentid = $initialcollegedepartment;
             $_SESSION['departmentidbasis']=$departmentid;
         }
-<<<<<<< Updated upstream
-
-        $departmentinfo = $department->getdepartmentinfo($_SESSION['departmentid']);
-=======
         
         $departmentinfo = $department->getdepartmentinfo($departmentid);
->>>>>>> Stashed changes
     ?>
     <main>
         <div class="container mb-1">

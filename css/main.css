@@ -225,6 +225,9 @@ a {
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 1040; /* Ensure backdrop is below modal but above other content */
     }
+    #subjecTable{
+        
+    }
 }
 
 .header-text {

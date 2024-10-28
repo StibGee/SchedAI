@@ -2,6 +2,13 @@
     session_start();
 }
 ?>
+<?php
+        require_once('../include/js.php')
+    ?>
+
+<?php
+        require_once('../include/head.php');
+    ?>
 <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
@@ -61,13 +68,7 @@
         </nav>
     </div>
 </body>
-<?php
-        require_once('../include/js.php')
-    ?>
 
-<?php
-        require_once('../include/head.php');
-    ?>
 <style>
         .dropdown img {
             width: 40px;

@@ -1,6 +1,7 @@
 import mysql.connector
 import time
 import sys
+import webbrowser
 
 departmentid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
@@ -26,7 +27,7 @@ if (departmentid==0):
         AND subjectschedule.calendarid = %s 
         AND department.collegeid = %s 
         
-        ORDER BY subject.type ASC, subjectschedule.departmentid ASC
+        ORDER BY subject.type DESC, subjectschedule.departmentid ASC
     """, (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
@@ -184,7 +185,7 @@ assignedsubjects = {}
 noassignment=[]
 tbh=[]
 backtrackcounters={}
-maxdepth=10
+maxdepth=100
 assignedsubjectscount=0
 
 def assign_subject(currentshubjectid):
@@ -287,7 +288,7 @@ def assign_subject(currentshubjectid):
             assignedsubjectscount -= 1
             del assignedsubjects[subjectscheduleid]
         
-    sortedfaculty = sorted(facultysubject, key=lambda x: facultyworkinghours[x[1]])
+    sortedfaculty = sorted(facultysubject, key=lambda x: -facultyworkinghours[x[1]])
     
     for facultysubjects in sortedfaculty:
         facultysubjectfacultyid = facultysubjects[1]
@@ -298,9 +299,9 @@ def assign_subject(currentshubjectid):
         facultysubjectfname = facultysubjects[4]
         facultysubjectlname = facultysubjects[6]
 
-        '''if (subjectscheduletype == 'Lec' and subjectscheduleunit == 3):
+        if (subjectscheduletype == 'Lec' and subjectscheduleunit == 3):
             if not lec3daysgapfaculty(facultysubjectfacultyid):
-                continue'''
+                continue
  
         
               
@@ -352,6 +353,8 @@ assignedsubjects = {}
 
 if assign_subject(0):
         print("all subjects are assigned")
+else:
+        webbrowser.open("http://schedai.online")
 conn.commit()
 
 cursor.close()
@@ -797,7 +800,7 @@ def minorfree(departmentid, yearlvl, section, day, time):
 subjectiteration={}
 backtrackcounters={}
 facultyhoursday={}
-maxdepth=1000
+maxdepth=500
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
     

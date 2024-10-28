@@ -52,25 +52,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
 
         // Sample data for tabular view
-        const tabularData = [
-            { no: 1, code: 'CS101', description: 'Intro to Computer Science', type: 'Lecture', room: 'R101', time: '8:00 AM - 9:00 AM', day: 'Monday', yearSec: '1A' },
-            { no: 2, code: 'MATH101', description: 'Calculus I', type: 'Lecture', room: 'R102', time: '9:00 AM - 10:00 AM', day: 'Tuesday', yearSec: '1B' }
-            // Add more data as needed
-        ];
-
-        tabularData.forEach(data => {
-            let row = `<tr>
-                            <td>${data.no}</td>
-                            <td>${data.code}</td>
-                            <td>${data.description}</td>
-                            <td>${data.type}</td>
-                            <td>${data.room}</td>
-                            <td>${data.time}</td>
-                            <td>${data.day}</td>
-                            <td>${data.yearSec}</td>
-                       </tr>`;
-            $('#tabularTableBody').append(row);
-        });
+        
 
         $('#viewToggleButton').click(function() {
             $('#calendarView, #tabularView').toggle();

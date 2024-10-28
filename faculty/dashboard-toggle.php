@@ -81,7 +81,7 @@
                     JOIN department ON subjectschedule.departmentid = department.id
                     JOIN faculty ON faculty.id = subjectschedule.facultyid
                     JOIN room ON room.id = subjectschedule.roomid
-                WHERE facultyid = $facultyid";
+                WHERE .subjectschedule.facultyid = $facultyid AND subjectschedule.calendarid=$collegelatestyear";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute();

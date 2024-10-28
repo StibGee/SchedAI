@@ -161,4 +161,4 @@ print(f"ran in {total_time:.2f} seconds")
 
 cursor.close()
 conn.close()
->>>>>>> Stashed changes
+
