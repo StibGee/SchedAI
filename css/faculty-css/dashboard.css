@@ -20,12 +20,12 @@ nav {
 }
 
 main {
+    height: 100vh;
     position: relative;
     overflow: visible;
     margin-left: auto;
     justify-content: flex-end;
     align-self: flex-end;
-    height: auto;
     background-color: #f8f8f8;
 }
 

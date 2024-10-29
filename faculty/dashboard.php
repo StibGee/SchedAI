@@ -39,16 +39,16 @@
     <nav class="navbar sticky-top navbar-expand-lg border-bottom bg-body d-flex">
     <div class="container-fluid ">
         <div class="button col-4 col-sm-4">
-            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapseWidthExample" aria-expanded="true" aria-controls="collapseWidthExample"
                 style="margin-right: 10px; padding: 0px 5px 0px 5px;" id="sidebartoggle" onclick="changeclass()">
-                <i class="bi bi-arrows-expand-vertical"></i>
-            </button>
-            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                <i class="bi bi-list"></i>
+        </button>
+        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
                 style="margin-right: 10px; padding: 2px 6px 2px 6px;" id="sidebarshow">
-                <i class="bi bi-arrow-bar-right"></i>
-            </button>
+                <i class="bi bi-list"></i>
+        </button>
         </div>
 
     <!-- Cambair Tema -->
@@ -186,43 +186,30 @@
     </div>
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                <a href="#" class="nav_logo d-flex justify-content-start ">
+                    <img src="../img/logo/Sched-logo1.png" width="60">
+                </a>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                    <svg class="bi pe-none me-2" width="40" height="32">
-                    <use xlink:href="#bootstrap" />
-                    </svg>
-                    <span class="d-print-block">Sidebar</span>
-                </a>
+
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                    <a href="#" class="nav-link link-body-emphasis" aria-current="page">
-                        <p class="bi bi-house-door"> Home</p><br>
+                <li class="nav-item">
+                    <a href="../faculty/dashboard.php" class="nav-link link-body-emphasis" aria-current="page">
+                    <p class="bi bi-house-door"> Assigned Schedule</p><br>
                     </a>
-                    </li>
-                    <li>
-                    <a href="#" class="nav-link link-body-emphasis">
-                        <p class="bi bi-speedometer2"> Dashboard</p><br>
+                </li>
+                <li>
+                    <a href="../faculty/profile.php"  class="nav-link link-body-emphasis">
+                    <p class="bi bi-speedometer2"> My Profile</p><br>
                     </a>
-                    </li>
-                    <li>
-                    <a href="#" class="nav-link link-body-emphasis">
-                        <p class="bi bi-table"> Orders</p><br>
+                </li>
+                <li>
+                    <a href="../faculty/user-account.php" class="nav-link link-body-emphasis">
+                    <p class="bi bi-table"> Account Settings</p><br>
                     </a>
-                    </li>
-                    <li>
-                    <a href="#" class="nav-link link-body-emphasis">
-                        <p class="bi bi-grid"> Products</p><br>
-                    </a>
-                    </li>
-                    <li>
-                    <a href="#" class="nav-link link-body-emphasis">
-                        <p class="bi bi-person-circle"> Customers</p><br>
-                    </a>
-                    </li>
+                </li>
                 </ul>
             </div>
         </div>
@@ -293,9 +280,3 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
 integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
