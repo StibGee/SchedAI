@@ -120,7 +120,7 @@
     while (ob_get_level()) {
         ob_end_flush();
     }
-    $command = escapeshellcmd("python3 .././finalmerge.py") . " " . escapeshellarg($deptid) . " " . escapeshellarg($colid) . " " . escapeshellarg($calid) . " " . escapeshellarg($minor);
+    $command = escapeshellcmd("python .././finalmerge.py") . " " . escapeshellarg($deptid) . " " . escapeshellarg($colid) . " " . escapeshellarg($calid) . " " . escapeshellarg($minor);
     $handle = popen($command, 'r');
 
 
