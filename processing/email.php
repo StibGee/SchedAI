@@ -2,12 +2,10 @@
 require '../vendor/PHPMailer-master/src/PHPMailer.php';
 require '../vendor/PHPMailer-master/src/SMTP.php';
 require '../vendor/PHPMailer-master/src/Exception.php';
-require_once('../database/datafetch.php');
 
 $mail = new PHPMailer\PHPMailer\PHPMailer();
 
 try {
-    // Server settings
     $mail->isSMTP();
     $mail->Host = 'smtp.hostinger.com'; 
     $mail->SMTPAuth = true;
@@ -16,9 +14,8 @@ try {
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
 
-    // Recipients
     $mail->setFrom('rui@meetneat.online', 'SchedAI');
-    $mail->addAddress('qrovic@gmail.com', 'Steve Garciano');
+    $mail->addAddress('quilantangrovic@gmail.com', 'Steve Garciano');
 
     // Content
     $mail->isHTML(true);
@@ -125,13 +122,13 @@ try {
                 </div>
                 <div class="email-footer">
                     Best regards, <br>
-                    The Scheduling Team
+                    SchedAI
                 </div>
             </div>
         </body>
         </html>
     ';
-    $mail->AltBody = 'Mr. Garciano, Your schedule is now available for review. Please log in to your account to view the details. Best regards, The Scheduling Team.';
+    $mail->AltBody = 'Mr. Garciano, Your schedule is now available for review. Please log in to your account to view the details. Best regards, SchedAI.';
 
     $mail->send();
     echo 'Message has been sent';

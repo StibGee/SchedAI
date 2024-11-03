@@ -13,6 +13,7 @@
     require_once('../classes/college.php');
     require_once('../classes/schedule.php');
     require_once('../classes/faculty.php');
+    require_once('../classes/email.php');
     
     $collegeid=$_SESSION['collegeid'];
     $scheduling=False;
@@ -21,6 +22,7 @@
     
     
     $curriculum = new Curriculum($pdo);
+    $email = new Email($pdo);
     $faculty = new Faculty($pdo);
     $schedule = new Schedule($pdo);
     $college = new College($pdo);
@@ -52,12 +54,14 @@
         $minornofacultycount=$schedule->minorfacultycountdepartment($departmentid, $_SESSION['calendarid']);
         $minorsubjectsnofaculty=$schedule->minornofacultydepartment($departmentid, $_SESSION['calendarid']);
         $faculties=$faculty->departmentfaculty($departmentid);
+        $facultywemail=$faculty->facultywemaildepartment($departmentid);
     }else{
         $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
         $minorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
         $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
         $collegeinfo=$college->getcollegeinfo($collegeid);
         
+        $facultywemail=$faculty->facultywemailcollege($_SESSION['collegeid']);
         $filteredschedules=$schedule->filteredschedulecollege($_SESSION['calendarid'], $_SESSION['collegeid']);
         $faculties=$faculty->collegefaculty($_SESSION['collegeid']);
     }
@@ -72,7 +76,17 @@
 <link href="../css/style.css" rel="stylesheet">
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/generated-sched.css">
-<body >
+<body>
+<?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='scheduled'){
+    foreach($facultywemail as $facultywemails){
+        $emailadd=$facultywemails['email'];
+        $fullname=$facultywemails['fname'];
+        $facultyid=$facultywemails['facultyid'];
+        $calendarid=$_SESSION['calendarid'];
+        $emailfacultysched=$email->emailfacultyschedule($emailadd, $fullname, $facultyid, $calendarid);
+    }
+}
+?>
 <?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading'){?>
     <div class="progresspopupdiv">
         
@@ -131,9 +145,11 @@
                         document.getElementById('progress-bar').setAttribute('aria-valuenow', percentage);
                         document.getElementById('progress-bar').setAttribute('aria-valuenow', '<?php echo $percentage; ?>');
                         document.getElementById('progress-text').innerText = '<?php echo $percentage; ?>%';
-
+                        
                         if (percentage>= 100) {
-                            window.location.href = './final-sched.php';
+                            
+                            window.location.href = './final-sched.php?scheduling=scheduled';
+                            
                         }
                     </script>
                     <?php

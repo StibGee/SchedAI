@@ -8,7 +8,7 @@ class Faculty {
         $this->pdo = $pdo;
     }
 
-    public function addfaculty($fname, $mname, $lname, $contactno, $bday, $gender, $username, $hashedpassword, $type, $startdate, $departmentid, $collegeid, $teachinghours, $rank, $masters, $phd) {
+    public function addfaculty($fname, $mname, $lname, $contactno, $bday, $gender, $username, $hashedpassword, $type, $startdate, $departmentid, $collegeid, $teachinghours, $rank, $masters, $phd, $emailadd) {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM faculty WHERE fname = :fname");
         $stmt->bindParam(':fname', $fname);
         $stmt->execute();
@@ -19,7 +19,7 @@ class Faculty {
             exit();
         }
 
-        $stmt = $this->pdo->prepare("INSERT INTO faculty (fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, collegeid, teachinghours, rank, masters, phd) VALUES (:fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :collegeid, :teachinghours, :rank, :masters, :phd)");
+        $stmt = $this->pdo->prepare("INSERT INTO faculty (fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, collegeid, teachinghours, rank, masters, phd, email) VALUES (:fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :collegeid, :teachinghours, :rank, :masters, :phd, :email)");
     
         $stmt->bindParam(':fname', $fname);
         $stmt->bindParam(':mname', $mname);
@@ -37,7 +37,7 @@ class Faculty {
         $stmt->bindParam(':rank', $rank);
         $stmt->bindParam(':masters', $masters);
         $stmt->bindParam(':phd', $phd);
-    
+        $stmt->bindParam(':email', $emailadd);
         return $stmt->execute();
     }
     
@@ -161,6 +161,30 @@ class Faculty {
                 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['collegeid' => $collegeid]);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function facultywemailcollege($collegeid) {
+        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname 
+                FROM faculty 
+                JOIN department ON department.id = faculty.departmentid 
+                WHERE department.collegeid = :collegeid AND email IS NOT NULL AND email != '';
+                ";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['collegeid' => $collegeid]);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function facultywemaildepartment($departmentid) {
+        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname 
+                FROM faculty 
+                JOIN department ON department.id = faculty.departmentid 
+                WHERE department.id = :departmentid AND email IS NOT NULL AND email != '';
+                ";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['departmentid' => $departmentid]);
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -800,7 +800,7 @@ def minorfree(departmentid, yearlvl, section, day, time):
 subjectiteration={}
 backtrackcounters={}
 facultyhoursday={}
-maxdepth=500
+maxdepth=250
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
     

@@ -1,12 +1,13 @@
 <?php
 require_once '../classes/db.php'; 
 require_once '../classes/faculty.php'; 
-
+require_once '../classes/email.php'; 
 
 $db = new Database();
+
 $pdo = $db->connect();
 $faculty = new Faculty ($pdo); 
-
+$email = new Email($pdo);
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
@@ -113,6 +114,7 @@ function login($pdo) {
 }
 function addfaculty() {
     global $faculty;
+    global $email;
     $fname = trim(stripslashes(htmlspecialchars($_POST['fname'])));
     $mname = trim(stripslashes(htmlspecialchars($_POST['mname'])));
     $lname = trim(stripslashes(htmlspecialchars($_POST['lname'])));
@@ -127,7 +129,8 @@ function addfaculty() {
     $collegeid = trim(stripslashes(htmlspecialchars($_POST['collegeid'])));
     $teachinghours = trim(stripslashes(htmlspecialchars($_POST['teachinghours'])));
     $rank = trim(stripslashes(htmlspecialchars($_POST['rank'])));
-
+    $emailadd = trim(stripslashes(htmlspecialchars($_POST['emailadd'])));
+    $fullname=$fname.' '.$lname;
     if (isset($_POST['rank'])&&($_POST['rank']=='phd')) {
         $masters='Yes';
         $phd='Yes';
@@ -139,9 +142,10 @@ function addfaculty() {
         $phd='No';
     }
 
-
+    if(isset($_POST['emailadd'])){$emailfaculty=$email->emailnewfaculty($emailadd, $fullname, $username, $password);}
     $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
-    $addfaculty = $faculty->addfaculty($fname,$mname,$lname,$contactno,$bday,$gender,$username,$hashedpassword,$type,$startdate,$departmentid,$collegeid,$teachinghours,$rank,$masters,$phd
+    
+    $addfaculty = $faculty->addfaculty($fname,$mname,$lname,$contactno,$bday,$gender,$username,$hashedpassword,$type,$startdate,$departmentid,$collegeid,$teachinghours,$rank,$masters,$phd,$emailadd
     );
     if ($addfaculty) {
         header("Location: ../admin/faculty.php?faculty=added");

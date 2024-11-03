@@ -137,8 +137,8 @@
                                 <h2 class="head-label">Add faculty</h2>
                                 <div class="container form">
                                     <form id="facultyForm" action="../processing/facultyprocessing.php" method="POST" class="row g-3 needs-validation" novalidate="">
-                                        <input type="text" name="action" id="" value="addfaculty">
-                                        <input type="number" name="collegeid" id="" value="<?php echo $_SESSION['collegeid'];?>">
+                                        <input type="text" name="action" id="" value="addfaculty" hidden>
+                                        <input type="number" name="collegeid" id="" value="<?php echo $_SESSION['collegeid'];?>" hidden>
                                         <div class="col-6">
                                             <label class="form-label" for="department">Deparment</label>
                                             <select class="form-select form-select-sm" id="select-classtype" name="departmentid"  <?php if ($_SESSION['departmentid']!=0){echo 'readonly';} ?>>
@@ -172,6 +172,12 @@
                                             <div class="col-md-4">
                                                 <label class="form-label" for="contactnumber">Contact Number</label>
                                                 <input class="form-control" id="contactnumber" name="contactno" type="tel" required />
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="email">Email Address</label>
+                                                <input class="form-control" id="email" name="emailadd" type="email" required />
+                                        
                                                 <div class="valid-feedback">Looks good!</div>
                                             </div>
                                             <div class="col-md-4">

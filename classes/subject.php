@@ -90,7 +90,6 @@ class Subject {
                 commonname = :commonname 
             WHERE id = :id");
 
-        // Bind parameters individually
         $stmt->bindParam(':subjectcode', $subjectcode);
         $stmt->bindParam(':subjectname', $subjectname);
         $stmt->bindParam(':type', $type);
