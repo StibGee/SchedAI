@@ -11,8 +11,8 @@ $faculty = new Faculty ($pdo);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 switch ($action) {
-    case 'add':
-        addschedule();
+    case 'addfaculty':
+        addfaculty();
         break;
     case 'addprofiling':
         addfacultypreferences();
@@ -111,35 +111,42 @@ function login($pdo) {
     }  
     
 }
-function addschedule() {
-    global $schedule;
-    global $curriculum;
+function addfaculty() {
+    global $faculty;
+    $fname = trim(stripslashes(htmlspecialchars($_POST['fname'])));
+    $mname = trim(stripslashes(htmlspecialchars($_POST['mname'])));
+    $lname = trim(stripslashes(htmlspecialchars($_POST['lname'])));
+    $contactno = trim(stripslashes(htmlspecialchars($_POST['contactno'])));
+    $bday = trim(stripslashes(htmlspecialchars($_POST['bday'])));
+    $gender = trim(stripslashes(htmlspecialchars($_POST['gender'])));
+    $username = trim(stripslashes(htmlspecialchars($_POST['username'])));
+    $password = trim(stripslashes(htmlspecialchars($_POST['password'])));
+    $type = trim(stripslashes(htmlspecialchars($_POST['type'])));
+    $startdate = trim(stripslashes(htmlspecialchars($_POST['startdate'])));
+    $departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
+    $collegeid = trim(stripslashes(htmlspecialchars($_POST['collegeid'])));
+    $teachinghours = trim(stripslashes(htmlspecialchars($_POST['teachinghours'])));
+    $rank = trim(stripslashes(htmlspecialchars($_POST['rank'])));
 
-    $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
-    $departmentid= isset($_POST['departmentid']) ? filter_var($_POST['departmentid'], FILTER_SANITIZE_STRING) : '';
-    $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
-    $section1= isset($_POST['section1']) ? filter_var($_POST['section1'], FILTER_SANITIZE_STRING) : '';
-    $curriculum1= isset($_POST['curriculum1']) ? filter_var($_POST['curriculum1'], FILTER_SANITIZE_STRING) : '';
-    $section2= isset($_POST['section2']) ? filter_var($_POST['section2'], FILTER_SANITIZE_STRING) : '';
-    $curriculum2= isset($_POST['curriculum2']) ? filter_var($_POST['curriculum2'], FILTER_SANITIZE_STRING) : '';
-    $section3= isset($_POST['section3']) ? filter_var($_POST['section3'], FILTER_SANITIZE_STRING) : '';
-    $curriculum3= isset($_POST['curriculum3']) ? filter_var($_POST['curriculum3'], FILTER_SANITIZE_STRING) : '';
-    $section4= isset($_POST['section4']) ? filter_var($_POST['section4'], FILTER_SANITIZE_STRING) : '';
-    $curriculum4= isset($_POST['curriculum4']) ? filter_var($_POST['curriculum4'], FILTER_SANITIZE_STRING) : '';
+    if (isset($_POST['rank'])&&($_POST['rank']=='phd')) {
+        $masters='Yes';
+        $phd='Yes';
+    }elseif(isset($_POST['rank'])&&($_POST['rank']=='masters')) {
+        $masters='Yes';
+        $phd='No';
+    }else{
+        $masters='No';
+        $phd='No';
+    }
 
-    $calendarid=$curriculum->findcurriculumid($academicyear, $semester);
-    $request = $schedule->addrequest($departmentid, $calendarid);
-    $result1 = $schedule->addschedule(1,$academicyear, $departmentid, $semester, $section1, $curriculum1, $calendarid);
-    $result2 = $schedule->addschedule(2,$academicyear, $departmentid, $semester, $section2, $curriculum2, $calendarid);
-    $result3 = $schedule->addschedule(3,$academicyear, $departmentid, $semester, $section3, $curriculum3, $calendarid);
-    $result4 = $schedule->addschedule(4,$academicyear, $departmentid, $semester, $section4, $curriculum4, $calendarid);
 
-    if ($result1 && $result2 && $result3 && $result4) {
-        header("Location: ../admin/academic-plan.php?curriculum=added");
-    } else {
-        header("Location: ../admin/academic-plan.php?curriculum=error");
-    }    
-    exit();
+    $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+    $addfaculty = $faculty->addfaculty($fname,$mname,$lname,$contactno,$bday,$gender,$username,$hashedpassword,$type,$startdate,$departmentid,$collegeid,$teachinghours,$rank,$masters,$phd
+    );
+    if ($addfaculty) {
+        header("Location: ../admin/faculty.php?faculty=added");
+        exit();
+    }
 }
 function addfacultypreferences() {
     global $faculty;

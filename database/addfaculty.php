@@ -16,14 +16,14 @@ $teachinghours = trim(stripslashes(htmlspecialchars($_POST['teachinghours'])));
 $rank = trim(stripslashes(htmlspecialchars($_POST['rank'])));
 
 if (isset($_POST['rank'])&&($_POST['rank']=='phd')) {
-    $masters='yes';
-    $phd='yes';
+    $masters='Yes';
+    $phd='Yes';
 }elseif(isset($_POST['rank'])&&($_POST['rank']=='masters')) {
-    $masters='yes';
-    $phd='no';
+    $masters='Yes';
+    $phd='No';
 }else{
-    $masters='no';
-    $phd='no';
+    $masters='No';
+    $phd='No';
 }
 
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM faculty WHERE fname = :fname");

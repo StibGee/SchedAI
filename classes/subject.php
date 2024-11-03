@@ -9,6 +9,11 @@ class Subject {
     }
 
     public function addsubjectlec($subjectcode, $subjectname, $lecunit, $focus, $masters, $calendarid, $departmentid, $yearlvl){
+        if ($lecunit==1){
+            $lechours=3;
+        }else{
+            $lechours=$lecunit;
+        }
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM room WHERE name = :name");
         $stmt->bindParam(':name', $name);
         $stmt->execute();
@@ -23,7 +28,7 @@ class Subject {
             $stmt->bindParam(':subjectcode', $subjectcode);
             $stmt->bindParam(':name', $subjectname);
             $stmt->bindParam(':unit', $lecunit);
-            $stmt->bindParam(':hours', $lecunit);
+            $stmt->bindParam(':hours', $lechours);
             $stmt->bindParam(':masters', $masters);
             $stmt->bindParam(':focus', $focus);
             $stmt->bindParam(':calendarid', $calendarid);
@@ -71,14 +76,38 @@ class Subject {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function updatesubject($id, $name, $capacity) {
-        $sql = "UPDATE rooms SET name = :name, capacity = :capacity WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
-            ':name' => $name,
-            ':capacity' => $capacity,
-            ':id' => $id
-        ]);
+    public function updatesubject($subjectid, $subjectcode, $subjectname, $type, $unit,$hours, $focus, $labroom, $masters, $commonname) {
+       
+        $stmt = $this->pdo->prepare("UPDATE subject 
+            SET subjectcode = :subjectcode, 
+                name = :subjectname, 
+                type = :type, 
+                unit = :unit, 
+                hours = :hours, 
+                focus = :focus, 
+                requirelabroom = :labroom, 
+                masters = :masters, 
+                commonname = :commonname 
+            WHERE id = :id");
+
+        // Bind parameters individually
+        $stmt->bindParam(':subjectcode', $subjectcode);
+        $stmt->bindParam(':subjectname', $subjectname);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':unit', $unit);
+        $stmt->bindParam(':hours', $hours);
+        $stmt->bindParam(':focus', $focus);
+        $stmt->bindParam(':labroom', $labroom);
+        $stmt->bindParam(':masters', $masters);
+        $stmt->bindParam(':commonname', $commonname);
+        $stmt->bindParam(':id', $subjectid); 
+
+        
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false; 
+        }
     }
 
     public function deletesubject($id) {

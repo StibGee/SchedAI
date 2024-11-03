@@ -8,27 +8,39 @@ class Faculty {
         $this->pdo = $pdo;
     }
 
-    public function addroom($name, $type, $departmentid, $timestart, $timeend) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM room WHERE name = :name");
-        $stmt->bindParam(':name', $name);
+    public function addfaculty($fname, $mname, $lname, $contactno, $bday, $gender, $username, $hashedpassword, $type, $startdate, $departmentid, $collegeid, $teachinghours, $rank, $masters, $phd) {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM faculty WHERE fname = :fname");
+        $stmt->bindParam(':fname', $fname);
         $stmt->execute();
-        $roomExists = $stmt ->fetchColumn();
+        $facultyexists = $stmt->fetchColumn();
     
-        if ($roomExists) {
-            header("Location: ../admin/room.php?room=exist");
+        if ($facultyexists) {
+            header("Location: ../admin/faculty.php?faculty=exist");
             exit();
-        } else {
-            $sql = "INSERT INTO room (name, type, departmentid, timestart, timeend) VALUES (:name, :type, :departmentid, :timestart, :timeend)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':type', $type);
-            $stmt->bindParam(':departmentid', $departmentid);
-            $stmt->bindParam(':timestart', $timestart);
-            $stmt->bindParam(':timeend', $timeend);
-            return $stmt->execute();
-        
         }
+
+        $stmt = $this->pdo->prepare("INSERT INTO faculty (fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, collegeid, teachinghours, rank, masters, phd) VALUES (:fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :collegeid, :teachinghours, :rank, :masters, :phd)");
+    
+        $stmt->bindParam(':fname', $fname);
+        $stmt->bindParam(':mname', $mname);
+        $stmt->bindParam(':lname', $lname);
+        $stmt->bindParam(':contactno', $contactno);
+        $stmt->bindParam(':bday', $bday);
+        $stmt->bindParam(':gender', $gender);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $hashedpassword);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':startdate', $startdate);
+        $stmt->bindParam(':departmentid', $departmentid);
+        $stmt->bindParam(':collegeid', $collegeid);
+        $stmt->bindParam(':teachinghours', $teachinghours);
+        $stmt->bindParam(':rank', $rank);
+        $stmt->bindParam(':masters', $masters);
+        $stmt->bindParam(':phd', $phd);
+    
+        return $stmt->execute();
     }
+    
     
     public function checkfacultyday($facultyid, $day) {
         $sql = "SELECT COUNT(*) FROM facultypreferences WHERE facultyid = :facultyid AND day = :day";

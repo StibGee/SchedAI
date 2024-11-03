@@ -136,7 +136,9 @@
                             <div class="rounded-top-3 form p-4" style="max-height: 500px; overflow-y: auto;">
                                 <h2 class="head-label">Add faculty</h2>
                                 <div class="container form">
-                                    <form id="facultyForm" action="../database/addfaculty.php" method="POST" class="row g-3 needs-validation" novalidate="">
+                                    <form id="facultyForm" action="../processing/facultyprocessing.php" method="POST" class="row g-3 needs-validation" novalidate="">
+                                        <input type="text" name="action" id="" value="addfaculty">
+                                        <input type="number" name="collegeid" id="" value="<?php echo $_SESSION['collegeid'];?>">
                                         <div class="col-6">
                                             <label class="form-label" for="department">Deparment</label>
                                             <select class="form-select form-select-sm" id="select-classtype" name="departmentid"  <?php if ($_SESSION['departmentid']!=0){echo 'readonly';} ?>>
@@ -208,8 +210,8 @@
                                                 <label class="form-label" for="position">Type</label>
                                                 <select class="form-select" id="position" name="type" required="">
                                                     <option selected="" disabled="" value="">Choose...</option>
-                                                    <option value="regular">Regular </option>
-                                                    <option value="contractual">Contractual</option>
+                                                    <option value="Regular">Regular </option>
+                                                    <option value="Contractual">Contractual</option>
                                                 </select>
                                                 <div class="invalid-feedback">Please select a Gender</div>
                                             </div>
