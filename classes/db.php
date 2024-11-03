@@ -3,7 +3,7 @@ class Database {
     private $host = 'localhost';
     private $dbname = 'schedai';
     private $username = 'root';
-    private $password = 'mayjune123';
+    private $password = '';
     private $pdo;
 
     public function connect() {
