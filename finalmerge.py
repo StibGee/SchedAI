@@ -27,7 +27,7 @@ if (departmentid==0):
         AND subjectschedule.calendarid = %s 
         AND department.collegeid = %s 
         
-        ORDER BY subject.type DESC, subjectschedule.departmentid ASC
+        ORDER BY subjectschedule.departmentid ASC, subject.type DESC
     """, (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
@@ -110,7 +110,7 @@ else:
     FROM facultysubject 
     JOIN faculty ON faculty.id = facultysubject.facultyid 
     WHERE faculty.departmentid = %s 
-    ORDER BY faculty.masters ASC, faculty.teachinghours DESC, faculty.departmentid ASC
+    ORDER BY faculty.departmentid ASC, faculty.masters ASC, faculty.teachinghours DESC
     """, (departmentid,))
     facultysubject = cursor.fetchall()
 

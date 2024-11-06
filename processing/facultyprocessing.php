@@ -2,18 +2,23 @@
 require_once '../classes/db.php'; 
 require_once '../classes/faculty.php'; 
 require_once '../classes/email.php'; 
+require_once '../classes/department.php';
 
 $db = new Database();
 
 $pdo = $db->connect();
 $faculty = new Faculty ($pdo); 
 $email = new Email($pdo);
+$department = new Department($pdo);
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 switch ($action) {
     case 'addfaculty':
         addfaculty();
+        break;
+    case 'addrootfaculty':
+        addrootfaculty();
         break;
     case 'addprofiling':
         addfacultypreferences();
@@ -152,6 +157,37 @@ function addfaculty() {
         exit();
     }
 }
+
+function addrootfaculty() {
+    global $faculty;
+    global $email;
+    global $department;
+    
+    $departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
+    $role = trim(stripslashes(htmlspecialchars($_POST['role'])));
+    $emailadd = trim(stripslashes(htmlspecialchars($_POST['emailadd'])));
+    $fname = trim(stripslashes(htmlspecialchars($_POST['fname'])));
+    $mname = trim(stripslashes(htmlspecialchars($_POST['mname'])));
+    $lname = trim(stripslashes(htmlspecialchars($_POST['lname'])));
+    $fullname=$fname.' '.$lname;
+    $username = trim(stripslashes(htmlspecialchars($_POST['username'])));
+    $password = trim(stripslashes(htmlspecialchars($_POST['password'])));
+    $departmentinfo=$department->getdepartmentinfo($departmentid);
+    $collegeid=htmlspecialchars($departmentinfo['collegeid']);
+
+   
+
+    if(isset($_POST['emailadd'])){$emailfaculty=$email->emailnewfaculty($emailadd, $fullname, $username, $password);}
+    $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+    
+    $addfaculty = $faculty->addrootfaculty($fname,$mname,$lname,$username,$hashedpassword,$departmentid,$collegeid,$emailadd, $role);
+
+    if ($addfaculty) {
+        header("Location: ../superadmin/users.php?user=added");
+        exit();
+    }
+}
+
 function addfacultypreferences() {
     global $faculty;
     

@@ -87,7 +87,7 @@ class Email {
                         <div class="email-body">
                             <p>Dear ' . htmlspecialchars($fullname) . ',</p>
                             <p>Please log in using the credentials below to complete your profile setup.</p>
-                            <p><strong>Email:</strong> ' . htmlspecialchars($email) . '</p>
+                            <p><strong>Usrname:</strong> ' . htmlspecialchars($username) . '</p>
                             <p><strong>Password:</strong> ' . htmlspecialchars($passwordlol) . '</p>
                         </div>
                         <div class="email-footer">

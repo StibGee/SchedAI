@@ -80,10 +80,35 @@ class Schedule {
             ':timeend' => $timeend
         ]);
     }
-    
-    
-    
+    public function subjectscheduleinfo($subjectscheduleid){
+        $sql = "SELECT * FROM subjectschedule WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $subjectscheduleid]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
+    public function swapschedule($draggedsubjectid, $draggedsubjectday, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $droppedsubjectday, $droppedsubjectstarttime, $droppedsubjectendtime) {
+        $sql = "UPDATE subjectschedule SET day = :day, timestart = :timestart, timeend = :timeend WHERE id = :subjectscheduleid";
+        $stmt = $this->pdo->prepare($sql);
+        $result1 = $stmt->execute([
+            ':subjectscheduleid' => $droppedsubjectid,
+            ':day' => $draggedsubjectday,
+            ':timestart' => $draggedsubjectstarttime,
+            ':timeend' => $draggedsubjectendtime
+        ]);
+    
+        $stmt = $this->pdo->prepare($sql);
+        $result2 = $stmt->execute([
+            ':subjectscheduleid' => $draggedsubjectid,
+            ':day' => $droppedsubjectday,
+            ':timestart' => $droppedsubjectstarttime,
+            ':timeend' => $droppedsubjectendtime
+        ]);
+
+        return $result1 && $result2;
+    }
+    
+    
     public function getroombyid($id) {
         $sql = "SELECT * FROM rooms WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);

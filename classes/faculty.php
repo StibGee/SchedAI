@@ -41,7 +41,31 @@ class Faculty {
         return $stmt->execute();
     }
     
+    public function addrootfaculty($fname,$mname,$lname,$username,$hashedpassword,$departmentid,$collegeid,$emailadd, $role){
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM faculty WHERE fname = :fname");
+        $stmt->bindParam(':fname', $fname);
+        $stmt->execute();
+        $facultyexists = $stmt->fetchColumn();
     
+        if ($facultyexists) {
+            header("Location: ../admin/faculty.php?faculty=exist");
+            exit();
+        }
+
+        $stmt = $this->pdo->prepare("INSERT INTO faculty (fname, mname, lname,username, password, departmentid, collegeid, email, role) VALUES (:fname, :mname, :lname, :username, :password, :departmentid, :collegeid, :email,:role)");
+    
+        $stmt->bindParam(':fname', $fname);
+        $stmt->bindParam(':mname', $mname);
+        $stmt->bindParam(':lname', $lname);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $hashedpassword);
+        $stmt->bindParam(':departmentid', $departmentid);
+        $stmt->bindParam(':collegeid', $collegeid);
+        $stmt->bindParam(':email', $emailadd);
+        $stmt->bindParam(':role', $role);
+        return $stmt->execute();
+    }
+
     public function checkfacultyday($facultyid, $day) {
         $sql = "SELECT COUNT(*) FROM facultypreferences WHERE facultyid = :facultyid AND day = :day";
         $stmt = $this->pdo->prepare($sql);
@@ -150,6 +174,11 @@ class Faculty {
     }
     public function getallfaculty() {
         $sql = "SELECT *,faculty.id AS facultyid, department.name AS departmentname FROM faculty JOIN department ON department.id = faculty.departmentid";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getallauthorizedfaculty() {
+        $sql = "SELECT *,faculty.id AS facultyid, college.abbreviation as collegename, department.abbreviation AS departmentname FROM faculty JOIN department ON department.id = faculty.departmentid JOIN college ON college.id=department.collegeid WHERE faculty.role='collegesecretary' OR faculty.role='departmenthead'";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

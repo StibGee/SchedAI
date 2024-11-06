@@ -21,7 +21,9 @@ switch ($action) {
     case 'updateminorcollege':
         updateminor();
         break;
-    
+    case 'swap':
+        swap();
+        break;
     case 'delete':
         deletecurriculum();
         break;
@@ -236,6 +238,33 @@ function updateminor() {
         header("Location: ../admin/final-sched.php?minor=failed");
     }    
     exit();
+}
+function swap() {
+   
+    global $schedule;
+    global $curriculum;
+  
+    $draggedsubjectid = $_POST['draggedsubjectid'];
+    $droppedsubjectid = $_POST['droppedsubjectid'];
+    
+    $draggedsubjectscheduleinfo = $schedule->subjectscheduleinfo($draggedsubjectid);
+    $draggedsubjectday = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['day'] : null;
+    $draggedsubjectstarttime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timestart'] : null;
+    $draggedsubjectendtime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timeend'] : null;
+
+    $droppeddsubjectscheduleinfo = $schedule->subjectscheduleinfo($droppedsubjectid);
+    $droppedsubjectday = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['day'] : null;
+    $droppedsubjectstarttime = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['timestart'] : null;
+    $droppedsubjectendtime = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['timeend'] : null;
+
+    
+    $swap=$schedule->swapschedule($draggedsubjectid, $draggedsubjectday, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $droppedsubjectday, $droppedsubjectstarttime, $droppedsubjectendtime);
+
+    if($swap){
+        header("Location: ../admin/final-sched-room.php");
+    }else {
+        header("Location: ../admin/final-sched-room.php?swap=failed");
+    }  
 }
 function updateroom() {
     global $room;

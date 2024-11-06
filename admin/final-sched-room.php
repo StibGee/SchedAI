@@ -29,20 +29,23 @@
 
     if (isset($_POST['roomid'])) {
         $roomids = $_POST['roomid'];
+        $_SESSION['roomid'] = $_POST['roomid'];
         foreach ($collegeroom as $collegerooms){
             if ($collegerooms['roomid']== $roomids){
                 $roomname=$collegerooms['roomname'];
                
             }
         }
-    } else {
+    }elseif(isset($_SESSION['roomid'])) {
+        $roomids = $_SESSION['roomid'];
+        
+    }else{
         $roomids = $inititialcollegeroom;
         foreach ($collegeroom as $collegerooms){
             if ($collegerooms['roomid']== $roomids){
                 $roomname=$collegerooms['roomname'];
             }
         }
-        
     }
     if ($_SESSION['departmentid']!=0){
         $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
@@ -79,7 +82,10 @@
                 section,
                 faculty.fname as facultyname,
                 subject.type as subjecttype,
-                department.abbreviation as departmentname
+                department.abbreviation as departmentname,
+                subject.hours as subjecthours,
+                subject.unit as subjectunit,
+                subject.type as subjecttype
             FROM 
                 subjectschedule 
                 JOIN subject ON subject.id = subjectschedule.subjectid
@@ -98,7 +104,10 @@
                 section,
                 faculty.fname as facultyname,
                 subject.type as subjecttype,
-                department.abbreviation as departmentname
+                department.abbreviation as departmentname,
+                subject.hours as subjecthours,
+                subject.unit as subjectunit,
+                subject.type as subjecttype
             FROM 
                 subjectschedule 
                 JOIN subject ON subject.id = subjectschedule.subjectid
@@ -114,8 +123,9 @@
         $daysArray = preg_split('/(?<=[a-zA-Z])(?=[A-Z])/', $row['day']);
         $starttime = $row['timestart'];
         $endtime = $row['timeend'];
-
+        $subjectunit = (int)$row['subjectunit']; 
         $subjectid = (int)$row['subjectidno']; 
+        $subjecthour = $row['subjecthours']; 
         $subjectname = htmlspecialchars($row['subjectname']);
         $departmentname = htmlspecialchars($row['departmentname']);
         $subjecttype = htmlspecialchars($row['subjecttype']);
@@ -155,6 +165,10 @@
                     $schedule[$day][$interval][] = [
                         'color' => $color,
                         'subjectname' => $subjectLabel,
+                        'subjectid' => $subjectid,
+                        'subjecthour' => $subjecthour,
+                        'subjectunit' => $subjectunit,
+                        'subjecttype' => $subjecttype,
                         'is_center' => true, 
                         'is_top' => $isTop,   
                         'is_middle' => $isMiddle,
@@ -163,7 +177,11 @@
                 } else {
                     $schedule[$day][$interval][] = [
                         'color' => $color,
-                        'subjectname' => '',
+                        'subjectname' => $subjectLabel,
+                        'subjectid' => $subjectid,
+                        'subjecthour' => $subjecthour,
+                        'subjectunit' => $subjectunit,
+                        'subjecttype' => $subjecttype,
                         'is_center' => false,
                         'is_top' => $isTop,
                         'is_middle' => $isMiddle,
@@ -285,19 +303,51 @@
                                                     //$isCenters = array_column($subjectData, 'is_center');
                                                     $color = $colors[0];
                                                     echo 'style="background-color: ' . htmlspecialchars($color) . ';"';
+                                                    
                                                     foreach ($schedule[$day][$interval] as $data) {
-                                                        if ($data['is_middle']==1 ){
-                                                            echo ' class="occupiedmiddle"';
-                                                        }elseif ($data['is_top']==1 ){
-                                                            echo ' class="occupiedfirst"';
-                                                        }else{
-                                                            echo ' class="occupiedlast"';
-                                                        }
+                                                        // Dynamically adding classes based on subject's position (top, middle, bottom)
+                                                        $subjectIdClass = htmlspecialchars(str_replace(' ', '', $data['subjectid']));  // Remove spaces 
+                                                        
+                                                        // Check if the data is "middle", "top", or "bottom" and make the element draggable
+                                                
+                                                        if ($data['is_middle']) {
+                                                            echo ' class="occupiedmiddle ' . 'subject ' . $subjectIdClass . '" 
+                                                                data-subject="' . htmlspecialchars($data['subjectid']) . '" 
+                                                                data-subjecthour="' . htmlspecialchars($data['subjecthour']) . '" 
+                                                                data-subjectunit="' . htmlspecialchars($data['subjectunit']) . '" 
+                                                                data-subjecttype="' . htmlspecialchars($data['subjecttype']) . '" 
+                                                                draggable="true" ondragstart="handleDragStart(event)" ';
+                                                        } elseif ($data['is_top']) {
+                                                            echo ' class="occupiedmiddle ' . 'subject ' . $subjectIdClass . '" 
+                                                                data-subject="' . htmlspecialchars($data['subjectid']) . '" 
+                                                                data-subjecthour="' . htmlspecialchars($data['subjecthour']) . '" 
+                                                                data-subjectunit="' . htmlspecialchars($data['subjectunit']) . '" 
+                                                                 data-subjecttype="' . htmlspecialchars($data['subjecttype']) . '" 
+                                                                draggable="true" ondragstart="handleDragStart(event)" ';
+                                                        } elseif ($data['is_bottom']) {
+                                                            echo ' class="occupiedlast ' . 'subject ' . $subjectIdClass . '" 
+                                                                data-subject="' . htmlspecialchars($data['subjectid']) . '" 
+                                                                data-subjecthour="' . htmlspecialchars($data['subjecthour']) . '" 
+                                                                data-subjectunit="' . htmlspecialchars($data['subjectunit']) . '" 
+                                                                data-subjecttype="' . htmlspecialchars($data['subjecttype']) . '" 
+                                                                draggable="true" ondragstart="handleDragStart(event)" ';
+                                                        }                                                     
+                                                    
+                                                        
+                                                        
+                                                        
+
                                                     }
                                                     
                                                  
                                                     
                                                     //echo ' data-subject="' . htmlspecialchars(implode(' and ', array_unique($subjectNames))) . '"';
+                                                }else{
+                                                    echo ' class="" 
+                                                                data-day="' . htmlspecialchars($day) . '" 
+                                                                data-time="' . htmlspecialchars($start) . '" 
+                                                                draggable="true" ondragstart="handleDragStart(event)" ';
+                                                    
                                                 }
                                                 ?>
                                             >
@@ -305,9 +355,15 @@
                                                 if (isset($schedule[$day][$interval])) {
                                                     foreach ($schedule[$day][$interval] as $data) {
                                                         if ($data['is_center']) {
+                                                            echo '<div class="subject ' . htmlspecialchars($data['subjectid']) . '" draggable="true" 
+                                                                    ondragstart="handleDragStart(event)" 
+                                                                    data-subject="' . htmlspecialchars($data['subjectid']) . '" data-subjecthour="' . htmlspecialchars($data['subjecthour']) . '"
+                                                                    data-subjecttype="' . htmlspecialchars($data['subjecttype']) . '"  
+                                                                    data-subjectunit="' . htmlspecialchars($data['subjectunit']) . '"  
+                                                                    style="background-color: ' . htmlspecialchars($data['color']) . ';">';
                                                             echo htmlspecialchars($data['subjectname']);
+                                                            echo '</div>';
                                                         }
-                                                       
                                                     }
                                                 }
                                                 ?>
@@ -326,6 +382,26 @@
 
     </main>
 </body>
+<style>.timetable-cell {
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 100px;
+    height: 50px;
+    position: relative;
+}
+
+.timetable-cell:hover {
+    background-color: #f0f0f0;
+}
+
+.occupiedmiddle, .occupiedlast {
+    cursor: move;
+}
+
+.occupiedmiddle.dragging, .occupiedlast.dragging {
+    opacity: 0.5;
+}
+</style>
     <link rel="stylesheet" href="../css/generated-sched-room.css">
     <link rel="stylesheet" href="../css/main.css">
     
@@ -338,10 +414,136 @@
             var selectElement = document.getElementById('filter');
             var selectedValue = selectElement.value;
 
-            // Redirect based on selected value
             if (selectedValue) {
                 window.location.href = selectedValue;
             }
         }
     </script>
+    
+
 </html>
+
+<script>
+    
+    let draggedElements = []; 
+
+    function handleDragStart(event) {
+    const subjectId = event.target.getAttribute('data-subject'); 
+    
+    draggedElements = Array.from(document.querySelectorAll(`[data-subject="${subjectId}"]`));
+    
+    draggedElements.forEach(elem => {
+        elem.style.opacity = '0.5'; 
+    });
+
+    event.dataTransfer.setData("text", event.target.id);  
+    }
+
+    function handleDragOver(event) {
+    event.preventDefault(); 
+    }
+
+    function handleDrop(event) {
+    event.preventDefault();
+    
+    const target = event.target;
+    
+    if (target.tagName.toLowerCase() === "td" || target.tagName.toLowerCase() === "div") {
+        
+        draggedElements.forEach(elem => {
+        elem.style.opacity = '1'; 
+        });
+
+        const draggedSubjectId = draggedElements[0].getAttribute('data-subject');
+        const draggedSubjecthours = draggedElements[0].getAttribute('data-subjecthour');
+        const draggedSubjecttype = draggedElements[0].getAttribute('data-subjecttype');
+        const draggedSubjectunit = draggedElements[0].getAttribute('data-subjectunit');
+
+        const droppedSubjectId = target.getAttribute('data-subject');
+        const droppedSubjecthours = target.getAttribute('data-subjecthour');
+        const droppedSubjecttype = target.getAttribute('data-subjecttype');
+        const droppedSubjectunit = target.getAttribute('data-subjectunit');
+        const droppedday = target.getAttribute('data-day');
+        const droppedtime = target.getAttribute('data-time');
+
+        if (draggedSubjecttype===droppedSubjecttype && draggedSubjectunit===droppedSubjectunit && draggedSubjecthours===droppedSubjecthours && draggedSubjectId!=droppedSubjectId){
+            const confirmSwap = confirm("Are you sure you want to swap these subjects?");
+            if (confirmSwap) {
+                swapSubjects(draggedSubjectId, droppedSubjectId);
+            }
+            
+        }else {
+            
+
+            alert(`Cannot swap. Please note the differences:\n
+                Dragged Subject:\nType: ${droppedday}\nHours: ${droppedtime}`);
+        }
+        
+    }
+    }
+
+    function swapSubjects(draggedSubjectId, droppedSubjectId) {
+        console.log(`Swapping subject ${draggedSubjectId} with subject ${droppedSubjectId}`);
+        const draggedSubject = document.querySelector(`[data-subject="${draggedSubjectId}"]`);
+        const droppedSubject = document.querySelector(`[data-subject="${droppedSubjectId}"]`);
+
+        if (draggedSubject && droppedSubject) {
+            const tempText = draggedSubject.innerHTML;
+            draggedSubject.innerHTML = droppedSubject.innerHTML;
+            droppedSubject.innerHTML = tempText;
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '../processing/scheduleprocessing.php'; 
+
+            const draggedInput = document.createElement('input');
+            draggedInput.type = 'hidden';
+            draggedInput.name = 'draggedsubjectid';
+            draggedInput.value = draggedSubjectId;
+
+            const droppedInput = document.createElement('input');
+            droppedInput.type = 'hidden';
+            droppedInput.name = 'droppedsubjectid';
+            droppedInput.value = droppedSubjectId;
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'swap';
+
+            form.appendChild(draggedInput);
+            form.appendChild(droppedInput);
+            form.appendChild(actionInput);
+
+            document.body.appendChild(form);
+
+            console.log('Submitting form');
+
+            setTimeout(() => {
+            form.submit();
+            }, 500);
+        }
+    }
+
+    document.querySelector('table').addEventListener('dragover', handleDragOver);
+    document.querySelector('table').addEventListener('drop', handleDrop);
+
+    document.querySelectorAll('[draggable="true"]').forEach(item => {
+    item.addEventListener('dragstart', handleDragStart);
+    });
+
+
+</script>
+<script>
+window.addEventListener("beforeunload", () => {
+    sessionStorage.setItem("scrollPosition", window.scrollY);
+});
+
+window.addEventListener("load", () => {
+    const scrollPosition = sessionStorage.getItem("scrollPosition");
+    if (scrollPosition) {
+        window.scrollTo(0, parseInt(scrollPosition, 10));
+    }
+});
+
+</script>
