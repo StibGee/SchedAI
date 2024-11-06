@@ -175,6 +175,45 @@ span {
     .logo-display{
         display: none;
     }
+    
+    .tablefaculty th:nth-child(1),
+    .tablefaculty td:nth-child(1) {
+        display: none;
+    }
+
+
+    .tablefaculty th:nth-child(3),
+    .tablefaculty td:nth-child(3) {
+        display: none;
+    }
+
+    .tablefaculty th:nth-child(4),
+    .tablefaculty td:nth-child(4) {
+        display: none;
+    }
+
+    .tablefaculty th:nth-child(5),
+    .tablefaculty td:nth-child(5) {
+        display: none;
+    }
+    .tablefaculty {
+        display: flex;
+        flex-direction: column;
+    }
+
+    
+    .tablefaculty tr {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border: 1px solid #ddd;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .tablefaculty td, .tablefaculty th {
+        width: 50% !important;
+    }
 }
 
 /* Hide the image and text-head by default */
@@ -187,4 +226,6 @@ span {
     .text-head {
         display: none;
     }
+    
+    
 }

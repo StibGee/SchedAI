@@ -6,7 +6,7 @@
 
     <?php
         require_once('../include/user-mainnav.php');
-        require_once('../database/datafetch.php');
+       
 
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
@@ -120,8 +120,8 @@
                 </a>
             </div>
             <div class="sched-table mt-3">
-                <div id="tabularViews" class="mt-2 table-responsive">
-                    <table id="subjectTable" class="table">
+                <div id="tabularViews" class="mt-2 table-responsive scroll-container">
+                    <table id="subjectTable" class="table tablefaculty">
                         <thead>
                             <tr>
                                 <th>No.</th>
