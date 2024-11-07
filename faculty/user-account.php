@@ -7,7 +7,6 @@
         require_once('../include/js.php')
     ?>
 
-<body>
 
     <?php
 
@@ -24,49 +23,8 @@
         $facultysubjects=$faculty->getfacultysubjects($_SESSION['id']);
         $facultypreference=$faculty->getfacultydaytime($_SESSION['id']);
     ?>
-<main class="col-sm-10 pb-5" style="height: 100vh;" id="main">
-    <!-- NavBar -->
-    <nav class="navbar sticky-top navbar-expand-lg border-bottom bg-body d-flex">
-    <div class="container-fluid ">
-        <div class="button col-4 col-sm-4">
-            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseWidthExample" aria-expanded="true" aria-controls="collapseWidthExample"
-                    style="margin-right: 10px; padding: 0px 5px 0px 5px;" id="sidebartoggle" onclick="changeclass()">
-                    <i class="bi bi-list"></i>
-            </button>
-            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
-                    style="margin-right: 10px; padding: 2px 6px 2px 6px;" id="sidebarshow">
-                    <i class="bi bi-list"></i>
-            </button>
-        </div>
+<main>
 
-    <!-- Cambair Tema -->
-        <div class="user col-8 col-sm-6 d-flex justify-content-end">
-
-            <!-- Mobile Image -->
-            <div class="mobile-image-container col-5">
-                <img src="../img/logo/Sched-logo1.png" alt="Mobile Image" class="mobile-image">
-            </div>
-            <div class="dropdown col-6 d-flex justify-content-end">
-                <div class="header-text ">
-                    <h5><?php echo $_SESSION['fname'];?></h5>
-                </div>
-                <img src="../img/icons/user.png" width="30" height="30" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li class="ms-3">
-                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
-                            <input type="text" name="action" value="logout" hidden>
-                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    </nav>
     <div class="container custom-container p-4">
         <div class="row py-2 ">
             <span class="text-head">Account Settings</span>
@@ -91,8 +49,8 @@
             </div>
             <!-- Modal -->
             <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
+                <div class="modal-dialog modal-sm ">
+                    <div class="modal-content ">
                     <div class="modal-header">
                         <h5 class="modal-title" id="forgotPasswordModalLabel">Change Password</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -122,20 +80,16 @@
     </div>
 
     </main>
-</body>
+
 <script src="../js/main.js"></script>
 <link rel="stylesheet" href="../css/faculty-css/user-account.css">
 
-
+   <link rel="stylesheet" href="../css/faculty-css/dashboard.css">
 <?php
         require_once('../include/js.php')
     ?>
 
-  <script>
-    function changeclass() {
-      $("#main").toggleClass('col-sm-10 col-sm-12');
-    }
-  </script>
+
 <script src="color-modes.js"></script>
 
 </html>

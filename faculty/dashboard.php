@@ -5,9 +5,8 @@
 <body>
 
     <?php
-        require_once('../include/user-mainnav.php');
-       
-
+         require_once('../include/user-mainnav.php');
+        require_once('../database/datafetch.php');
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
         require_once('../classes/department.php');
@@ -34,50 +33,7 @@
         $collegeroom=$room->getcollegerooms($_SESSION['collegeid']);
     ?>
 
-<main class="col-sm-10 pb-5" id="main">
-    <!-- NavBar -->
-    <nav class="navbar sticky-top navbar-expand-lg border-bottom bg-body d-flex">
-    <div class="container-fluid ">
-        <div class="button col-4 col-sm-4">
-        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseWidthExample" aria-expanded="true" aria-controls="collapseWidthExample"
-                style="margin-right: 10px; padding: 0px 5px 0px 5px;" id="sidebartoggle" onclick="changeclass()">
-                <i class="bi bi-list"></i>
-        </button>
-        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
-                style="margin-right: 10px; padding: 2px 6px 2px 6px;" id="sidebarshow">
-                <i class="bi bi-list"></i>
-        </button>
-        </div>
-
-    <!-- Cambair Tema -->
-        <div class="user col-8 col-sm-6 d-flex justify-content-end">
-
-            <!-- Mobile Image -->
-            <div class="mobile-image-container col-5">
-                <img src="../img/logo/Sched-logo1.png" alt="Mobile Image" class="mobile-image">
-            </div>
-            <div class="dropdown col-6 d-flex justify-content-end">
-                <div class="header-text ">
-                    <h5><?php echo $_SESSION['fname'];?></h5>
-                </div>
-                <img src="../img/icons/user.png" width="30" height="30" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li class="ms-3">
-                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
-                            <input type="text" name="action" value="logout" hidden>
-                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    </nav>
-
+<main >
     <div class="container p-3">
         <div class="row py-2 ">
             <span class="text-head">Schedule</span>
@@ -120,8 +76,8 @@
                 </a>
             </div>
             <div class="sched-table mt-3">
-                <div id="tabularViews" class="mt-2 table-responsive scroll-container">
-                    <table id="subjectTable" class="table tablefaculty">
+                <div id="tabularViews" class="mt-2 table-responsive">
+                    <table id="subjectTable" class="table">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -183,45 +139,11 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div class="offcanvas-header">
-                <a href="#" class="nav_logo d-flex justify-content-start ">
-                    <img src="../img/logo/Sched-logo1.png" width="60">
-                </a>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
 
-                <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="../faculty/dashboard.php" class="nav-link link-body-emphasis" aria-current="page">
-                    <p class="bi bi-house-door"> Assigned Schedule</p><br>
-                    </a>
-                </li>
-                <li>
-                    <a href="../faculty/profile.php"  class="nav-link link-body-emphasis">
-                    <p class="bi bi-speedometer2"> My Profile</p><br>
-                    </a>
-                </li>
-                <li>
-                    <a href="../faculty/user-account.php" class="nav-link link-body-emphasis">
-                    <p class="bi bi-table"> Account Settings</p><br>
-                    </a>
-                </li>
-                </ul>
-            </div>
-        </div>
     </main>
 
 </body>
 
-<script>
-    function changeclass() {
-      $("#main").toggleClass('col-sm-10 col-sm-12');
-    }
-</script>
 <script>
     $(document).ready(function() {
         // Initialize the DataTable and store the instance in a variable
@@ -270,9 +192,3 @@
         require_once('../include/js.php')
     ?>
 
-  <script>
-    function changeclass() {
-      $("#main").toggleClass('col-sm-10 col-sm-12');
-    }
-  </script>
-<script src="color-modes.js"></script>

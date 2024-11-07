@@ -137,7 +137,23 @@ a {
 .height-100 {
     height: 100vh;
 }
-
+.curriculum-sched{
+    width: auto;
+    margin: 0 auto;
+    background-color: #d8e4db;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+}
+.table-load {
+    border-radius: 12px;
+    background-color: #E4EFE7;
+    box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+}
 @media screen and (min-width: 768px) {
     body {
         margin: calc(var(--header-height) + 1rem) 0 0 0;
@@ -225,9 +241,7 @@ a {
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 1040; /* Ensure backdrop is below modal but above other content */
     }
-    #subjecTable{
-        
-    }
+
 }
 
 .header-text {

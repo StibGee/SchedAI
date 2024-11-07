@@ -1,9 +1,9 @@
 <?php session_start();?>
 <body id="body-pd">
-    <header class="header px-5" id="header">
+    <header class="header " id="header">
             <div class="row">
-                <div class="text d-flex align-items-center justify-content-center m-0">
-                    <h2> Hola !!! </h2><span></span>
+                <div class="text d-flex align-items-center justify-content-center m-2">
+                    <img class="logo_" src="../img/logo/Sched-logo1.png" width="50">
                 </div>
             </div>
         <div class="user d-flex justify-content-center align-items-center">
@@ -11,14 +11,13 @@
                 <h5><?php echo $_SESSION['fname'];?></h5>
             </div>
             <div class="dropdown">
-                <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="../img/icons/user.png" width="20" height="20" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="../admin/facultyloading.php">Profile</a></li>
-                    <li><a class="dropdown-item" href="../faculty/profiling.php">user(temporary)</a></li>
+                    <li><a class="dropdown-item" href="../faculty/dashboard.php">Profile</a></li>
                     <li>
                         <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
                             <input type="text" name="action" value="logout" hidden>
-                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
+                            <button type="submit" name="logout" class="dropdown-item px-3" style="background: none; border: none; padding: 0; margin: 0;">
                                 Logout
                             </button>
                         </form>

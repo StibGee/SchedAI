@@ -1,32 +1,4 @@
-body{
-    height: 100vh;
-}
-aside {
-/* border: 1px yellow solid; */
-position: fixed;
-overflow: auto;
-height: 100vh;
-justify-content: flex-start;
-align-self: flex-start;
-background-color: #B0D9B1;
-box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
-}
 
-nav {
-position: sticky;
-top: 0;
-z-index: 1000;
-}
-
-main {
-position: relative;
-overflow: visible;
-margin-left: auto;
-justify-content: flex-end;
-align-self: flex-end;
-height: auto;
-    background-color: #f8f8f8;
-}
 
 #sidebarshow {
 display: none;
@@ -76,6 +48,7 @@ span {
 
 }
 .form-control{
+
     border-radius: 16px;
 }
 
@@ -163,5 +136,7 @@ span{
     .container h5{
         display: none;
     }
-
+    .form-control{
+        width: 100%;
+    }
   }

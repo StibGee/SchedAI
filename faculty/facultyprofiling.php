@@ -2,11 +2,11 @@
 <html lang="en">
 
 
-<body >
+
 
     <?php
-      
-        require_once('../include/user-mainnav.php');
+
+    require_once('../include/user-nav.php');
 
         require_once('../classes/subject.php');
         require_once('../classes/db.php');
@@ -71,47 +71,7 @@
 
     <main>
             <!-- NavBar -->
-    <nav class="navbar sticky-top navbar-expand-lg border-bottom bg-body d-flex">
-    <div class="container-fluid ">
-        <div class="button col-4 col-sm-4">
-            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseWidthExample" aria-expanded="true" aria-controls="collapseWidthExample"
-                style="margin-right: 10px; padding: 0px 5px 0px 5px;" id="sidebartoggle" onclick="changeclass()">
-                <i class="bi bi-arrows-expand-vertical"></i>
-            </button>
-            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
-                style="margin-right: 10px; padding: 2px 6px 2px 6px;" id="sidebarshow">
-                <i class="bi bi-arrow-bar-right"></i>
-            </button>
-        </div>
 
-    <!-- Cambair Tema -->
-        <div class="user col-8 col-sm-6 d-flex justify-content-end">
-
-            <!-- Mobile Image -->
-            <div class="mobile-image-container col-5">
-                <img src="../img/logo/Sched-logo1.png" alt="Mobile Image" class="mobile-image">
-            </div>
-            <div class="dropdown col-6 d-flex justify-content-end">
-                <div class="header-text ">
-                    <h5><?php echo $_SESSION['fname'];?></h5>
-                </div>
-                <img src="../img/icons/user.png" width="30" height="30" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                    <li class="ms-3">
-                        <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
-                            <input type="text" name="action" value="logout" hidden>
-                            <button type="submit" name="logout" class="dropdown-item" style="background: none; border: none; padding: 0; margin: 0;">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    </nav>
     <div class="container py-2">
         <div class="row ">
             <div class="g-3 row year-level">
@@ -227,72 +187,72 @@
                     </div>
                     <?php } ?>
                     <div class="step-content p-4" id="step3">
-                        <h5>Teaching Details</h5>
-                        <div class="container "><label for="">Teaching Specialization</label>
-                            <div class="wrap p-3 m-3">
-                                <table class="table table-sm fs-9 mb-0 text-center ">
-                                    <thead>
-                                        <tr>
-                                            <th data-sort="subcode">Subject Name</th>
+    <h5>Teaching Details</h5>
 
-                                            <th>action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="loadedSubjects1" class="list">
+    <!-- Teaching Specialization Section -->
+    <div class="container">
+        <label for="" class="form-label">Teaching Specialization</label>
+        <div class="wrap p-3 m-3">
+            <div class="table-responsive">
+                <table class="table table-sm fs-9 mb-0 text-center">
+                    <thead>
+                        <tr>
+                            <th data-sort="subcode">Subject Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loadedSubjects1" class="list">
+                        <!-- Dynamic content here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                                    </tbody>
-                                </table>
-                            </div>
-                            <label for="">Preferred Subject Selection</label>
-                            <div class="wrap p-3 m-3">
-                                <div class="table-sub1 table-sub my-3 p-3">
-                                <table id="subjects1" class="table table-sm fs-9 mb-0">
-                                    <thead>
-                                        <tr>
+        <!-- Preferred Subject Selection Section -->
+        <label for="" class="form-label">Preferred Subject Selection</label>
+        <div class="wrap p-3 m-3">
+            <div class="table-sub1 table-sub my-3 p-3">
+                <div class="table-responsive">
+                    <table id="subjects1" class="table table-sm fs-9 mb-0">
+                        <thead>
+                            <tr>
+                                <th data-sort="desc">Subject Name</th>
+                                <th>Select</th>
+                            </tr>
+                        </thead>
+                        <tbody class="list">
+                            <?php foreach ($distinctsubjects as $subjects): ?>
+                                <?php
+                                    $checked = '';
+                                    foreach ($existingsubjects as $existingsubject) {
+                                        if ($existingsubject['subjectname'] == $subjects['name']) {
+                                            $checked = 'checked';
+                                            break;
+                                        }
+                                    }
+                                ?>
+                                <tr>
+                                    <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
+                                    <td class="align-middle">
+                                        <input type="checkbox" class="form-check-input load-subject-checkbox1"
+                                            data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>" <?php echo $checked; ?>>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                            <th data-sort="desc">Subject Name</th>
+    <!-- Footer with Navigation Buttons -->
+    <div class="form-footer mt-4 d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary prev-step">Previous</button>
+        <button type="button" class="btn btn-success next-step">Next</button>
+    </div>
+</div>
 
-                                            <th>Select</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="list">
-                                        <?php
-                                        foreach ($distinctsubjects as $subjects) {
-
-                                            $checked = '';
-
-                                            foreach ($existingsubjects as $existingsubject) {
-                                                if ($existingsubject['subjectname'] == $subjects['name']) {
-                                                    $checked = 'checked';
-                                                    break;
-                                                }
-                                            }
-                                        ?>
-                                        <tr>
-                                            <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
-
-                                            <td class="align-middle">
-                                                <input type="checkbox" class="form-check-input load-subject-checkbox1"
-                                                    data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>"
-
-                                                    <?php echo $checked; ?>>
-                                            </td>
-                                        </tr>
-                                        <?php } ?>
-
-                                </tbody>
-
-
-                                </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-success next-step">Next</button>
-                        </div>
-                    </div>
                     <div class="step-content p-4" id="step4">
                         <h5>Professional  Qualifications</h5>
                         <div class="row">
@@ -385,7 +345,6 @@
         </div>
     </div>
     </main>
-</body>
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/user.css">
 <script src="../js/user.js"></script>

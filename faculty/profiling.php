@@ -8,7 +8,7 @@
 
     <?php
         require_once('../include/user-nav.php');
-    
+
         require_once('../classes/subject.php');
         require_once('../classes/db.php');
         require_once('../classes/faculty.php');
@@ -26,9 +26,9 @@
         $distinctsubjects = $subject->getdistinctsubjects();
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
-        
-        
-            
+
+
+
     ?>
 
     <main>
@@ -120,7 +120,7 @@
                                 <select class="form-select" id="position" name="type" required="">
                                     <option selected="" disabled="" value="">Choose...</option>
                                     <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Regular'){ echo 'selected'; } ?> value="Regular">Regular </option>
-                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>  
+                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a type</div>
                             </div>
@@ -154,7 +154,7 @@
                                     <thead>
                                         <tr>
                                             <th data-sort="subcode">Subject Name</th>
-                                            
+
                                             <th>action</th>
                                         </tr>
                                     </thead>
@@ -169,37 +169,37 @@
                                 <table id="subjects1" class="table table-sm fs-9 mb-0">
                                     <thead>
                                         <tr>
-                                            
+
                                             <th data-sort="desc">Subject Name</th>
-                                        
+
                                             <th>Select</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list">
                                         <?php
                                         foreach ($distinctsubjects as $subjects) {
-                                           
+
                                             $checked = '';
 
                                             foreach ($existingsubjects as $existingsubject) {
                                                 if ($existingsubject['subjectname'] == $subjects['name']) {
                                                     $checked = 'checked';
-                                                    break; 
+                                                    break;
                                                 }
                                             }
                                         ?>
                                         <tr>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
-                                           
+
                                             <td class="align-middle">
-                                                <input type="checkbox" class="form-check-input load-subject-checkbox1" 
-                                                    data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>" 
-                                                     
+                                                <input type="checkbox" class="form-check-input load-subject-checkbox1"
+                                                    data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>"
+
                                                     <?php echo $checked; ?>>
                                             </td>
                                         </tr>
                                         <?php } ?>
-                                       
+
                                     </tbody>
                                 </table>
                                 </div>
@@ -289,7 +289,7 @@
                                     </tbody>
                                 </table>
 
-                            
+
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
@@ -339,7 +339,7 @@
         newRow.innerHTML = `
             <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
             <td class="align-middle">${subjectName}</td>
-          
+
             <td class="align-middle">
                 <button type="button" class="btn btn-danger btn-sm remove-subject">Remove</button>
             </td>
@@ -347,7 +347,7 @@
 
         newRow.querySelector('.remove-subject').addEventListener('click', function() {
             newRow.remove();
-            
+
             checkbox.checked = false;
         });
 
@@ -357,12 +357,12 @@
     function removeFromSpecialization(subjectName) {
         const tbody = document.getElementById('loadedSubjects1');
         const rows = tbody.querySelectorAll('tr');
-   
+
         rows.forEach(function(row) {
             const subjectInput = row.querySelector('input[name="subjectname[]"]');
-           
+
             if (subjectInput && subjectInput.value.trim() === subjectName) {
-                
+
                 row.remove();
             }
         });
@@ -373,9 +373,9 @@
 <script>
 $(document).ready(function() {
     $('#subjects1').DataTable({
-        "pageLength": 10, 
+        "pageLength": 10,
         "searching": true,
-        "lengthChange": false   
+        "lengthChange": false
     });
 });
 </script>

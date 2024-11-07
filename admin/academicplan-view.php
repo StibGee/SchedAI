@@ -44,7 +44,7 @@
                 $year=$_SESSION['year'];
 
             }
-            
+
         } else {
             $year=$_SESSION['year'];
             $sem=$_SESSION['sem'];
@@ -52,15 +52,15 @@
             $departmentid = $_SESSION['departmentidbasis'];
             $yearlvl=$_SESSION['yearlvl'];
         }
-        
+
         if ((isset($_SESSION['departmentid']) && $_SESSION['departmentid']!=0)){
             $departmentid = htmlspecialchars($_SESSION['departmentid']);
         }elseif(isset($_SESSION['departmentidbasis']) && $_SESSION['departmentidbasis']!=0){
             $departmentid=$_SESSION['departmentidbasis'];
         }
 
-        
-       
+
+
         $filteredsubject = $subject->filteredsubjects($calendarid, $departmentid, $yearlvl);
         $departmentinfo = $department->getdepartmentinfo($departmentid);
 
@@ -76,13 +76,13 @@
             }
         }
     ?>
-    
+
     <main>
-    
+
     <div class="mb-1">
     <div class="row">
     <div class="toast-container position-fixed top-0.5 start-50 translate-middle-x p-3">
-    <div id="subjectToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" 
+    <div id="subjectToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
          <?php echo $message ? 'style="display: block; background-color: #28a745; color: white; padding: 0.3rem 0.5rem; font-size: 1.1rem; width: 400px; border-radius: 10px;"' : 'style="display: none;"'; ?>>
         <div class="toast-body" id="toastBody">
             <?php echo htmlspecialchars($message); ?>
@@ -96,11 +96,11 @@
             Academic Plan for <span><?php echo $departmentinfo['name'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
         </h5>
     </div>
-    
+
     <div class="container py-3">
-       
+
         <div class="row d-flex justify-content-end align-items-center">
-            
+
             <div class="col-1">
                 <select class="form-select  form-select-sm " id="select-position">
                     <option>all</option>
@@ -117,7 +117,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 steps fixed-sidebar">
+                    <div class="col-3 col-md-3 steps fixed-sidebar">
                         <h5>Year Level</h5>
                         <div class="navs d-flex align-items-center mt-3 text-center">
                             <?php for ($i = 1; $i <= $departmentinfo['yearlvl']; $i++) { ?>
@@ -126,8 +126,8 @@
                                     <button type="submit" class="<?php if ($i==$yearlvl){echo 'currentyearlvl';}?>">Year Level <?php echo $i;?></button>
                                 </form>
                             <?php } ?>
-                            
-                            
+
+
                         </div>
                     </div>
                     <div class="col-md-9 scrollable-content">
@@ -211,12 +211,12 @@
                                                                                 <?php if ($filteredsubjects['type'] == 'Lec'): ?>
                                                                                     <option value="3.0" <?= htmlspecialchars($filteredsubjects['unit']) == '3.0' ? 'selected' : '' ?>>3.0</option>
                                                                                     <option value="2.0" <?= htmlspecialchars($filteredsubjects['unit']) == '2.0' ? 'selected' : '' ?>>2.0</option>
-                                                                                    
+
                                                                                     <option value="1.0" <?= htmlspecialchars($filteredsubjects['unit']) == '1.0' ? 'selected' : '' ?>>1.0</option>
                                                                                 <?php elseif ($filteredsubjects['type'] == 'Lab'): ?>
                                                                                     <option value="1.0" <?= htmlspecialchars($filteredsubjects['unit']) == '1.0' ? 'selected' : '' ?>>1.0</option>
                                                                                 <?php endif; ?>
-                                                                            
+
                                                                             </select>
                                                                         </div>
 
@@ -240,7 +240,7 @@
                                                                             <input class="form-check-input" type="checkbox" id="" name="masters" <?= htmlspecialchars($filteredsubjects['masters']) == 'Yes' ? 'checked' : '' ?>>
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                     <div class="row mt-3 labdetails">
                                                                         <h5>Lab Details</h5>
                                                                         <div class="col-md-6">
@@ -249,14 +249,14 @@
                                                                                 <label class="form-check-label" for="">Requires Lab Room</label>
                                                                             </div>
                                                                         </div>
-                                                                        
+
                                                                     </div>
-                                                             
+
                                                                     <div class="modal-footer d-flex justify-content-between">
                                                                         <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
                                                                         <button type="submit" class="confirm">Update Subject</button>
                                                                     </div>
-                                                                    
+
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -266,7 +266,7 @@
                                             <?php } ?>
                                         <?php } else { ?>
                                             <tr>
-                                                <td colspan="7">No subjects found.</td> 
+                                                <td colspan="7">No subjects found.</td>
                                             </tr>
                                         <?php } ?>
                                         </tbody>
@@ -372,7 +372,7 @@
                                                                 <select class="form-select" id="unit" required="" name="labunit">
                                                                     <option selected="" disabled="" value="">Choose...</option>
                                                                     <option selected value="1.0">1.0</option>
-                            
+
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -420,23 +420,23 @@
                 </div>
             </form>
         </div>
-     
-        
+
+
     </main>
 </body>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const labSection = document.getElementById("lab-section");
-            const lecSection = document.getElementById("lec-section"); 
+            const lecSection = document.getElementById("lec-section");
             const labCheckbox = document.getElementById("checkbox-1");
-            const lecCheckbox = document.getElementById("checkbox-3"); 
+            const lecCheckbox = document.getElementById("checkbox-3");
             const lecUnitSelect = document.querySelector("select[name='lecunit']");
             const labUnitSelect = document.querySelector("select[name='labunit']");
             const lecHoursInput = document.getElementById("subhours");
             const labHoursInput = document.getElementById("subhourslab");
 
             labSection.style.display = "none";
-            lecSection.style.display = "none"; 
+            lecSection.style.display = "none";
 
             labCheckbox.addEventListener("change", function () {
                 if (this.checked) {
@@ -470,7 +470,7 @@
             });
         });
     </script>
-    
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             function updateUnitOptions(modal) {
@@ -546,13 +546,13 @@
                             hoursInput.value = "3 hrs";
                             break;
                         default:
-                            hoursInput.value = ""; 
+                            hoursInput.value = "";
                             break;
                     }
                 } else if (selectedType === 'Lab' && selectedUnit === "1.0") {
                     hoursInput.value = "3 hrs";
                 } else {
-                    hoursInput.value = ""; 
+                    hoursInput.value = "";
                 }
             }
 
@@ -564,8 +564,8 @@
 
                 if (typeSelect) {
                     typeSelect.addEventListener("change", function () {
-                        updateUnitOptions(modal);  
-                        updateHours(modal);    
+                        updateUnitOptions(modal);
+                        updateHours(modal);
                     });
                 }
 
@@ -575,7 +575,7 @@
                     });
                 }
 
-        
+
                 updateUnitOptions(modal);
                 updateHours(modal);
             });

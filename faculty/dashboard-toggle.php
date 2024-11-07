@@ -77,7 +77,7 @@
                     department.abbreviation as departmentname
                 FROM
                     subjectschedule
-                
+
                     JOIN subject ON subject.id = subjectschedule.subjectid
                     JOIN department ON subjectschedule.departmentid = department.id
                     JOIN faculty ON faculty.id = subjectschedule.facultyid
@@ -316,5 +316,4 @@
     }
   </script>
 <script src="color-modes.js"></script>
-
 

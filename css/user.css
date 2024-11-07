@@ -91,6 +91,17 @@ body {
 }
 
 .table-sub1 {
-    margin-top: 0 !important; 
+    margin-top: 0 !important;
     padding: 0;
+}
+@media (min-width: 768px) {
+    .logo_ {
+        display: none;
+    }
+}
+@media (max-width: 575px) {
+    .container{
+        padding: 0 !important; /* Remove padding on mobile view */
+        margin: 0 !important;  /* Adjust margin if needed */
+    }
 }

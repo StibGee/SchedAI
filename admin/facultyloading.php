@@ -7,7 +7,7 @@
 
 
     <?php
-        
+
         require_once('../include/nav.php');
         require_once('../classes/db.php');
         require_once('../classes/curriculum.php');
@@ -15,13 +15,13 @@
         require_once('../classes/college.php');
         require_once('../classes/schedule.php');
         require_once('../classes/faculty.php');
-        
+
         $collegeid=$_SESSION['collegeid'];
         $scheduling=False;
         $db = new Database();
         $pdo = $db->connect();
-        
-    
+
+
         $curriculum = new Curriculum($pdo);
         $faculty = new Faculty($pdo);
         $schedule = new Schedule($pdo);
@@ -31,8 +31,8 @@
         $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
     ?>
-            <main>
-            
+<main>
+
             <div class="container">
                 <div class="row">
                     <div class="text d-flex align-items-center" >
@@ -60,14 +60,14 @@
             <div class="row">
                 <div class=" col-5 mt-2">
                 <div class="faculty-info">
-                   
+
                     <li>Name : <?php echo $facultyinfo['fname']." ".$facultyinfo['mname']." ".$facultyinfo['lname'];?></li>
                     <li>Rank : <?php echo $facultyinfo['type'];?></li>
                     <li>Contact : <?php echo $facultyinfo['contactno'];?></li>
                     <li>Specialization :</li>
-                
+
                 </div>
-               
+
                 <audio id="audio-element" preload="auto" src="../audio/schedai.wav" muted></audio>
 
                 <script>
@@ -163,7 +163,7 @@
                                             <th>Description</th>
                                             <th>Type</th>
                                             <th>Unit</th>
-                                            
+
                                             <th>Year & Sec</th>
                                             <th>Time</th>
                                             <th>Day</th>
@@ -175,7 +175,7 @@
                                         $number=1;
                                         foreach ($filteredschedules as $subjectschedules) {
                                             if (!in_array($subjectschedules['subjectcode'], $seenSubjectCodes)) {
-                                            
+
                                                 $seenSubjectCodes[] = $subjectschedules['subjectcode'];
                                                 $displaySubjectCode = $subjectschedules['subjectcode'];
                                             } else {
@@ -197,9 +197,9 @@
                                             </td>
                                             <td><?php echo $subjectschedules['day'];?></td>
                                             <td><?php echo $subjectschedules['roomname'];?></td>
-                                        
+
                                         </tr>
-                                        
+
                                     <?php $number+=1; } ?>
                                     </tbody>
                                 </table>
@@ -207,7 +207,7 @@
                             <!-- Calendar View -->
                             <table id="calendarView" class="table mt-2" style="display: none;">
                                 <thead>
-                                    
+
                                 </thead>
                                 <tbody id="scheduleTableBody">
                                     <!-- Time slots will be added here -->
