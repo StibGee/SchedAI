@@ -243,7 +243,7 @@ class Faculty {
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
     public function getfacultydaytime($facultyid) {
-        $sql = "SELECT * FROM facultypreferences WHERE facultyid=:facultyid";
+        $sql = "SELECT * FROM facultypreferences WHERE facultyid=:facultyid ORDER BY day";
         $stmt = $this->pdo->prepare($sql); 
         $stmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT); 
         $stmt->execute(); 

@@ -179,11 +179,11 @@
             if (selectedType === "All") {
                 table.column(8).search('').draw();  // If 'All' is selected, show all rows
             } else {
-                table.column(8).search(selectedType).draw();  // Filter by the selected value (Lec or Lab)
+                table.column(8).search(selectedType).draw();  
             }
         });
         $('#customSearch').on('keyup', function() {
-            table.search(this.value).draw();  // Perform search on DataTable when user types
+            table.search(this.value).draw(); 
         });
     });
 </script>

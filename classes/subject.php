@@ -142,14 +142,15 @@ class Subject {
         return $results;
     }
     public function getdistinctsubjectscollege($collegeid) {
-        $stmt = $this->pdo->prepare("SELECT DISTINCT commonname AS name FROM subject WHERE departmentid = :departmentid AND focus='Major'");
-
-        $stmt->bindParam(':departmentid', $departmentId, PDO::PARAM_INT);
+        $stmt = $this->pdo->prepare("SELECT DISTINCT commonname AS name FROM subject JOIN department ON department.id=subject.departmentid WHERE collegeid = :collegeid AND focus='Major'");
+        $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         return $results;
     }
+
+   
 
     public function addfacultysubject($facultyid, $subjectname){
         $sql="INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid, :subjectname)";

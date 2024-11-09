@@ -23,8 +23,14 @@
         }else{
             $facultyid=$_SESSION['id'];
         }
-
-        $distinctsubjects = $subject->getdistinctsubjects();
+        if ($_SESSION['departmentid']==0){
+            $collegeid=$_SESSION['collegeid'];
+            $distinctsubjects = $subject->getdistinctsubjectscollege($collegeid);
+        }else{
+            $collegeid=$_SESSION['collegeid'];
+            $distinctsubjects = $subject->getdistinctsubjectscollege($collegeid);
+        }
+        
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
 

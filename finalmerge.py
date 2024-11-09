@@ -480,7 +480,7 @@ FROM (
         AND department.collegeid = %s
 ) AS ordered_schedule
 ORDER BY 
-    FIELD(ordered_schedule.unit,3,1,2),ordered_schedule.startdate ASC,ordered_schedule.requirelabroom DESC;""", (calendarid, collegeid))
+    FIELD(ordered_schedule.unit,3,2,1),ordered_schedule.startdate ASC,ordered_schedule.requirelabroom DESC;""", (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
     cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, collegeid))
@@ -800,7 +800,7 @@ def minorfree(departmentid, yearlvl, section, day, time):
 subjectiteration={}
 backtrackcounters={}
 facultyhoursday={}
-maxdepth=250
+maxdepth=1000
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
     
