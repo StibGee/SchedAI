@@ -13,7 +13,7 @@
 </head>
 <body>
     <main>
-    <div class="row landing m-0">
+    <div class="row landing m-0 d-flex">
         <div class="col-lg-5 col-md-5 col-12 p-0 text-center">
             <div class="carousel">
                 <img src="./img/logo/logo(1).png" alt="Sched Logo" class="responsive-img">
@@ -35,7 +35,7 @@
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required/>
                     </div>
-                    <div class="btn mt-3 d-flex justify-content-center">
+                    <div class="btn mt-5 d-flex justify-content-center">
                         <button type="submit" class="d-flex justify-content-center">Login</button>
                     </div>
                     <?php if (isset($_SESSION['error']) && $_SESSION['error'] == 'wrongpassword'): ?>

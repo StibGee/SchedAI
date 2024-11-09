@@ -31,7 +31,7 @@
     color: #ffff;
 
 }
-.login{
+.login {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -124,6 +124,15 @@ button{
     .modal-content {
         width: 90%; /* Adjust the width as needed */
     }
+    #login-form {
+        margin-top: 32px;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border: none;
+    }
 }
 
 /* Media query for screens smaller than 576px (very small mobile devices) */
@@ -133,7 +142,7 @@ button{
 
     }
     .carousel{
-       margin: 0px;
+       margin-top: 16px;
     }
     .responsive-img {
         width: 40%; /* Adjust the width as needed */
@@ -146,15 +155,24 @@ button{
         display: flex;
         justify-content: flex-start;
         margin-top: 0px;
+
     }
     .login{
+        background-image: none;
         background: none;
         padding: 0px;
         justify-content: flex-start;
         border: none;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border: none;
     }
-    #loginForm{
-        margin-top: 32px;
+
+    #loginForm {
+        margin-top: 43px;
     }
 
 
