@@ -27,7 +27,7 @@
                         <button class="button" onclick="window.location.href='landing.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        List of Colleges
+                        Colleges
                     </h3>
                 </div>
                 <div class="col-3 d-flex align-items-center justify-content-start">
@@ -40,36 +40,36 @@
                 <table class="mb-0 table table-hover">
                     <thead>
                         <tr>
+                            <th>No.</th>
                             <th>College</th>
                             <th>Abbreviation</th>
-                            <th>Year Created</th>
+                          
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($allcollege as $allcolleges): ?>
-                        <!-- Wrap each row with a form to handle row click and POST submission -->
-                        <form id="form_<?php echo $allcolleges['id']; ?>" action="../SuperAdmin/department.php" method="post">
-                            <input type="hidden" name="collegeid" value="<?php echo $allcolleges['id']; ?>">
-
-                            <!-- Table row that submits the form on click -->
-                            <tr onclick="document.getElementById('form_<?php echo $allcolleges['id']; ?>').submit();">
+                    <?php $count=1; foreach ($allcollege as $allcolleges): ?>
+                        
+                        
+                            <tr onclick="submitCollegeForm('<?php echo $allcolleges['id']; ?>')">
+                                
+                                <td><?php echo $count; ?></td>
                                 <td><?php echo $allcolleges['name']; ?></td>
                                 <td><?php echo $allcolleges['abbreviation']; ?></td>
-                                <td><?php echo $allcolleges['year']; ?></td>
                                 <td>
-                                    <img src="../img/icons/view.png" alt="View Details">
-                                    
-                                    <!-- Separate delete form to avoid nested form tags -->
+                                
                                     <form action="../processing/collegeprocessing.php" method="post" style="display:inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $allcolleges['id']; ?>">
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this college?');">Delete</button>
+                                        <button type="submit" class="btn btn-danger" onclick="event.stopPropagation(); return confirm('Are you sure you want to delete this college?');">Delete</button>
                                     </form>
                                 </td>
-                            </tr>
-                        </form>
-                    <?php endforeach; ?>
+                            </tr> 
+
+                            
+
+
+                    <?php $count+=1; endforeach; ?>
                 </tbody>
 
                 </table>
@@ -80,20 +80,13 @@
             <div class="modal-dialog modal-lg mt-6" role="document">
             <div class="modal-content border-0">
                 <div class="modal-header border-0">
-                    <h4 class="modal-title" id="formModalLabel">Add New Curriculum</h4>
+                    <h4 class="modal-title" id="formModalLabel">Add New College</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
                     <form action="../processing/collegeprocessing.php" method="POST">
                         <input type="text" value="add" name="action" hidden>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="startyear">Enter Year Created</label>
-                                <div class="input-group mt-2">
-                                    <input type="date" name="year" id="startyear" class="form-control form-control-sm" style="width: 120px;">
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -103,14 +96,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="abbriviation">Abbreviation</label>
+                                    <label class="form-label" for="abbriviation">Abbreviation</label>
                                     <input class="form-control" id="abbreviation" type="text" name="abbreviation" required />
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Done</button>
+                            <button type="submit" class="btn btn-success">Done</button>
                         </div>
                     </form>
                 </div>
@@ -136,3 +129,20 @@
             });
         });
     </script>
+    <script>
+    function submitCollegeForm(collegeId) {
+    
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '../SuperAdmin/department.php';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'collegeid';
+        input.value = collegeId;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>

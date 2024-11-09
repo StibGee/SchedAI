@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="container col-5 p-0">
-                <h2> College Of Computing Studies</h2>
+                
                 <h4> Western Mindanao State University</h4>
                 <div class="admin-login">
                     <button id="admin-log"><img src="./assets/img/icons/admin.png" width="25" alt=""> Login</button>

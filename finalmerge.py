@@ -3,9 +3,12 @@ import time
 import sys
 import webbrowser
 
-departmentid = int(sys.argv[1])
+'''departmentid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
-calendarid = int(sys.argv[3])
+calendarid = int(sys.argv[3])'''
+departmentid = 0
+collegeid = 3
+calendarid = 26
 minor=False
 
 conn = mysql.connector.connect(
@@ -20,14 +23,21 @@ cursor = conn.cursor()
 
 if (departmentid==0):
     cursor.execute("""
-        SELECT * FROM `subjectschedule` 
+        SELECT * 
+        FROM `subjectschedule` 
         JOIN `subject` ON subjectschedule.subjectid = subject.id 
-        JOIN department ON department.id=subjectschedule.departmentid
-        WHERE subject.focus != 'Minor' AND subject.focus != 'Major2'
+        JOIN department ON department.id = subjectschedule.departmentid
+        LEFT JOIN (
+            SELECT subjectname, COUNT(subjectname) AS specialization_count
+            FROM facultysubject
+            GROUP BY subjectname
+        ) AS fs ON fs.subjectname = subject.commonname
+        WHERE subject.focus != 'Minor' 
+        AND subject.focus != 'Major2'
         AND subjectschedule.calendarid = %s 
         AND department.collegeid = %s 
-        
-        ORDER BY subjectschedule.departmentid ASC, subject.type DESC
+        ORDER BY subjectschedule.departmentid ASC, subject.type DESC, subject.unit DESC, fs.specialization_count ASC;
+
     """, (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
@@ -62,7 +72,7 @@ if (departmentid==0):
     cursor.execute("""SELECT * FROM room WHERE collegeid=%s""", (collegeid,))
     room = cursor.fetchall()
 
-    cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=%s AND faculty.id!=0 ORDER BY starttime ASC""",(collegeid,))
+    cursor.execute("SELECT faculty.*, facultypreferences.*, COUNT(facultysubject.facultyid) AS subject_count FROM facultypreferences JOIN faculty ON faculty.id = facultypreferences.facultyid LEFT JOIN facultysubject ON facultysubject.facultyid = facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=%s GROUP BY faculty.id, facultypreferences.id ORDER BY faculty.teachinghours ASC, subject_count ASC""",(collegeid,))
     facultypreference = cursor.fetchall()
 
     try:
@@ -158,15 +168,20 @@ def facultysubjectmatch(subjectschedulesubjectname, facultysubjectfsubjectname, 
 
 def lec3daysgapfaculty(facultyid):
     for facultypref1 in facultypreference:
-        if facultypref1[1] == facultyid: 
-            day1 = facultypref1[2]  
+        
+        if facultypref1[0] == facultyid: 
+            
+            day1 = facultypref1[22]  
             for facultypref2 in facultypreference:
-                if facultypref2[1] == facultyid:
-                    day2 = facultypref2[2]
+                if facultypref2[0] == facultyid:
+                    day2 = facultypref2[22]
                
-                    if abs(day1 - day2) == 3:
+                    if abs(day2 - day1) == 3:
                         return True
+   
     return False
+
+
 
 
 
@@ -301,6 +316,7 @@ def assign_subject(currentshubjectid):
 
         if (subjectscheduletype == 'Lec' and subjectscheduleunit == 3):
             if not lec3daysgapfaculty(facultysubjectfacultyid):
+                
                 continue
  
         
@@ -480,7 +496,7 @@ FROM (
         AND department.collegeid = %s
 ) AS ordered_schedule
 ORDER BY 
-    FIELD(ordered_schedule.unit,3,2,1),ordered_schedule.startdate ASC,ordered_schedule.requirelabroom DESC;""", (calendarid, collegeid))
+    FIELD(ordered_schedule.unit,3,1,2),ordered_schedule.requirelabroom DESC,ordered_schedule.startdate ASC, ordered_schedule.departmentid ASC;""", (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
     cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, collegeid))
@@ -800,7 +816,7 @@ def minorfree(departmentid, yearlvl, section, day, time):
 subjectiteration={}
 backtrackcounters={}
 facultyhoursday={}
-maxdepth=1000
+maxdepth=2000 
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
     

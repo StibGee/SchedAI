@@ -380,7 +380,7 @@
                                                                 <input class="form-control" id="subhourslab" type="text" readonly>
                                                             </div>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" id="" name="labroom" <?= htmlspecialchars($filteredsubjects['type']) == 'Lab' ? 'checked' : '' ?>>
+                                                                <input class="form-check-input" type="checkbox" id="" name="labroom">
                                                                 <label class="form-check-label" for="">Requires Lab Room</label>
                                                             </div>
                                                         </div>

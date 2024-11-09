@@ -12,7 +12,7 @@
         require_once('../classes/db.php');
         require_once('../classes/department.php');
         if (isset($_POST['collegeid'])){
-            $collegeid=$_POST['id'];
+            $collegeid=$_POST['collegeid'];
             $_SESSION['collegeid']=$collegeid;
         }else{
             $collegeid=$_SESSION['collegeid'];
@@ -33,11 +33,13 @@
                         <button class="button" onclick="window.location.href='colleges.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
+                        Department
                         
                     </h3>
                 </div>
                 <div class="col-3 d-flex align-items-center justify-content-center">
                         <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
+                        
                         </div>
             </div>
 
@@ -45,7 +47,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Seal</th>
+                            <th>No.</th>
                             <th>Department Abbreviation</th>
                             <th>Department</th>
                         
@@ -53,9 +55,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($collegedepartment as $collegedepartments){ ?>
+                        <?php $count=1; foreach($collegedepartment as $collegedepartments){ ?>
                         <tr data-href="college_details.html">
-                            <td class="seal-cell">img</td>
+                            <td class="seal-cell"><?php echo $count;?></td>
                             <td><?php echo $collegedepartments['abbreviation'];?></td>
                             <td><?php echo $collegedepartments['name'];?></td>
                           
@@ -76,7 +78,7 @@
                                 </form>
                             </td>
                         </tr>
-                        <?php } ?>
+                        <?php $count+=1; } ?>
                     </tbody>
                 </table>
             </div>
@@ -86,7 +88,7 @@
             <div class="modal-dialog modal-lg mt-6" role="document">
             <div class="modal-content border-0">
                 <div class="modal-header border-0">
-                    <h4 class="modal-title" id="formModalLabel">Add New Curriculum</h4>
+                    <h4 class="modal-title" id="formModalLabel">Add New Department</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
@@ -96,13 +98,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="subname">Input Department Name</label>
+                                    <label class="form-label" for="subname">Department Name</label>
                                     <input class="form-control" id="subname" type="text" name="departmentname" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="subname">Input College Abbreviation</label>
+                                    <label class="form-label" for="subname">Department Abbreviation</label>
                                     <input class="form-control" id="subname" type="text" name="abbreviation" required />
                                 </div>
                             </div>
@@ -110,25 +112,26 @@
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="subname">How many years</label>
+                                    <label class="form-label" for="subname">Year levels</label>
                                     <input class="form-control" id="yearlvl" type="number" name="yearlvl" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="profile-image">Upload Seal</label>
+                                    <!--<label for="profile-image">Upload Seal</label>
                                     <div class="profile-image-container">
                                         <label for="profile-image">
                                             <img id="profile-image-preview" src="../img/icons/upload.png" alt="Profile Image" />
                                         </label>
                                         <input type="file" id="profile-image" name="profile-image" accept="image/*" style="display: none;" />
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Done</button>
+                            <button type="submit" class="btn btn-success">Done</button>
+
                         </div>
                     </form>
                 </div>

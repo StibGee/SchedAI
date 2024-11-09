@@ -131,8 +131,8 @@
                                                     <div class="col-md-8">
                                                         <select class="form-select" id="room-type" id="type" required name="type">
                                                             <option selected="" disabled="">Choose...</option>
-                                                            <option value="Lab">Lecture</option>
-                                                            <option value="Lec">Laboratory</option>
+                                                            <option value="Lec">Lecture</option>
+                                                            <option value="Lab">Laboratory</option>
                                                         </select>
                                                     </div>
 

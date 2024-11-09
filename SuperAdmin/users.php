@@ -99,7 +99,7 @@
                             <input type="text" value="addrootfaculty" name="action" hidden>
                             <div class="row">
                                 
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label class="form-label" for="departmentid">Select Department</label>
                                     <select class="form-select" id="departmentid" name="departmentid" required="">
                                         <option selected="" disabled="">Select Department</option>
@@ -108,9 +108,7 @@
                                         <?php } ?>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-5">
+                                <div class="form-group col-md-4">
                                     <label class="form-label" for="role">Select Role</label>
                                     <select class="form-select" id="role" name="role" required="">
                                         <option selected="" disabled="">Select Role</option>
@@ -123,9 +121,8 @@
                                     <label class="form-label" for="emailadd">Email Address</label>
                                     <input type="email" class="form-control" id="emailadd" name="emailadd" required>
                                 </div>
-                                
-                                
                             </div>
+                           
                             <div class="row mt-3">
                                 <div class="col-md-5">
                                     <label class="form-label" for="fname">First Name</label>
@@ -154,7 +151,7 @@
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Done</button>
+                                <button type="submit" class="btn btn-success">Done</button>
                             </div>
                         </form>
                     </div>
