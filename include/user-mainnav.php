@@ -2,13 +2,16 @@
 
 <body id="body-pd">
     <header class="header" id="header">
-        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <div class="header_toggle p-1"> <i class='bx bx-menu' id="header-toggle"></i>
+          <img src="../img/logo/Sched-logo1.png" width="50" class="logo-img">
+       </div>
+
         <div class="user d-flex justify-content-center align-items-center">
             <div class="header-text">
                 <h5><?php echo $_SESSION['fname'];?></h5>
             </div>
             <div class="dropdown">
-                <img src="../img/icons/user.png" width="40" height="40" alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="../img/icons/user.png"  alt="" class="dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                     <li><form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
                             <input type="text" name="action" value="logout" hidden>
@@ -37,7 +40,7 @@
                     </a>
                     </a>
                     <a href="../faculty/user-account.php" class="nav_link">
-                    <img src="../img/icons/home.png" alt="" width="24">
+                    <img src="../img/icons/settings.png" alt="" width="24">
                         <span class="nav_name">Account Settings</span>
                     </a>
                 </div>

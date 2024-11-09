@@ -29,7 +29,7 @@
             <div class="row ">
                 <div class="col-12 col-md-6 first">
                     <div class="row">
-                        <div class="col-12 col-md-2 img-upload">
+                        <div class="col-12 col-md-3 img-upload">
                             <div class="image-container">
                                 <img src="http://www.clker.com/cliparts/M/o/W/d/C/j/about-icon-md.png" class="circle-image">
                                 <label for="file-upload" class="custom-file-upload">
@@ -179,11 +179,11 @@
             if (selectedType === "All") {
                 table.column(8).search('').draw();  // If 'All' is selected, show all rows
             } else {
-                table.column(8).search(selectedType).draw();  
+                table.column(8).search(selectedType).draw();
             }
         });
         $('#customSearch').on('keyup', function() {
-            table.search(this.value).draw(); 
+            table.search(this.value).draw();
         });
     });
 </script>

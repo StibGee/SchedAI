@@ -107,7 +107,10 @@ a {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
     }
-
+    .body-pd{
+         padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
     .profile-table {
         margin: 0px;
         border: none;
@@ -171,4 +174,13 @@ a {
         width: 50%;
     }
 
+}
+
+@media screen and (max-width: 768px) {
+    .save{
+        width: 30%;
+    }
+    .save:hover{
+        width: 30%;
+    }
 }
