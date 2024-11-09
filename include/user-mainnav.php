@@ -46,7 +46,13 @@
     </div>
 </body>
 
-
+<div id="loading-screen" class="loading-screen visible">
+        <svg>
+            <text x="50%" y="50%" dy=".35em">
+                SchedAi
+            </text>
+        </svg>
+    </div>
 <style>
         .dropdown img {
             width: 40px;
@@ -58,3 +64,21 @@
             text-decoration: none !important;
         }
 </style>
+<script>
+  window.addEventListener('load', function() {
+            // Simulate a delay (e.g., 3 seconds)
+            setTimeout(function() {
+                // Hide the loading screen
+                document.getElementById('loading-screen').style.display = 'none';
+                // Show the content
+                document.getElementById('content').style.display = 'block';
+
+                // Fetch content from PHP (optional)
+                fetch('content.php')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('content').innerHTML = data;
+                    });
+            }, 1500); // 3000 milliseconds = 3 seconds
+        });
+</script>
