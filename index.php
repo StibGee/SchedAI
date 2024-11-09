@@ -13,62 +13,52 @@
 </head>
 <body>
     <main>
-        <div class="row landing  m-0">
-            <div class="col-lg-5 col-md-6 col-12 p-0 text-center">
-                <div class="carousel">
-                    <img src="./img/logo/Sched-logo1.png" alt="">
-                </div>
-            </div>
-            <div class="container col-5 p-0">
-                
-                <h4> Western Mindanao State University</h4>
-                <div class="admin-login">
-                    <button id="admin-log"><img src="./assets/img/icons/admin.png" width="25" alt=""> Login</button>
-
-                </div>
-                <div class="faculty-login" hidden>
-                    <button id="faculty-log"><img src="./assets/img/icons/faculty.PNG" width="25" alt=""> faculty</button>
-                </div>
-                <div id="loginModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <form id="loginForm" action="./processing/facultyprocessing.php" method="POST" onsubmit="return validateForm()">
-                            <input type="text" name="action" id="" value="login" hidden>
-                            <h2><span class="entypo-login"><i class="fa fa-sign-in"></i></span> Login</h2>
-                            <button type="submit" class="submit"><span class="entypo-lock"><i class="fa fa-lock"></i></span></button>
-                            <span class="entypo-user inputUserIcon">
-                                <i class="fa fa-user"></i>
-                            </span>
-                            <input type="text" class="user" id="username" name="username" placeholder="username" required/>
-                            <span class="entypo-key inputPassIcon" onclick="togglePasswordVisibility()">
-                                <i class="fa fa-eye" id="eyeIcon"></i>
-                            </span>
-                            <input type="password" class="pass" id="password" name="password" placeholder="password" required/>
-                            
-                            <?php if (isset($_SESSION['error']) && $_SESSION['error'] == 'wrongpassword'): ?>
-                                <p class="text-danger pl-4">Wrong Password!</p>
-
-                                
-                            <?php endif; ?>
-                        </form>
-                        
-                    </div>
-                </div>
+    <div class="row landing m-0">
+        <div class="col-lg-5 col-md-5 col-12 p-0 text-center">
+            <div class="carousel">
+                <img src="./img/logo/logo(1).png" alt="Sched Logo" class="responsive-img">
             </div>
         </div>
+        <div class="container col-lg-7 col-md-5 col-12 p-0">
+            <div class="login p-4">
+                <div class="text-center m-2">
+                    <h4>Western Mindanao State University</h4>
+                    <span>Faculty Preference-Based Scheduler</span>
+                </div>
+                <form id="loginForm" action="./processing/facultyprocessing.php" method="POST" onsubmit="return validateForm()">
+                    <input type="text" name="action" id="" value="login" hidden>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required/>
+                    </div>
+                    <div class="btn mt-3 d-flex justify-content-center">
+                        <button type="submit" class="d-flex justify-content-center">Login</button>
+                    </div>
+                    <?php if (isset($_SESSION['error']) && $_SESSION['error'] == 'wrongpassword'): ?>
+                        <p class="text-danger pl-4">Wrong Password!</p>
+                    <?php endif; ?>
+                </form>
+            </div>
+        </div>
+    </div>
+
     </main>
 
 
 </body>
 <?php if (isset($_SESSION['error']) && $_SESSION['error'] == 'wrongpassword'): ?>
-    <script>                                                        
+    <script>
     window.onload = function() {
         document.getElementById("loginModal").style.display = "block";
     };
 </script>
-                                
+
     <?php endif; ?>
 
-  
+
 <script src="./js/login.js"></script>
 </html>

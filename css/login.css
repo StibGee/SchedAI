@@ -2,16 +2,16 @@
     font-family: 'Poppins', sans-serif;
 
 }
-.landing{
+.landing {
     --scale: 1em;
-	background-color: #000;
-	background-image: radial-gradient(circle at 0 5%, #265432, #227c49 12%, #1a9e4c 25%, #006a30 39%, #005f26 50%, #005f26 50%, #007b3f 60%, #00430d 76%, #00430d 91%, #000);
-	background-repeat: no-repeat;
+    background-color: #000;
+    background-image: radial-gradient(circle at 0 5%, #265432, #227c49 12%, #1a9e4c 25%, #006a30 39%, #005f26 50%, #005f26 50%, #007b3f 60%, #00430d 76%, #00430d 91%, #000);
+    background-repeat: no-repeat;
+    position: relative;
 }
 
-
 .carousel{
-    background-color: #ffff;
+
 
     margin:20px;
     height: 95%;
@@ -31,6 +31,18 @@
     color: #ffff;
 
 }
+.login{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 70%;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10.5px);
+    -webkit-backdrop-filter: blur(10.5px);
+    border: 1px solid rgba(206, 206, 206, 0.48);
+}
 .container button{
     width: 300px;
     padding: 6px 10px;
@@ -41,121 +53,109 @@
 
 
 }
-.admin-login{
-    margin-top: 70px;
+
+
+.form-group {
+    margin-bottom: 15px;
 }
 
-/*modal area */
-
-*, *:before, *:after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-form h2 {
-    color: #000000;
-    margin-left: 12px;
-}
-
-form {
-    position: relative;
-    margin: 50px auto;
-    width: 380px;
-    height: 100%;
-}
-
-input {
-    padding: 16px;
-    border-radius: 7px;
-    border: 0px;
-    background: rgba(122, 145, 23, 0.2);
+.form-group label {
     display: block;
-    margin: 15px;
-    width: 300px;
-    color: #000000;
-    font-size: 18px;
-    height: 54px;
+    margin-bottom: 5px;
+
 }
 
-input:focus {
-    outline-color: rgba(0, 0, 0, 0);
-    background: #80AF81;
-    color: #000000;
-}
-
-button.submit {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    float: right;
-    height: 135px;
-    width: 50px;
-    border: 0px;
-    background: #06442075;
-    border-radius: 7px;
-    color: rgb(0, 0, 0);
-    font-size: 22px;
-}
-
-.inputUserIcon {
-    position: absolute;
-    top: 68px;
-    right: 80px;
-    color: rgb(10, 10, 10);
-}
-
-.inputPassIcon {
-    position: absolute;
-    top: 136px;
-    right: 80px;
-    color: rgb(0, 0, 0);
-    cursor: pointer;
-}
-
-input::-webkit-input-placeholder {
-    color: rgb(3, 3, 3);
-}
-
-input:focus::-webkit-input-placeholder {
-    color: #0c0c0c;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
+.form-group input {
     width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px); /* Added backdrop-filter for blur effect */
+    padding: 8px ; /* Adjust padding to only top and bottom */
+    border: none; /* Remove default border */
+    border-radius: 5px;
+    border-bottom: 1px solid #ccc; /* Add bottom border */
+    background-color: transparent; /* Make background transparent */
+    outline: none; /* Remove outline on focus */
 }
 
-.modal-content {
-    background-color: #ffffff;
-    margin: 9% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    border-radius: 16px;
+
+.form-control::placeholder{
+    color: #ffffff80;
 }
 
-.close {
-    color: #000000;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+button{
+    background-color: #9EDF9C;
+}
+.submit:hover {
+    background-color: #0056b3;
 }
 
-.close:hover,
-.close:focus {
-    color: #064420;
-    text-decoration: none;
-    cursor: pointer;
+.text-danger {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+}
+.responsive-img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Default styles for larger screens */
+.responsive-img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Media query for screens smaller than 768px (typical mobile devices) */
+@media (max-width: 768px) {
+    *{
+        font-size: 12px;
+    }
+    .login{
+
+        width: 95%;
+    }
+    .responsive-img {
+        width: 100%; /* Adjust the width as needed */
+        margin: 0 auto; /* Center the image */
+    }
+
+    .carousel {
+        text-align: center; /* Center the carousel content */
+    }
+
+    .modal-content {
+        width: 90%; /* Adjust the width as needed */
+    }
+}
+
+/* Media query for screens smaller than 576px (very small mobile devices) */
+@media (max-width: 576px) {
+    *{
+        font-size: 12px;
+
+    }
+    .carousel{
+       margin: 0px;
+    }
+    .responsive-img {
+        width: 40%; /* Adjust the width as needed */
+    }
+
+    .modal-content {
+        width: 95%; /* Adjust the width as needed */
+    }
+    .container{
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 0px;
+    }
+    .login{
+        background: none;
+        padding: 0px;
+        justify-content: flex-start;
+        border: none;
+    }
+    #loginForm{
+        margin-top: 32px;
+    }
+
+
 }
