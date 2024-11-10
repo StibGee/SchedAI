@@ -55,7 +55,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Colleges with Schedules</h5>
-                            <p class="card-text">85</p>
+                            <p class="card-text">4</p>
                         </div>
                     </div>
                 </div>
