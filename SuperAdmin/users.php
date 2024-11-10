@@ -12,7 +12,7 @@
         require_once('../classes/faculty.php');
         require_once('../classes/email.php');
         
-        $collegeid=$_SESSION['collegeid'];
+            
         $scheduling=False;
         $db = new Database();
         $pdo = $db->connect();

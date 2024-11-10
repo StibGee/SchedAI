@@ -1,5 +1,8 @@
 <?php session_start();
-
+if (!isset($_SESSION['role'])){
+    header("Location: ../index.php");
+    exit();
+}
 if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenthead') {
     header("Location: ../index.php");
     exit();
