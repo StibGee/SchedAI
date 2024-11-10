@@ -37,6 +37,30 @@ class Curriculum {
             return $stmt->execute();
         }
     }
+    public function addcalendar($academicyear, $semester, $curriculumplan, $collegeid) {
+        $name = $academicyear . "-" . ($academicyear + 1); 
+
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM calendar WHERE year = :year AND sem = :sem AND collegeid=:collegeid");
+        $stmt->bindParam(':year', $academicyear); 
+        $stmt->bindParam(':sem', $semester); 
+        $stmt->bindParam(':collegeid', $collegeid);         
+        $stmt->execute();
+        $curriculumexists = $stmt->fetchColumn();
+
+        if ($curriculumexists) {
+            header("Location: ../admin/schedule.php?calendar=exist");
+            exit();
+        } else {
+            $sql = "INSERT INTO calendar (sem, year, name, curriculumplan,collegeid) VALUES (:sem, :year, :name, :curriculumplan, :collegeid)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':year', $academicyear);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':sem', $semester);
+            $stmt->bindParam(':curriculumplan', $curriculumplan);
+            $stmt->bindParam(':collegeid', $collegeid);  
+            return $stmt->execute();
+        }
+    }
 
     
     
@@ -58,10 +82,35 @@ class Curriculum {
     }
 
     public function deletecurriculum($id) {
-        $sql = "DELETE FROM calendar WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':id' => $id]);
+        try {
+            // Begin a transaction
+            $this->pdo->beginTransaction();
+    
+            // Delete from `subjectschedule`
+            $sql2 = "DELETE FROM subjectschedule WHERE calendarid = :id";
+            $stmt2 = $this->pdo->prepare($sql2);
+            $stmt2->execute([':id' => $id]);
+    
+            // Delete from `subject`
+            $sql3 = "DELETE FROM subject WHERE calendarid = :id";
+            $stmt3 = $this->pdo->prepare($sql3);
+            $stmt3->execute([':id' => $id]);
+    
+            // Finally, delete from `calendar`
+            $sql1 = "DELETE FROM calendar WHERE id = :id";
+            $stmt1 = $this->pdo->prepare($sql1);
+            $stmt1->execute([':id' => $id]);
+    
+           
+            $this->pdo->commit();
+    
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            return false;
+        }
     }
+    
 
     public function getallcurriculums() {
         $sqlcalendar = "SELECT * FROM calendar WHERE curriculumplan=1 ORDER BY year";

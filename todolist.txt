@@ -27,5 +27,38 @@ profiling: faculty side
     -edit
     -dashboard
 
+----------------------------------------------
+Curriculum
+    - edit
+
+Pages
+    - current page
+
+Edit profile 
+    - email
+
+schedule
+    - add by faculty
+    
+user
+    - add active or not
+
+Room 
+    - remove year level
+    - time 
+    - exclusive
+
+Superadmin
+    - edit college
+    - edit user
+    - edt department
+
 Algorithm
     -fallback mechanism
+    - track student section
+    - add virtual faculty
+    - add virtual room
+All
+    - validations
+
+    

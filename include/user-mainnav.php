@@ -1,4 +1,9 @@
-<?php session_start();?>
+<?php session_start();
+
+if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenthead') {
+    header("Location: ../index.php");
+    exit();
+}?>
 
 <body id="body-pd">
     <header class="header" id="header">

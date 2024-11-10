@@ -66,7 +66,7 @@
                         <table id="example" class="table">
                             <thead>
                                 <tr>
-                                    <th>ID Number</th>
+                                    <th>No.</th>
                                     <th>Name</th>
                                     <th>Gender</th>
                                     <th>Contact No.</th>

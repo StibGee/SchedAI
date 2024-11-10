@@ -13,11 +13,17 @@ switch ($action) {
     case 'add':
         addcurriculum();
         break;
+    case 'addcalendar':
+        addcalendar();
+        break;
     case 'update':
         updateRoom();
         break;
     case 'delete':
         deletecurriculum();
+        break;
+    case 'deletecalendar':
+        deletecalendar();
         break;
     case 'list':
         listRooms();
@@ -44,6 +50,26 @@ function addcurriculum() {
         header("Location: ../admin/academic-plan.php?curriculum=added");
     } else {
         header("Location: ../admin/academic-plan.php?curriculum=error");
+    }
+    exit();
+}
+function addcalendar() {
+    global $curriculum;
+
+    $academicyear = isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $semester = isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
+    $collegeid = isset($_POST['collegeid']) ? filter_var($_POST['collegeid'], FILTER_SANITIZE_STRING) : '';
+    if(isset($_POST['curriculumplan'])&&($_POST['curriculumplan']=='1')) {
+        $curriculumplan='1';
+    }else{
+        $curriculumplan='0';
+    }
+    $result = $curriculum->addcalendar($academicyear, $semester, $curriculumplan, $collegeid);
+
+    if ($result) {
+        header("Location: ../admin/schedule.php?calendar=added");
+    } else {
+        header("Location: ../admin/schedule.php?calendar=error");
     }
     exit();
 }
@@ -79,6 +105,19 @@ function deletecurriculum() {
         header("Location: ../admin/academic-plan.php?curriculum=deleted");
     } else {
         header("Location: ../admin//academic-plan.php?curriculum=error");
+    }
+    exit();
+}
+function deletecalendar() {
+    global $curriculum;
+    $id = isset($_POST['id']) ? filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT) : 0;
+    $result = $curriculum->deletecurriculum($id);
+
+
+    if ($result) {
+        header("Location: ../admin/schedule.php?calendar=deleted");
+    } else {
+        header("Location: ../admin/schedule.php?calendar=error");
     }
     exit();
 }

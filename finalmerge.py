@@ -808,7 +808,7 @@ def minorfree(departmentid, yearlvl, section, day, time):
             if section in minoroccupied[departmentid][yearlvl]:
                 if day in minoroccupied[departmentid][yearlvl][section]:
                     if time in minoroccupied[departmentid][yearlvl][section][day]:
-                        return minoroccupied[departmentid][yearlvl][section][day][time] != 'occupied'
+                        return minoroccupied[departmentid][yearlvl][section][day][time] == 'occupied'
     
     return True  
 

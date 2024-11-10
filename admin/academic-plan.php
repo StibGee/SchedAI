@@ -67,7 +67,7 @@
                 <div class="col-3 d-flex align-items-center justify-content-start">
                         <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
                         </div>
-            </div>
+                </div>
 
             <div class="curriculum-sched mt-4">
                 <form id="curriculum-form" class="mb-0" action="academicplan-view.php" method="POST">
@@ -99,13 +99,13 @@
                                 <th scope="row"><?php echo htmlspecialchars($displayyear); ?></th>
                                 <td><?php echo htmlspecialchars($calendars['sem'] == 1 ? '1st Semester' : ($calendars['sem'] == 2 ? '2nd Semester' : ($calendars['sem'] == 3 ? '3rd Semester' : $calendars['sem'] . 'th'))); ?></td>
                                 <td>
-                                        <a href="edit_room.php?id=<?php echo $calendars['id']; ?>" class="btn btn-warning">Edit</a>
-                                        <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?php echo $calendars['id']; ?>">
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this curriculum?');">Delete</button>
-                                        </form>
-                                    </td>
+                                    <a href="edit_room.php?id=<?php echo $calendars['id']; ?>" class="btn btn-warning">Edit</a>
+                                    <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="<?php echo $calendars['id']; ?>">
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this curriculum?');">Delete</button>
+                                    </form>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -127,39 +127,26 @@
                         <input type="hidden" value="1" name="curriculumplan" >
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="startyear">Enter Year</label>
+                                <label for="startyear">Enter Academic Year</label>
                                 <div class="input-group mt-2">
-                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" style="width: 120px;">
+                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" placeholder="Start Year">
                                     <span class="input-group-text">-</span>
-                                    <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" style="width: 120px;">
+                                    <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" placeholder="End Year">
                                 </div>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="select-semester">Select Semester</label>
+                                <select name="semester" class="form-select form-select-sm mt-2" id="select-semester">
+                                    <option value="1">First Semester</option>
+                                    <option value="2">Second Semester</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="select-department">Select Department</label>
-                                    <select class="form-select form-select-sm mt-2" id="select-department" name="departmentid">
-                                        <?php foreach ($collegedepartment as $collegedepartments){ ?>
-                                        <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
 
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="select-semester">Select Semester</label>
-                                    <select name="semester" class="form-select form-select-sm mt-2" id="select-semester">
-                                        <option value="1">First Semester</option>
-                                        <option value="2">Second Semester</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                      
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Done</button>
+                            <button type="submit" class="btn btn-success">Done</button>
                         </div>
                     </form>
                 </div>
