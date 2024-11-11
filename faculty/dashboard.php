@@ -83,11 +83,11 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Subject Code</th>
+                                <th>Code</th>
                                 <th>Description</th>
                                 <th>Type</th>
                                 <th>Unit</th>
-                                <th>Year & Sec</th>
+                                <th>YrSec</th>
                                 <th>Time</th>
                                 <th>Day</th>
                                 <th>Room</th>
@@ -113,7 +113,7 @@
                                 <td><?php echo $subjectschedules['abbreviation'].' '.$subjectschedules['yearlvl'].$subjectschedules['section'];?></td>
                                 <td><?php
                                 if (!empty($subjectschedules['starttime']) && !empty($subjectschedules['endtime'])) {
-                                    echo date("g:i A", strtotime($subjectschedules['starttime'])) . " - " . date("g:i A", strtotime($subjectschedules['endtime']));
+                                    echo date("g:i A", strtotime($subjectschedules['starttime'])) . "-" . date("g:i A", strtotime($subjectschedules['endtime']));
                                 }
                                 ?>
                                 </td>
