@@ -284,6 +284,33 @@
     font-size: 1.2em;
     max-width: 80%;
 }
+.sched-table {
+    transition: all 0.3s ease; 
+}
+
+.fullscreen-table {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; 
+    height: 100vh;
+    background-color: white; 
+    overflow-y: auto; 
+    z-index: 999; 
+    margin-top: 0 !important;
+}
+
+.tablesched {
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .tablesched {
+        font-size: 0.7rem;
+    }
+}
+
 
 
 </style>
@@ -314,6 +341,28 @@
 checkOrientation();
 
 window.addEventListener('resize', checkOrientation);
+</script>
+<script>
+    function toggleFullScreenTable() {
+    const tableContainer = document.getElementById('pageContent');
+    
+    if (window.innerWidth <= 768) {
+        if (window.innerWidth > window.innerHeight) {
+            tableContainer.classList.add('fullscreen-table');
+        } else {
+            tableContainer.classList.remove('fullscreen-table');
+        }
+    } else {
+        tableContainer.classList.remove('fullscreen-table');
+    }
+}
+
+toggleFullScreenTable();
+
+window.addEventListener('resize', toggleFullScreenTable);
+
+
+
 </script>
 </html>
 
