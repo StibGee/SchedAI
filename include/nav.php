@@ -27,7 +27,7 @@
                 <li><form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
                             <input type="text" name="action" value="logout" hidden>
                             <button type="submit" name="logout" class="dropdown-item px-3" style="background: none; border: none; padding: 0; margin: 0;">
-                                Logout
+                                Logout 
                             </button>
                         </form></li>
                 </ul>
@@ -41,34 +41,34 @@
             </text>
         </svg>
     </div>
-    <div class="l-navbar" id="nav-bar">
+    <div class="l-navbar " id="nav-bar">
         <nav class="nav">
             <div>
                 <a href="#" class="nav_logo d-flex justify-content-center ">
                     <img src="../img/logo/Sched-logo1.png" width="100">
                 </a>
                 <div class="nav_list">
-                    <a href="../admin/facultyloading.php" class="nav_link active">
+                    <a href="../admin/facultyloading.php" class="nav_link <?php if ($_SESSION['currentpage']=='landing'){ echo 'active'; }?>">
                     <img src="../img/icons/load.png" alt="" width="24">
                         <span class="nav_name">Faculty Loading</span>
                     </a>
-                    <a href="../admin/schedule.php" class="nav_link">
+                    <a href="../admin/schedule.php" class="nav_link <?php if ($_SESSION['currentpage']=='schedule'){ echo 'active'; }?>">
                     <img src="../img/icons/sched.png" alt="" width="24">
                         <span class="nav_name">Schedule</span>
                     </a>
-                    <a href="../admin/academic-plan.php" class="nav_link">
+                    <a href="../admin/academic-plan.php" class="nav_link <?php if ($_SESSION['currentpage']=='curriculum'){ echo 'active'; }?>">
                     <img src="../img/icons/files.png" alt="" width="24">
                         <span class="nav_name">Curriculum Plan</span>
                     </a>
-                    <a href="../admin/faculty.php" class="nav_link">
+                    <a href="../admin/faculty.php" class="nav_link <?php if ($_SESSION['currentpage']=='faculty'){ echo 'active'; }?>">
                     <img src="../img/icons/faculty.png" alt="" width="24">
                         <span class="nav_name">Faculty</span>
                     </a>
-                    <a href="../admin/room.php" class="nav_link">
+                    <a href="../admin/room.php" class="nav_link <?php if ($_SESSION['currentpage']=='room'){ echo 'active'; }?>">
                     <img src="../img/icons/room.png" alt="" width="24">
                         <span class="nav_name">Rooms</span>
                     </a>
-                    <a href="../admin/account.php" class="nav_link">
+                    <a href="../admin/account.php" class="nav_link <?php if ($_SESSION['currentpage']=='account'){ echo 'active'; }?>">
                     <img src="../img/icons/settings.png" alt="" width="24">
                         <span class="nav_name">Accounts</span>
                     </a>
@@ -99,34 +99,49 @@
         });
     });
     window.addEventListener('load', function() {
-            // Simulate a delay (e.g., 3 seconds)
             setTimeout(function() {
-                // Hide the loading screen
                 document.getElementById('loading-screen').style.display = 'none';
-                // Show the content
                 document.getElementById('content').style.display = 'block';
 
-                // Fetch content from PHP (optional)
                 fetch('content.php')
                     .then(response => response.text())
                     .then(data => {
                         document.getElementById('content').innerHTML = data;
                     });
-            }, 1500); // 3000 milliseconds = 3 seconds
+            }, 1500); 
         });
         document.addEventListener("DOMContentLoaded", function() {
-            // Get all navigation links
             const navLinks = document.querySelectorAll('.nav_link');
 
-            // Loop through each link
             navLinks.forEach(link => {
-                // Check if the link's href matches the current page's URL
                 if (link.href === window.location.href) {
-                    link.classList.add('active-link');
+                    link.classList.add('fc');
                 }
             });
         });
 
 });
+
+</script>
+<script>
+     
+    const laptopMediaQuery = window.matchMedia('(min-width: 1440px) and (max-width: 2560px)');
+
+  
+    function handleNavbarVisibility() {
+        const navBar = document.getElementById('nav-bar');
+        
+        if (laptopMediaQuery.matches) {
+            navBar.classList.add('show'); 
+        } else {
+            navBar.classList.remove('show'); 
+        }
+    }
+
+ 
+    handleNavbarVisibility();
+
+    
+    laptopMediaQuery.addEventListener('change', handleNavbarVisibility);
 
 </script>

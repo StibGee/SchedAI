@@ -80,25 +80,25 @@
     <main>
 
     <div class="mb-1">
-    <div class="row">
-    <div class="toast-container position-fixed top-0.5 start-50 translate-middle-x p-3">
-    <div id="subjectToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
-         <?php echo $message ? 'style="display: block; background-color: #28a745; color: white; padding: 0.3rem 0.5rem; font-size: 1.1rem; width: 400px; border-radius: 10px;"' : 'style="display: none;"'; ?>>
-        <div class="toast-body" id="toastBody">
-            <?php echo htmlspecialchars($message); ?>
-        </div>
-    </div>
-</div>
-        <h5>
-            <button class="button" onclick="window.location.href='academic-plan.php'">
-                <i class="fa-solid fa-circle-arrow-left"></i>
-            </button>
-            Academic Plan for <span><?php echo $departmentinfo['name'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
-        </h5>
-    </div>
+    
 
     <div class="container py-3">
-
+        <div class="row">
+            <div class="toast-container position-fixed top-0.5 start-50 translate-middle-x p-3">
+                <div id="subjectToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                    <?php echo $message ? 'style="display: block; background-color: #28a745; color: white; padding: 0.3rem 0.5rem; font-size: 1.1rem; width: 400px; border-radius: 10px;"' : 'style="display: none;"'; ?>>
+                    <div class="toast-body" id="toastBody">
+                        <?php echo htmlspecialchars($message); ?>
+                    </div>
+                </div>
+            </div>
+            <h5>
+                <button class="button" onclick="window.location.href='academic-plan.php'">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                </button>
+                Academic Plan for <span><?php echo $departmentinfo['name'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
+            </h5>
+        </div>
         <div class="row d-flex justify-content-end align-items-center">
 
             <div class="col-1">

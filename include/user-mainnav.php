@@ -38,7 +38,7 @@ if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenth
                     <img src="../img/logo/Sched-logo1.png" width="100">
                 </a>
                 <div class="nav_list">
-                <a href="../faculty/dashboard.php" class="nav_link active">
+                <a href="../faculty/dashboard.php" class="nav_link">
                     <img src="../img/icons/dashboard.png" alt="" width="24">
                         <span class="nav_name"> Schedule</span>
                     </a>
