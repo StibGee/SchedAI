@@ -1,3 +1,4 @@
+
 :root {
     --header-height: 3rem;
     --nav-width: 68px;
@@ -30,7 +31,9 @@ a {
     padding: 0 1rem;
     background-color: #ffff;
     z-index: var(--z-fixed);
-
+    -webkit-box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.21);
+    -moz-box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.21);
+    box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.21);
 }
 
 .header_toggle {
@@ -56,7 +59,7 @@ a {
     position: fixed;
     top: 0;
     left: -30%;
-    width: var(--nav-width);
+    width: var(--nav-width) ;
     height: 100vh;
     background-color: #B0D9B1;
     padding: .5rem 1rem 0 0;
@@ -152,9 +155,7 @@ a {
 }
 
 @media screen and (min-width: 768px) {
-    *{
-        font-size: 14px;
-    }
+
     body {
         margin: calc(var(--header-height) + 1rem) 0 0 0;
         padding-left: calc(var(--nav-width) + 2rem);
@@ -180,11 +181,11 @@ a {
     }
 
     .show {
-        width: calc(var(--nav-width) + 156px);
+        width: calc(var(--nav-width) + 152px);
     }
 
     .body-pd {
-        padding-left: calc(var(--nav-width) + 188px);
+        padding-left: calc(var(--nav-width) + 152px);
     }
     .form-control{
         width: 100%;
@@ -240,6 +241,10 @@ a {
         height: 100vh;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 1040; /* Ensure backdrop is below modal but above other content */
+    }
+    .dropdown img {
+        width: 35px; /* Adjusted width for mobile view */
+        height: 35px; /* Adjusted height for mobile view */
     }
 
 }
@@ -415,7 +420,7 @@ span {
     .tablefaculty td:nth-child(5) {
         display: none;
     }
-  
+
     .logo-img {
         display: inline-block; /* Show the image for smaller screens */
     }
@@ -436,16 +441,18 @@ span {
     .sched-table{
         padding: 0 !important;
     }
-    
+
 
 }
 
 /* Hide the image and text-head by default */
 
 @media screen and (min-width: 768px) {
+
     .mobile-image-container {
         display: none;
     }
+
 
     .text-head {
         display: none;
@@ -512,4 +519,23 @@ span {
         stroke-dasharray: 50% 0;
         stroke-width: 0;
     }
+}
+
+@media screen and (max-width: 768px) {
+
+    *{
+        font-size:13px ;
+
+    }
+    .step{
+        font-size: 10px;
+    }
+    .step-label{
+        font-size: 8px;
+    }
+    .logo-display img{
+        height: 120px;
+        width: 120px;
+    }
+
 }

@@ -1,3 +1,6 @@
+.logo_{
+    display: none !important;
+}
 .step-indicator {
     position: relative;
     display: flex;
@@ -60,7 +63,7 @@
 }
 
 .step-indicator .step:hover .step-label {
-    color: #0d6efd;
+    color: #35dd5f;
 }
 
 body {
@@ -84,6 +87,7 @@ body {
 .wrap{
     background-color: #ffffff;
     border-radius: 12px;
+    width: auto;
 }
 .prefer-table{
     background-color: #ffffff;
@@ -94,14 +98,114 @@ body {
     margin-top: 0 !important;
     padding: 0;
 }
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+    *{
+        font-size: 12px;
+    }
+    #body-pd{
+        padding: 20px !important; /* Remove padding on mobile view */
+        margin: 0 !important;  /* Adjust margin if needed */
+    }
     .logo_ {
         display: none;
     }
+    .year-level{
+        margin-top: 24px;
+    }
+
+
 }
 @media (max-width: 575px) {
     .container{
         padding: 0 !important; /* Remove padding on mobile view */
         margin: 0 !important;  /* Adjust margin if needed */
     }
+    .step-content{
+        padding: 12px !important;
+    }
+    .btn.prev-step{
+        width: 25%;
+        padding: 2px;
+    }
+    .btn.next-step{
+        width: 25%;
+        padding: 2px;
+
+
+    }
+    .step-indicator {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        padding-left: 0;
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+    .step-indicator::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background-color: #dee2e6;
+        z-index: 1;
+    }
+
+    .step {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: rgb(216, 216, 216);
+        border: 2px solid #dee2e6;
+        border-radius: 50%;
+        color: #6c757d;
+        z-index: 2;
+        margin: 0 !important;
+    }
+    .steps{
+        margin: 0 !important;
+    }
+
+    .step.active {
+        background-color: rgb(12, 139, 3);
+        border-color: rgb(12, 139, 3);
+        color: white;
+    }
+
+    .step.completed {
+        background-color: #198754;
+        border-color: #198754;
+        color: white;
+    }
+
+    .step-label {
+        display: none;
+    }
+
+
+
+}
+.btn{
+    width: 16%;
+    padding: 2px;
+}
+.next-step{
+    background-color: rgb(12, 139, 3);
+}
+.prev-step{
+    color: rgb(12, 139, 3);
+    border: 1px solid rgb(12, 139, 3);
+}
+.step-content{
+    box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
 }

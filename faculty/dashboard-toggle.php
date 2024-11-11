@@ -154,7 +154,7 @@
 <main>
 
     <div class="container containersched p-4">
-   
+
         <div class="row d-flex justify-content-end align-items-center">
             <div class="col-12 col-md-6">
                 <h5>
@@ -263,11 +263,11 @@
 </main>
 <style>
     #pageContent {
-    transition: filter 0.3s ease; 
+    transition: filter 0.3s ease;
 }
 
 #pageContent.blurred {
-    filter: blur(5px); 
+    filter: blur(5px);
 }
 
 #rotateMessage {
@@ -285,18 +285,18 @@
     max-width: 80%;
 }
 .sched-table {
-    transition: all 0.3s ease; 
+    transition: all 0.3s ease;
 }
 
 .fullscreen-table {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; 
+    width: 100vw;
     height: 100vh;
-    background-color: white; 
-    overflow-y: auto; 
-    z-index: 999; 
+    background-color: white;
+    overflow-y: auto;
+    z-index: 999;
     margin-top: 0 !important;
 }
 
@@ -326,13 +326,13 @@
     function checkOrientation() {
     const rotateMessage = document.getElementById('rotateMessage');
     const pageContent = document.getElementById('pageContent');
-    
+
     if (window.innerHeight > window.innerWidth) {
-       
+
         rotateMessage.style.display = 'block';
         pageContent.classList.add('blurred');
     } else {
-        
+
         rotateMessage.style.display = 'none';
         pageContent.classList.remove('blurred');
     }
@@ -345,7 +345,7 @@ window.addEventListener('resize', checkOrientation);
 <script>
     function toggleFullScreenTable() {
     const tableContainer = document.getElementById('pageContent');
-    
+
     if (window.innerWidth <= 768) {
         if (window.innerWidth > window.innerHeight) {
             tableContainer.classList.add('fullscreen-table');

@@ -23,14 +23,8 @@
         }else{
             $facultyid=$_SESSION['id'];
         }
-        if ($_SESSION['departmentid']==0){
-            $collegeid=$_SESSION['collegeid'];
-            $distinctsubjects = $subject->getdistinctsubjectscollege($collegeid);
-        }else{
-            $collegeid=$_SESSION['collegeid'];
-            $distinctsubjects = $subject->getdistinctsubjectscollege($collegeid);
-        }
-        
+
+        $distinctsubjects = $subject->getdistinctsubjects();
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
 
@@ -79,13 +73,12 @@
             <!-- NavBar -->
 
     <div class="container py-2">
-        <div class="row ">
+        <div class="row wizard">
             <div class="g-3 row year-level">
                 <h5>Complete Your Profile</h5>
             </div>
-            <div class="col-md-3 steps sticky-sidebar">
-
-                <div class="step-indicator d-flex align-items-start mt-3">
+            <div class="col-12 col-md-3 steps sticky-sidebar">
+                <div class="step-indicator d-flex justify-content-between mt-3">
                     <div class="step active">
                         1
                         <span class="step-label">Personal Information</span>
@@ -100,7 +93,7 @@
                     </div>
                     <div class="step">
                         4
-                        <span class="step-label">Professional Qualificaton</span>
+                        <span class="step-label">Professional Qualification</span>
                     </div>
                     <div class="step">
                         5
@@ -111,6 +104,7 @@
                     <img src="../img/logo/Sched-logo1.png" width="300">
                 </div>
             </div>
+
             <div class="col-md-9 scrollable-content mt-4">
                 <form id="wizardForm" method="POST" action="../processing/facultyprocessing.php">
                     <input type="hidden" name="action" value="editprofiling">
@@ -155,7 +149,7 @@
                             </div>
                         </div>
                         <div class="form-footer mt-4 d-flex justify-content-end">
-                            <button type="button" class="btn btn-success next-step">Next</button>
+                            <button type="button" class="btn  next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step2">
@@ -186,8 +180,8 @@
                         </div>
 
                         <div class="form-footer mt-5 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-success next-step">Next</button>
+                            <button type="button" class="btn prev-step">Previous</button>
+                            <button type="button" class="btn  next-step">Next</button>
 
                         </div>
                     </div>
@@ -198,7 +192,7 @@
     <!-- Teaching Specialization Section -->
     <div class="container">
         <label for="" class="form-label">Teaching Specialization</label>
-        <div class="wrap p-3 m-3">
+        <div class="wrap p-3 ">
             <div class="table-responsive">
                 <table class="table table-sm fs-9 mb-0 text-center">
                     <thead>
@@ -254,15 +248,15 @@
 
     <!-- Footer with Navigation Buttons -->
     <div class="form-footer mt-4 d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary prev-step">Previous</button>
-        <button type="button" class="btn btn-success next-step">Next</button>
+        <button type="button" class="btn prev-step">Previous</button>
+        <button type="button" class="btn next-step">Next</button>
     </div>
 </div>
 
                     <div class="step-content p-4" id="step4">
                         <h5>Professional  Qualifications</h5>
                         <div class="row">
-                            <div class="table-load my-2 p-3 col-6">
+                            <div class=" my-2 p-3 ">
                                 <label class="form-label" for="degree">Highest Degree Obtained</label>
                                 <select class="form-select" name="highestdegree" id="degree" name="degree" required>
                                     <option selected disabled value="">Choose...</option>
@@ -280,8 +274,8 @@
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-success next-step">Next</button>
+                            <button type="button" class="btn prev-step">Previous</button>
+                            <button type="button" class="btn  next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step5">
@@ -341,8 +335,8 @@
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="submit" class="btn btn-success next-step">Finish</button>
+                            <button type="button" class="btn  prev-step">Previous</button>
+                            <button type="submit" class="btn next-step">Finish</button>
                         </div>
                     </div>
                 </div>
@@ -395,10 +389,10 @@
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
             <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
-            <td class="align-middle">${subjectName}</td>
+            <td class="text-start">${subjectName}</td>
 
             <td class="align-middle">
-                <button type="button" class="btn btn-danger btn-sm remove-subject">Remove</button>
+                <button type="button" class="remove-subject btn-danger btn-sm ">Remove</button>
             </td>
         `;
 
@@ -482,7 +476,9 @@ $(document).ready(function() {
         });
     });
 </script>
+<script>
 
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const steps = document.querySelectorAll(".step-content");
@@ -512,4 +508,5 @@ $(document).ready(function() {
     }
   </script>
 <script src="color-modes.js"></script>
+
 

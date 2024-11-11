@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (!isset($_SESSION['role'])){
     header("Location: ../index.php");
     exit();
@@ -11,7 +11,7 @@ if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenth
 <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle p-1"> <i class='bx bx-menu' id="header-toggle"></i>
-          <img src="../img/logo/Sched-logo1.png" width="50" class="logo-img">
+          <img src="../img/logo/logo(1).png" width="50" class="logo-img">
        </div>
 
         <div class="user d-flex justify-content-center align-items-center">
@@ -35,7 +35,7 @@ if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenth
         <nav class="nav">
             <div>
                 <a href="#" class="nav_logo d-flex justify-content-center">
-                    <img src="../img/logo/Sched-logo1.png" width="100">
+                    <img src="../img/logo/logo(1).png" width="100">
                 </a>
                 <div class="nav_list">
                 <a href="../faculty/dashboard.php" class="nav_link <?php if ($_SESSION['currentpage']=='schedule'){ echo 'active'; }?>">
