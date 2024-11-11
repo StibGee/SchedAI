@@ -258,6 +258,7 @@
     </div>
 </main>
 <link rel="stylesheet" href="../css/generated-sched-room.css">
+<link rel="stylesheet" href="../css/faculty-css/dashboard.css">
 <link rel="stylesheet" href="../css/main.css">
 
     <script src="../js/facultyloading.js"></script>

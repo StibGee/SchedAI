@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-    <?php  require_once('../include/head.php');?>
+    <?php  require_once('../include/head.php');
+    $_SESSION['currentpage']='schedule';
+    ?>
 
 <body>
 
@@ -77,7 +79,7 @@
             </div>
             <div class="sched-table mt-3">
                 <div id="tabularViews" class="mt-2 table-responsive">
-                    <table id="subjectTable" class="table">
+                    <table id="subjectTable" class="table tablefaculty">
                         <thead>
                             <tr>
                                 <th>No.</th>

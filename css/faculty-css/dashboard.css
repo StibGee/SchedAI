@@ -306,7 +306,7 @@ span {
     border-radius: 12px;
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 576px) {
     * {
         font-size: 12px;
     }
@@ -415,26 +415,23 @@ span {
     .tablefaculty td:nth-child(5) {
         display: none;
     }
-    .tablefaculty {
-        display: flex;
-        flex-direction: column;
-    }
-
-
-    .tablefaculty tr {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        border: 1px solid #ddd;
-        margin-bottom: 0.5rem;
-        padding: 0.5rem;
-    }
-
-    .tablefaculty td, .tablefaculty th {
-        width: 50% !important;
-    }
+  
     .logo-img {
         display: inline-block; /* Show the image for smaller screens */
+    }
+    .table-responsive {
+        overflow-x: auto;
+        white-space: auto;
+    }
+
+    .table-responsive table {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .table-responsive th,
+    .table-responsive td {
+        min-width: 80px;
     }
 
 }

@@ -123,25 +123,3 @@
 });
 
 </script>
-<script>
-     
-    const laptopMediaQuery = window.matchMedia('(min-width: 1440px) and (max-width: 2560px)');
-
-  
-    function handleNavbarVisibility() {
-        const navBar = document.getElementById('nav-bar');
-        
-        if (laptopMediaQuery.matches) {
-            navBar.classList.add('show'); 
-        } else {
-            navBar.classList.remove('show'); 
-        }
-    }
-
- 
-    handleNavbarVisibility();
-
-    
-    laptopMediaQuery.addEventListener('change', handleNavbarVisibility);
-
-</script>

@@ -1,4 +1,4 @@
-<?php session_start();
+<?php 
 if (!isset($_SESSION['role'])){
     header("Location: ../index.php");
     exit();
@@ -38,16 +38,16 @@ if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenth
                     <img src="../img/logo/Sched-logo1.png" width="100">
                 </a>
                 <div class="nav_list">
-                <a href="../faculty/dashboard.php" class="nav_link">
+                <a href="../faculty/dashboard.php" class="nav_link <?php if ($_SESSION['currentpage']=='schedule'){ echo 'active'; }?>">
                     <img src="../img/icons/dashboard.png" alt="" width="24">
                         <span class="nav_name"> Schedule</span>
                     </a>
-                    <a href="../faculty/profile.php"  class="nav_link ">
+                    <a href="../faculty/profile.php"  class="nav_link <?php if ($_SESSION['currentpage']=='profile'){ echo 'active'; }?>">
                     <img src="../img/icons/faculty.png" alt="" width="24">
                         <span class="nav_name">My Profile</span>
                     </a>
                     </a>
-                    <a href="../faculty/user-account.php" class="nav_link">
+                    <a href="../faculty/user-account.php" class="nav_link <?php if ($_SESSION['currentpage']=='account'){ echo 'active'; }?>">
                     <img src="../img/icons/settings.png" alt="" width="24">
                         <span class="nav_name">Account Settings</span>
                     </a>
@@ -74,6 +74,33 @@ if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenth
         a{
             text-decoration: none !important;
         }
+        .active {
+            color: var(--white-color);
+        }
+
+        .active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 2px;
+            height: 32px;
+            background-color: var(--white-color);
+        }
+        .nav_link.active {
+            background-color: #7BB883; /* Highlight color */
+            color: #fff; /* Text color */
+            border-radius: 5px; /* Optional: Rounded corners */
+        }
+
+        .nav_link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background-color: #fff; /* Highlight color for the left border */
+        }
+
 </style>
 <script>
   window.addEventListener('load', function() {
