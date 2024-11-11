@@ -32,7 +32,7 @@ Curriculum
     - edit
 
 Pages
-    - current page
+    - current page done
 
 Edit profile 
     - email
