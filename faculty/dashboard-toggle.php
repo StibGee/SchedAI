@@ -191,7 +191,7 @@
         </a>
     </div>
 
-    <div class="sched-table mt-3">
+    <div class="sched-table mt-3" id="pageContent">
         <div id="tabularView" class="mt-2">
             <div class="table-responsive">
                 <table class="table tablesched">
@@ -256,7 +256,37 @@
 </div>
 </div>
     </div>
+    <div id="rotateMessage" style="display: none;">
+    Please rotate your device to view full schedule.
+</div>
+
 </main>
+<style>
+    #pageContent {
+    transition: filter 0.3s ease; 
+}
+
+#pageContent.blurred {
+    filter: blur(5px); 
+}
+
+#rotateMessage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 1000;
+    font-size: 1.2em;
+    max-width: 80%;
+}
+
+
+</style>
 <link rel="stylesheet" href="../css/generated-sched-room.css">
 <link rel="stylesheet" href="../css/faculty-css/dashboard.css">
 <link rel="stylesheet" href="../css/main.css">
@@ -265,6 +295,26 @@
     <?php
         require_once('../include/js.php')
     ?>
+    <script>
+    function checkOrientation() {
+    const rotateMessage = document.getElementById('rotateMessage');
+    const pageContent = document.getElementById('pageContent');
+    
+    if (window.innerHeight > window.innerWidth) {
+       
+        rotateMessage.style.display = 'block';
+        pageContent.classList.add('blurred');
+    } else {
+        
+        rotateMessage.style.display = 'none';
+        pageContent.classList.remove('blurred');
+    }
+}
+
+checkOrientation();
+
+window.addEventListener('resize', checkOrientation);
+</script>
 </html>
 
 
