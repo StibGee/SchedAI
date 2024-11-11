@@ -431,8 +431,12 @@ span {
 
     .table-responsive th,
     .table-responsive td {
-        min-width: 80px;
+        min-width: 1px;
     }
+    .sched-table{
+        padding: 0 !important;
+    }
+    
 
 }
 
