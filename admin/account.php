@@ -3,6 +3,7 @@
 <?php
         require_once('../include/head.php');
         $_SESSION['currentpage']='acccount';
+        $_SESSION['loading']=1;
     ?>
 
 <body >

@@ -3,7 +3,7 @@
 <?php
         require_once('../include/head.php');
         $_SESSION['currentpage']='landing';
-       
+        $_SESSION['loading']=1;
     ?>
 
 

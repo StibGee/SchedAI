@@ -41,13 +41,15 @@ class Room {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateroom($id, $name, $capacity) {
-        $sql = "UPDATE rooms SET name = :name, capacity = :capacity WHERE id = :id";
+    public function updateroom($roomid, $name, $type, $departmentid, $isexclusive){
+        $sql = "UPDATE room SET name = :name, type = :type, departmentid=:departmentid, isexclusive=:isexclusive WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             ':name' => $name,
-            ':capacity' => $capacity,
-            ':id' => $id
+            ':type' => $type,
+            ':departmentid' => $departmentid,
+            ':isexclusive' => $isexclusive,
+            ':id' => $roomid
         ]);
     }
 

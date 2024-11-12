@@ -3,6 +3,10 @@
 <?php
         require_once('../include/head.php');
         $_SESSION['currentpage']='faculty';
+       
+        if (!isset($_GET['faculty'])){
+            $_SESSION['loading']=1;
+        }
     ?>
 
 <body >
@@ -96,6 +100,23 @@
                                             <i class="fa-solid fa-ellipsis"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                            <li>
+                                                <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="action" value="setactive">
+                                                    <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">
+                                                    <?php
+                                                    $isActive = $facultys['active'];
+                                                    $newStatus = $isActive ? 0 : 1;
+                                                    $buttonText = $isActive ? 'Set Inactive' : 'Set Active';
+                                                    ?>
+
+                                                    <input type="hidden" name="active" value="<?php echo $newStatus; ?>">
+                                                    <button type="submit" class="dropdown-item"><?php echo $buttonText; ?></button>
+                                                </form>
+                                            </li>
+
+                                            <li><hr class="dropdown-divider"></li>
+                                            
                                             <li>
                                                 <form action="profiling.php" method="POST" style="display: inline;">
                                                     <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">

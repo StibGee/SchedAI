@@ -34,6 +34,7 @@
             </div>
         </div>
     </header>
+    <?php if ($_SESSION['loading']==1){ ?>
     <div id="loading-screen" class="loading-screen visible">
         <svg>
             <text x="50%" y="50%" dy=".35em">
@@ -41,6 +42,8 @@
             </text>
         </svg>
     </div>
+    <?php } ?>
+    <?php $_SESSION['loading']=0; ?>
     <div class="l-navbar " id="nav-bar">
         <nav class="nav">
             <div>

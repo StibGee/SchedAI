@@ -10,6 +10,9 @@ $college = new College($pdo);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 switch ($action) {
+    case 'editcollege':
+        editcollege();
+        break;
     case 'add':
         addcollege();
         break;
@@ -63,6 +66,23 @@ function updateroom() {
         header("Location: ../admin/room.php?room=updated");
     } else {
         header("Location: ../admin/room.php?room=error");
+    }
+    exit();
+}
+
+function editcollege() {
+    global $college;
+
+    $collegeid = isset($_POST['collegeid']) ? filter_var($_POST['collegeid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+    $collegename = isset($_POST['collegename']) ? filter_var($_POST['collegename'], FILTER_SANITIZE_STRING) : '';
+    $abbreviation = isset($_POST['abbreviation']) ? filter_var($_POST['abbreviation'], FILTER_SANITIZE_STRING) : '';
+   
+    $result = $college->editcollege($collegeid, $collegename, $abbreviation);
+
+    if ($result) {
+        header("Location: ../superadmin/colleges.php?college=updated");
+    } else {
+        header("Location: ../superadmin/colleges.php?college=error");
     }
     exit();
 }

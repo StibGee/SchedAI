@@ -3,6 +3,9 @@
 <?php
         require_once('../include/head.php');
         $_SESSION['currentpage']='curriculum';
+        if (!isset($_GET['curriculum'])){
+            $_SESSION['loading']=1;
+        }
     ?>
 
 <body >
@@ -120,7 +123,8 @@
                                         <div class="modal-body px-5">
                                             <form action="../processing/curriculumprocessing.php" method="POST">
                                                 <input type="text" value="editcalendar" name="action" hidden>
-                                                <input type="hidden" value="<?php echo $collegeid;?>" name="collegeid">
+                                                <input type="hidden" value="0" name="schedule">
+                                                <input type="hidden" value="<?php echo $calendars['id'];?>" name="calendarid">
                                                 <div class="row">
                                                     <div class="form-group col-md-6">
                                                         <label for="startyear">Enter Year</label>

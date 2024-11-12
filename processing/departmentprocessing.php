@@ -13,6 +13,10 @@ switch ($action) {
     case 'add':
         adddepartment();
         break;
+    case 'editdepartment':
+        editdepartment();
+        break;
+        
     case 'update':
         updatesubject();
         break;
@@ -47,23 +51,21 @@ function adddepartment() {
     exit();
 }
 
-function updateroom() {
-    global $room;
+function editdepartment() {
+    global $department;
 
-    $id = isset($_POST['id']) ? filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT) : 0;
-    $name = isset($_POST['name']) ? filter_var($_POST['name'], FILTER_SANITIZE_STRING) : '';
-    $capacity = isset($_POST['capacity']) ? filter_var($_POST['capacity'], FILTER_SANITIZE_NUMBER_INT) : 0;
-    $type = isset($_POST['type']) ? filter_var($_POST['type'], FILTER_SANITIZE_STRING) : '';
-    $departmentid = isset($_POST['departmentid']) ? filter_var($_POST['departmentid'], FILTER_SANITIZE_STRING) : '';
-    $timestart = isset($_POST['timestart']) ? filter_var($_POST['timestart'], FILTER_SANITIZE_STRING) : '';
-    $timeend = isset($_POST['timeend']) ? filter_var($_POST['timeend'], FILTER_SANITIZE_STRING) : '';
+    $departmentid = isset($_POST['departmentid']) ? filter_var($_POST['departmentid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+    $departmentname = isset($_POST['departmentname']) ? filter_var($_POST['departmentname'], FILTER_SANITIZE_STRING) : '';
+    $abbreviation = isset($_POST['abbreviation']) ? filter_var($_POST['abbreviation'], FILTER_SANITIZE_STRING) : 0;
+    $yearlvl = isset($_POST['yearlvl']) ? filter_var($_POST['yearlvl'], FILTER_SANITIZE_STRING) : 0;
+    
 
-    $result = $room->updateRoom($id, $name, $capacity, $type, $departmentid, $timestart, $timeend);
+    $result = $department->editdepartment($departmentid, $departmentname, $abbreviation, $yearlvl);
 
     if ($result) {
-        header("Location: ../admin/room.php?room=updated");
+        header("Location: ../superadmin/department.php?department=updated");
     } else {
-        header("Location: ../admin/room.php?room=error");
+        header("Location: ../superadmin/department.php?department=error");
     }
     exit();
 }

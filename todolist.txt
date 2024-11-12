@@ -29,30 +29,31 @@ profiling: faculty side
 
 ----------------------------------------------
 Curriculum
-    - edit
+    - edit done
 
 Pages
     - current page done
 
 Edit profile 
-    - email
+    - email done
+
+    
+user
+    - add active or not done
+
+Room 
+    - remove year level done
+    - time  done
+    - edit done
+
+Superadmin
+    - edit college done
+    - edit user
+    - edt department done
 
 schedule
     - add by faculty
     
-user
-    - add active or not
-
-Room 
-    - remove year level
-    - time 
-    - exclusive
-
-Superadmin
-    - edit college
-    - edit user
-    - edt department
-
 Algorithm
     -fallback mechanism
     - track student section

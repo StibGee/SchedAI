@@ -7,7 +7,7 @@
 <body>
 
     <?php
-
+        $_SESSION['currentpage']='colleges';
         require_once('../include/admin-nav.php');
         require_once('../classes/db.php');
         require_once('../classes/college.php');
@@ -57,7 +57,7 @@
                                 <td><?php echo $allcolleges['name']; ?></td>
                                 <td><?php echo $allcolleges['abbreviation']; ?></td>
                                 <td>
-                                
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editcollegeform<?php echo $allcolleges['id']; ?>" onclick="event.stopPropagation();">Edit</button>
                                     <form action="../processing/collegeprocessing.php" method="post" style="display:inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $allcolleges['id']; ?>">
@@ -65,8 +65,42 @@
                                     </form>
                                 </td>
                             </tr> 
-
-                            
+                            <!-- edit modal-->
+                            <div class="modal fade" id="editcollegeform<?php echo $allcolleges['id']; ?>" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg mt-6" role="document">
+                                <div class="modal-content border-0">
+                                    <div class="modal-header border-0">
+                                        <h4 class="modal-title" id="formModalLabel">Add New College</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body px-5">
+                                        <form action="../processing/collegeprocessing.php" method="POST">
+                                            <input type="text" value="editcollege" name="action" hidden>
+                                            <input type="text" value="<?php echo $allcolleges['id']; ?>" name="collegeid" hidden>
+                                            
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="collegename">Input College Name</label>
+                                                        <input class="form-control" id="collegename" type="text" name="collegename" value="<?php echo $allcolleges['name']; ?>" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="abbriviation">Abbreviation</label>
+                                                        <input class="form-control" id="collegename" type="text" name="abbreviation" value="<?php echo $allcolleges['abbreviation']; ?>" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-between">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-success">Done</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                                                
 
 
                     <?php $count+=1; endforeach; ?>

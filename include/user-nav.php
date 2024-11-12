@@ -1,4 +1,9 @@
-<?php session_start();?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <body id="body-pd">
     <header class="header " id="header">
             <div class="row">

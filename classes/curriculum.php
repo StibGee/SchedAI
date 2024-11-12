@@ -71,16 +71,18 @@ class Curriculum {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateroom($id, $name, $capacity) {
-        $sql = "UPDATE rooms SET name = :name, capacity = :capacity WHERE id = :id";
+    public function editcalendar($calendarid, $academicyear, $endyear, $semester) {
+        $name = $academicyear . "-" . $endyear; 
+        $sql = "UPDATE calendar SET year = :year, name = :name, sem = :sem WHERE id = :calendarid";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
+            ':year' => $academicyear,
             ':name' => $name,
-            ':capacity' => $capacity,
-            ':id' => $id
+            ':sem' => $semester,
+            ':calendarid' => $calendarid
         ]);
     }
-
+   
     public function deletecurriculum($id) {
         try {
             // Begin a transaction

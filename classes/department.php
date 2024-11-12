@@ -50,13 +50,15 @@ class Department {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
-    public function updatedepartment($id, $name, $capacity) {
-        $sql = "UPDATE rooms SET name = :name, capacity = :capacity WHERE id = :id";
+    
+    public function editdepartment($departmentid, $departmentname, $abbreviation, $yearlvl){
+        $sql = "UPDATE department SET name = :name, abbreviation = :abbreviation, yearlvl=:yearlvl  WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
-            ':name' => $name,
-            ':capacity' => $capacity,
-            ':id' => $id
+            ':abbreviation' => $abbreviation,
+            ':yearlvl' => $yearlvl,
+            ':name' => $departmentname,
+            ':id' => $departmentid
         ]);
     }
 

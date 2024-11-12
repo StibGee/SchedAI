@@ -64,13 +64,14 @@
                     
             
                             <td>
-                                <div class="action-dropdown">
+                                <!--div class="action-dropdown">
                                     <button class="action-button">...</button>
                                     <div class="action-dropdown-content">
                                         <a href="#">View Faculty</a>
                                         <a href="#">View Schedule</a>
                                     </div>
-                                </div>
+                                </div>-->
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editdepartment<?php echo $collegedepartments['id']; ?>" onclick="event.stopPropagation();">Edit</button>
                                 <form action="../processing/departmentprocessing.php" method="post" style="display:inline;">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="id" value="<?php echo $collegedepartments['id']; ?>">
@@ -78,6 +79,60 @@
                                 </form>
                             </td>
                         </tr>
+                        <!-- Modal Form -->
+                        <div class="modal fade" id="editdepartment<?php echo $collegedepartments['id']; ?>" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg mt-6" role="document">
+                            <div class="modal-content border-0">
+                                <div class="modal-header border-0">
+                                    <h4 class="modal-title" id="formModalLabel">Edit Department</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body px-5">
+                                    <form action="../processing/departmentprocessing.php" method="POST">
+                                        <input type="text" value="editdepartment" name="action" hidden>
+                                        <input type="number" value="<?php echo $collegedepartments['id'];?>" name="departmentid" hidden>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="subname">Department Name</label>
+                                                    <input class="form-control" id="subname" type="text" name="departmentname" value="<?php echo $collegedepartments['name'];?>" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="subname">Department Abbreviation</label>
+                                                    <input class="form-control" id="subname" type="text" name="abbreviation" value="<?php echo $collegedepartments['abbreviation'];?>" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="subname">Year levels</label>
+                                                    <input class="form-control" id="yearlvl" type="number" name="yearlvl" value="<?php echo $collegedepartments['yearlvl'];?>" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <!--<label for="profile-image">Upload Seal</label>
+                                                    <div class="profile-image-container">
+                                                        <label for="profile-image">
+                                                            <img id="profile-image-preview" src="../img/icons/upload.png" alt="Profile Image" />
+                                                        </label>
+                                                        <input type="file" id="profile-image" name="profile-image" accept="image/*" style="display: none;" />
+                                                    </div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-success">Done</button>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <?php $count+=1; } ?>
                     </tbody>
                 </table>

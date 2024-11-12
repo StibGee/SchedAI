@@ -80,7 +80,10 @@
     <div class="container py-2">
         <div class="row ">
             <div class="g-3 row year-level">
-                <h5>Complete Your Profile</h5>
+                
+                <h5><button class="button" onclick="window.location.href='faculty.php'">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                </button>Edit Profile</h5>
             </div>
             <div class="col-md-3 steps sticky-sidebar">
 
@@ -139,8 +142,8 @@
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label" for="birthdate">Birthdate</label>
-                                <input class="form-control" id="birthdate" name="bday" type="date" value="<?php if(isset($facultyinfo['bday'])){ echo $facultyinfo['bday'];} ?>"required />
+                                <label class="form-label" for="email">Email</label>
+                                <input class="form-control" id="email" name="email" type="email" value="<?php if(isset($facultyinfo['email'])){ echo $facultyinfo['email'];} ?>"required />
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-3">

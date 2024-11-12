@@ -98,6 +98,10 @@ body {
     margin-top: 0 !important;
     padding: 0;
 }
+.button{
+    background-color: none;
+    border: none;
+}
 @media (max-width: 768px) {
     *{
         font-size: 12px;

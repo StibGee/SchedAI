@@ -40,16 +40,15 @@ class College {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function updatesubject($id, $name, $capacity) {
-        $sql = "UPDATE rooms SET name = :name, capacity = :capacity WHERE id = :id";
+    public function editcollege($collegeid, $collegename, $abbreviation){
+        $sql = "UPDATE college SET name = :name, abbreviation = :abbreviation WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
-            ':name' => $name,
-            ':capacity' => $capacity,
-            ':id' => $id
+            ':name' => $collegename,
+            ':abbreviation' => $abbreviation,
+            ':id' => $collegeid
         ]);
     }
-
     public function deletecollege($id) {
         $sql = "DELETE FROM college WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);

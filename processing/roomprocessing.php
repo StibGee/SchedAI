@@ -13,9 +13,10 @@ switch ($action) {
     case 'add':
         addroom();
         break;
-    case 'update':
-        updateRoom();
+    case 'editroom':
+        editroom();
         break;
+    
     case 'delete':
         deleteroom();
         break;
@@ -49,18 +50,16 @@ function addroom() {
     exit();
 }
 
-function updateroom() {
+function editroom() {
     global $room;
 
-    $id = isset($_POST['id']) ? filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT) : 0;
+    $roomid = isset($_POST['roomid']) ? filter_var($_POST['roomid'], FILTER_SANITIZE_NUMBER_INT) : 0;
     $name = isset($_POST['name']) ? filter_var($_POST['name'], FILTER_SANITIZE_STRING) : '';
-    $capacity = isset($_POST['capacity']) ? filter_var($_POST['capacity'], FILTER_SANITIZE_NUMBER_INT) : 0;
     $type = isset($_POST['type']) ? filter_var($_POST['type'], FILTER_SANITIZE_STRING) : '';
-    $departmentid = isset($_POST['departmentid']) ? filter_var($_POST['departmentid'], FILTER_SANITIZE_STRING) : '';
-    $timestart = isset($_POST['timestart']) ? filter_var($_POST['timestart'], FILTER_SANITIZE_STRING) : '';
-    $timeend = isset($_POST['timeend']) ? filter_var($_POST['timeend'], FILTER_SANITIZE_STRING) : '';
+    $departmentid = isset($_POST['departmentid']) ? filter_var($_POST['departmentid'], FILTER_SANITIZE_NUMBER_INT) : 0;
+    $isexclusive= isset($_POST['isexclusive']) ? filter_var($_POST['isexclusive'], FILTER_SANITIZE_NUMBER_INT) : 0;
 
-    $result = $room->updateRoom($id, $name, $capacity, $type, $departmentid, $timestart, $timeend);
+    $result = $room->updateroom($roomid, $name, $type, $departmentid, $isexclusive);
 
     if ($result) {
         header("Location: ../admin/room.php?room=updated");
