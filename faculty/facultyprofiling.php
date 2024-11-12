@@ -479,26 +479,6 @@ $(document).ready(function() {
 <script>
 
 </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const steps = document.querySelectorAll(".step-content");
-        steps.forEach((step, index) => {
-            const requiredInputs = step.querySelectorAll("input[required], select[required]");
-            const nextButton = step.querySelector(".next-step");
-
-            function checkRequiredFields() {
-                const allFilled = Array.from(requiredInputs).every(input => input.value.trim() !== "");
-                nextButton.disabled = !allFilled;
-            }
-
-            requiredInputs.forEach(input => {
-                input.addEventListener("input", checkRequiredFields);
-            });
-            checkRequiredFields();
-        });
-    });
-</script>
-
 
 </html>
 <link rel="stylesheet" href="../css/faculty-css/dashboard.css">

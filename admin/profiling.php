@@ -8,7 +8,7 @@
 
     <?php
         require_once('../include/user-nav.php');
-    
+
         require_once('../classes/subject.php');
         require_once('../classes/db.php');
         require_once('../classes/faculty.php');
@@ -27,11 +27,11 @@
         }else{
             $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid']);
         }
-        
+
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
         if ($facultyinfo) {
-           
+
         } else {
             echo 'No faculty information found.';
         }
@@ -39,7 +39,7 @@
         $mondaychecked=$tuesdaychecked=$wednesdaychecked=$thursdaychecked=$fridaychecked=$saturdaychecked='';
 
         foreach($facultydaytime as $facultydaytimes){
-          
+
             if($facultydaytimes['day']==1){
                 $mondaychecked='checked';
                 $mondaystarttime=$facultydaytimes['starttime'];
@@ -50,7 +50,7 @@
                 $tuesdaystarttime=$facultydaytimes['starttime'];
                 $tuesdayendtime=$facultydaytimes['endtime'];
             }
-            
+
             if($facultydaytimes['day']==3){
                 $wednesdaychecked='checked';
                 $wednesdaystarttime=$facultydaytimes['starttime'];
@@ -65,7 +65,7 @@
                 $fridaychecked='checked';
                 $fridaystarttime=$facultydaytimes['starttime'];
                 $fridayendtime=$facultydaytimes['endtime'];
-            }  
+            }
             if($facultydaytimes['day']==6){
                 $saturdaychecked='checked';
                 $saturdaystarttime=$facultydaytimes['starttime'];
@@ -73,17 +73,15 @@
             }
 
         }
-            
+
     ?>
 
     <main>
     <div class="container py-2">
         <div class="row ">
             <div class="g-3 row year-level">
-                
-                <h5><button class="button" onclick="window.location.href='faculty.php'">
-                    <i class="fa-solid fa-circle-arrow-left"></i>
-                </button>Edit Profile</h5>
+
+                <h5>Edit Faculty Profile</h5>
             </div>
             <div class="col-md-3 steps sticky-sidebar">
 
@@ -157,7 +155,7 @@
                             </div>
                         </div>
                         <div class="form-footer mt-4 d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn  next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step2">
@@ -168,7 +166,7 @@
                                 <select class="form-select" id="position" name="type" required="">
                                     <option selected="" disabled="" value="">Choose...</option>
                                     <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Regular'){ echo 'selected'; } ?> value="Regular">Regular </option>
-                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>  
+                                    <option <?php if(isset($facultyinfo['type']) && $facultyinfo['type'] == 'Contractual'){ echo 'selected'; } ?> value="Contractual">Contractual</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a type</div>
                             </div>
@@ -188,8 +186,8 @@
                         </div>
 
                         <div class="form-footer mt-5 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn  prev-step">Previous</button>
+                            <button type="button" class="btn next-step">Next</button>
                         </div>
                     </div>
                     <?php } ?>
@@ -201,7 +199,7 @@
                                     <thead>
                                         <tr>
                                             <th data-sort="subcode">Subject Name</th>
-                                            
+
                                             <th>action</th>
                                         </tr>
                                     </thead>
@@ -216,37 +214,37 @@
                                 <table id="subjects1" class="table table-sm fs-9 mb-0">
                                     <thead>
                                         <tr>
-                                            
+
                                             <th data-sort="desc">Subject Name</th>
-                                         
+
                                             <th>Select</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list">
                                         <?php
                                         foreach ($distinctsubjects as $subjects) {
-                                           
+
                                             $checked = '';
 
                                             foreach ($existingsubjects as $existingsubject) {
                                                 if ($existingsubject['subjectname'] == $subjects['name']) {
                                                     $checked = 'checked';
-                                                    break; 
+                                                    break;
                                                 }
                                             }
                                         ?>
                                         <tr>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
-                                           
+
                                             <td class="align-middle">
-                                                <input type="checkbox" class="form-check-input load-subject-checkbox1" 
-                                                    data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>" 
-                                                     
+                                                <input type="checkbox" class="form-check-input load-subject-checkbox1"
+                                                    data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>"
+
                                                     <?php echo $checked; ?>>
                                             </td>
                                         </tr>
                                         <?php } ?>
-                                       
+
                                 </tbody>
 
 
@@ -256,8 +254,8 @@
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn  prev-step">Previous</button>
+                            <button type="button" class="btn  next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step4">
@@ -281,8 +279,8 @@
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn  prev-step">Previous</button>
+                            <button type="button" class="btn next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step5">
@@ -338,12 +336,12 @@
                                     </tbody>
                                 </table>
 
-                            
+
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="submit" class="btn btn-primary">Finish</button>
+                            <button type="button" class="btn prev-step">Previous</button>
+                            <button type="submit" class="btn complete">Finish</button>
                         </div>
                     </div>
             </div>
@@ -353,7 +351,7 @@
     </div>
     </main>
 </body>
-<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/faculty-css/dashboard.css">
 <link rel="stylesheet" href="../css/user.css">
 <script src="../js/user.js"></script>
 <?php
@@ -367,24 +365,24 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-       
+
         document.querySelectorAll('.load-subject-checkbox1:checked').forEach(function(checkbox) {
             const subjectName = checkbox.getAttribute('data-subjectname1');
-         
+
 
             addToSpecialization(subjectName,checkbox);
         });
 
-    
+
         document.querySelectorAll('.load-subject-checkbox1').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 const subjectName = this.getAttribute('data-subjectname1');
-              
+
 
                 if (this.checked) {
                     addToSpecialization(subjectName,  this);
                 } else {
-                 
+
                     removeFromSpecialization(subjectName);
                 }
             });
@@ -398,7 +396,7 @@
         newRow.innerHTML = `
             <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
             <td class="align-middle">${subjectName}</td>
-          
+
             <td class="align-middle">
                 <button type="button" class="btn btn-danger btn-sm remove-subject">Remove</button>
             </td>
@@ -406,7 +404,7 @@
 
         newRow.querySelector('.remove-subject').addEventListener('click', function() {
             newRow.remove();
-            
+
             checkbox.checked = false;
         });
         tbody.appendChild(newRow);
@@ -419,7 +417,7 @@
         rows.forEach(function(row) {
             const subjectInput = row.querySelector('input[name="subjectname[]"]');
 
-      
+
             if (subjectInput && subjectInput.value.trim() === subjectName) {
                 row.remove();
             }
@@ -430,9 +428,9 @@
 <script>
 $(document).ready(function() {
     $('#subjects1').DataTable({
-        "pageLength": 10, 
+        "pageLength": 10,
         "searching": true,
-        "lengthChange": false   
+        "lengthChange": false
     });
 });
 </script>

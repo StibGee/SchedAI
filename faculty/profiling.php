@@ -109,7 +109,7 @@
                             </div>
                         </div>
                         <div class="form-footer mt-4 d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn  next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step2">
@@ -140,8 +140,8 @@
                         </div>
 
                         <div class="form-footer mt-5 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn  prev-step">Previous</button>
+                            <button type="button" class="btn next-step">Next</button>
                         </div>
                     </div>
                     <?php } ?>
@@ -207,8 +207,8 @@
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn  prev-step">Previous</button>
+                            <button type="button" class="btn next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step4">
@@ -232,8 +232,8 @@
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="button" class="btn btn-primary next-step">Next</button>
+                            <button type="button" class="btn prev-step">Previous</button>
+                            <button type="button" class="btn next-step">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step5">
@@ -293,8 +293,8 @@
                         </div>
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary prev-step">Previous</button>
-                            <button type="submit" class="btn btn-primary">Finish</button>
+                            <button type="button" class="btn prev-step">Previous</button>
+                            <button type="submit" class="btn ">Finish</button>
                         </div>
                     </div>
             </div>
@@ -304,14 +304,14 @@
     </div>
     </main>
 </body>
-<link rel="stylesheet" href="../css/main.css">
-<link rel="stylesheet" href="../css/user.css">
+<link rel="stylesheet" href="../css/faculty-css/dashboard.css">
+<link rel="stylesheet" href="../css/faculty-css/user.css">
 <script src="../js/user.js"></script>
 <?php
         require_once('../include/js.php')
     ?>
 <script>
-    document.querySelector('.btn-primary[type="submit"]').addEventListener('click', function() {
+    document.querySelector('[type="submit"]').addEventListener('click', function() {
     document.getElementById('wizardForm').submit();
 });
 

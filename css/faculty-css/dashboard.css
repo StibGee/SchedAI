@@ -297,7 +297,9 @@ span {
     -moz-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
 }
 
-#viewToggleButton {
+#viewToggle
+
+{
     font-size: 13px;
     padding: 6px;
     border-radius: 8px;
@@ -447,7 +449,7 @@ span {
 
 /* Hide the image and text-head by default */
 
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 768px) {
 
     .mobile-image-container {
         display: none;
@@ -457,7 +459,9 @@ span {
     .text-head {
         display: none;
     }
-
+    *{
+        font-size: 12px;
+    }
 
 }
 .loading-screen {
@@ -538,4 +542,8 @@ span {
         width: 120px;
     }
 
+}
+.btn.remove-subject{
+    padding: 4px;
+    width: auto;
 }

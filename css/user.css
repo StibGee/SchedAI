@@ -198,13 +198,25 @@ body {
 
 }
 .btn{
-    width: 16%;
+    width: 14%;
     padding: 2px;
 }
 .next-step{
+    color: rgb(255, 255, 255);
     background-color: rgb(12, 139, 3);
 }
 .prev-step{
+    color: rgb(255, 255, 255);
+
+    background-color: rgb(109, 109, 109);
+}
+.prev-step:hover{
+    background: none;
+    color: rgb(12, 139, 3);
+    border: 1px solid rgb(12, 139, 3);
+}
+.next-step:hover{
+    background: none;
     color: rgb(12, 139, 3);
     border: 1px solid rgb(12, 139, 3);
 }
