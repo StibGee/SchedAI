@@ -370,25 +370,25 @@ span {
     }
 
     .header-text, .mobile-image-container, .dropdown {
-        margin: 0 5px; /* Add some spacing between elements */
+        margin: 0 5px;
     }
 
     .mobile-image-container {
-        display: flex; /* Use flexbox to center the image */
-        justify-content: center; /* Center the image horizontally */
-        align-items: center; /* Center the image vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .dropdown img {
-        width: 25px; /* Adjusted width for mobile view */
-        height: 25px; /* Adjusted height for mobile view */
+        width: 25px;
+        height: 25px;
     }
     .navbar {
         background-color: #B0D9B1;
     }
 
     .text-head {
-        display: block; /* Show the text-head on mobile view */
+        display: block;
         font-size: 18px;
         color: #119e0e;
         font-family: 'Baloo Paaji 2', cursive;
@@ -424,7 +424,7 @@ span {
     }
 
     .logo-img {
-        display: inline-block; /* Show the image for smaller screens */
+        display: inline-block; 
     }
     .table-responsive {
         overflow-x: auto;
@@ -473,7 +473,7 @@ span {
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(15px); /* Apply blur effect */
+    backdrop-filter: blur(15px);
     z-index: 9999;
     visibility: hidden;
     opacity: 0;
