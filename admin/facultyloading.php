@@ -35,40 +35,30 @@
     ?>
 <main>
 
-            <div class="container">
                 <div class="row">
-                    <div class="text d-flex align-items-center" >
-                        <h2> Hola !!! </h2> <span> Role</span>
+                    <div class="col-8 text d-flex align-items-center" >
+                        <h2>Faculty Loading</span>
                     </div>
                 </div>
             <div class="row  mb-4 mx-2">
-                <div class="faculty-type col-3">
-                    <select class="form-select form-select-sm" id="select-faculty-type">
-                        <option>Visiting Lecturer</option>
-                        <option>Dean</option>
-                        <option>Regular Faculty</option>
-                    </select>
-                </div>
-                <div class="department col-3">
-                    <select class="form-select form-select-sm" id="select-department">
-                        <option>Information Technology</option>
-                        <option>Computer Science</option>
-                    </select>
-                </div>
-                <div class="searchbar col-6 d-flex justify-content-end">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
+
+                <div class="searchbar d-flex justify-content-center">
+                    <input type="search" class="form-control" placeholder="Search Faculty Schedule" aria-label="Search" data-last-active-input="">
                 </div>
             </div>
             <div class="row">
-                <div class=" col-5 mt-2">
-                <div class="faculty-info">
+                <div class=" col-3 my-2">
+                    <div class="col-9 subload-title">
+                        <h5>Faculty Information</h5>
+                    </div>
+                    <div class="faculty-info ">
 
-                    <li>Name : <?php echo $facultyinfo['fname']." ".$facultyinfo['mname']." ".$facultyinfo['lname'];?></li>
-                    <li>Rank : <?php echo $facultyinfo['type'];?></li>
-                    <li>Contact : <?php echo $facultyinfo['contactno'];?></li>
-                    <li>Specialization :</li>
+                        <li>Name : <?php echo $facultyinfo['fname']." ".$facultyinfo['mname']." ".$facultyinfo['lname'];?></li>
+                        <li>Rank : <?php echo $facultyinfo['type'];?></li>
+                        <li>Contact : <?php echo $facultyinfo['contactno'];?></li>
+                        <li>Email :</li>
 
-                </div>
+                    </div>
 
                 <audio id="audio-element" preload="auto" src="../audio/schedai.wav" muted></audio>
 
@@ -85,62 +75,39 @@
                     audio.load();
                 </script>
                 <div class="row mt-4">
-                    <div class="col-9 subload-title">
-                        <h5>Subject Loaded</h5>
-                    </div>
-                    <div class="col-3">
-                        <select class="form-select  form-select-sm " id="select-classtype">
-                            <option>all</option>
-                            <option>lec</option>
-                            <option>lab</option>
-                        </select>
+                    <div class=" subload-title">
+                        <h5>Specialization</h5>
                     </div>
                 </div>
-                <div class="p-4">
                     <div id="Subject-load" data-list="{&quot;valueNames&quot;:[&quot;yr&sec&quot;,&quot;email&quot;,&quot;desc&quot;,&quot;subtype&quot;,&quot;Units&quot;}">
                         <div class="table-responsive">
                         <table class="table table-sm fs-9 mb-0">
                             <thead>
                             <tr>
-                                <th data-sort="subcode">Code</th>
-                                <th  data-sort="desc">Description</th>
-                                <th  data-sort="desc">Type</th>
-                                <th  data-sort="desc">Units</th>
-
+                                <th data-sort="subcode">Subject</th>
                             </tr>
                             </thead>
                             <tbody class="list">
                             <tr>
-                                <td class="align-middle subcode">CS139</td>
                                 <td class="align-middle desc">Web Development</td>
-                                <td class="align-middle subtype">Lec</td>
-                                <td class="align-middle unit">3.00</td>
                             </tr>
                             </tbody>
                             <tbody class="list">
                             <tr>
-                                <td class="align-middle subcode">CS139</td>
                                 <td class="align-middle desc">Web Development</td>
-                                <td class="align-middle subtype">Lec</td>
-                                <td class="align-middle unit">3.00</td>
                             </tr>
                             </tbody>
                             <tbody class="list">
                             <tr>
-                                <td class="align-middle subcode">CS139</td>
                                 <td class="align-middle desc">Web Development</td>
-                                <td class="align-middle subtype">Lec</td>
-                                <td class="align-middle unit">3.00</td>
                             </tr>
                             </tbody>
-
                         </table>
                         </div>
 
                     </div>
                     </div>
-                </div>
-                <div class="col-7">
+                <div class="col-9">
                 <div class="sched-container">
                     <div class="row mt-2 justify-content-between">
                         <div class="col-5">
@@ -219,7 +186,7 @@
                     </div>
                 </div>
                 </div>
-            </div>
+
         </main>
 
 <script src="../js/facultyloading.js"></script>

@@ -87,10 +87,7 @@
     border: none;
 }
 
-.header-table button:hover {
-    border: 1px solid #1A5319;
-    border-radius: 15px;
-}
+
 
 table {
     width: 100%;

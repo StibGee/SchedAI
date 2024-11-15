@@ -218,7 +218,7 @@
                 <div class="col-2">
                         <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
                             <option value="">Faculty Schedule</option>
-                            <option onclick="window.location.href='final-sched-student.php'" >Student Schedule</option>
+                            <option >Student Schedule</option>
                         </select>
                 </div>
                 <div class="col-2">
@@ -243,9 +243,15 @@
 
 
                             <?php /*}*/ endforeach; ?>
-                            <option value="" selected>Select a Room</option>
+                            <option value="" selected>Select Year</option>
                         </select>
                     </form>
+                </div>
+                <div class="col-2">
+                        <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
+                            <option value="">Select Section</option>
+                            <option >Student Schedule</option>
+                        </select>
                 </div>
 
                 <div class="searchbar col-3 ">
