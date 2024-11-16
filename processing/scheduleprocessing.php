@@ -73,13 +73,13 @@ function addschedulecollege() {
     global $schedule;
     global $curriculum;
     
-    $collegeid = $_POST['collegeid'];
-    $academicyear= $_SESSION['year'];
-    $includegensub= isset($_POST['includegensub']) ? filter_var($_POST['includegensub'], FILTER_SANITIZE_STRING) : '';
-    $semester= isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_STRING) : '';
-    $_SESSION['semester']=$semester;
+    $collegeid = isset($_POST['collegeid']) ? filter_var($_POST['collegeid'], FILTER_SANITIZE_STRING) : '';
+    $academicyear= isset($_POST['academicyear']) ? filter_var($_POST['academicyear'], FILTER_SANITIZE_STRING) : '';
+    $includegensub = isset($_POST['includegensub']) ? filter_var($_POST['includegensub'], FILTER_SANITIZE_STRING) : '';
+    $semester = isset($_POST['semester']) ? filter_var($_POST['semester'], FILTER_SANITIZE_NUMBER_INT) : 0; 
+    //$_SESSION['semester']=$semester;
     $calendarid=$curriculum->findcurriculumidcollege($academicyear, $semester,$collegeid);
-    $_SESSION['calendarid']=$calendarid;
+    //$_SESSION['calendarid']=$calendarid;
   
     $deleteschedulecollege = $schedule->deleteschedulecollege($calendarid, $collegeid);
     
@@ -95,9 +95,9 @@ function addschedulecollege() {
 
                 if (isset($value[$index]) && isset($_POST[$curriculumindex][$index])) {
                     $section = htmlspecialchars($value[$index], ENT_QUOTES, 'UTF-8');
-                    $curriculum = htmlspecialchars($_POST[$curriculumindex][$index], ENT_QUOTES, 'UTF-8');
+                    $curriculume = htmlspecialchars($_POST[$curriculumindex][$index], ENT_QUOTES, 'UTF-8');
                     
-                    $result = $schedule->addschedule($yearlvl,$academicyear, $departmentid, $semester, $section, $curriculum, $calendarid, $yearlvl, $collegeid);
+                    $result = $schedule->addschedule($yearlvl,$academicyear, $departmentid, $semester, $section, $curriculume, $calendarid, $yearlvl, $collegeid);
                     if ($result){
                         $assigned=1;
                     }else{

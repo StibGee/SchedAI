@@ -30,7 +30,7 @@ class Department {
     }
     
     public function getcollegedepartment($collegeid) {
-        $sql = "SELECT * FROM department WHERE collegeid = :collegeid";
+        $sql = "SELECT * FROM department WHERE collegeid = :collegeid ORDER BY yearlvl DESC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':collegeid' => $collegeid]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
