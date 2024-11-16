@@ -314,7 +314,9 @@
                     </div>
                     <div class="modal-body p-3">
                         <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
-
+                        
+                        
+                            <input type="number" name='academicyear' value="<?php echo $_SESSION['year'];?>">
                             <div class="rounded-top-3 bg-body-tertiary p-2">
                                 <h2 class="head-label">Generate Schedule for <?php if($_SESSION['departmentidbasis']==0){echo $collegeinfo['abbreviation'];}else{echo $departmentinfo['abbreviation'];}?><?php if($_SESSION['sem']==1){echo ' '.$_SESSION['sem'].'st sem';}else{echo ' '.$_SESSION['sem'].'nd sem';}?><?php echo ' S.Y-'.$_SESSION['year'];?></h2>
                                 <div class="form-check d-flex justify-content-end">
