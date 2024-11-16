@@ -77,205 +77,204 @@
         }
     ?>
 
-    <main>
-
+<main>
     <div class="mb-1">
-    
-
-    <div class="container py-3">
-        <div class="row">
-            <div class="toast-container position-fixed top-0.5 start-50 translate-middle-x p-3">
-                <div id="subjectToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
-                    <?php echo $message ? 'style="display: block; background-color: #28a745; color: white; padding: 0.3rem 0.5rem; font-size: 1.1rem; width: 400px; border-radius: 10px;"' : 'style="display: none;"'; ?>>
-                    <div class="toast-body" id="toastBody">
-                        <?php echo htmlspecialchars($message); ?>
-                    </div>
-                </div>
-            </div>
-            <h5>
-                <button class="button" onclick="window.location.href='academic-plan.php'">
-                    <i class="fa-solid fa-circle-arrow-left"></i>
-                </button>
-                Academic Plan for <span><?php echo $departmentinfo['name'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
-            </h5>
-        </div>
-        <div class="row d-flex justify-content-end align-items-center">
-
-            <div class="col-1">
-                <select class="form-select  form-select-sm " id="select-position">
-                    <option>all</option>
-                    <option>Lec</option>
-                    <option>Lab</option>
-                </select>
-            </div>
-
-                    <div class="searchbar col-4 ">
-                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
-                    </div>
-                    <div class="col-1 d-flex align-items-center justify-content-end">
-                        <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3 col-md-3 steps fixed-sidebar">
-                        <h5>Year Level</h5>
-                        <div class="navs d-flex align-items-center mt-3 text-center">
-                            <?php for ($i = 1; $i <= $departmentinfo['yearlvl']; $i++) { ?>
-                                <form action="academicplan-view.php" method="POST">
-                                    <input type="hidden" name="academicplanyearlvl" value="<?php echo $i;?>">
-                                    <button type="submit" class="<?php if ($i==$yearlvl){echo 'currentyearlvl';}?>">Year Level <?php echo $i;?></button>
-                                </form>
-                            <?php } ?>
-
-
+        <div class="container py-3">
+            <div class="row d-flex justify-content-end align-items-center">
+                <div class="col-6">
+                    <div class="toast-container position-fixed top-0.5 start-50 translate-middle-x p-3">
+                        <div id="subjectToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                            <?php echo $message ? 'style="display: block; background-color: #28a745; color: white; padding: 0.3rem 0.5rem; font-size: 1.1rem; width: 400px; border-radius: 10px;"' : 'style="display: none;"'; ?>>
+                            <div class="toast-body" id="toastBody">
+                                <?php echo htmlspecialchars($message); ?>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-9 scrollable-content">
-                            <div class="row">
-                                <label for="">First Year Subjects Loaded</label>
-                                <div class="table-load my-3 p-3">
-                                    <table id="" class="table table-sm fs-9 mb-0 p-3">
-                                        <thead>
+                    <h5>
+                        <button class="button" onclick="window.location.href='academic-plan.php'">
+                            <i class="fa-solid fa-circle-arrow-left"></i>
+                        </button>
+                        Academic Plan for <span><?php echo $departmentinfo['name'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
+                    </h5>
+                </div>
+                <div class="col-1">
+                    <select class="form-select  form-select-sm " id="select-position">
+                        <option>all</option>
+                        <option>Lec</option>
+                        <option>Lab</option>
+                    </select>
+                </div>
+
+                <div class="searchbar col-4 ">
+                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
+                </div>
+                <div class="col-1 d-flex align-items-center justify-content-start">
+                    <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 col-md-3 steps fixed-sidebar">
+                    <h5>Year Level</h5>
+                    <div class="navs d-flex align-items-center mt-3 text-center">
+                        <?php for ($i = 1; $i <= $departmentinfo['yearlvl']; $i++) { ?>
+                            <form action="academicplan-view.php" method="POST">
+                                <input type="hidden" name="academicplanyearlvl" value="<?php echo $i;?>">
+                                <button type="submit" class="<?php if ($i==$yearlvl){echo 'currentyearlvl';}?>">Year Level <?php echo $i;?></button>
+                            </form>
+                        <?php } ?>
+
+
+                    </div>
+                </div>
+                <div class="col-md-9 scrollable-content">
+                        <div class="row">
+                            <label for="">First Year Subjects Loaded</label>
+                            <div class="table-load my-3 p-3">
+                                <table id="" class="table table-sm fs-9 mb-0 p-3">
+                                    <thead>
+                                        <tr>
+                                            <th data-sort="subcode">Code</th>
+                                            <th data-sort="desc">Description</th>
+                                            <th data-sort="desc">Type</th>
+                                            <th data-sort="desc">Unit</th>
+                                            <th data-sort="desc">Time</th>
+                                            <th data-sort="desc">Focus</th>
+                                            <th data-sort="desc">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="loadedSubjects1" class="list">
+                                    <?php if (!empty($filteredsubject)) { ?>
+                                        <?php foreach ($filteredsubject as $filteredsubjects) { ?>
                                             <tr>
-                                                <th data-sort="subcode">Code</th>
-                                                <th data-sort="desc">Description</th>
-                                                <th data-sort="desc">Type</th>
-                                                <th data-sort="desc">Unit</th>
-                                                <th data-sort="desc">Time</th>
-                                                <th data-sort="desc">Focus</th>
-                                                <th data-sort="desc">Action</th>
+                                                <td><?= htmlspecialchars($filteredsubjects['subjectcode']) ?></td>
+                                                <td><?= htmlspecialchars($filteredsubjects['subjectname']) ?></td>
+                                                <td><?= htmlspecialchars($filteredsubjects['type']) ?></td>
+                                                <td><?= htmlspecialchars($filteredsubjects['unit']) ?></td>
+                                                <td><?= htmlspecialchars($filteredsubjects['hours']) ?></td>
+                                                <td><?= htmlspecialchars($filteredsubjects['focus']) ?></td>
+                                                <td>
+                                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal<?= htmlspecialchars($filteredsubjects['id']) ?>" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                                        <i class="fas fa-edit"></i> <!-- Edit icon -->
+                                                    </button>
 
-                                            </tr>
-                                        </thead>
-                                        <tbody id="loadedSubjects1" class="list">
-                                        <?php if (!empty($filteredsubject)) { ?>
-                                            <?php foreach ($filteredsubject as $filteredsubjects) { ?>
-                                                <tr>
-                                                    <td><?= htmlspecialchars($filteredsubjects['subjectcode']) ?></td>
-                                                    <td><?= htmlspecialchars($filteredsubjects['subjectname']) ?></td>
-                                                    <td><?= htmlspecialchars($filteredsubjects['type']) ?></td>
-                                                    <td><?= htmlspecialchars($filteredsubjects['unit']) ?></td>
-                                                    <td><?= htmlspecialchars($filteredsubjects['hours']) ?></td>
-                                                    <td><?= htmlspecialchars($filteredsubjects['focus']) ?></td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?= htmlspecialchars($filteredsubjects['id']) ?>">
-                                                            Edit
+                                                    <form action="../processing/subjectprocessing.php" method="post" style="display:inline;">
+                                                        <input type="hidden" name="action" value="delete">
+                                                        <input type="hidden" name="id" value="<?= htmlspecialchars($filteredsubjects['id']) ?>">
+                                                        <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this subject?');" style="background: none; border: none; padding: 0;">
+                                                            <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
                                                         </button>
-                                                        <form action="../processing/subjectprocessing.php" method="post" style="display:inline;">
-                                                            <input type="hidden" name="action" value="delete">
-                                                            <input type="hidden" name="id" value="<?= htmlspecialchars($filteredsubjects['id']) ?>">
-                                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this subject?');">Delete</button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                <!-- Edit Modal -->
-                                                <div class="modal fade" id="editModal<?= htmlspecialchars($filteredsubjects['id']) ?>" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg mt-6">
-                                                        <div class="modal-content border-0">
-                                                            <div class="modal-body p-4">
-                                                                <div class="position-absolute top-0 end-0 mt-3 me-3 z-1">
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <h2 class="head-label">Edit Subject</h2>
-                                                                <form action="../processing/subjectprocessing.php" method="POST" class="row g-3 mt-4 needs-validation" novalidate>
-                                                                    <input type="hidden" name="action" value="updatesubject">
-                                                                    <input type="hidden" name="subjectid" value="<?= htmlspecialchars($filteredsubjects['id']) ?>">
+                                                    </form>
 
-                                                                    <h5>Subject Information</h5>
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" for="subcode">Subject Code</label>
-                                                                            <input class="form-control" id="subcode" type="text" name="subjectcode" value="<?= htmlspecialchars($filteredsubjects['subjectcode']) ?>" required />
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" for="subname">Subject Name</label>
-                                                                            <input class="form-control" id="subname" type="text" name="subjectname" value="<?= htmlspecialchars(str_replace('LAB', '', $filteredsubjects['subjectname'])) ?>" required />
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <h5>Subject Details</h5>
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" for="type">Type</label>
-                                                                            <select class="form-select type-select" id="type" name="type" required>
-                                                                                <option selected disabled value="">Choose...</option>
-                                                                                <option value="Lec" <?= htmlspecialchars($filteredsubjects['type']) == 'Lec' ? 'selected' : '' ?>>Lec</option>
-                                                                                <option value="Lab" <?= htmlspecialchars($filteredsubjects['type']) == 'Lab' ? 'selected' : '' ?>>Lab</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" for="unit">Unit</label>
-                                                                            <select class="form-select unit-select" id="unit" name="unit" required>
-                                                                                <option selected disabled value="">Choose...</option>
-                                                                                <?php if ($filteredsubjects['type'] == 'Lec'): ?>
-                                                                                    <option value="3.0" <?= htmlspecialchars($filteredsubjects['unit']) == '3.0' ? 'selected' : '' ?>>3.0</option>
-                                                                                    <option value="2.0" <?= htmlspecialchars($filteredsubjects['unit']) == '2.0' ? 'selected' : '' ?>>2.0</option>
-
-                                                                                    <option value="1.0" <?= htmlspecialchars($filteredsubjects['unit']) == '1.0' ? 'selected' : '' ?>>1.0</option>
-                                                                                <?php elseif ($filteredsubjects['type'] == 'Lab'): ?>
-                                                                                    <option value="1.0" <?= htmlspecialchars($filteredsubjects['unit']) == '1.0' ? 'selected' : '' ?>>1.0</option>
-                                                                                <?php endif; ?>
-
-                                                                            </select>
-                                                                        </div>
-
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" for="hours">Hours</label>
-                                                                            <input class="form-control hours-input" id="hoursedit" type="text" name="hours" readonly value="<?= htmlspecialchars($filteredsubjects['hours']) ?>" required />
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" for="focus">Program Focus</label>
-                                                                            <select class="form-select" id="focus" name="focus" required>
-                                                                                <option selected disabled value="">Choose...</option>
-                                                                                <option value="Major" <?= htmlspecialchars($filteredsubjects['focus']) == 'Major' ? 'selected' : '' ?>>Major</option>
-                                                                                <option value="Minor" <?= htmlspecialchars($filteredsubjects['focus']) == 'Minor' ? 'selected' : '' ?>>Minor</option>
-                                                                                <option value="Major1" <?= htmlspecialchars($filteredsubjects['focus']) == 'Major1' ? 'selected' : '' ?>>Major (no schedule)</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label" for="focus">Require Masters</label>
-                                                                            <input class="form-check-input" type="checkbox" id="" name="masters" <?= htmlspecialchars($filteredsubjects['masters']) == 'Yes' ? 'checked' : '' ?>>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="row mt-3 labdetails">
-                                                                        <h5>Lab Details</h5>
-                                                                        <div class="col-md-6">
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input" type="checkbox" id="" name="labroom" <?= htmlspecialchars($filteredsubjects['type']) == 'Lab' ? 'checked' : '' ?>>
-                                                                                <label class="form-check-label" for="">Requires Lab Room</label>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <div class="modal-footer d-flex justify-content-between">
-                                                                        <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
-                                                                        <button type="submit" class="confirm">Update Subject</button>
-                                                                    </div>
-
-                                                                </form>
+                                                </td>
+                                            </tr>
+                                            <!-- Edit Modal -->
+                                            <div class="modal fade" id="editModal<?= htmlspecialchars($filteredsubjects['id']) ?>" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg mt-6">
+                                                    <div class="modal-content border-0">
+                                                        <div class="modal-body p-4">
+                                                            <div class="position-absolute top-0 end-0 mt-3 me-3 z-1">
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
+                                                            <h2 class="head-label">Edit Subject</h2>
+                                                            <form action="../processing/subjectprocessing.php" method="POST" class="row g-3 mt-4 needs-validation" novalidate>
+                                                                <input type="hidden" name="action" value="updatesubject">
+                                                                <input type="hidden" name="subjectid" value="<?= htmlspecialchars($filteredsubjects['id']) ?>">
+
+                                                                <h5>Subject Information</h5>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="subcode">Subject Code</label>
+                                                                        <input class="form-control" id="subcode" type="text" name="subjectcode" value="<?= htmlspecialchars($filteredsubjects['subjectcode']) ?>" required />
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="subname">Subject Name</label>
+                                                                        <input class="form-control" id="subname" type="text" name="subjectname" value="<?= htmlspecialchars(str_replace('LAB', '', $filteredsubjects['subjectname'])) ?>" required />
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <h5>Subject Details</h5>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="type">Type</label>
+                                                                        <select class="form-select type-select" id="type" name="type" required>
+                                                                            <option selected disabled value="">Choose...</option>
+                                                                            <option value="Lec" <?= htmlspecialchars($filteredsubjects['type']) == 'Lec' ? 'selected' : '' ?>>Lec</option>
+                                                                            <option value="Lab" <?= htmlspecialchars($filteredsubjects['type']) == 'Lab' ? 'selected' : '' ?>>Lab</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="unit">Unit</label>
+                                                                        <select class="form-select unit-select" id="unit" name="unit" required>
+                                                                            <option selected disabled value="">Choose...</option>
+                                                                            <?php if ($filteredsubjects['type'] == 'Lec'): ?>
+                                                                                <option value="3.0" <?= htmlspecialchars($filteredsubjects['unit']) == '3.0' ? 'selected' : '' ?>>3.0</option>
+                                                                                <option value="2.0" <?= htmlspecialchars($filteredsubjects['unit']) == '2.0' ? 'selected' : '' ?>>2.0</option>
+
+                                                                                <option value="1.0" <?= htmlspecialchars($filteredsubjects['unit']) == '1.0' ? 'selected' : '' ?>>1.0</option>
+                                                                            <?php elseif ($filteredsubjects['type'] == 'Lab'): ?>
+                                                                                <option value="1.0" <?= htmlspecialchars($filteredsubjects['unit']) == '1.0' ? 'selected' : '' ?>>1.0</option>
+                                                                            <?php endif; ?>
+
+                                                                        </select>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="hours">Hours</label>
+                                                                        <input class="form-control hours-input" id="hoursedit" type="text" name="hours" readonly value="<?= htmlspecialchars($filteredsubjects['hours']) ?>" required />
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="focus">Program Focus</label>
+                                                                        <select class="form-select" id="focus" name="focus" required>
+                                                                            <option selected disabled value="">Choose...</option>
+                                                                            <option value="Major" <?= htmlspecialchars($filteredsubjects['focus']) == 'Major' ? 'selected' : '' ?>>Major</option>
+                                                                            <option value="Minor" <?= htmlspecialchars($filteredsubjects['focus']) == 'Minor' ? 'selected' : '' ?>>Minor</option>
+                                                                            <option value="Major1" <?= htmlspecialchars($filteredsubjects['focus']) == 'Major1' ? 'selected' : '' ?>>Major (no schedule)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="focus">Require Masters</label>
+                                                                        <input class="form-check-input" type="checkbox" id="" name="masters" <?= htmlspecialchars($filteredsubjects['masters']) == 'Yes' ? 'checked' : '' ?>>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row mt-3 labdetails">
+                                                                    <h5>Lab Details</h5>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" id="" name="labroom" <?= htmlspecialchars($filteredsubjects['type']) == 'Lab' ? 'checked' : '' ?>>
+                                                                            <label class="form-check-label" for="">Requires Lab Room</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="modal-footer d-flex justify-content-between">
+                                                                    <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="confirm">Update Subject</button>
+                                                                </div>
+
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                            <?php } ?>
-                                        <?php } else { ?>
-                                            <tr>
-                                                <td colspan="7">No subjects found.</td>
-                                            </tr>
                                         <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <?php } else { ?>
+                                        <tr>
+                                            <td colspan="7">No subjects found.</td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
                             </div>
-                    </div>
-
-        </div>
+                        </div>
+                </div>
+            </div>
         <!-- Modal Form -->
         <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg mt-6" role="document">

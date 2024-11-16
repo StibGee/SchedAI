@@ -10,7 +10,7 @@
     color: black;
 }
 .curriculum-sched{
-    width: 80%;
+    width: 60%;
 }
 
 button{
@@ -22,5 +22,5 @@ button{
 }
 .form-select{
     border-radius: 12px;
-    height: 38px;
+
 }

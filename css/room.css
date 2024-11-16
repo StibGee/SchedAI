@@ -8,22 +8,26 @@
 }
 
 .table-contents{
+    box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(127, 127, 127, 0.7);
     background-color:#E4EFE7 ;
     border-radius: 16px;
     padding: 24px;
+    width: 60%;
 }
 .searchbar .form-control{
-    height: 32px;
+
     border-radius: 12px;
 }
 .form-select{
-    height: 32px;
-    border-radius: 12px;
+
+    border-radius: 14px;
 }
 
 
 .modal-body .form-select{
-    border-radius: 14px;
+    border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: 32px;
 }
@@ -31,7 +35,7 @@
 
 
 .form-control{
-    border-radius:  16px;
+    border-radius:  8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: 32px;
 }
@@ -48,7 +52,7 @@
 
 .modal-footer button{
     width: 90px;
-    border-radius: 14px;
+    border-radius:12px;
     padding: 3px;
 }
 
@@ -69,4 +73,32 @@ button.confirm{
 
 tbody th{
     font-weight: 100;
+}
+/* Custom checkbox style */
+.custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #000; /* Black border */
+    border-radius: 50%; /* Make it circular */
+    background-color: #fff; /* White background */
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-checkbox:checked {
+    background-color: #119e0e; /* Black background when checked */
+    border-color: #119e0e; /* Black border when checked */
+}
+
+.custom-checkbox:checked::before {
+    content: '✔'; /* Check mark icon */
+    position: absolute;
+    left: 4px;
+    top: 0;
+    font-size: 16px;
+    color: #fff; /* White color for the check mark */
 }

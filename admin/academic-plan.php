@@ -41,13 +41,13 @@
             $departmentid = $initialcollegedepartment;
             $_SESSION['departmentidbasis']=$departmentid;
         }
-        
+
         $departmentinfo = $department->getdepartmentinfo($departmentid);
     ?>
     <main>
         <div class="container mb-1">
             <div class="row d-flex align-items-center">
-                <div class="col-5">
+                <div class="col-6">
                     <h3><?php echo $departmentinfo['abbreviation']; ?> Curriculum Plan</h3>
                 </div>
                 <div class="col-3">
@@ -61,14 +61,8 @@
                         </select>
                     </form>
                 </div>
-                <div class="col-1">
-                    <select class="form-select form-select-sm" id="select-classtype">
-                        <option>all</option>
-                        <option>lec</option>
-                        <option>lab</option>
-                    </select>
-                </div>
-                <div class="col-3 d-flex align-items-center justify-content-start">
+
+                <div class="col-1 d-flex align-items-center justify-content-end">
                         <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
                         </div>
                 </div>
@@ -103,15 +97,20 @@
                                 <th scope="row"><?php echo htmlspecialchars($displayyear); ?></th>
                                 <td><?php echo htmlspecialchars($calendars['sem'] == 1 ? '1st Semester' : ($calendars['sem'] == 2 ? '2nd Semester' : ($calendars['sem'] == 3 ? '3rd Semester' : $calendars['sem'] . 'th'))); ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#formeditcalendar<?php echo $calendars['id']; ?>" onclick="event.stopPropagation();">Edit</button>
+                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#formeditcalendar<?php echo $calendars['id']; ?>" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                        <i class="fas fa-edit"></i> <!-- Edit icon -->
+                                    </button>
+
                                     <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this curriculum?');">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $calendars['id']; ?>">
-                                        <button type="submit" class="btn btn-danger" onclick="event.stopPropagation();">Delete</button>
+                                        <button type="submit" class="btn" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                            <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
-                            
+
                             <!--Modal edit year-->
                             <div class="modal fade" id="formeditcalendar<?php echo $calendars['id']; ?>" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg mt-6" role="document">
@@ -134,7 +133,7 @@
                                                             <input type="number" name="endyear" id="endyear1<?php echo $calendars['id']; ?>" class="form-control form-control-sm" style="width: 120px;"  value="<?php echo ($calendars['year']+1); ?>">
                                                         </div>
                                                     </div>
-                                                
+
                                                     <div class="form-group col-md-6">
                                                         <label for="select-semester">Select Semester</label>
                                                         <select name="semester" class="form-select form-select-sm mt-2" id="select-semester">
@@ -188,7 +187,7 @@
                             </div>
                         </div>
 
-                      
+
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-success">Done</button>
@@ -254,7 +253,7 @@
                 endYearInput.addEventListener('input', function() {
                     const endYear = parseInt(endYearInput.value);
                     if (!isNaN(endYear)) {
-                        startYearInput.value = endYear - 1; 
+                        startYearInput.value = endYear - 1;
                     }
                 });
             }
@@ -292,7 +291,7 @@
         console.log('Modal is being closed');
     });
     </script>
-    
+
     <script src="../js/main.js"></script>
 
     <?php

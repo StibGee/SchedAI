@@ -3,7 +3,7 @@
 <?php
         require_once('../include/head.php');
         $_SESSION['currentpage']='faculty';
-       
+
         if (!isset($_GET['faculty'])){
             $_SESSION['loading']=1;
         }
@@ -22,7 +22,7 @@
 
         $faculty = new Faculty($pdo);
         $department = new Department($pdo);
-       
+
         if($_SESSION['departmentid']==0){
             $departmentall = $department->getalldepartment();
             $facultyall = $faculty->getallfacultycollege($_SESSION['collegeid']);
@@ -31,9 +31,9 @@
             $facultyall = $faculty->getallfacultydepartment($_SESSION['departmentid']);
         }
         $collegedepartment = $department->getcollegedepartment($_SESSION['collegeid']);
-            
-        
-        
+
+
+
 
     ?>
 
@@ -96,43 +96,25 @@
                                     <td><?php echo $facultys['rank']; ?></td>
                                     <td><?php echo $facultys['startdate']; ?></td>
                                     <td>
-                                        <button type="button" id="dropdownMenuButton" class="btn-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa-solid fa-ellipsis"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                            <li>
-                                                <form action="../processing/facultyprocessing.php" method="POST" style="display: inline;">
-                                                    <input type="hidden" name="action" value="setactive">
-                                                    <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">
-                                                    <?php
-                                                    $isActive = $facultys['active'];
-                                                    $newStatus = $isActive ? 0 : 1;
-                                                    $buttonText = $isActive ? 'Set Inactive' : 'Set Active';
-                                                    ?>
+                                    <div style="display: flex;">
+    <!-- Edit Icon -->
+    <form action="profiling.php" method="POST" style="display: inline;">
+        <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">
+        <button type="submit" class="btn" style="border: none; background: none;">
+            <i class="fas fa-edit"></i>
+        </button>
+    </form>
 
-                                                    <input type="hidden" name="active" value="<?php echo $newStatus; ?>">
-                                                    <button type="submit" class="dropdown-item"><?php echo $buttonText; ?></button>
-                                                </form>
-                                            </li>
+    <!-- Delete Icon -->
+    <form action="../processing/facultyprocessing.php" method="post" style="display: inline;">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="id" value="<?php echo $facultys['facultyid']; ?>">
+        <button type="submit" class="btn" style="border: none; background: none;" onclick="return confirm('Are you sure you want to delete this faculty?');">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </form>
+</div>
 
-                                            <li><hr class="dropdown-divider"></li>
-                                            
-                                            <li>
-                                                <form action="profiling.php" method="POST" style="display: inline;">
-                                                    <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">
-                                                    <button type="submit" class="dropdown-item">Edit</button>
-                                                </form>
-                                            </li>
-
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <form action="../processing/facultyprocessing.php" method="post" style="display:inline;">
-                                                    <input type="hidden" name="action" value="delete">
-                                                    <input type="hidden" name="id" value="<?php echo $facultys['facultyid']; ?>">
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this faculty?');">Delete</button>
-                                                </form>
-                                            </li>
-                                        </ul>
                                     </td>
                                 </tr>
                                 <?php } ?>
@@ -199,7 +181,7 @@
                                             <div class="col-md-4">
                                                 <label class="form-label" for="email">Email Address</label>
                                                 <input class="form-control" id="email" name="emailadd" type="email" required />
-                                        
+
                                                 <div class="valid-feedback">Looks good!</div>
                                             </div>
                                             <div class="col-md-4">
