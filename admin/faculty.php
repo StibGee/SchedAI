@@ -97,23 +97,23 @@
                                     <td><?php echo $facultys['startdate']; ?></td>
                                     <td>
                                     <div style="display: flex;">
-    <!-- Edit Icon -->
-    <form action="profiling.php" method="POST" style="display: inline;">
-        <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">
-        <button type="submit" class="btn" style="border: none; background: none;">
-            <i class="fas fa-edit"></i>
-        </button>
-    </form>
+                                        <!-- Edit Icon -->
+                                        <form action="profiling.php" method="POST" style="display: inline;">
+                                            <input type="hidden" name="facultyid" value="<?php echo $facultys['facultyid']; ?>">
+                                            <button type="submit" class="btn" style="border: none; background: none;">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </form>
 
-    <!-- Delete Icon -->
-    <form action="../processing/facultyprocessing.php" method="post" style="display: inline;">
-        <input type="hidden" name="action" value="delete">
-        <input type="hidden" name="id" value="<?php echo $facultys['facultyid']; ?>">
-        <button type="submit" class="btn" style="border: none; background: none;" onclick="return confirm('Are you sure you want to delete this faculty?');">
-            <i class="fas fa-trash-alt"></i>
-        </button>
-    </form>
-</div>
+                                        <!-- Delete Icon -->
+                                        <form action="../processing/facultyprocessing.php" method="post" style="display: inline;">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<?php echo $facultys['facultyid']; ?>">
+                                            <button type="submit" class="btn" style="border: none; background: none;" onclick="return confirm('Are you sure you want to delete this faculty?');">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
 
                                     </td>
                                 </tr>
@@ -128,17 +128,16 @@
 
             </div>
         </div>
-         <!-- Modal Form -->
-            <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg mt-6" role="document">
-                    <div class="modal-content border-0">
-                        <div class="modal-body p-3">
-                            <div class="position-absolute top-0 end-0 mt-3 me-3 z-1">
-
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="rounded-top-3 form p-4" style="max-height: 500px; overflow-y: auto;">
-                                <h2 class="head-label">Add faculty</h2>
+        <!-- Modal Form -->
+        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg mt-6" role="document">
+                <div class="modal-content border-0">
+                    <div class="modal-body p-3">
+                        <div class="close-btn-container position-absolute top-0 end-0 mt-3 me-3">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="scrollable-content form-content p-4" style="max-height: 400px; overflow-y: auto;">
+                            <h2 class="head-label">Add faculty</h2>
                                 <div class="container form">
                                     <form id="facultyForm" action="../processing/facultyprocessing.php" method="POST" class="row g-3 needs-validation" novalidate="">
                                         <input type="text" name="action" id="" value="addfaculty" hidden>
@@ -178,17 +177,13 @@
                                                 <input class="form-control" id="contactnumber" name="contactno" type="tel" required />
                                                 <div class="valid-feedback">Looks good!</div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label" for="email">Email Address</label>
                                                 <input class="form-control" id="email" name="emailadd" type="email" required />
 
                                                 <div class="valid-feedback">Looks good!</div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label" for="birthdate">Birthdate</label>
-                                                <input class="form-control" id="birthdate" name="bday" type="date" required />
-                                                <div class="valid-feedback">Looks good!</div>
-                                            </div>
+
                                             <div class="col-md-2">
                                                 <label class="form-label" for="gender">Gender</label>
                                                 <select class="form-select" id="gender" name="gender" required="">
@@ -216,7 +211,7 @@
 
                                         <h5>Faculty Information</h5>
                                         <div class="row mt-2">
-                                            <div class="col-3">
+                                            <div class="col-6">
                                                 <label class="form-label" for="position">Type</label>
                                                 <select class="form-select" id="position" name="type" required="">
                                                     <option selected="" disabled="" value="">Choose...</option>
@@ -225,25 +220,26 @@
                                                 </select>
                                                 <div class="invalid-feedback">Please select a Gender</div>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-6">
                                                 <label class="form-label" for="startdate">Start Date</label>
                                                 <input class="form-control" id="startdate" type="date" name="startdate" required />
                                                 <div class="valid-feedback">Looks good!</div>
                                             </div>
-                                            <div class="col-4">
-                                                <label class="form-label" for="teachinghours">Teaching Hours</label>
-                                                <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week" />
-                                            </div>
+
                                         </div>
 
                                         <div class="row mt-3">
-                                            <div class="col-3">
+                                            <div class="col-6">
                                                 <label class="form-label" for="rank">Rank</label>
                                                 <select class="form-select" id="position" name="rank" required="">
                                                     <option selected value="None">Choose...</option>
                                                     <option value="phd">PhD </option>
                                                     <option value="masters">Masters</option>
                                                 </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label" for="teachinghours">Teaching Hours</label>
+                                                <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week" />
                                             </div>
                                             <!--<div class="col-9">
                                                 <label class="form-label" for="assign-sub">Assign Subject <span>*optional</span></label>
@@ -253,16 +249,18 @@
 
                                             </div>-->
                                         </div>
+                                    </form>
                                 </div>
-                            </div>
+                        </div>
+                    </div>
                     <div class="modal-footer d-flex justify-content-between">
-
                         <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                         <button type="submit" class="confirm">Done</button>
-
                     </div>
+                </div>
             </div>
-            </form>
+        </div>
+
     </main>
 </body>
 

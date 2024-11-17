@@ -12,7 +12,7 @@
     <main>
         <div class="container mb-5">
             <div class="row mt-4 d-flex align-items-center">
-                <div class="header-table col-3">
+                <div class="header-table col-4">
                     <h3>Accounts</h3>
                 </div>
                 <div class="col-md-2">
@@ -23,18 +23,18 @@
                       </select>
                 </div>
 
-                <div class="searchbar col-3">
+                <div class="searchbar col-4">
                     <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
                 </div>
-                <div class="col-2 add-account d-flex justify-content-end">
+                <div class="col-1 add-account d-flex justify-content-end">
 
-                <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
+                    <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
 
                 </div>
 
             </div>
 
-            <div class="account my-4 p-3">
+            <div class="account my-4 p-3 d-flex justify-content-center">
                 <div class="account-table ">
                         <table class="table">
                             <thead>
