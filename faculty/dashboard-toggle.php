@@ -96,9 +96,10 @@
             $yearlvl = htmlspecialchars($row['yearlvl']);
             $section = htmlspecialchars($row['section']);
             $roomname = htmlspecialchars($row['roomname']);
+            $departmentname = htmlspecialchars($row['departmentname']);
 
 
-            $subjectLabel = "$subjectname $yearlvl$section ($roomname)";
+            $subjectLabel = "$subjectname $departmentname $yearlvl$section ($roomname)";
             $color = generateColor($subjectid);
 
 

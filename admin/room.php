@@ -63,7 +63,7 @@
                         <table class="table  mb-0">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>No.</th>
                                     <th>Room Name</th>
                                     <th>Type</th>
                                     <th>Department</th>
@@ -71,10 +71,10 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <?php foreach($roomsall as $rooms){ ?>
+                            <?php $i=1; foreach($roomsall as $rooms){ ?>
                                 <tr>
 
-                                    <td><?php echo $rooms['roomid'];?></td>
+                                    <td><?php echo $i;?></td>
                                     <td><?php echo $rooms['roomname'];?></td>
                                     <td><?php echo $rooms['type'];?></td>
                                     <td><?php echo $rooms['departmentname'];?></td>
@@ -201,7 +201,7 @@
                                             </div>
                                         </div>
                                 </div>
-                                <?php } ?>
+                                <?php $i+=1;} ?>
                             </tbody>
                         </table>
                         </div>

@@ -18,35 +18,24 @@
     $collegeid=$_SESSION['collegeid'];
     $inititialcollegeroom = $room->getinitialcollegeroom($collegeid);
 
+
+    $departmentidpost = isset($_POST['departmentidpost']) ? $_POST['departmentidpost'] : 1;
+    $yearlvlpost = isset($_POST['yearlvlpost']) ? $_POST['yearlvlpost'] : 1;
+    $sectionpost = isset($_POST['sectionpost']) ? $_POST['sectionpost'] : 'A';
+
+    echo ($departmentidpost.' '. $yearlvlpost);
     if ($_SESSION['departmentid']==0){
         $collegeroom=$room->getcollegerooms($collegeid);
+        $collegesections=$schedule->getcollegesection($collegeid);
     }else{
         $collegeroom=$room->getdepartmentrooms($_SESSION['departmentid']);
+        $collegesections=$schedule->getdepartmentsection($_SESSION['departmentid']);
     }
     $calendarid=$_SESSION['calendarid'];
     $collegeinfo=$college->getcollegeinfo($collegeid);
 
 
-    if (isset($_POST['roomid'])) {
-        $roomids = $_POST['roomid'];
-        $_SESSION['roomid'] = $_POST['roomid'];
-        foreach ($collegeroom as $collegerooms){
-            if ($collegerooms['roomid']== $roomids){
-                $roomname=$collegerooms['roomname'];
-
-            }
-        }
-    }elseif(isset($_SESSION['roomid'])) {
-        $roomids = $_SESSION['roomid'];
-
-    }else{
-        $roomids = $inititialcollegeroom;
-        foreach ($collegeroom as $collegerooms){
-            if ($collegerooms['roomid']== $roomids){
-                $roomname=$collegerooms['roomname'];
-            }
-        }
-    }
+    $departmentinfo1=$department->getdepartmentinfo($departmentidpost);
     if ($_SESSION['departmentid']!=0){
         $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
         $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
@@ -57,7 +46,7 @@
         $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
         $collegeinfo=$college->getcollegeinfo($collegeid);
 
-        $filteredschedules=$schedule->filteredschedulecollege($_SESSION['calendarid'], $_SESSION['collegeid']);
+        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['collegeid']);
 
     }
     $days = ['M', 'T', 'W', 'Th', 'F', 'S'];
@@ -74,30 +63,38 @@
     if ($_SESSION['departmentid']==0){
     $sql = "SELECT
                 day,
-                TIME_FORMAT(timestart, '%H:%i') AS timestart,
-                TIME_FORMAT(timeend, '%H:%i') AS timeend,
-                subjectschedule.id as subjectidno,
-                subject.subjectcode as subjectname,
-                subjectschedule.yearlvl as yearlvl,
+                TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,
+                TIME_FORMAT(subjectschedule.timeend, '%H:%i') AS timeend,
+                subjectschedule.id AS subjectidno,
+                subject.subjectcode AS subjectname,
+                subjectschedule.yearlvl AS yearlvl,
                 section,
-                faculty.fname as facultyname,
-                subject.type as subjecttype,
-                department.abbreviation as departmentname,
-                subject.hours as subjecthours,
-                subject.unit as subjectunit,
-                subject.type as subjecttype
+                faculty.fname AS facultyname,
+                subject.type AS subjecttype,
+                department.abbreviation AS departmentname,
+                subject.hours AS subjecthours,
+                subject.unit AS subjectunit,
+                subject.type AS subjecttype,
+                room.name as roomname
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
-                JOIN faculty ON faculty.id = subjectschedule.facultyid
+                LEFT JOIN faculty ON faculty.id = subjectschedule.facultyid
+                LEFT JOIN room ON room.id = subjectschedule.roomid
                 JOIN department ON subjectschedule.departmentid = department.id
-            WHERE roomid = $roomids AND department.collegeid=$collegeid AND subjectschedule.calendarid=$calendarid";
+            WHERE
+                department.collegeid = $collegeid
+                AND subjectschedule.calendarid = $calendarid
+                AND subjectschedule.departmentid = $departmentidpost
+                AND subjectschedule.yearlvl = $yearlvlpost
+                AND subjectschedule.section = '$sectionpost'
+            ";
     }else{
         $departmentid=$_SESSION['departmentid'];
         $sql = "SELECT
                 day,
-                TIME_FORMAT(timestart, '%H:%i') AS timestart,
-                TIME_FORMAT(timeend, '%H:%i') AS timeend,
+                TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,
+                TIME_FORMAT(subjectschedule.timeend, '%H:%i') AS timeend,
                 subjectschedule.id as subjectidno,
                 subject.subjectcode as subjectname,
                 subjectschedule.yearlvl as yearlvl,
@@ -107,11 +104,13 @@
                 department.abbreviation as departmentname,
                 subject.hours as subjecthours,
                 subject.unit as subjectunit,
-                subject.type as subjecttype
+                subject.type as subjecttype,
+                room.name as roomname
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
                 JOIN faculty ON faculty.id = subjectschedule.facultyid
+                JOIN room ON room.id = subjectschedule.roomid
                 JOIN department ON subjectschedule.departmentid = department.id
             WHERE roomid = $roomids  AND subjectschedule.departmentid=$departmentid AND subjectschedule.calendarid=$calendarid";
     }
@@ -131,10 +130,12 @@
         $subjecttype = htmlspecialchars($row['subjecttype']);
         $yearlvl = htmlspecialchars($row['yearlvl']);
         $section = htmlspecialchars($row['section']);
-        $facultyname = htmlspecialchars($row['facultyname']);
+        $roomname = !empty($row['roomname']) ? htmlspecialchars($row['roomname']) : 'General';
+        $facultyname = !empty($row['facultyname']) ? htmlspecialchars($row['facultyname']) : 'TBA';
 
 
-        $subjectLabel = "$subjectname $subjecttype $departmentname $yearlvl$section ($facultyname)";
+
+        $subjectLabel = "$subjectname $subjecttype ($roomname)($facultyname)";
         $color = generateColor($subjectid);
 
 
@@ -197,7 +198,6 @@
 ?>
 <!DOCTYPE html>
 <body >
-
     <?php
         require_once('../include/nav.php');
 
@@ -217,41 +217,42 @@
             <div class="row d-flex justify-content-end align-items-center">
                 <div class="col-2">
                         <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
-                            <option value="">Faculty Schedule</option>
-                            <option >Student Schedule</option>
+                            <option value="" disabled selected>Select </option>
+                            <option value="final-sched-room.php">Faculty Schedule</option>
+                            <option value="final-sched-section.php">Student Schedule</option>
                         </select>
                 </div>
                 <div class="col-2">
-                    <form class="mb-0" action="final-sched-room.php" method="POST">
-                        <select class="form-select  form-select-sm " id="select-classtype" name="roomid" onchange="this.form.submit()">
-                            <?php foreach ($collegeroom as $collegerooms):
-                                //if ($collegerooms['departmentid']==$_SESSION['departmentid']){?>
+                <form class="mb-0" id="roomForm" action="final-sched-section.php" method="POST">
+    <select class="form-select form-select-sm" id="select-classtype" name="roomid" onchange="updateAndSubmit()">
+        <option value="" selected>Select a Room</option>
+        <?php foreach ($collegesections as $collegesection) { 
+            // Create the concatenated value
+            $roomValue = htmlspecialchars($collegesection['abbreviation']) . ' ' . htmlspecialchars($collegesection['yearlvl']) . htmlspecialchars($collegesection['section']);
+        ?>
+            <option value="<?php echo $roomValue; ?>" 
+                <?php 
+                    // Check if the current room matches the selected department, yearlvl, and section
+                    if (($departmentidpost.$yearlvlpost.$sectionpost) == ($collegesection['departmentid'].$collegesection['yearlvl'].$collegesection['section'])) {
+                        echo 'selected'; 
+                    } 
+                ?>>
+                <?php echo $roomValue; ?>
+            </option>
+        <?php } ?>
+    </select>
 
-                                <option value="<?php echo $collegerooms['roomid']; ?>"
-                                    <?php
-                                        if (isset($roomids) && $roomids == $collegerooms['roomid']) {
-
-                                            $roomname = isset($collegerooms['roomname']) ? $collegerooms['roomname'] : '';
-                                            echo 'selected';
-                                        }
-                                    ?>>
-                                    <?php echo isset($collegerooms['roomname']) ? htmlspecialchars($collegerooms['roomname']) : ''; ?>
-                                </option>
+    <!-- Hidden fields for department, year level, and section -->
+    <input type="hidden" id="departmentidpost" name="departmentidpost" value="">
+    <input type="hidden" id="yearlvlpost" name="yearlvlpost" value="">
+    <input type="hidden" id="sectionpost" name="sectionpost" value="">
+    <!-- Add an input to directly send the room value -->
+    <input type="hidden" id="roomValue" name="roomValue" value="">
+</form>
 
 
 
 
-
-                            <?php /*}*/ endforeach; ?>
-                            <option value="" selected>Select Year</option>
-                        </select>
-                    </form>
-                </div>
-                <div class="col-2">
-                        <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
-                            <option value="">Select Section</option>
-                            <option >Student Schedule</option>
-                        </select>
                 </div>
 
                 <div class="searchbar col-3 ">
@@ -262,7 +263,7 @@
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3><?php echo $roomname;?></h3>
+                    <h3><?php echo $departmentinfo1['abbreviation'].' '.$yearlvl.$section;?></h3>
                     <a href="final-sched.php" id="viewToggleButton" class="btn">
                         Toggle View
                     </a>
@@ -304,11 +305,7 @@
                                                     echo 'style="background-color: ' . htmlspecialchars($color) . ';"';
 
                                                     foreach ($schedule[$day][$interval] as $data) {
-                                                        // Dynamically adding classes based on subject's position (top, middle, bottom)
-                                                        $subjectIdClass = htmlspecialchars(str_replace(' ', '', $data['subjectid']));  // Remove spaces
-
-                                                        // Check if the data is "middle", "top", or "bottom" and make the element draggable
-
+                                                        $subjectIdClass = htmlspecialchars(str_replace(' ', '', $data['subjectid'])); 
                                                         if ($data['is_middle']) {
                                                             echo ' class="occupiedmiddle ' . 'subject ' . $subjectIdClass . '"
                                                                 data-subject="' . htmlspecialchars($data['subjectid']) . '"
@@ -331,15 +328,7 @@
                                                                 data-subjecttype="' . htmlspecialchars($data['subjecttype']) . '"
                                                                 draggable="true" ondragstart="handleDragStart(event)" ';
                                                         }
-
-
-
-
-
                                                     }
-
-
-
                                                     //echo ' data-subject="' . htmlspecialchars(implode(' and ', array_unique($subjectNames))) . '"';
                                                 }else{
                                                     echo ' class=""
@@ -545,4 +534,29 @@ window.addEventListener("load", () => {
     }
 });
 
+</script>
+<script>
+function updateAndSubmit() {
+    // Get the selected room value
+    const selectedRoom = document.getElementById('select-classtype').value;
+
+    // Find the selected section data
+    const collegesections = <?php echo json_encode($collegesections); ?>;
+    const selectedSection = collegesections.find(function(section) {
+        return section.abbreviation + ' ' + section.yearlvl + section.section === selectedRoom;
+    });
+
+    // If a section is found, set the hidden fields
+    if (selectedSection) {
+        document.getElementById('departmentidpost').value = selectedSection.departmentid;
+        document.getElementById('yearlvlpost').value = selectedSection.yearlvl;
+        document.getElementById('sectionpost').value = selectedSection.section;
+    }
+
+    // Set the roomValue field to the selected room's value
+    document.getElementById('roomValue').value = selectedRoom;
+
+    // Submit the form after updating the hidden fields
+    document.getElementById('roomForm').submit();
+}
 </script>

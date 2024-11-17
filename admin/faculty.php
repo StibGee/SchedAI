@@ -38,7 +38,7 @@
     ?>
 
     <main>
-        <div class="container mb-1">
+        <div class="container mb-1 containerfaculty">
             <div class="row  d-flex align-items-center">
                 <div class="header-table col-3">
                     <h3>Instructors</h3>
@@ -84,9 +84,9 @@
                                 </tr>
                             </thead>
                             <tbody id="tabularTableBody">
-                                <?php foreach ($facultyall AS $facultys){ ?>
+                                <?php $i=1; foreach ($facultyall AS $facultys){ ?>
                                 <tr>
-                                    <td><?php echo $facultys['facultyid']; ?></td>
+                                    <td><?php echo $i; ?></td>
                                     <td><?php echo $facultys['fname']." ".$facultys['mname']." ".$facultys['lname']; ?></td>
                                     <td><?php echo $facultys['gender']; ?></td>
                                     <td><?php echo $facultys['contactno']; ?></td>
@@ -117,7 +117,7 @@
 
                                     </td>
                                 </tr>
-                                <?php } ?>
+                                <?php $i+=1;} ?>
                             </tbody>
                         </table>
 

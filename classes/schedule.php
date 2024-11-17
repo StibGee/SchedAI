@@ -174,6 +174,16 @@ class Schedule {
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getcollegesection($collegeid) {
+        $sql = "SELECT DISTINCT departmentid, subjectschedule.yearlvl, section, department.abbreviation 
+                FROM subjectschedule 
+                JOIN department ON department.id = subjectschedule.departmentid
+                WHERE department.collegeid = :collegeid
+                ORDER BY departmentid, subjectschedule.yearlvl, section";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid]); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function filteredschedulesfaculty($facultyid, $calendarid) {
         $sql = "SELECT 
     subject.name AS subjectname, 

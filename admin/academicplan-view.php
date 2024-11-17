@@ -395,6 +395,7 @@
                                                     <option>Major</option>
                                                     <option>Minor</option>
                                                     <option value="Major1">Major<p>(no schedule)</p></option>
+                                                    <option value="OJT">Major<p>(Immersion)</p></option>
                                                 </select>
                                                 <div class="row mt-3">
                                                     <label for="">Mark check if the Subject requires <span>Masters</span></label>

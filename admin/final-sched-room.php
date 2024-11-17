@@ -218,7 +218,7 @@
                 <div class="col-2">
                         <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
                             <option value="">Faculty Schedule</option>
-                            <option onclick="window.location.href='final-sched-student.php'" >Student Schedule</option>
+                            <option onclick="window.location.href='final-sched-section.php'" value="final-sched-section.php">Student Schedule</option>
                         </select>
                 </div>
                 <div class="col-2">

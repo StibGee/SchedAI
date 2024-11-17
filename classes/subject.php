@@ -120,6 +120,9 @@ class Subject {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    
+    
     //fetch subject data filtered by sem, year, and department
     public function getsubjectfilter() {
         $sql = "SELECT *, department.name AS departmentname, room.name AS roomname, room.id as roomid FROM room JOIN department ON department.id = room.departmentid";

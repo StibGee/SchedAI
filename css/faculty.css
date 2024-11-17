@@ -166,3 +166,7 @@ button.confirm{
 .col-9 .form-select {
     width: 100%;
 }
+
+.containerfaculty{
+    max-width: 1500px !important;
+}

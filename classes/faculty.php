@@ -190,7 +190,7 @@ class Faculty {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function getallfacultycollege($collegeid) {
-        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname 
+        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname, CONCAT(faculty.fname, ' ', faculty.lname) AS facultyname
                 FROM faculty 
                 JOIN department ON department.id = faculty.departmentid 
                 WHERE department.collegeid = :collegeid";
@@ -199,6 +199,13 @@ class Faculty {
         $stmt->execute(['collegeid' => $collegeid]);
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getinitialcollegefaculty($collegeid) {
+        $sql = "SELECT id FROM faculty WHERE collegeid = :collegeid LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['id'] : null;
     }
     public function facultywemailcollege($collegeid) {
         $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname 

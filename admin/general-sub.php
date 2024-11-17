@@ -51,7 +51,7 @@
             $getminorsubjects=$schedule->getminorsubjectscollege($collegeid, $_SESSION['calendarid']);
            
         }
-        echo $_SESSION['calendarid'];
+       
         $_SESSION['departmentid'];
         
     ?>

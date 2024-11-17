@@ -24,7 +24,7 @@
             $facultyid=$_SESSION['id'];
         }
 
-        $distinctsubjects = $subject->getdistinctsubjects();
+        $distinctsubjects = $subject->getdistinctsubjectsdepartment($_SESSION['departmentid']);
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
 

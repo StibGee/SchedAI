@@ -370,3 +370,7 @@ span {
     background-color: #fff; /* Highlight color for the left border */
 }
 
+.hover-row:hover {
+    
+    cursor: pointer;
+}
