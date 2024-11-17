@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label" for="birthdate">Email</label>
-                                <input class="form-control" id="birthdate" name="email" type="email" value="<?php if(isset($facultyinfo['email'])){ echo $facultyinfo['email'];} ?>"required />
+                                <input class="form-control" id="birthdate" name="email" type="email" value="<?php if(isset($facultyinfo['email'])){ echo $facultyinfo['email'];} ?>" />
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-3">

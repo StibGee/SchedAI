@@ -8,7 +8,7 @@ collegeid = int(sys.argv[2])
 calendarid = int(sys.argv[3])'''
 departmentid = 0
 collegeid = 3
-calendarid = 26
+calendarid = 57
 minor=False
 
 conn = mysql.connector.connect(
@@ -36,7 +36,7 @@ if (departmentid==0):
         AND subject.focus != 'Major2'
         AND subjectschedule.calendarid = %s 
         AND department.collegeid = %s 
-        ORDER BY subjectschedule.departmentid ASC, subject.type DESC, subject.unit DESC, fs.specialization_count ASC;
+        ORDER BY subjectschedule.departmentid ASC, subject.type DESC, subject.unit DESC, fs.specialization_count ASC, subject.name ASC;
 
     """, (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
@@ -58,7 +58,7 @@ if (departmentid==0):
     FROM facultysubject
     JOIN faculty ON faculty.id = facultysubject.facultyid 
     WHERE faculty.collegeid = %s 
-    ORDER BY faculty.departmentid ASC, faculty.type DESC 
+    ORDER BY faculty.departmentid ASC, faculty.type DESC, teachinghours ASC 
     """, (collegeid,))
     facultysubject = cursor.fetchall()
 
@@ -171,10 +171,10 @@ def lec3daysgapfaculty(facultyid):
         
         if facultypref1[0] == facultyid: 
             
-            day1 = facultypref1[22]  
+            day1 = facultypref1[23]  
             for facultypref2 in facultypreference:
                 if facultypref2[0] == facultyid:
-                    day2 = facultypref2[22]
+                    day2 = facultypref2[23]
                
                     if abs(day2 - day1) == 3:
                         return True
@@ -200,7 +200,7 @@ assignedsubjects = {}
 noassignment=[]
 tbh=[]
 backtrackcounters={}
-maxdepth=100
+maxdepth=50
 assignedsubjectscount=0
 
 def assign_subject(currentshubjectid):
@@ -303,7 +303,7 @@ def assign_subject(currentshubjectid):
             assignedsubjectscount -= 1
             del assignedsubjects[subjectscheduleid]
         
-    sortedfaculty = sorted(facultysubject, key=lambda x: -facultyworkinghours[x[1]])
+    sortedfaculty = sorted(facultysubject, key=lambda x: (x[13] != subjectscheduledepartmentid))
     
     for facultysubjects in sortedfaculty:
         facultysubjectfacultyid = facultysubjects[1]
@@ -316,9 +316,8 @@ def assign_subject(currentshubjectid):
 
         if (subjectscheduletype == 'Lec' and subjectscheduleunit == 3):
             if not lec3daysgapfaculty(facultysubjectfacultyid):
-                
                 continue
- 
+            
         
               
 
@@ -496,7 +495,14 @@ FROM (
         AND department.collegeid = %s
 ) AS ordered_schedule
 ORDER BY 
-    FIELD(ordered_schedule.unit,3,1,2),ordered_schedule.requirelabroom DESC,ordered_schedule.startdate ASC, ordered_schedule.departmentid ASC;""", (calendarid, collegeid))
+    CASE 
+        WHEN ordered_schedule.unit = 3 THEN 1   -- unit 3 comes first
+        WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 1 THEN 2   -- unit 1 with requirelabroom = 1 comes second
+        WHEN ordered_schedule.unit = 2 THEN 3   -- unit 2 comes third
+        WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 0 THEN 4  -- unit 1 with requirelabroom = 0 comes last
+        ELSE 5   -- Default case for other units, if any
+    END
+,ordered_schedule.startdate ASC, ordered_schedule.departmentid ASC;""", (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
     cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Major' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, collegeid))
@@ -511,8 +517,8 @@ ORDER BY
     cursor.execute("SELECT * FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus='Minor' AND department.collegeid=%s AND subjectschedule.calendarid=%s""",(collegeid,calendarid))
     subjectscheduleminor = cursor.fetchall()
 
-    cursor.execute("""SELECT * FROM room WHERE collegeid=%s ORDER BY type DESC, departmentid ASC""",(collegeid,))
-    room = cursor.fetchall()
+    
+    
     try:
         cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
         
@@ -654,7 +660,7 @@ roomoccupied = {}
 assignments={}
 assignedsubjects = set()
 facultyoccupied={} 
-minoroccupied={}
+sectionoccupied={}
 facultypreferencedays = {}
 
 
@@ -670,11 +676,14 @@ for pref in facultypreference:
 
     '''print("for 3.0")'''
     for pref2 in facultypreference:
-        day2, starttime2, endtime2 = pref2[2], pref2[3], pref2[4]
+        facultyid2, day2, starttime2, endtime2 = pref2[1], pref2[2], pref2[3], pref2[4]
+        if facultyid2!=facultyid:
+            continue
         if facultyid not in facultypairdaystime:
             facultypairdaystime[facultyid] = []
 
         if day + 3 == day2:
+            
             validtimeslots = findoverlappingslots(starttime, endtime, starttime2, endtime2, 90)
 
             for starttimeoverlap, endtimeoverlap in validtimeslots:
@@ -781,42 +790,77 @@ if minor==1:
             daynum2 = daymap[daytwo2]
             dayslist.append(daynum2)  
 
-        if departmentid not in minoroccupied:
-            minoroccupied[departmentid] = {}
+        if departmentid not in sectionoccupied:
+            sectionoccupied[departmentid] = {}
 
-        if yearlvl not in minoroccupied[departmentid]:
-            minoroccupied[departmentid][yearlvl] = {}
+        if yearlvl not in sectionoccupied[departmentid]:
+            sectionoccupied[departmentid][yearlvl] = {}
 
-        if section not in minoroccupied[departmentid][yearlvl]:
-            minoroccupied[departmentid][yearlvl][section] = {}
+        if section not in sectionoccupied[departmentid][yearlvl]:
+            sectionoccupied[departmentid][yearlvl][section] = {}
 
         for days in dayslist:
-            if days not in minoroccupied[departmentid][yearlvl]:
-                minoroccupied[departmentid][yearlvl][section][days] = {}
+            if days not in sectionoccupied[departmentid][yearlvl]:
+                sectionoccupied[departmentid][yearlvl][section][days] = {}
 
             for time in range(timestart, timeend, 30):
             
-                if time not in minoroccupied[departmentid][yearlvl][section][days]:
-                    minoroccupied[departmentid][yearlvl][section][days][time] = 'occupied'
+                if time not in sectionoccupied[departmentid][yearlvl][section][days]:
+                    sectionoccupied[departmentid][yearlvl][section][days][time] = 'occupied'
+                
 
 
       
-def minorfree(departmentid, yearlvl, section, day, time):
-   
-    if departmentid in minoroccupied:
-        if yearlvl in minoroccupied[departmentid]:
-            if section in minoroccupied[departmentid][yearlvl]:
-                if day in minoroccupied[departmentid][yearlvl][section]:
-                    if time in minoroccupied[departmentid][yearlvl][section][day]:
-                        return minoroccupied[departmentid][yearlvl][section][day][time] == 'occupied'
+def sectionfree(departmentid, yearlvl, section, day, time):
+    if departmentid in sectionoccupied:
+        if yearlvl in sectionoccupied[departmentid]:
+            if section in sectionoccupied[departmentid][yearlvl]:
+                if day in sectionoccupied[departmentid][yearlvl][section]:
+                    if time in sectionoccupied[departmentid][yearlvl][section][day]:
+                        return sectionoccupied[departmentid][yearlvl][section][day][time] != 'occupied'
+    return True
+
+
+def sectionassign(departmentid, yearlvl, section, day, time, gap):
+    sectionoccupied.setdefault(departmentid, {}).setdefault(yearlvl, {}).setdefault(section, {}).setdefault(day, {})
+
+    for timesection in range(time, time + gap, 30):
+        sectionoccupied[departmentid][yearlvl][section][day][timesection] = 'occupied'
+
+def countup(roomid, day, timestart):
+    timeslotcount = 0
+    time = timestart-30
+
+    while time >= 420:
+        if roomoccupied[roomid][day].get(time, 'occupied') == 'free': 
+            timeslotcount += 1
+        else:
+            break
+        time -= 30
+
+    return timeslotcount
+
+def countdown(roomid, day, timestart):
+    timeslotcount = 0
+    time = timestart
     
-    return True  
+    while time <= 1140: 
+        if roomoccupied[roomid][day].get(time, 'occupied') == 'free': 
+            timeslotcount += 1
+        else:
+            break
+        time += 30
+
+    return timeslotcount
 
 
 subjectiteration={}
 backtrackcounters={}
 facultyhoursday={}
-maxdepth=2000 
+newroomlablol={}
+newroomlec3={}
+newroomlec2={}
+maxdepth=1
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
     
@@ -849,17 +893,28 @@ def findlastfacultyasslec3(facultyid, day):
     return lastassignedtime
 
 def roomchecker(roomid):
+    cursor.execute("""SELECT * FROM room
+        WHERE collegeid = %s
+        ORDER BY 
+            CASE 
+                WHEN name = 'NEW ROOM' THEN 1
+                ELSE 0
+            END,
+            type DESC,
+            departmentid ASC;
+        """,(collegeid,))
+    room = cursor.fetchall()
     for rooms in room: 
-        if rooms[0] == roomid:  # Check if the room ID matches
-            roomtypelol = rooms[2]  # Get the room type from index 5
+        if rooms[0] == roomid:  
+            roomtypelol = rooms[2]  
             break
     return roomtypelol
 
 
-def checkroomoccupancy(roomid, day, time):
+def checkroomfree(roomid, day, time):
     for room in roomoccupied:
         if roomid == room:
-            return roomoccupied[room][day].get(time) == 'free'
+            return roomoccupied[roomid][day].get(time) != 'occupied'
     return False  
 
 def getfacultyhoursday(facultyid, day):
@@ -907,42 +962,46 @@ def getfacultytype(facultyid):
     return None
 assignedsubjectscount=0
 
+
+
 def assigntimeslot(currentsubjectid):
     global backtrackcounters
     global assignedsubjectscount
     
+    
     if currentsubjectid not in backtrackcounters:
         backtrackcounters[currentsubjectid] = 0  
 
-    '''for roomid, schedule in roomoccupied.items(): 
-        print(f"Room {roomid}:")  
-        for day in range(1, 7):
-            freetimes = []  
-            if day in schedule:  
-                for time, status in schedule[day].items():
-                    if status == 'occupied':  
-                        freetimes.append(minutestotime(time)) 
-        
-            if freetimes: 
-                print(f"  Day {day}: {', '.join(freetimes)} - Status: occupied")'''
+    cursor.execute("""SELECT * FROM room
+    WHERE collegeid = %s
+    ORDER BY 
+        CASE 
+            WHEN name = 'NEW ROOM' THEN 1
+            ELSE 0
+        END,
+        type DESC,
+        departmentid ASC;
+    """,(collegeid,))
+    room = cursor.fetchall()
 
-    '''for facultyidpair, days in facultyoccupied.items():
-        if facultyidpair != 14:
-            continue
-        for day, times in days.items():  
-            for time, status in times.items():
-                if status == "occupied":  
-                    print(f"Faculty ID Pair: {facultyidpair}, Day: {day}, Time: {minutestotime(time)}, Status: {status}")'''
+    for dayput in range(1, 7):
+        for rm in room:  
+            roomid = rm[0]
+            if roomid not in roomoccupied:
+                roomoccupied[roomid] = {}
 
-    '''timer.sleep(0.2)'''
-
-
+            if dayput not in roomoccupied[roomid]:
+                roomoccupied[roomid][dayput] = {time: 'free' for time in range(420, 1140, 30)}
 
      
-       
+    if currentsubjectid not in newroomlec3:
+        newroomlec3[currentsubjectid]=False
 
+    if currentsubjectid not in newroomlablol:
+        newroomlablol[currentsubjectid]=False
 
-   
+    if currentsubjectid not in newroomlec2:
+        newroomlec2[currentsubjectid]=False
    
     print("")
     '''print(f"current subject id: {currentsubjectid}")'''
@@ -982,8 +1041,8 @@ def assigntimeslot(currentsubjectid):
         print(f"No valid solution found for subject {subjectid} after {maxdepth} backtracks.")
        return False '''
     
-
-    for rm in room:
+    sorted_rooms = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
+    for rm in sorted_rooms:
         roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
 
         
@@ -997,7 +1056,8 @@ def assigntimeslot(currentsubjectid):
             if(backtrackcounters[currentsubjectid] < maxdepth):
                 if roomtype != subjecttype and subjecttype!='Lec':  
                     continue 
-                
+                if not newroomlec3[currentsubjectid] and roomname=='NEW ROOM':
+                    continue
                 for facultyidpair, slots in facultypairdaystime.items():
                     if facultyidpair not in facultyassignmentcounter:
                         facultyassignmentcounter[facultyidpair] = {}
@@ -1010,7 +1070,8 @@ def assigntimeslot(currentsubjectid):
             
                     for day1, day2, starttime, endtime in slots:
                         '''print(day1, day2, starttime, endtime)'''
-                      
+                        if day1+3!=day2:
+                            continue
                         day1free = day2free = facultyday1free = facultyday2free = None
                         if day1 not in facultyhoursday[facultyidpair]:
                             facultyhoursday[facultyidpair][day1] = Decimal(0)
@@ -1037,13 +1098,13 @@ def assigntimeslot(currentsubjectid):
                             continue
                         if getfacultytype(facultyidpair)=='Regular' and getfacultyhoursday(facultyidpair, day1)>=6 and getfacultyhoursday(facultyidpair, day2)>=6:
                             continue
-                        if facultyassignmentcounter[facultyidpair][day1] == 2:
+                        '''if facultyassignmentcounter[facultyidpair][day1] == 2:
                         
                             lastfacultyass= findlastfacultyasslec3(facultyidpair, day1)
                             if lastfacultyass:
                                 startminutes = lastfacultyass + 90 
                             else:
-                                '''print(f"No prior assignments for day2 {day2}")'''
+                                print(f"No prior assignments for day2 {day2}")'''
 
                     
                     
@@ -1062,13 +1123,13 @@ def assigntimeslot(currentsubjectid):
                             if day2 not in roomoccupied[roomid]:
                                 roomoccupied[roomid][day2] = {}
 
-                            if roomoccupied[roomid][day1].get(time_slot) == 'occupied' and minorfree(departmentid, yearlvl, section, day1, time_slot):
+                            if roomoccupied[roomid][day1].get(time_slot) != 'free' or not sectionfree(departmentid, yearlvl, section, day1, time_slot):
                                 day1free = False
                                 break
                             else:
                                 day1free=True
 
-                            if roomoccupied[roomid][day2].get(time_slot) == 'occupied' and minorfree(departmentid, yearlvl, section, day2, time_slot):
+                            if roomoccupied[roomid][day2].get(time_slot) != 'free' or not sectionfree(departmentid, yearlvl, section, day2, time_slot):
                                 day2free = False
                                 break
                             else:
@@ -1096,7 +1157,9 @@ def assigntimeslot(currentsubjectid):
                                 facultyday2free=True
                         
                         if day1free and day2free and facultyday1free and facultyday2free:
-                
+                            
+                            sectionassign(departmentid, yearlvl, section, day1, startminutes, 90)
+                            sectionassign(departmentid, yearlvl, section, day2, startminutes, 90)
                             '''print(f"assigned  subject {currentsubjectid} in {roomname} to this day {day2} and {day1} w/ time slot starting at {minutestotime(startminutes)} upto {minutestotime(end_minutes)}")'''
                     
                             for time_slot3 in range(startminutes, startminutes+90, 30):
@@ -1104,6 +1167,7 @@ def assigntimeslot(currentsubjectid):
                                 roomoccupied[roomid][day2][time_slot3] = 'occupied'
                                 facultyoccupied[facultyidpair][day1][time_slot3] = 'occupied'
                                 facultyoccupied[facultyidpair][day2][time_slot3] = 'occupied'
+
                             lastassignedtime1=startminutes+90
                             lastassignedtime2=startminutes+90
                             facultyassignmentcounter[facultyidpair][day1] += 1
@@ -1123,7 +1187,7 @@ def assigntimeslot(currentsubjectid):
                         
                             '''print("backtracking lec 3.0")'''
                             assignedsubjectscount=assignedsubjectscount-1
-                            for time_slot3 in range(time_slot, time_slot+90, 30):
+                            for time_slot3 in range(startminutes, startminutes+90, 30):
                                 roomoccupied[roomid][day1][time_slot3] = 'free'
                                 roomoccupied[roomid][day2][time_slot3] = 'free'
                                 facultyoccupied[facultyidpair][day1][time_slot3] = 'free'
@@ -1141,46 +1205,57 @@ def assigntimeslot(currentsubjectid):
             if (backtrackcounters[currentsubjectid] >= maxdepth):
                 for rm in room:
                     roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
-
-                    day1 = False
-                    day2 = False
+                    if not newroomlec3[currentsubjectid] and roomname=='NEW ROOM':
+                        continue
+                    
                     if subjectfacultyid in facultypreferencedays:
                         preferreddays = list(facultypreferencedays[subjectfacultyid]) 
-                    
-                    for dayin3 in preferreddays: 
-                        day2in3 = (dayin3 + 1)
-
                         
-                        if day2in3 == 7:
-                            day2in3 = 1
+                    for dayin3 in preferreddays: 
+                        
+                        
+                        day2in3 = (dayin3 + 3)
+
+                        if day2in3 == 7 or day2in3 == 8 or day2in3 == 9:
+                            continue
+
+                        if day2in3-3!=dayin3:
+                            continue
+                       
                         if dayin3 not in facultyhoursday[subjectfacultyid]:
                             facultyhoursday[subjectfacultyid][dayin3] = Decimal(0)
                         if day2in3 not in facultyhoursday[subjectfacultyid]:
                             facultyhoursday[subjectfacultyid][day2in3] = Decimal(0)
                         if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, dayin3)>=6 and getfacultyhoursday(subjectfacultyid, day2in3)>=6:
                             continue
-                        for time in range(420, 1140, 30):
-                            if time==1140:
-                                day1free=False
-                                break
+                        for time3 in range(420, 1140, 30):
+                            day1 = False
+                            day2 = False
                             facultyday1 = False
                             facultyday2 = False
+
+                            if time3==1140:
+                                day1free=False
+                                break
                             
                             
-                            if (checkroomoccupancy(roomid, dayin3, time) and
-                                checkroomoccupancy(roomid, dayin3, time+30) and
-                                checkroomoccupancy(roomid, dayin3, time+60)):
+                            
+                            if (checkroomfree(roomid, dayin3, time3) and
+                                checkroomfree(roomid, dayin3, time3+30) and
+                                checkroomfree(roomid, dayin3, time3+60)):
                                 day1 = True
-                                start_time_day1=time
+                                
                             else:
+                                day1 = False
                                 continue
                             
-                            if (checkroomoccupancy(roomid, day2in3, time) and
-                                checkroomoccupancy(roomid, day2in3, time+30) and
-                                checkroomoccupancy(roomid, day2in3, time+60)):
+                            if (checkroomfree(roomid, day2in3, time3) and
+                                checkroomfree(roomid, day2in3, time3+30) and
+                                checkroomfree(roomid, day2in3, time3+60)):
                                 day2 = True
                                 
                             else:
+                                day2 = False
                                 continue
 
                             if dayin3 not in facultyoccupied[subjectfacultyid]:
@@ -1188,26 +1263,31 @@ def assigntimeslot(currentsubjectid):
                             if day2in3 not in facultyoccupied[subjectfacultyid]:
                                 facultyoccupied[subjectfacultyid][day2in3] = {}
 
-                            if (facultyoccupied[subjectfacultyid][dayin3].get(time) == 'free' and
-                                facultyoccupied[subjectfacultyid][dayin3].get(time + 30) == 'free' and
-                                facultyoccupied[subjectfacultyid][dayin3].get(time + 60) == 'free' and minorfree(departmentid, yearlvl, section, dayin3, time)):
+                            if (facultyoccupied[subjectfacultyid][dayin3].get(time3) == 'free' and
+                                facultyoccupied[subjectfacultyid][dayin3].get(time3 + 30) == 'free' and
+                                facultyoccupied[subjectfacultyid][dayin3].get(time3 + 60) == 'free' and sectionfree(departmentid, yearlvl, section, dayin3, time3)):
                                 facultyday1 = True
                             else:
+                                facultyday1 = False
                                 continue
-                            if (facultyoccupied[subjectfacultyid][day2in3].get(time) == 'free' and
-                                facultyoccupied[subjectfacultyid][day2in3].get(time + 30) == 'free' and
-                                facultyoccupied[subjectfacultyid][day2in3].get(time + 60) == 'free' and minorfree(departmentid, yearlvl, section, day2in3, time)):
+                            if (facultyoccupied[subjectfacultyid][day2in3].get(time3) == 'free' and
+                                facultyoccupied[subjectfacultyid][day2in3].get(time3 + 30) == 'free' and
+                                facultyoccupied[subjectfacultyid][day2in3].get(time3 + 60) == 'free' and sectionfree(departmentid, yearlvl, section, day2in3, time3)):
                                 facultyday2 = True
                             else:
+                                facultyday2 = False
                                 continue
                                     
                             
-                    
-                            if day1 and day2 and facultyday1 and facultyday2:     
-                                lec3found=True
-                                '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {day2} and {day1} w/ time slot starting at {minutestotime(startminutes)} upto {minutestotime(end_minutes)}")'''
                             
-                                for time_slot in range(start_time_day1, start_time_day1+90, 30):
+                            if day1 and day2 and facultyday1 and facultyday2:  
+                                
+                                sectionassign(departmentid, yearlvl, section, dayin3, time3, 90)
+                                sectionassign(departmentid, yearlvl, section, day2in3, time3, 90)
+                                lec3found=True
+                                '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {day2} and {day1} w/ time3 slot starting at {minutestotime(startminutes)} upto {minutestotime(end_minutes)}")'''
+                            
+                                for time_slot in range(time3, time3+90, 30):
                                     roomoccupied[roomid][dayin3][time_slot] = 'occupied'
                                     roomoccupied[roomid][day2in3][time_slot] = 'occupied'
                                     facultyoccupied[subjectfacultyid][dayin3][time_slot] = 'occupied'
@@ -1218,20 +1298,20 @@ def assigntimeslot(currentsubjectid):
                                 facultyhoursday[subjectfacultyid][dayin3] += Decimal(1.5)
                                 facultyhoursday[subjectfacultyid][day2in3] += Decimal(1.5)
 
-                                assignments[subjectid] = (start_time_day1, start_time_day1 + 90, (day1, day2), roomid)
+                                assignments[subjectid] = (time3, time3 + 90, (dayin3, day2in3), roomid)
                                 assignedsubjects.add(subjectid)
                                 assignedsubjectscount=assignedsubjectscount+1
                                 progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
-                                print(f"{progress:.2f}%: {subname} {subjectfacultyid} assigned on {dayin3} and {day2in3} starting {start_time_day1}-{start_time_day1+90}")
+                                print(f"{progress:.2f}%: {subname} {subjectfacultyid} assigned on {dayin3} and {day2in3} starting {time3}-{time3+90}")
                                 sys.stdout.flush()
-
+                               
                                 if assigntimeslot(currentsubjectid+1):
                                     return True 
                                 '''print("backtracking lec 3.0")'''
                                 assignedsubjectscount=assignedsubjectscount-1
-                                for time_slot in range(start_time_day1, start_time_day1+90, 30):
+                                for time_slot in range(time3, time3+90, 30):
                                     roomoccupied[roomid][dayin3][time_slot] = 'free'
-                                    roomoccupied[roomid][day2][time_slot] = 'free'
+                                    roomoccupied[roomid][day2in3][time_slot] = 'free'
                                     facultyoccupied[subjectfacultyid][dayin3][time_slot] = 'free'
                                     facultyoccupied[subjectfacultyid][day2in3][time_slot] = 'free'
 
@@ -1247,39 +1327,46 @@ def assigntimeslot(currentsubjectid):
                 if not lec3found:
                     for rm in room:
                         roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
-
+                        if not newroomlec3[currentsubjectid] and roomname=='NEW ROOM':
+                            continue
                         
                         
                         
                         for dayin3 in range(1,7): 
                             day1 = False
                             day2 = False
-                            day2in3 = (dayin3 + 1)
+                            facultyday1 = False
+                            facultyday2 = False
+                            day2in3 = (dayin3 + 3)
 
                             
                             if day2in3 == 7:
-                                day2in3 = 1
-                            if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, dayin3)>=6 and getfacultyhoursday(subjectfacultyid, day2in3)>=6:
+                                break
+                            facultyhoursday1 = getfacultyhoursday(subjectfacultyid, dayin3)
+                            facultyhoursday2 = getfacultyhoursday(subjectfacultyid, day2in3)
+
+                            if getfacultytype(subjectfacultyid) == 'Regular' and facultyhoursday1 is not None and facultyhoursday1 >= 6 and facultyhoursday2 is not None and facultyhoursday2 >= 6:
                                 continue
+
+                            
                             for time in range(420, 1140, 30):
                                 if time==1140:
                                     day1free=False
                                     break
-                                facultyday1 = False
-                                facultyday2 = False
                                 
                                 
-                                if (checkroomoccupancy(roomid, dayin3, time) and
-                                    checkroomoccupancy(roomid, dayin3, time+30) and
-                                    checkroomoccupancy(roomid, dayin3, time+60)):
+                                
+                                if (checkroomfree(roomid, dayin3, time) and
+                                    checkroomfree(roomid, dayin3, time+30) and
+                                    checkroomfree(roomid, dayin3, time+60)):
                                     day1 = True
-                                    start_time_day1=time
+                                    
                                 else:
                                     continue
                                 
-                                if (checkroomoccupancy(roomid, day2in3, time) and
-                                    checkroomoccupancy(roomid, day2in3, time+30) and
-                                    checkroomoccupancy(roomid, day2in3, time+60)):
+                                if (checkroomfree(roomid, day2in3, time) and
+                                    checkroomfree(roomid, day2in3, time+30) and
+                                    checkroomfree(roomid, day2in3, time+60)):
                                     day2 = True
                                     
                                 else:
@@ -1296,24 +1383,28 @@ def assigntimeslot(currentsubjectid):
 
                                 if (facultyoccupied[subjectfacultyid][dayin3].get(time) == 'free' and
                                     facultyoccupied[subjectfacultyid][dayin3].get(time + 30) == 'free' and
-                                    facultyoccupied[subjectfacultyid][dayin3].get(time + 60) == 'free' and minorfree(departmentid, yearlvl, section, dayin3, time)):
+                                    facultyoccupied[subjectfacultyid][dayin3].get(time + 60) == 'free' and sectionfree(departmentid, yearlvl, section, dayin3, time)):
                                     facultyday1 = True
                                 else:
                                     continue
                                 if (facultyoccupied[subjectfacultyid][day2in3].get(time) == 'free' and
                                     facultyoccupied[subjectfacultyid][day2in3].get(time + 30) == 'free' and
-                                    facultyoccupied[subjectfacultyid][day2in3].get(time + 60) == 'free' and minorfree(departmentid, yearlvl, section, day2in3, time)):
+                                    facultyoccupied[subjectfacultyid][day2in3].get(time + 60) == 'free' and sectionfree(departmentid, yearlvl, section, day2in3, time)):
                                     facultyday2 = True
                                 else:
                                     continue
                                         
                                 
                         
-                                if day1 and day2 and facultyday1 and facultyday2:     
+                                if day1 and day2 and facultyday1 and facultyday2:  
+                                    print(dayin3, day2in3)   
+                                    timer.sleep(0.5)   
+                                    sectionassign(departmentid, yearlvl, section, dayin3, time, 90)
+                                    sectionassign(departmentid, yearlvl, section, dayin3, time, 90)
                                     lec3found=True
                                     '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {day2} and {day1} w/ time slot starting at {minutestotime(startminutes)} upto {minutestotime(end_minutes)}")'''
                                 
-                                    for time_slot in range(start_time_day1, start_time_day1+90, 30):
+                                    for time_slot in range(time, time+90, 30):
                                         roomoccupied[roomid][dayin3][time_slot] = 'occupied'
                                         roomoccupied[roomid][day2in3][time_slot] = 'occupied'
                                         facultyoccupied[subjectfacultyid][dayin3][time_slot] = 'occupied'
@@ -1323,19 +1414,19 @@ def assigntimeslot(currentsubjectid):
                                     facultyassignmentcounter[subjectfacultyid][day2in3] += 1
                                     facultyhoursday[subjectfacultyid][dayin3] += Decimal(1.5)
                                     facultyhoursday[subjectfacultyid][day2in3] += Decimal(1.5)
-                                    assignments[subjectid] = (start_time_day1, start_time_day1 + 90, (day1, day2), roomid)
+                                    assignments[subjectid] = (time, time + 90, (day1, day2), roomid)
                                     
                                     assignedsubjects.add(subjectid)
                                     assignedsubjectscount=assignedsubjectscount+1
                                     progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
-                                    print(f"{progress:.2f}%: {subname} {subjectfacultyid} assigned on {dayin3} and {day2in3} starting {start_time_day1}-{start_time_day1+90}")
+                                    print(f"{progress:.2f}%: {subname} {subjectfacultyid} assigned on {dayin3} and {day2in3} starting {time}-{time+90}")
                                     sys.stdout.flush()
 
                                     if assigntimeslot(currentsubjectid+1):
                                         return True 
                                     '''print("backtracking lec 3.0")'''
                                     assignedsubjectscount=assignedsubjectscount-1
-                                    for time_slot in range(start_time_day1, start_time_day1+90, 30):
+                                    for time_slot in range(time, time+90, 30):
                                         roomoccupied[roomid][dayin3][time_slot] = 'free'
                                         roomoccupied[roomid][day2][time_slot] = 'free'
                                         facultyoccupied[subjectfacultyid][dayin3][time_slot] = 'free'
@@ -1377,7 +1468,9 @@ def assigntimeslot(currentsubjectid):
             if (backtrackcounters[currentsubjectid] < maxdepth):
                 if roomtype != subjecttype and not (roomtype == 'Lab' and subjecttype == 'Lec'):
                     continue
-
+                
+                if not newroomlec2[currentsubjectid] and roomname=='NEW ROOM':
+                    continue
                 
                 for facultyidlec2, slots in facultydaystimelec2.items():
                     
@@ -1425,6 +1518,15 @@ def assigntimeslot(currentsubjectid):
                         if daylec2 not in facultyoccupied[facultyidlec2]:
                             facultyoccupied[facultyidlec2][daylec2] = {}
 
+                        countup_value = countup(roomid, daylec2, startminutes)
+                        countdown_value = countdown(roomid, daylec2, startminutes) 
+
+                        if countup_value<4 and countup_value!=0 and (countdown_value-4)!=0 and countup_value<(countdown_value-4):
+                            startminutes = startminutes + (30 * (4 - countup_value))
+                        elif countup_value<4 and countup_value!=0 and (countdown_value-4)!=0 and countup_value>(countdown_value-4):
+                            startminutes = startminutes + (30 * (4 - countup_value))    
+                        elif (countdown_value-4)<4 and countdown_value-4!=0 and countdown_value<countup_value:
+                            startminutes = startminutes + (30 * (4 - countup_value))   
 
                         for timeslotlec2 in range(startminutes, startminutes+120, 30):
                             if timeslotlec2>=1140:
@@ -1435,7 +1537,7 @@ def assigntimeslot(currentsubjectid):
                                 roomoccupied[roomid][daylec2][timeslotlec2] = 'free'
                                 daylec2free=True
                             
-                            if roomoccupied[roomid][daylec2][timeslotlec2] == 'occupied' and minorfree(departmentid, yearlvl, section, daylec2, timeslotlec2):
+                            if roomoccupied[roomid][daylec2][timeslotlec2] == 'occupied' or not sectionfree(departmentid, yearlvl, section, daylec2, timeslotlec2):
                                 daylec2free = False
                                 break
                             else:
@@ -1452,6 +1554,7 @@ def assigntimeslot(currentsubjectid):
                                 facultylec2free = True
 
                         if daylec2free and facultylec2free:
+                            sectionassign(departmentid, yearlvl, section, daylec2, startminutes, 120)
                             '''print(f"assigned subject {currentsubjectid} to this day {daylec2} w/ time slot starting at {minutestotime(startminutes)} upto {minutestotime(startminutes)}")
                             print('')'''
                             for time2 in range(startminutes, startminutes+120, 30):
@@ -1510,17 +1613,20 @@ def assigntimeslot(currentsubjectid):
                         if daylabbacktrack not in facultyhoursday:
                             facultyhoursday[subjectfacultyid][daylabbacktrack]=Decimal(0)
 
+                        facultyhours = getfacultyhoursday(subjectfacultyid, daylabbacktrack)
+
                         if getfacultytype(subjectfacultyid)=='Regular':
-                            if getfacultyhoursday(subjectfacultyid, daylabbacktrack)>=6:
+                            if facultyhours is not None and facultyhours >= 6:
                                 continue
+
                         for timebacktrack in range(420, 1140, 30):
                             if timebacktrack>=1140:
                                 day1free=False
                                 
                                 break
-                            if (checkroomoccupancy(roomid, daylabbacktrack, timebacktrack) and
-                                checkroomoccupancy(roomid, daylabbacktrack, timebacktrack+30) and
-                                checkroomoccupancy(roomid, daylabbacktrack, timebacktrack+60) and checkroomoccupancy(roomid, daylabbacktrack, timebacktrack+90) and minorfree(departmentid, yearlvl, section, daylabbacktrack, timebacktrack)):
+                            if (checkroomfree(roomid, daylabbacktrack, timebacktrack) and
+                                checkroomfree(roomid, daylabbacktrack, timebacktrack+30) and
+                                checkroomfree(roomid, daylabbacktrack, timebacktrack+60) and checkroomfree(roomid, daylabbacktrack, timebacktrack+90) and sectionfree(departmentid, yearlvl, section, daylabbacktrack, timebacktrack)):
                                 day1free = True
                             else:
                                 day1free = False
@@ -1530,7 +1636,7 @@ def assigntimeslot(currentsubjectid):
 
                             if (facultyoccupied[subjectfacultyid][daylabbacktrack].get(timebacktrack) == 'free' and
                                 facultyoccupied[subjectfacultyid][daylabbacktrack].get(timebacktrack + 30) == 'free' and
-                                facultyoccupied[subjectfacultyid][daylabbacktrack].get(timebacktrack + 60) == 'free' and facultyoccupied[subjectfacultyid][daylabbacktrack].get(timebacktrack + 90) == 'free' and minorfree(departmentid, yearlvl, section, daylabbacktrack, timebacktrack)):
+                                facultyoccupied[subjectfacultyid][daylabbacktrack].get(timebacktrack + 60) == 'free' and facultyoccupied[subjectfacultyid][daylabbacktrack].get(timebacktrack + 90) == 'free' and sectionfree(departmentid, yearlvl, section, daylabbacktrack, timebacktrack)):
                                 facultyday1free = True
                             else:
                                 facultyday1free = False
@@ -1543,6 +1649,7 @@ def assigntimeslot(currentsubjectid):
 
             
                             if day1free and facultyday1free:         
+                                sectionassign(departmentid, yearlvl, section, dayvalid, starttime, 120)
                                 '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {daylabbacktrack} w/ time slot starting at {minutestotime(starttime)} upto {minutestotime(starttime+120)}")'''
                         
                                 for time_slot in range(starttime, starttime + 120, 30):
@@ -1609,10 +1716,10 @@ def assigntimeslot(currentsubjectid):
                                     day1true=False
                                     
                                     break
-                                if (checkroomoccupancy(roomid, daybacktracklec2, time) and
-                                    checkroomoccupancy(roomid, daybacktracklec2, time+30) and
-                                    checkroomoccupancy(roomid, daybacktracklec2, time+60) and
-                                    checkroomoccupancy(roomid, daybacktracklec2, time+90) and minorfree(departmentid, yearlvl, section, daybacktracklec2, time)):
+                                if (checkroomfree(roomid, daybacktracklec2, time) and
+                                    checkroomfree(roomid, daybacktracklec2, time+30) and
+                                    checkroomfree(roomid, daybacktracklec2, time+60) and
+                                    checkroomfree(roomid, daybacktracklec2, time+90) and sectionfree(departmentid, yearlvl, section, daybacktracklec2, time)):
                                     day1true = True
                                 else:
                                     day1true = False
@@ -1625,13 +1732,14 @@ def assigntimeslot(currentsubjectid):
                                 if (facultyoccupied[subjectfacultyid][daybacktracklec2].get(time) == 'free' and
                                     facultyoccupied[subjectfacultyid][daybacktracklec2].get(time + 30) == 'free' and
                                     facultyoccupied[subjectfacultyid][daybacktracklec2].get(time + 60) == 'free' and
-                                    facultyoccupied[subjectfacultyid][daybacktracklec2].get(time + 90) == 'free' and minorfree(departmentid, yearlvl, section, daybacktracklec2, time)):
+                                    facultyoccupied[subjectfacultyid][daybacktracklec2].get(time + 90) == 'free' and sectionfree(departmentid, yearlvl, section, daybacktracklec2, time)):
                                     facultyday1true = True   
                                 else:
                                     facultyday1true = False  
                                     continue
 
                                 if day1true and facultyday1true: 
+                                    sectionassign(departmentid, yearlvl, section, daybacktracklec2, time, 120)
                                     lec2found2=True
                                     '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {daybacktracklec2} w/ time slot starting at {minutestotime(time)} upto {minutestotime(time+180)}")
                                     print('')'''
@@ -1697,7 +1805,8 @@ def assigntimeslot(currentsubjectid):
             if(backtrackcounters[currentsubjectid] < maxdepth):
                 if roomtype != subjecttype and  requirelab==1: 
                     continue   
-                
+                if not newroomlablol[currentsubjectid] and roomname=='NEW ROOM':
+                    continue
                 for faculty_idlab, slotslab in facultydaystimelab.items():
                     
                     
@@ -1734,6 +1843,7 @@ def assigntimeslot(currentsubjectid):
                        
                         if facultyassignmentcounter[faculty_idlab][daylab]>=2:
                             start_minuteslab=start_minuteslab+120
+                            
                         if roomid not in roomoccupied:
                             roomoccupied[roomid] = {}
                         if daylab not in roomoccupied[roomid]:
@@ -1748,8 +1858,41 @@ def assigntimeslot(currentsubjectid):
                         if facultyassignmentcounter[faculty_idlab][daylab] == 4:
                             continue
                         
+                        '''if 0 < countup(roomid, daylab, start_minuteslab) < 6:
+                
+                            if 0 < countdown(roomid, daylab, start_minuteslab+150)>=1:
+                                start_minuteslab = start_minuteslab + (30 * (6 - countup(roomid, daylab, start_minuteslab)))
+                                print(start_minuteslab)'''
+
+                       
+                            
+                        '''if countdown(roomid, daylab, start_minuteslab)<11:
+                            start_minuteslab = start_minuteslab + (30 * countdown(roomid, daylab, start_minuteslab))'''
+                            
+                            
+                            
+                            
+
+                        '''elif(countup_value<countdown_value and countdown_value>=1):
+                        if countup_value<countdown_value:
+                            start_minuteslab = start_minuteslab+180 + (30 * countdown_value)'''
+
+                        countup_value = countup(roomid, daylab, start_minuteslab)
+                        countdown_value = countdown(roomid, daylab, start_minuteslab) 
+
+                        
+                        
+                        if countup_value<6 and countup_value!=0 and (countdown_value-6)!=0 and countup_value<(countdown_value-6):
+                            start_minuteslab = start_minuteslab + (30 * (6 - countup_value))
+                        elif countup_value<6 and countup_value!=0 and (countdown_value-6)!=0 and countup_value>(countdown_value-6):
+                            start_minuteslab = start_minuteslab + (30 * (6 - countup_value))    
+                        elif (countdown_value-6)<6 and countdown_value-6!=0 and countdown_value<countup_value:
+                            start_minuteslab = start_minuteslab + (30 * (6 - countup_value))    
+                            
                         for time_slotlab in range(start_minuteslab, start_minuteslab+180, 30):
                             
+                            
+            
                             if (time_slotlab>=1140):
                                 dayfreelab = False
                 
@@ -1760,7 +1903,7 @@ def assigntimeslot(currentsubjectid):
                             
 
                                 '''print(f"room {roomid} {daylab} {time_slotlab} is free")'''
-                            if roomoccupied[roomid][daylab][time_slotlab] == 'occupied' and minorfree(departmentid, yearlvl, section, daylab, time_slotlab):
+                            if roomoccupied[roomid][daylab][time_slotlab] == 'occupied' or not sectionfree(departmentid, yearlvl, section, daylab, time_slotlab):
                                 '''print(f"room {roomid} {daylab} {time_slotlab} is occupied")'''
                                 dayfreelab = False
                                 break 
@@ -1781,7 +1924,8 @@ def assigntimeslot(currentsubjectid):
                                 facultyfreelab=True
                             
                         if dayfreelab and facultyfreelab:
-
+                           
+                            sectionassign(departmentid, yearlvl, section, daylab, start_minuteslab, 180)
                             '''print(f"assigned subject {currentsubjectid} to day {daylab} with time slot starting at {minutestotime(start_minuteslab)} up to {minutestotime(end_minuteslab)}")
                             print('')'''
                             for time3 in range(start_minuteslab, start_minuteslab+180, 30):
@@ -1820,23 +1964,32 @@ def assigntimeslot(currentsubjectid):
                     
                     if roomchecker(roomid)=='Lec' and requirelab==1: 
                         continue
-                    
+                    if not newroomlablol[currentsubjectid] and roomname=='NEW ROOM':
+                        continue
                         
                     for day1 in preferreddays: 
                         
                         day1true = None
                         facultyday1true = None
-                        if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, day1)>=6:
+                        if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, day1)>6:
                             continue
                         
                         for time in range(420, 1140, 30):
+                            countup_value = countup(roomid, day1, time)
+                            countdown_value = countdown(roomid, day1, time+210) 
+                        
+                            if countup_value<6 and countup_value!=0:
+                                day1true = False
+                                continue
                             
-                            if (checkroomoccupancy(roomid, day1, time) and
-                                checkroomoccupancy(roomid, day1, time+30) and
-                                checkroomoccupancy(roomid, day1, time+60) and
-                                checkroomoccupancy(roomid, day1, time+90) and
-                                checkroomoccupancy(roomid, day1, time+120) and
-                                checkroomoccupancy(roomid, day1, time+150) and minorfree(departmentid, yearlvl, section, day1, time)):
+                                
+
+                            if (checkroomfree(roomid, day1, time) and
+                                checkroomfree(roomid, day1, time+30) and
+                                checkroomfree(roomid, day1, time+60) and
+                                checkroomfree(roomid, day1, time+90) and
+                                checkroomfree(roomid, day1, time+120) and
+                                checkroomfree(roomid, day1, time+150) and sectionfree(departmentid, yearlvl, section, day1, time)):
                                 day1true = True
                             else:
                                 day1true = False
@@ -1851,14 +2004,15 @@ def assigntimeslot(currentsubjectid):
                                 facultyoccupied[subjectfacultyid][day1].get(time + 60) == 'free' and
                                 facultyoccupied[subjectfacultyid][day1].get(time + 90) == 'free' and
                                 facultyoccupied[subjectfacultyid][day1].get(time + 120) == 'free' and
-                                facultyoccupied[subjectfacultyid][day1].get(time + 150) == 'free' and minorfree(departmentid, yearlvl, section, day1, time)):
+                                facultyoccupied[subjectfacultyid][day1].get(time + 150) == 'free' and sectionfree(departmentid, yearlvl, section, day1, time)):
                                 facultyday1true = True   
                             else:
                                 facultyday1true = False  
                                 continue
 
                             if day1true and facultyday1true: 
-                            
+                                
+                                sectionassign(departmentid, yearlvl, section, day1, time, 180)
                                 '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {day1} w/ time slot starting at {minutestotime(time)} upto {minutestotime(time+180)}")'''
                                 '''print('')'''
                                 assignmentfoundlab = True
@@ -1900,26 +2054,45 @@ def assigntimeslot(currentsubjectid):
                 if not labfound:
                     for rm in room:
                         roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
+
+                        if roomchecker(roomid)=='Lec' and requirelab==1: 
+                            continue
+
+                        if not newroomlablol[currentsubjectid] and roomname=='NEW ROOM':
+                            continue
+                        
                         for day1 in range(1,7): 
                             if subjectfacultyid not in facultyhoursday:
                                 facultyhoursday[subjectfacultyid] = {}
                             if day1 not in facultyhoursday[subjectfacultyid]:
                                 facultyhoursday[subjectfacultyid][day1] = Decimal(0)
-                            if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, day1)>=6:
+                            if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, day1)>6:
                                 continue
                             day1true = None
                             facultyday1true = None
+
                             for time in range(420, 1140, 30):
+                                countup_value = countup(roomid, day1, time)
+                                countdown_value = countdown(roomid, day1, time+210) 
+                            
+                                if countup_value<6 and countup_value!=0:
+                                    day1true = False
+                                    continue
+
+                               
+                                        
+                                
+
                                 if time>=1140:
                                     day1true=False
                                     
                                     break
-                                if (checkroomoccupancy(roomid, day1, time) and
-                                    checkroomoccupancy(roomid, day1, time+30) and
-                                    checkroomoccupancy(roomid, day1, time+60) and
-                                    checkroomoccupancy(roomid, day1, time+90) and
-                                    checkroomoccupancy(roomid, day1, time+120) and
-                                    checkroomoccupancy(roomid, day1, time+150) and minorfree(departmentid, yearlvl, section, day1, time)):
+                                if (checkroomfree(roomid, day1, time) and
+                                    checkroomfree(roomid, day1, time+30) and
+                                    checkroomfree(roomid, day1, time+60) and
+                                    checkroomfree(roomid, day1, time+90) and
+                                    checkroomfree(roomid, day1, time+120) and
+                                    checkroomfree(roomid, day1, time+150) and sectionfree(departmentid, yearlvl, section, day1, time)):
                                     day1true = True
                                 else:
                                     day1true = False
@@ -1934,13 +2107,15 @@ def assigntimeslot(currentsubjectid):
                                     facultyoccupied[subjectfacultyid][day1].get(time + 60) == 'free' and
                                     facultyoccupied[subjectfacultyid][day1].get(time + 90) == 'free' and
                                     facultyoccupied[subjectfacultyid][day1].get(time + 120) == 'free' and
-                                    facultyoccupied[subjectfacultyid][day1].get(time + 150) == 'free' and minorfree(departmentid, yearlvl, section, day1, time)):
+                                    facultyoccupied[subjectfacultyid][day1].get(time + 150) == 'free' and sectionfree(departmentid, yearlvl, section, day1, time)):
                                     facultyday1true = True   
                                 else:
                                     facultyday1true = False  
                                     continue
 
                                 if day1true and facultyday1true:
+                                    newroomlab=False
+                                    sectionassign(departmentid, yearlvl, section, day1, time, 180)
                                     labfound2=True
                                   
                                     '''print(f"assigned alter subject {currentsubjectid} in {roomname} to this day {day1} w/ time slot starting at {minutestotime(time)} upto {minutestotime(time+180)}")
@@ -1984,7 +2159,8 @@ def assigntimeslot(currentsubjectid):
 
                     labfound2=False
                     if not labfound2:
-                        assignments[subjectid] = (0, 0, (0), 0)
+                        newroomlablol[currentsubjectid]=True
+                        '''assignments[subjectid] = (0, 0, (0), 0)
                         assignedsubjects.add(subjectid)
                         assignedsubjectscount=assignedsubjectscount+1
                         progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
@@ -1993,17 +2169,25 @@ def assigntimeslot(currentsubjectid):
                         if assigntimeslot(currentsubjectid+1):
                             return True 
                         
-                        '''print("Backtracking h.0")'''
+                        print("Backtracking h.0")
                         assignedsubjectscount=assignedsubjectscount-1
                         
                         
                         if subjectid in assignments:
                             del assignments[subjectid]
-                        assignedsubjects.remove(subjectid)
+                        assignedsubjects.remove(subjectid)'''
 
-            
-                    
-                        
+                        query = """
+                            INSERT INTO `room` (`name`, `type`, `departmentid`, `collegeid`)
+                            VALUES (%s, %s, %s, %s)
+                        """
+                        values = ("NEW ROOM", 'Lab', departmentid, collegeid)
+                        cursor.execute(query, values)
+                        conn.commit()
+                        backtrackcounters[currentsubjectid] = 0
+
+                        if assigntimeslot(currentsubjectid):
+                            return True 
     print(f"Failed to assign subject {currentsubjectid} {subname} {(subjecttype)} Units: {units} Faculty id: {subjectfacultyid}, trying previous assignment.") 
    
     backtrackcounters[currentsubjectid] += 1
@@ -2074,8 +2258,30 @@ for subjectid, assignment in assignments.items():
     cursor.execute("""UPDATE subjectschedule SET day = %s, timestart = %s, timeend = %s, roomid = %s WHERE id = %s""", (daycombined, starttimeformatted, endtimeformatted, roomid, subjectid))
     conn.commit()
 
+cursor.execute("""DELETE 
+    FROM room
+    WHERE name = 'NEW ROOM'
+    AND id NOT IN (
+        SELECT DISTINCT roomid
+        FROM subjectschedule
+        WHERE roomid IS NOT NULL AND calendarid = %s AND collegeid = %s
+    );""", (calendarid, collegeid))
+conn.commit()
 
+for roomid, days in roomoccupied.items():
+        if roomid == 4:  # Only process 'room1'
+            for day, time_slots in days.items():
+                for timelab3, status in time_slots.items():
+                    if status !='occupied':  # Only print if the status is 'free'
+                        # Convert timelab3 (minutes) to HH:MM format
+                        hours = timelab3 // 60
+                        minutes = timelab3 % 60
+                        time_str = f"{hours:02d}:{minutes:02d}"
 
+                        # Print with labels
+                        print(f"Room: {roomid}, Day: {day}, Time: {time_str}, Status: {status}")
 
 cursor.close()
 conn.close()
+
+
