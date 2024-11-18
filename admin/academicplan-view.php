@@ -176,7 +176,7 @@
                                                             <div class="position-absolute top-0 end-0 mt-3 me-3 z-1">
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                            <h2 class="head-label">Edit Subject</h2>
+                                                            <h2 class="head-label">Edit Subject for <?php echo $filteredsubjects['subjectcode'];?></h2>
                                                             <form action="../processing/subjectprocessing.php" method="POST" class="row g-3 mt-4 needs-validation" novalidate>
                                                                 <input type="hidden" name="action" value="updatesubject">
                                                                 <input type="hidden" name="subjectid" value="<?= htmlspecialchars($filteredsubjects['id']) ?>">
@@ -194,7 +194,7 @@
 
                                                                 </div>
 
-                                                                <h5>Subject Details</h5>
+                                                                <h5 class="mt-4">Subject Details</h5>
                                                                 <div class="row">
                                                                     <div class="col-md-6">
                                                                         <label class="form-label" for="type">Type</label>
@@ -221,7 +221,7 @@
                                                                     </div>
 
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row mt-2">
                                                                     <div class="col-md-6">
                                                                         <label class="form-label" for="hours">Hours</label>
                                                                         <input class="form-control hours-input" id="hoursedit" type="text" name="hours" readonly value="<?= htmlspecialchars($filteredsubjects['hours']) ?>" required />
@@ -236,7 +236,7 @@
                                                                             <option value="OJT" <?= htmlspecialchars($filteredsubjects['focus']) == 'OJT' ? 'selected' : '' ?>>Major (Immersion)</option>
                                                                         </select>
                                                                     </div>
-                                                                    <div class="col-md-6">
+                                                                    <div class="col-md-6 mt-3">
                                                                         <label class="form-label" for="focus">Require Masters</label>
                                                                         <input class="form-check-input" type="checkbox" id="" name="masters" <?= htmlspecialchars($filteredsubjects['masters']) == 'Yes' ? 'checked' : '' ?>>
                                                                     </div>
@@ -254,8 +254,8 @@
                                                                 </div>
 
                                                                 <div class="modal-footer d-flex justify-content-between">
-                                                                    <button type="button" class="cancel" data-bs-dismiss="modal">Cancel</button>
-                                                                    <button type="submit" class="confirm">Update Subject</button>
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-success">Update</button>
                                                                 </div>
 
                                                             </form>
@@ -286,7 +286,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="rounded-top-3 form p-4">
-                            <h2 class="head-label">Add Subject</h2>
+                            <h2 class="head-label">Add Subject for <span><?php echo $departmentinfo['abbreviation'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year.'-'.$year+1;};?></h2>
                             <div class="container form ">
                                 <form id="facultyForm" class="row g-3 mt-4 needs-validation" action="../processing/subjectprocessing.php" method="POST" novalidate="">
                                     <input type="text" value='add' name="action" hidden>
@@ -347,18 +347,18 @@
                                                             <h5>Lec <input class="form-check-input " type="checkbox" id="checkbox-3" name="lec" data-bulk-select-row="data-bulk-select-row" /></h5>
                                                         </div>
                                                         <div class="" id="lec-section">
-                                                            <div class="col-md-5">
+                                                            <div class="col-md-3 me-3">
                                                                 <label class="form-label" for="unit">Unit</label>
                                                                 <select class="form-select" id="unit" required="" name="lecunit">
-                                                                    <option selected="" disabled="" value="">Choose...</option>
-                                                                    <option value="3.0">3.0</option>
+                                                                    <option disabled value="">Choose...</option>
+                                                                    <option selected value="3.0">3.0</option>
                                                                     <option value="2.0">2.0</option>
                                                                     <option value="1.0">1.0</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <label class="form-label" for="subname">Subject hours</label>
-                                                                <input class="form-control" id="subhours" type="text" readonly>
+                                                                <input class="form-control" id="subhours" type="text" readonly >
                                                             </div>
                                                         </div>
                                                 </div>
@@ -367,10 +367,10 @@
                                                             <h5>Lab <input class="form-check-input " type="checkbox" id="checkbox-1" name="lab" data-bulk-select-row="data-bulk-select-row" /></h5>
                                                         </div>
                                                         <div class="" id="lab-section">
-                                                            <div class="col-md-5" >
+                                                            <div class="col-md-3 me-3">
                                                                 <label class="form-label" for="unit">Unit</label>
                                                                 <select class="form-select" id="unit" required="" name="labunit">
-                                                                    <option selected="" disabled="" value="">Choose...</option>
+                                                                    <option disabled value="">Choose unit</option>
                                                                     <option selected value="1.0">1.0</option>
 
                                                                 </select>
@@ -380,8 +380,8 @@
                                                                 <input class="form-control" id="subhourslab" type="text" readonly>
                                                             </div>
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" id="" name="labroom">
-                                                                <label class="form-check-label" for="">Requires Lab Room</label>
+                                                               
+                                                                <label class="form-check-label" for=""> <input class="form-check-input" type="checkbox" id="" name="labroom">Prioritize Lab Room</label>
                                                             </div>
                                                         </div>
                                                 </div>
@@ -393,14 +393,15 @@
                                                 <label class="form-label" for="subname">Program Focus</label>
                                                 <select class="form-select" id="department" required="" name="focus">
                                                     <option selected="" disabled="" value="">Choose...</option>
-                                                    <option>Major</option>
-                                                    <option>Minor</option>
-                                                    <option value="Major1">Major<p>(no schedule)</p></option>
-                                                    <option value="OJT">Major<p>(Immersion)</p></option>
+                                                    <option>Specialized Subject</option>
+                                                    <option>General Subject</option>
+                                                    <option value="Major1">Specialized Subject<p>(no schedule)</p></option>
+                                                    <option value="OJT">Specialized Subject<p>(Immersion)</p></option>
                                                 </select>
                                                 <div class="row mt-3">
-                                                    <label for="">Mark check if the Subject requires <span>Masters</span></label>
-                                                    <h5 class="mt-3 "> <input class="form-check-input " type="checkbox" id="" name="masters" data-bulk-select-row="data-bulk-select-row" /> Required</h5>
+                                                    
+                                                    
+                                                    <label for=""><input class="form-check-input " type="checkbox" id="" name="masters" data-bulk-select-row="data-bulk-select-row" /> Requires Faculty with Masteral</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -415,8 +416,8 @@
                         </div>
                 <div class="modal-footer d-flex justify-content-between">
 
-                    <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="submit" class="confirm">Done</button>
+                    <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                    <button type="submit"  class="btn btn-success">Done</button>
 
                 </div>
             </form>
@@ -452,7 +453,7 @@
             lecCheckbox.addEventListener("change", function () {
                 if (this.checked) {
                     lecSection.style.display = "flex";
-                    lecHoursInput.value = "";
+                    lecHoursInput.value = "1.5 hrs 2 days";
                 } else {
                     lecSection.style.display = "none";
                     lecHoursInput.value = "";

@@ -144,7 +144,7 @@
                                         <input type="number" name="collegeid" id="" value="<?php echo $_SESSION['collegeid'];?>" hidden>
                                         <div class="col-6">
                                             <label class="form-label" for="department">Deparment</label>
-                                            <select class="form-select form-select-sm" id="select-classtype" name="departmentid"  <?php if ($_SESSION['scheduling']='college'){echo 'disabled';} ?>>
+                                            <select class="form-select form-select-sm" id="select-classtype" name="departmentid"  <?php if ($_SESSION['departmentid']!=0){echo 'disabled';} ?>>
                                                 <?php foreach ($collegedepartment as $collegedepartments){?>
                                                     <option value="<?php echo $collegedepartments['id'];?>" <?php if ($_SESSION['departmentid']==$collegedepartments['id']){echo 'selected';} ?>><?php echo $collegedepartments['name'];?></option>
                                                 <?php } ?>
@@ -154,7 +154,7 @@
                                                     Please enter a department.
                                                 </div>
                                         </div>
-                                        <h5>Personal Information</h5>
+                                        <h5 class="mt-4">Personal Information</h5>
                                         <div class="row mt-2">
                                             <div class="col-md-5">
                                                 <label class="form-label" for="firstname">First name</label>
@@ -207,25 +207,9 @@
                                             </div>
                                         </div>
 
-                                        <h5>Account Details</h5>
-                                        <div class="row mt-2">
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="email">Username</label>
-                                                <input class="form-control" id="email" type="text" name="username" minlength="2" maxlength="50" required>
-                                                <div class="invalid-feedback">
-                                                    Please enter a valid username.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="password">Password</label>
-                                                <input class="form-control" id="password" type="text" name="password" minlength="8" maxlength="50" required>
-                                                <div class="invalid-feedback">
-                                                    Please enter a password (at least 8 characters).
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
 
-                                        <h5>Faculty Information</h5>
+                                        <h5  class="mt-4">Faculty Information</h5>
                                         <div class="row mt-2">
                                             <div class="col-6">
                                                 <label class="form-label" for="position">Type</label>
@@ -264,13 +248,30 @@
                                             </div>
                                             
                                         </div>
+                                        <h5  class="mt-4">Account Details</h5>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="email">Username</label>
+                                                <input class="form-control" id="email" type="text" name="username" minlength="2" maxlength="50" required>
+                                                <div class="invalid-feedback">
+                                                    Please enter a valid username.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="password">Password</label>
+                                                <input class="form-control" id="password" type="text" name="password" minlength="8" maxlength="50" required>
+                                                <div class="invalid-feedback">
+                                                    Please enter a password (at least 8 characters).
+                                                </div>
+                                            </div>
+                                        </div>
                                    
                                 </div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="cancel" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                        <button type="submit" class="confirm">Done</button>
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                        <button type="submit"  class="btn btn-success">Done</button>
                     </div>
                 </div>
             </div>

@@ -30,7 +30,7 @@
                         Colleges
                     </h3>
                 </div>
-                <div class="col-3 d-flex align-items-center justify-content-start">
+                <div class="col-3 d-flex align-items-center justify-content-end">
                         <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
                         </div>
             </div>
@@ -70,7 +70,7 @@
                                 <div class="modal-dialog modal-lg mt-6" role="document">
                                 <div class="modal-content border-0">
                                     <div class="modal-header border-0">
-                                        <h4 class="modal-title" id="formModalLabel">Add New College</h4>
+                                        <h4 class="modal-title" id="formModalLabel">Edit College</h4>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body px-5">

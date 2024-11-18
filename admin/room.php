@@ -38,21 +38,12 @@
     ?>
     <main>
         <div class="container mb-1">
-            <div class="row mt-2 d-flex align-items-center">
-                <div class="col-4">
+            <div class="row mt-2 d-flex align-items-around">
+                <div class="col-9">
                     <h3>Rooms</h3>
                 </div>
-                <div class="col-2">
-                    <select class="form-select form-select-sm" id="select-classtype">
-                        <option>all</option>
-                        <option>lecture</option>
-                        <option>laboratory</option>
-                    </select>
-                </div>
-                <div class="searchbar col-3 ">
-                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
-                    </div>
-                <div class="col-1 ">
+               
+                <div class="col-1 ms-10">
                 <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
                 </div>
             </div>
@@ -60,7 +51,7 @@
                 <div class="row d-flex justify-content-around">
                     <div class=" room-table p-4  d-flex justify-content-center">
                         <div class="table-contents">
-                        <table class="table  mb-0">
+                        <table id="example" class="table mb-0">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -350,6 +341,13 @@
 
 </html>
 <script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthChange": false  
+        });
+    });
+</script>
+<script>
     (() => {
       'use strict';
 
@@ -365,3 +363,4 @@
       });
     })();
   </script>
+  

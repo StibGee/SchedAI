@@ -395,3 +395,24 @@ span {
 .pagination a {
     color: #119e0e;
 }
+tr:has(input[type="checkbox"]:checked) {
+    background-color: #d1e7dd;
+}
+input[type="checkbox"]:checked ~ td {
+    background-color: #d1e7dd; /* Success green for the cells */
+    color: #0f5132; /* Text color for better contrast */
+}
+
+/* Alternatively, style the entire row */
+input[type="checkbox"]:checked ~ td,
+input[type="checkbox"]:checked ~ td + td {
+    background-color: #d1e7dd; /* Success green for all cells */
+}
+input[type="checkbox"] {
+    accent-color: #198754 !important; /* Bootstrap success green */
+}
+
+/* Optional: Add a hover effect */
+input[type="checkbox"]:hover {
+    accent-color: #145a32 !important; /* Darker green for hover */
+}

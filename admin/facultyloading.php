@@ -32,19 +32,18 @@
         $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid']);
         $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
+        $existingsubjects = $faculty->getfacultysubjects($_SESSION['id']);
     ?>
-<main>
-
+<main >
+<div class="container">
                 <div class="row">
                     <div class="col-8 text d-flex align-items-center" >
-                        <h2>Faculty Loading</span>
+                        <h2>Welcome, <?php echo $facultyinfo['lname'].'!';?></span>
                     </div>
                 </div>
             <div class="row  mb-4 mx-2">
 
-                <div class="searchbar d-flex justify-content-center">
-                    <input type="search" class="form-control" placeholder="Search Faculty Schedule" aria-label="Search" data-last-active-input="">
-                </div>
+                
             </div>
             <div class="row">
                 <div class=" col-3 my-2">
@@ -56,7 +55,7 @@
                         <li>Name : <?php echo $facultyinfo['fname']." ".$facultyinfo['mname']." ".$facultyinfo['lname'];?></li>
                         <li>Rank : <?php echo $facultyinfo['type'];?></li>
                         <li>Contact : <?php echo $facultyinfo['contactno'];?></li>
-                        <li>Email :</li>
+                        <li>Email : <?php echo $facultyinfo['email'];?></li>
 
                     </div>
 
@@ -87,21 +86,14 @@
                                 <th data-sort="subcode">Subject</th>
                             </tr>
                             </thead>
+                            <?php foreach ($existingsubjects AS $existingsubject){ ?>
+                            
                             <tbody class="list">
                             <tr>
-                                <td class="align-middle desc">Web Development</td>
+                                <td class="align-middle desc"><?php echo $existingsubject['subjectname'];?></td>
                             </tr>
                             </tbody>
-                            <tbody class="list">
-                            <tr>
-                                <td class="align-middle desc">Web Development</td>
-                            </tr>
-                            </tbody>
-                            <tbody class="list">
-                            <tr>
-                                <td class="align-middle desc">Web Development</td>
-                            </tr>
-                            </tbody>
+                            <?php } ?>
                         </table>
                         </div>
 
@@ -111,13 +103,11 @@
                 <div class="sched-container">
                     <div class="row mt-2 justify-content-between">
                         <div class="col-5">
-                            <h5>Faculty Schedule <span>(role)</span></h5>
-                            <p>Total No. Of Units Loaded : <span> #</span></p>
+                            <h5>Faculty Schedule</h5>
+                            
                         </div>
                         <div class="col-2">
-                            <button id="viewToggleButton">
-                                Toggle View
-                            </button>
+                            
                         </div>
                     </div>
                     <div class="sched-table">
@@ -186,7 +176,7 @@
                     </div>
                 </div>
                 </div>
-
+</div>
         </main>
 
 <script src="../js/facultyloading.js"></script>
