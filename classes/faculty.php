@@ -200,6 +200,17 @@ class Faculty {
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getallfacultydepartment($departmentid) {
+        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname, CONCAT(faculty.fname, ' ', faculty.lname) AS facultyname
+                FROM faculty 
+                JOIN department ON department.id = faculty.departmentid 
+                WHERE department.id = :departmentid";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['departmentid' => $departmentid]);
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function getinitialcollegefaculty($collegeid) {
         $sql = "SELECT id FROM faculty WHERE collegeid = :collegeid LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
@@ -232,18 +243,7 @@ class Faculty {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function getallfacultydepartment($departmentid) {
-        $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname 
-                FROM faculty 
-                JOIN department ON department.id = faculty.departmentid 
-                WHERE department.id = :departmentid";
-                
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['departmentid' => $departmentid]);
-        
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    
+   
     public function countallfaculty() {
         $sql = "SELECT count(*) from faculty";
         $stmt = $this->pdo->query($sql);

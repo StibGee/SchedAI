@@ -198,7 +198,7 @@
                                                     </thead>
                                                     <tbody id="loadedSubjects<?php echo $collegeminoryearlvls['minoryearlvl'];?>" class="list">
                                                         <?php foreach($getminorsubjects AS $getminorsubjectscolleges){
-                                                             echo 'ffff';
+                                                            
                                                             if ($_SESSION['departmentid']!=$getminorsubjectscolleges['departmentid'] || $getminorsubjectscolleges['yearlvl']!=$collegeminoryearlvls['minoryearlvl']){
                                                             
                                                                 continue;

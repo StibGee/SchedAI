@@ -190,15 +190,7 @@ button.confirm{
 .scrollable-content::-webkit-scrollbar-thumb:hover {
     background-color: #555;
 }
-.pagination .page-link {
-    color: #119e0e; 
-}
 
-.pagination .page-item.active .page-link,
-.pagination .page-item:hover .page-link {
-    background-color: #119e0e;
-    border-color: #119e0e;
-}
 
 .containerfaculty{
     max-width: 1500px !important;

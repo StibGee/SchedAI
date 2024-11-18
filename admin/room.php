@@ -24,7 +24,7 @@
         // Initialize Room class
         $room = new Room($pdo);
         $college = new College($pdo);
-        if ($_SESSION['departmentid']!=0){
+        if ($_SESSION['scheduling']!='college'){
             $roomsall = $room->getdepartmentrooms($_SESSION['departmentid']);
         }else{
             $roomsall = $room->getcollegerooms($collegeid);
@@ -77,11 +77,11 @@
                                     <td><?php echo $i;?></td>
                                     <td><?php echo $rooms['roomname'];?></td>
                                     <td><?php echo $rooms['type'];?></td>
-                                    <td><?php echo $rooms['departmentname'];?></td>
+                                    <td><?php echo $rooms['abbreviation'];?></td>
 
                                     <td>
 
-                                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editroom<?php echo $rooms['roomid']; ?>" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editroom<?php echo $rooms['roomid']; ?>" onclick="event.stopPropagation();">
                                             <i class="fas fa-edit"></i>
                                         </button>
 
@@ -89,7 +89,7 @@
                                         <form action="../processing/roomprocessing.php" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this room?');">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="id" value="<?php echo $rooms['roomid']; ?>">
-                                            <button type="submit" class="btn" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                            <button type="submit" class="btn btn-danger" onclick="event.stopPropagation();">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -117,7 +117,7 @@
                                                                         <label class="form-label" for="firstname">Department</label>
                                                                         <div class="col-md-12">
                                                                             <select class="form-select" id="room-type" name="departmentid" required>
-                                                                                <option selected disabled>Choose...</option>
+                                                                                <option disabled>Choose...</option>
                                                                                 <?php foreach($collegedepartment as $collegedepartments) { ?>
                                                                                     <option value="<?php echo $collegedepartments['id']; ?>"
                                                                                         <?php echo $rooms['departmentid'] == $collegedepartments['id'] ? 'selected' : ''; ?>>
@@ -133,7 +133,7 @@
                                                                     <div class="col-6">
                                                                         <label class="form-label" for="firstname">Room Name</label>
                                                                         <div class="col-md-12">
-                                                                            <input type="text" class="form-control" name="name" required value="<?php echo $rooms['roomname'];?>">
+                                                                            <input type="text" class="form-control" name="name" required value="<?php echo $rooms['roomname'];?>" required>
                                                                         </div>
                                                                     </div>
 
@@ -141,7 +141,7 @@
                                                                         <label class="form-label" for="firstname">Room Type</label>
                                                                         <div class="col-md-12">
                                                                             <select class="form-select" id="room-type" name="type" required>
-                                                                                <option selected disabled>Choose...</option>
+                                                                                <option disabled>Choose...</option>
                                                                                 <option value="Lec" <?php echo $rooms['type'] == 'Lec' ? 'selected' : ''; ?>>Lecture</option>
                                                                                 <option value="Lab" <?php echo $rooms['type'] == 'Lab' ? 'selected' : ''; ?>>Laboratory</option>
                                                                             </select>
@@ -226,7 +226,7 @@
                             <div class="rounded-top-3 form p-4">
                                 <h2 class="head-label">Add Rooms</h2>
                                 <div class="container form ">
-                                    <form id="facultyForm" method="POST"  action="../processing/roomprocessing.php" class="row g-3 mt-4 needs-validation" novalidate="">
+                                    <form id="facultyForm" class="needs-validation" novalidation method="POST"  action="../processing/roomprocessing.php" class="row g-3 mt-4">
                                     <input type="hidden" name="action" value="add">
                                     <input type="hidden" name="collegeid" value="<?php echo $collegeid;?>">
                                     <h5>Room Details</h5>
@@ -235,12 +235,15 @@
                                                 <label class="form-label" for="firstname">Department</label>
 
                                                     <div class="col-md-12">
-                                                        <select class="form-select" id="room-type" required name="departmentid">
-                                                            <option selected="" disabled="">Choose...</option>
+                                                        <select class="form-select" id="room-type" required name="departmentid" required>
+                                                            <option disabled>Choose...</option>
                                                             <?php foreach($collegedepartment as $collegedepartments){ ?>
                                                             <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
                                                             <?php } ?>
                                                         </select>
+                                                        <div class="invalid-feedback">
+                                                            Please select a department.
+                                                        </div>
                                                     </div>
 
                                             </div>
@@ -254,12 +257,7 @@
                                                 </select>
                                             </div>-->
 
-                                            <div class="col-md-6 d-flex justify-content-between align-items-start">
-
-                                                <label class="form-label" for="isexclusive">Room Exclusive to Department</label>
-                                                <input type="checkbox" name="isexclusive" id="isexclusive" class="custom-checkbox">
-
-                                            </div>
+                                
 
                                         </div>
                                         <div class="row mt-2">
@@ -268,6 +266,9 @@
 
                                                     <div class="col-md-12">
                                                         <input type="text" class="form-control" name="name" required>
+                                                        <div class="invalid-feedback">
+                                                            Please enter a room name.
+                                                        </div>
                                                     </div>
 
                                             </div>
@@ -275,11 +276,14 @@
                                                 <label class="form-label" for="firstname">Room Type</label>
 
                                                     <div class="col-md-12">
-                                                        <select class="form-select" id="room-type" id="type" required name="type">
-                                                            <option selected="" disabled="">Choose...</option>
+                                                        <select class="form-select" id="room-type" id="type" required name="type" >
+                                                            <option disabled>Choose...</option>
                                                             <option value="Lec">Lecture</option>
                                                             <option value="Lab">Laboratory</option>
                                                         </select>
+                                                        <div class="invalid-feedback">
+                                                            Please select a room type.
+                                                        </div>
                                                     </div>
 
                                             </div>
@@ -345,3 +349,19 @@
     ?>
 
 </html>
+<script>
+    (() => {
+      'use strict';
+
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>

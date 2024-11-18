@@ -58,7 +58,7 @@
 
             <div class="colleges mt-4">
 
-                <table class="mb-0 table">
+                <table id="example" class="mb-0 table">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -97,57 +97,81 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body px-5">
-                        <form action="../processing/facultyprocessing.php" method="POST">
+                        <form class="needs-validation" novalidate action="../processing/facultyprocessing.php" method="POST">
                             <input type="text" value="addrootfaculty" name="action" hidden>
                             <div class="row">
                                 
                                 <div class="form-group col-md-4">
                                     <label class="form-label" for="departmentid">Select Department</label>
                                     <select class="form-select" id="departmentid" name="departmentid" required="">
-                                        <option selected="" disabled="">Select Department</option>
+                                        <option disabled>Select Department</option>
                                         <?php foreach ($alldepartment AS $alldepartments){?>
                                             <option value="<?php echo $alldepartments['id'];?>"><?php echo $alldepartments['abbreviation'];?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
+                                <div class="invalid-feedback">
+                                Please enter a department.
+                                </div>
                                 <div class="form-group col-md-4">
                                     <label class="form-label" for="role">Select Role</label>
                                     <select class="form-select" id="role" name="role" required="">
-                                        <option selected="" disabled="">Select Role</option>
+                                        <option disabled>Select Role</option>
                                         <option value="departmenthead">Department Head</option>
                                         <option value="collegesecretary">College Secretary</option>
             
                                     </select>
+                                    <div class="invalid-feedback">
+                                    Please select a role.
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label" for="emailadd">Email Address</label>
                                     <input type="email" class="form-control" id="emailadd" name="emailadd" required>
+                                    <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                    </div>
                                 </div>
                             </div>
                            
                             <div class="row mt-3">
                                 <div class="col-md-5">
                                     <label class="form-label" for="fname">First Name</label>
-                                    <input type="text" class="form-control" id="fname" name="fname" required>
+                                    <input type="text" class="form-control" id="fname" name="fname" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                Please enter a valid First Name.
                                 </div>
                                 <div class="col-md-5">
                                     <label class="form-label" for="lname">Last Name</label>
-                                    <input type="text" class="form-control" id="lname" name="lname" required>
+                                    <input type="text" class="form-control" id="lname" name="lname" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                Please enter a valid Last Name.
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label" for="mname">MI (Optional)</label>
-                                    <input type="text" class="form-control" id="mname" name="mname">
+                                    <input type="text" class="form-control" id="mname" name="mname" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50">
+                                </div>
+                                <div class="invalid-feedback">
+                                Please enter a valid Middle Name.
                                 </div>
 
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-6">
                                     <label class="form-label" for="email">Username</label>
-                                    <input type="text" class="form-control" id="username" name="username" required>
+                                    <input type="text" class="form-control" id="username" name="username" minlength="2" maxlength="50" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                Please enter a valid username.
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <input type="password" class="form-control" id="password" name="password" minlength="8" maxlength="50" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                Please enter at least 8 characters.
                                 </div>
 
                             </div>
@@ -169,4 +193,32 @@
     <?php
         require_once('../include/js.php')
     ?>
+
+<script>
+    
+    (() => {
+      'use strict';
+      
+     
+      const forms = document.querySelectorAll('.needs-validation');
+
+      
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
+  <script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthChange": false  
+        });
+    });
+</script>
 </html>

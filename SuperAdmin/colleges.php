@@ -37,7 +37,7 @@
 
             <div class="colleges mt-4">
 
-                <table class="mb-0 table table-hover">
+                <table id="example" class="mb-0 table table-hover">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -57,11 +57,11 @@
                                 <td><?php echo $allcolleges['name']; ?></td>
                                 <td><?php echo $allcolleges['abbreviation']; ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editcollegeform<?php echo $allcolleges['id']; ?>" onclick="event.stopPropagation();">Edit</button>
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editcollegeform<?php echo $allcolleges['id']; ?>" onclick="event.stopPropagation();"><i class="fas fa-edit"></i></button>
                                     <form action="../processing/collegeprocessing.php" method="post" style="display:inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $allcolleges['id']; ?>">
-                                        <button type="submit" class="btn btn-danger" onclick="event.stopPropagation(); return confirm('Are you sure you want to delete this college?');">Delete</button>
+                                        <button type="submit" class="btn btn-danger" onclick="event.stopPropagation(); return confirm('Are you sure you want to delete this college?');"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr> 
@@ -74,7 +74,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body px-5">
-                                        <form action="../processing/collegeprocessing.php" method="POST">
+                                        <form class="needs-validation1" novalidate action="../processing/collegeprocessing.php" method="POST">
                                             <input type="text" value="editcollege" name="action" hidden>
                                             <input type="text" value="<?php echo $allcolleges['id']; ?>" name="collegeid" hidden>
                                             
@@ -82,13 +82,19 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="form-label" for="collegename">Input College Name</label>
-                                                        <input class="form-control" id="collegename" type="text" name="collegename" value="<?php echo $allcolleges['name']; ?>" required />
+                                                        <input class="form-control" id="collegename" type="text" name="collegename" value="<?php echo $allcolleges['name']; ?>" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required />
+                                                        <div class="invalid-feedback">
+                                                        Please enter a valid college name.
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="form-label" for="abbriviation">Abbreviation</label>
-                                                        <input class="form-control" id="collegename" type="text" name="abbreviation" value="<?php echo $allcolleges['abbreviation']; ?>" required />
+                                                        <input class="form-control" id="collegename" type="text" name="abbreviation" value="<?php echo $allcolleges['abbreviation']; ?>" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required />
+                                                        <div class="invalid-feedback">
+                                                        Please enter a valid college name.
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -100,6 +106,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                                                 
 
 
@@ -118,20 +125,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
-                    <form action="../processing/collegeprocessing.php" method="POST">
+                    <form class="needs-validation" novalidate action="../processing/collegeprocessing.php" method="POST" >
                         <input type="text" value="add" name="action" hidden>
                         
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" for="collegename">Input College Name</label>
-                                    <input class="form-control" id="collegename" type="text" name="collegename" required />
+                                    <input class="form-control" id="collegename" type="text" name="collegename" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required />
+                                    <div class="invalid-feedback">
+                                    Please enter a valid college name.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" for="abbriviation">Abbreviation</label>
-                                    <input class="form-control" id="abbreviation" type="text" name="abbreviation" required />
+                                    <input class="form-control" id="abbreviation" type="text" name="abbreviation" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required />
+                                    <div class="invalid-feedback">
+                                    Please enter a valid college abbreviation.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -180,3 +193,48 @@
         form.submit();
     }
 </script>
+<script>
+    (() => {
+      'use strict';
+    
+      const forms = document.querySelectorAll('.needs-validation');
+
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
+  <script>
+   (() => {
+  'use strict';
+
+ 
+  document.addEventListener('submit', (event) => {
+    const form = event.target;
+
+  
+    const activeModal = document.querySelector('.modal.show'); 
+    if (activeModal && activeModal.contains(form)) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }
+  }, false);
+})();
+  </script>
+  <script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthChange": false  
+        });
+    });
+</script>
+  

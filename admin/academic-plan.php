@@ -33,31 +33,33 @@
 
         if(isset($_POST['departmentid'])){
             $departmentid = $_POST['departmentid'];
-            $_SESSION['departmentidbasis']=$departmentid;
-        }elseif($_SESSION['departmentid'] && $_SESSION['departmentid']!=0){
+            $_SESSION['departmentid']=$departmentid;
+        }elseif($_SESSION['departmentid']){
             $departmentid = $_SESSION['departmentid'];
-            $_SESSION['departmentidbasis']=$departmentid;
+          
         } else {
             $departmentid = $initialcollegedepartment;
             $_SESSION['departmentidbasis']=$departmentid;
         }
-
+        
         $departmentinfo = $department->getdepartmentinfo($departmentid);
     ?>
     <main>
+        
         <div class="container mb-1">
             <div class="row d-flex align-items-center">
                 <div class="col-6">
                     <h3><?php echo $departmentinfo['abbreviation']; ?> Curriculum Plan</h3>
                 </div>
+                
                 <div class="col-3">
                     <form class="mb-0" action="academic-plan.php" method="POST">
-                        <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()">
+                        <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()" <?php if ($_SESSION['scheduling']=='department'){ echo 'disabled';}?>>
                             <?php foreach ($collegedepartment as $collegedepartments){ ?>
-                                <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
+                                <option <?php if ($departmentid==$collegedepartments['id']){ echo 'selected';}?> value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
                             <?php } ?>
 
-                            <option value="" selected>Choose a department</option>
+                            <option value="">Choose a department</option>
                         </select>
                     </form>
                 </div>
@@ -97,14 +99,14 @@
                                 <th scope="row"><?php echo htmlspecialchars($displayyear); ?></th>
                                 <td><?php echo htmlspecialchars($calendars['sem'] == 1 ? '1st Semester' : ($calendars['sem'] == 2 ? '2nd Semester' : ($calendars['sem'] == 3 ? '3rd Semester' : $calendars['sem'] . 'th'))); ?></td>
                                 <td>
-                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#formeditcalendar<?php echo $calendars['id']; ?>" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#formeditcalendar<?php echo $calendars['id']; ?>" onclick="event.stopPropagation();">
                                         <i class="fas fa-edit"></i> <!-- Edit icon -->
                                     </button>
 
                                     <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this curriculum?');">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $calendars['id']; ?>">
-                                        <button type="submit" class="btn" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                        <button type="submit" class="btn btn-danger" onclick="event.stopPropagation();">
                                             <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
                                         </button>
                                     </form>
@@ -165,7 +167,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
-                    <form action="../processing/curriculumprocessing.php" method="POST">
+                    <form class="needs-validation" novalidate action="../processing/curriculumprocessing.php" method="POST">
                         <input type="text" value="add" name="action" hidden>
                         <input type="hidden" value="<?php echo $collegeid;?>" name="collegeid" >
                         <input type="hidden" value="1" name="curriculumplan" >
@@ -173,10 +175,16 @@
                             <div class="form-group col-md-6">
                                 <label for="startyear">Enter Academic Year</label>
                                 <div class="input-group mt-2">
-                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" placeholder="Start Year">
+                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" placeholder="Start Year" minlength="4" required>
+                                    
                                     <span class="input-group-text">-</span>
-                                    <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" placeholder="End Year">
+                                    <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" placeholder="End Year" minlength="4" required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid year.
+                                    </div>
                                 </div>
+                                
+                                
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="select-semester">Select Semester</label>
@@ -299,5 +307,20 @@
     ?>
 
 
+<script>
+    (() => {
+      'use strict';
 
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
 </html>

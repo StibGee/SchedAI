@@ -91,6 +91,7 @@ function login($pdo) {
             $_SESSION['id']=$id;
             $_SESSION['collegeid']=$collegeid;
             $_SESSION['departmentid']=$departmentid;
+           
             $_SESSION['fname']=$name;
     
             

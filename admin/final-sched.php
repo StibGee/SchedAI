@@ -47,6 +47,7 @@
 
 
     }
+    
     if ($departmentid!=0){
         $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
         $departmentinfo=$department->getdepartmentinfo($departmentid);
@@ -113,6 +114,7 @@
     </script>
 
     <?php
+    
     $deptid = ($departmentid);
     $colid = ($collegeid);
     $calid = ($_SESSION['calendarid']);
@@ -174,6 +176,7 @@
         document.body.classList.remove('blur-background');
     </script>
     <?php } ?>
+    
 
     <main>
         <div class="container mb-5">
@@ -238,7 +241,7 @@
                 </div>
                 <div class="sched-table mt-3">
                     <div id="tabularView" class="mt-2">
-                        <table class="table">
+                        <table class="table" id="example">
                             <thead>
                                 <tr>
                                     <th>Subject Code</th>
@@ -253,19 +256,13 @@
                                 </tr>
                             </thead>
                             <tbody id="tabularTableBody">
-                            <?php $seenSubjectCodes = [];
+                            <?php
 
                                 foreach ($filteredschedules as $subjectschedules) {
-                                    if (!in_array($subjectschedules['subjectcode'], $seenSubjectCodes)) {
-
-                                        $seenSubjectCodes[] = $subjectschedules['subjectcode'];
-                                        $displaySubjectCode = $subjectschedules['subjectcode'];
-                                    } else {
-                                        $displaySubjectCode = '';
-                                    }
+                                   
                                 ?>
                                 <tr>
-                                    <td><?php echo $displaySubjectCode;?></td>
+                                    <td><?php echo $subjectschedules['subjectcode'];?></td>
                                     <td><?php echo $subjectschedules['subjectname'];?></td>
                                     <td><?php echo $subjectschedules['subjecttype'];?></td>
                                     <td><?php echo $subjectschedules['subjectunit'];?></td>
@@ -278,7 +275,7 @@
                                     </td>
                                     <td><?php echo $subjectschedules['day'];?></td>
                                     <td><?php echo $subjectschedules['roomname'];?></td>
-                                    <td><?php echo $subjectschedules['facultylname'];?></td>
+                                    <td><?php echo $subjectschedules['facultyfname'].' '.$subjectschedules['facultylname'];?></td>
                                 </tr>
                                <?php } ?>
                             </tbody>
@@ -316,7 +313,7 @@
                         <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
                         
                         
-                            <input type="number" name='academicyear' value="<?php echo $_SESSION['year'];?>">
+                            <input type="number" name='academicyear' value="<?php echo $_SESSION['year'];?>" hidden>
                             <div class="rounded-top-3 bg-body-tertiary p-2">
                                 <h2 class="head-label">Generate Schedule for <?php if($_SESSION['departmentidbasis']==0){echo $collegeinfo['abbreviation'];}else{echo $departmentinfo['abbreviation'];}?><?php if($_SESSION['sem']==1){echo ' '.$_SESSION['sem'].'st sem';}else{echo ' '.$_SESSION['sem'].'nd sem';}?><?php echo ' S.Y-'.$_SESSION['year'];?></h2>
                                 <div class="form-check d-flex justify-content-end">
@@ -565,3 +562,11 @@
         require_once('../include/js.php')
     ?>
 </html>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthChange": false,  // Allows changing the number of rows shown
+            "pageLength": -1       // Shows all rows without pagination
+        });
+    });
+</script>

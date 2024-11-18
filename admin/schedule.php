@@ -30,6 +30,7 @@
             $_SESSION['departmentid']=0;
         }else{
             $_SESSION['departmentid']=$_SESSION['departmentid'];
+           
         }
 
         /*$calendardistinct = $curriculum->getdistinctcurriculumsschedule();
@@ -119,15 +120,15 @@
 
                                 <td>
 
-                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#formeditcalendar<?php echo $calendars['id']; ?>" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#formeditcalendar<?php echo $calendars['id']; ?>" onclick="event.stopPropagation();">
                                         <i class="fas fa-edit"></i>
                                     </button>
-
+                                    
 
                                     <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this curriculum?');">
                                         <input type="hidden" name="action" value="deletecalendar">
                                         <input type="hidden" name="id" value="<?php echo $calendars['id']; ?>">
-                                        <button type="submit" class="btn" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                        <button type="submit" class="btn btn-danger" onclick="event.stopPropagation();" >
                                             <i class="fas fa-trash-alt"></i> 
                                         </button>
                                     </form>
@@ -157,9 +158,9 @@
                                                             <input type="number" name="endyear" id="endyear1<?php echo $calendars['id']; ?>" class="form-control form-control-sm" style="width: 120px;"  value="<?php echo ($calendars['year']+1); ?>">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-5">
                                                         <label for="select-semester">Select Semester</label>
-                                                        <select name="semester" class="form-select form-select-sm mt-2" id="select-semester">
+                                                        <select name="semester" class="form-select form-select-md mt-2" id="select-semester">
                                                             <option value="1" <?php if ($calendars['sem'] == 1){ echo 'selected';}?>>First Semester</option>
                                                             <option value="2" <?php if ($calendars['sem'] == 2){ echo 'selected';}?>>Second Semester</option>
                                                         </select>
@@ -188,7 +189,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
-                    <form action="../processing/curriculumprocessing.php" method="POST">
+                    <form class="needs-validation" novalidate action="../processing/curriculumprocessing.php" method="POST">
                         <input type="text" value="addcalendar" name="action" hidden>
                         <input type="hidden" value="<?php echo $collegeid;?>" name="collegeid" >
                         <input type="hidden" value="0" name="curriculumplan" >
@@ -196,19 +197,25 @@
                             <div class="form-group col-md-6">
                                 <label for="startyear">Enter Year</label>
                                 <div class="input-group mt-2">
-                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" style="width: 120px;">
+                                    <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" minlength="4" maxlength="50" style="width: 120px;" required>
                                     <span class="input-group-text">-</span>
-                                    <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" style="width: 120px;">
+                                    <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" minlength="4" maxlength="50" style="width: 120px;" required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid year.
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="select-semester">Select Semester</label>
                                 <div class="input-group mt-2">
 
-                                    <select name="semester" class="form-select form-select-sm mt-2" id="select-semester">
+                                    <select name="semester" class="form-select form-select-sm mt-2" id="select-semester" required>
                                         <option value="1">First Semester</option>
                                         <option value="2">Second Semester</option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please select a semester.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -267,7 +274,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-3">
-                        <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
+                        <form id="formModalForm"  action="../processing/scheduleprocessing.php"  method="post">
 
                             <div class="rounded-top-3 bg-body-tertiary p-2">
                                 <h2 class="head-label">Generate New Schedule</h2>
@@ -295,8 +302,11 @@
                                                         <option <?php if ($_SESSION['departmentid']==$collegedepartments['id']){echo 'selected';}?> value="<?php echo $collegedepartments['id'];?>" ><?php echo $collegedepartments['name'];?></option>
                                                     <?php } ?>
 
-                                                    <option value="" >Choose a department</option>
+                                                    <option value="" disabled>Choose a department</option>
                                                 </select>
+                                                <div class="invalid-feedback">
+                                                Please enter a department.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -308,6 +318,9 @@
                                                     <option value="1">First Semester</option>
                                                     <option value="2">Second Semester</option>
                                                 </select>
+                                                <div class="invalid-feedback">
+                                                Please enter a semester.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-6 mt-4">
@@ -342,6 +355,9 @@
                                                                         <td style="border: none;">Year Level <?php echo $i;?></td>
                                                                         <td style="border: none;">
                                                                             <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>" class="form-control form-control-sm" style="width: 200px;">
+                                                                            <div class="invalid-feedback">
+                                                                            Please enter a valid section.
+                                                                            </div>
                                                                         </td>
                                                                         <td style="border: none;">
                                                                             <select class="form-select form-select-sm m-0" name="curriculum1">
@@ -353,6 +369,9 @@
                                                                                 }
                                                                                 ?>
                                                                             </select>
+                                                                            <div class="invalid-feedback">
+                                                                            Please select a curriculum.
+                                                                            </div>
                                                                         </td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -388,6 +407,9 @@
                                                                     <td style="border: none;">Year Level <?php echo $i;?></td>
                                                                     <td style="border: none;">
                                                                         <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>[]" class="form-control form-control-sm" style="width: 200px;">
+                                                                        <div class="invalid-feedback">
+                                                                            Please enter a valid year level.
+                                                                        </div>
                                                                     </td>
                                                                     <td style="border: none;">
                                                                         <select class="form-select form-select-sm m-0" name="curriculum<?php echo $i;?>[]">
@@ -399,6 +421,9 @@
                                                                             }
                                                                             ?>
                                                                         </select>
+                                                                        <div class="invalid-feedback">
+                                                                            Please select a curriculum.
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             <?php } ?>
@@ -562,6 +587,21 @@
 <?php
     require_once('../include/js.php');
 ?>
-
+<script>
+    (() => {
+      'use strict';
+    
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
 </html>
 

@@ -375,3 +375,23 @@ span {
 
     cursor: pointer;
 }
+
+
+.pagination .page-item.active .page-link{
+    background-color: #119e0e;
+    border-color: #119e0e;
+    color: white;
+}
+.page-item:hover{
+    cursor: pointer;
+    color: #119e0e;
+   
+}
+.page-item a:hover{
+    cursor: pointer;
+    color: #119e0e;
+   
+}
+.pagination a {
+    color: #119e0e;
+}

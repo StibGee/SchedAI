@@ -25,6 +25,7 @@
     if ($_SESSION['departmentid']==0){
         $collegefaculty=$faculty->getallfacultycollege($collegeid);
     }else{
+        $collegefaculty=$faculty->getallfacultydepartment($_SESSION['departmentid']);
         $collegeroom=$room->getdepartmentrooms($_SESSION['departmentid']);
     }
     $calendarid=$_SESSION['calendarid'];
@@ -106,8 +107,8 @@
         $departmentid=$_SESSION['departmentid'];
         $sql = "SELECT
                 day,
-                TIME_FORMAT(timestart, '%H:%i') AS timestart,
-                TIME_FORMAT(timeend, '%H:%i') AS timeend,
+                TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,
+                TIME_FORMAT(subjectschedule.timeend, '%H:%i') AS timeend,
                 subjectschedule.id as subjectidno,
                 subject.subjectcode as subjectname,
                 subjectschedule.yearlvl as yearlvl,
@@ -117,13 +118,15 @@
                 department.abbreviation as departmentname,
                 subject.hours as subjecthours,
                 subject.unit as subjectunit,
-                subject.type as subjecttype
+                subject.type as subjecttype,
+                room.name as roomname
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
                 JOIN faculty ON faculty.id = subjectschedule.facultyid
+                LEFT JOIN room ON room.id = subjectschedule.roomid
                 JOIN department ON subjectschedule.departmentid = department.id
-            WHERE roomid = $roomids  AND subjectschedule.departmentid=$departmentid AND subjectschedule.calendarid=$calendarid";
+            WHERE subjectschedule.facultyid = $facultyids AND department.id=$departmentid AND subjectschedule.calendarid=$calendarid";
     }
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -254,7 +257,7 @@
 
 
                             <?php /*}*/ endforeach; ?>
-                            <option value="" selected>Select a Room</option>
+                            <option value="" selected>Select a Faculty</option>
                         </select>
                     </form>
                 </div>

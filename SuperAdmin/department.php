@@ -44,7 +44,7 @@
             </div>
 
             <div class="colleges mt-4">
-                <table>
+                <table id="example">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -71,11 +71,11 @@
                                         <a href="#">View Schedule</a>
                                     </div>
                                 </div>-->
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editdepartment<?php echo $collegedepartments['id']; ?>" onclick="event.stopPropagation();">Edit</button>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editdepartment<?php echo $collegedepartments['id']; ?>" onclick="event.stopPropagation();"><i class="fas fa-edit"></i></button>
                                 <form action="../processing/departmentprocessing.php" method="post" style="display:inline;">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="id" value="<?php echo $collegedepartments['id']; ?>">
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this department?');">Delete</button>
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this department?');"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -147,20 +147,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
-                    <form action="../processing/departmentprocessing.php" method="POST">
+                    <form class="needs-validation" novalidate action="../processing/departmentprocessing.php" method="POST">
                         <input type="text" value="add" name="action" hidden>
                         <input type="number" value="<?php echo $collegeid;?>" name="collegeid" hidden>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" for="subname">Department Name</label>
-                                    <input class="form-control" id="subname" type="text" name="departmentname" required />
+                                    <input class="form-control" id="subname" type="text" name="departmentname" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required />
+                                    <div class="invalid-feedback">
+                                    Please enter a valid department abbreviaton.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" for="subname">Department Abbreviation</label>
-                                    <input class="form-control" id="subname" type="text" name="abbreviation" required />
+                                    <input class="form-control" id="subname" type="text" name="abbreviation" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50" required />
+                                    <div class="invalid-feedback">
+                                    Please enter a valid department abbreviation.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +174,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" for="subname">Year levels</label>
-                                    <input class="form-control" id="yearlvl" type="number" name="yearlvl" required />
+                                    <input class="form-control" id="yearlvl" type="number" name="yearlvl" minlength="1" maxlength="9" min="1" required />
+                                    <div class="invalid-feedback">
+                                    Please enter a valid year level.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -202,23 +211,28 @@
         require_once('../include/js.php')
     ?>
 </html>
+
 <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const rows = document.querySelectorAll("tbody tr[data-href]");
-            rows.forEach(row => {
-                row.addEventListener("click", function() {
-                    window.location.href = this.getAttribute("data-href");
-                });
-            });
+    
+    (() => {
+      'use strict';
+      
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            "lengthChange": false  
         });
-        document.getElementById('profile-image').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profile-image-preview').src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
+    });
+</script>

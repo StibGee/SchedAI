@@ -94,7 +94,7 @@
                         <button class="button" onclick="window.location.href='academic-plan.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        Academic Plan for <span><?php echo $departmentinfo['name'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year;};?></span>
+                        Academic Plan for <span><?php echo $departmentinfo['abbreviation'];?> <?php if ($sem==1){echo $sem.'st Sem S.Y '.$year;}else{echo $sem.'nd Sem S.Y '.$year.'-'.$year+1;};?></span>
                     </h5>
                 </div>
                 <div class="col-1">
@@ -154,14 +154,14 @@
                                                 <td><?= htmlspecialchars($filteredsubjects['hours']) ?></td>
                                                 <td><?= htmlspecialchars($filteredsubjects['focus']) ?></td>
                                                 <td>
-                                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editModal<?= htmlspecialchars($filteredsubjects['id']) ?>" onclick="event.stopPropagation();" style="background: none; border: none; padding: 0;">
+                                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?= htmlspecialchars($filteredsubjects['id']) ?>" onclick="event.stopPropagation();" >
                                                         <i class="fas fa-edit"></i> <!-- Edit icon -->
                                                     </button>
 
                                                     <form action="../processing/subjectprocessing.php" method="post" style="display:inline;">
                                                         <input type="hidden" name="action" value="delete">
                                                         <input type="hidden" name="id" value="<?= htmlspecialchars($filteredsubjects['id']) ?>">
-                                                        <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this subject?');" style="background: none; border: none; padding: 0;">
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this subject?');">
                                                             <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
                                                         </button>
                                                     </form>
@@ -233,6 +233,7 @@
                                                                             <option value="Major" <?= htmlspecialchars($filteredsubjects['focus']) == 'Major' ? 'selected' : '' ?>>Major</option>
                                                                             <option value="Minor" <?= htmlspecialchars($filteredsubjects['focus']) == 'Minor' ? 'selected' : '' ?>>Minor</option>
                                                                             <option value="Major1" <?= htmlspecialchars($filteredsubjects['focus']) == 'Major1' ? 'selected' : '' ?>>Major (no schedule)</option>
+                                                                            <option value="OJT" <?= htmlspecialchars($filteredsubjects['focus']) == 'OJT' ? 'selected' : '' ?>>Major (Immersion)</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -245,7 +246,7 @@
                                                                     <h5>Lab Details</h5>
                                                                     <div class="col-md-6">
                                                                         <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" id="" name="labroom" <?= htmlspecialchars($filteredsubjects['type']) == 'Lab' ? 'checked' : '' ?>>
+                                                                            <input class="form-check-input" type="checkbox" id="" name="labroom" <?= htmlspecialchars($filteredsubjects['requirelabroom']) == 1 ? 'checked' : '' ?>>
                                                                             <label class="form-check-label" for="">Requires Lab Room</label>
                                                                         </div>
                                                                     </div>

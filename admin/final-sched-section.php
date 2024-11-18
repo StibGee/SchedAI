@@ -23,7 +23,7 @@
     $yearlvlpost = isset($_POST['yearlvlpost']) ? $_POST['yearlvlpost'] : 1;
     $sectionpost = isset($_POST['sectionpost']) ? $_POST['sectionpost'] : 'A';
 
-    echo ($departmentidpost.' '. $yearlvlpost);
+
     if ($_SESSION['departmentid']==0){
         $collegeroom=$room->getcollegerooms($collegeid);
         $collegesections=$schedule->getcollegesection($collegeid);
@@ -95,24 +95,29 @@
                 day,
                 TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,
                 TIME_FORMAT(subjectschedule.timeend, '%H:%i') AS timeend,
-                subjectschedule.id as subjectidno,
-                subject.subjectcode as subjectname,
-                subjectschedule.yearlvl as yearlvl,
+                subjectschedule.id AS subjectidno,
+                subject.subjectcode AS subjectname,
+                subjectschedule.yearlvl AS yearlvl,
                 section,
-                faculty.fname as facultyname,
-                subject.type as subjecttype,
-                department.abbreviation as departmentname,
-                subject.hours as subjecthours,
-                subject.unit as subjectunit,
-                subject.type as subjecttype,
+                faculty.fname AS facultyname,
+                subject.type AS subjecttype,
+                department.abbreviation AS departmentname,
+                subject.hours AS subjecthours,
+                subject.unit AS subjectunit,
+                subject.type AS subjecttype,
                 room.name as roomname
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
-                JOIN faculty ON faculty.id = subjectschedule.facultyid
-                JOIN room ON room.id = subjectschedule.roomid
+                LEFT JOIN faculty ON faculty.id = subjectschedule.facultyid
+                LEFT JOIN room ON room.id = subjectschedule.roomid
                 JOIN department ON subjectschedule.departmentid = department.id
-            WHERE roomid = $roomids  AND subjectschedule.departmentid=$departmentid AND subjectschedule.calendarid=$calendarid";
+            WHERE
+                subjectschedule.calendarid = $calendarid
+                AND subjectschedule.departmentid = $departmentidpost
+                AND subjectschedule.yearlvl = $yearlvlpost
+                AND subjectschedule.section = '$sectionpost'
+            ";
     }
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
