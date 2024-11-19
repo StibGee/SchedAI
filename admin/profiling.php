@@ -12,20 +12,26 @@
         require_once('../classes/subject.php');
         require_once('../classes/db.php');
         require_once('../classes/faculty.php');
+        require_once('../classes/department.php');
 
         $db = new Database();
         $pdo = $db->connect();
 
         $subject = new Subject($pdo);
+        $department = new Department($pdo);
         $faculty = new Faculty($pdo);
 
         if (isset($_POST['facultyid'])){
             $facultyid=$_POST['facultyid'];
         }
         if ($_SESSION['departmentid']!=0){
-            $distinctsubjects = $subject->getdistinctsubjectsdepartment($_SESSION['departmentid']);
+            $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid']);
+            $collegedepartment = $department->getdepartmentdepartment($_SESSION['departmentid']);
+            
         }else{
             $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid']);
+            
+            $collegedepartment = $department->getcollegedepartment($_SESSION['collegeid']);
         }
 
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
@@ -136,12 +142,12 @@
                         <div class="row mt-5">
                             <div class="col-md-5">
                                 <label class="form-label" for="contactnumber">Contact Number</label>
-                                <input class="form-control" id="contactnumber" name="contactno" type="tel" value="<?php if(isset($facultyinfo['contactno'])){ echo $facultyinfo['contactno'];} ?>" required />
+                                <input class="form-control" id="contactnumber" name="contactno" type="tel" value="<?php if(isset($facultyinfo['contactno'])){ echo $facultyinfo['contactno'];} ?>">
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label" for="email">Email</label>
-                                <input class="form-control" id="email" name="email" type="email" value="<?php if(isset($facultyinfo['email'])){ echo $facultyinfo['email'];} ?>"required />
+                                <input class="form-control" id="email" name="email" type="email" value="<?php if(isset($facultyinfo['email'])){ echo $facultyinfo['email'];} ?>">
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-3">
@@ -170,7 +176,16 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a type</div>
                             </div>
-
+                            <div class="col-6">
+                                <label class="form-label" for="position">Department</label>
+                                <select class="form-select" id="position" name="departmentidpost" required="">
+                                    <?php foreach ($collegedepartment AS  $collegedepartments){?>
+                                        <option <?php if($facultyinfo['departmentid']==$collegedepartments['id']){echo 'selected';}?> value="<?php echo $collegedepartments['id'];?>"><?php echo  $collegedepartments['abbreviation'];?></option>
+                                    
+                                    <?php }?>
+                                </select>
+                                <div class="invalid-feedback">Please select a type</div>
+                            </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-6">
@@ -265,9 +280,9 @@
                                 <label class="form-label" for="degree">Highest Degree Obtained</label>
                                 <select class="form-select" name="highestdegree" id="degree" name="degree" required>
                                     <option selected disabled value="">Choose...</option>
-                                    <option value="PhD" <?php if($facultyinfo['rank']=='PhD'){ echo 'selected';}?>>PhD</option>
-                                    <option value="Masteral" <?php if($facultyinfo['rank']=='Masteral'){ echo 'selected';}?>>Masteral</option>
-                                    <option value="None" <?php if($facultyinfo['rank']=='None'){ echo 'selected';}?>>None</option>
+                                    <option value="Doctorate" <?php if($facultyinfo['rank']=='Doctorate'){ echo 'selected';}?>>Doctorate Degree</option>
+                                    <option value="Masters" <?php if($facultyinfo['rank']=='Masters'){ echo 'selected';}?>>Masters Degree</option>
+                                    <option value="Bachelor" <?php if($facultyinfo['rank']=='Bachelor'){ echo 'selected';}?>>Bachelor Degree</option>
                                 </select>
                             </div>
                             <!--<div class="table-load my-2 p-3 col-6" id="specialization-container" style="display: none;">

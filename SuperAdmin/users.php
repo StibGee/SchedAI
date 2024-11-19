@@ -79,7 +79,16 @@
                                 <td><?php echo ($authorizedusers['role'] == 'collegesecretary') ? $authorizedusers['collegename'] : ($authorizedusers['role'] == 'departmenthead' ? $authorizedusers['departmentname'] : 'No role assigned'); ?></td>
                                 <td><?php echo ($authorizedusers['role'] == 'collegesecretary') ? 'College Secretary' : ($authorizedusers['role'] == 'departmenthead' ? 'Department Head' : 'Unknown Role'); ?></td>
                                 <td><?php echo $authorizedusers['email'];?></td>
-                                <td></td>
+                                <td>
+                                   
+                                    <form action="../processing/facultyprocessing.php" method="post" style="display: inline;">
+                                            <input type="hidden" name="action" value="deleteadmin">
+                                            <input type="hidden" name="id" value="<?php echo $authorizedusers['facultyid']; ?>">
+                                            <button type="submit" class="btn btn-danger ms-1" onclick="return confirm('Are you sure you want to delete this faculty?');">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                    </form>
+                                </td>
                                 
                             </tr>
                         <?php $i++; } ?>
@@ -127,7 +136,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label" for="emailadd">Email Address</label>
-                                    <input type="email" class="form-control" id="emailadd" name="emailadd" required>
+                                    <input type="email" class="form-control" id="emailadd" name="emailadd">
                                     <div class="invalid-feedback">
                                     Please enter a valid email address.
                                     </div>
@@ -151,7 +160,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label" for="mname">MI (Optional)</label>
-                                    <input type="text" class="form-control" id="mname" name="mname" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50">
+                                    <input type="text" class="form-control" id="mname" name="mname" pattern="^[A-Za-z\s]+$" minlength="1" maxlength="50">
                                 </div>
                                 <div class="invalid-feedback">
                                 Please enter a valid Middle Name.

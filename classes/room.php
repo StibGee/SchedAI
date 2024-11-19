@@ -9,28 +9,20 @@ class Room {
     }
 
     public function addroom($name, $type, $departmentid, $timestart, $timeend, $isexclusive ,$collegeid ,$yearlvl) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM room WHERE name = :name");
+       
+        $sql = "INSERT INTO room (name, type, departmentid, timestart, timeend, isexclusive,collegeid ,yearlvl) VALUES (:name, :type, :departmentid, :timestart, :timeend, :isexclusive, :collegeid ,:yearlvl)";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':name', $name);
-        $stmt->execute();
-        $roomExists = $stmt ->fetchColumn();
-    
-        if ($roomExists) {
-            header("Location: ../admin/room.php?room=exist");
-            exit();
-        } else {
-            $sql = "INSERT INTO room (name, type, departmentid, timestart, timeend, isexclusive,collegeid ,yearlvl) VALUES (:name, :type, :departmentid, :timestart, :timeend, :isexclusive, :collegeid ,:yearlvl)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':type', $type);
-            $stmt->bindParam(':departmentid', $departmentid);
-            $stmt->bindParam(':timestart', $timestart);
-            $stmt->bindParam(':timeend', $timeend);
-            $stmt->bindParam(':isexclusive', $isexclusive);
-            $stmt->bindParam(':collegeid', $collegeid);
-            $stmt->bindParam(':yearlvl', $yearlvl);
-            return $stmt->execute();
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':departmentid', $departmentid);
+        $stmt->bindParam(':timestart', $timestart);
+        $stmt->bindParam(':timeend', $timeend);
+        $stmt->bindParam(':isexclusive', $isexclusive);
+        $stmt->bindParam(':collegeid', $collegeid);
+        $stmt->bindParam(':yearlvl', $yearlvl);
+        return $stmt->execute();
         
-        }
+        
     }
     
 

@@ -212,7 +212,7 @@
             <div class="row mt-4">
                 <div class="header-table">
                     <h5>
-                        <button class="back" href="javascript:history.back()">
+                        <button class="back" onclick="window.location.href='schedule.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
                         <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentid']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
@@ -222,9 +222,9 @@
             <div class="row d-flex justify-content-end align-items-center">
                 <div class="col-2">
                         <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
-                            <option value="" disabled selected>Select </option>
-                            <option value="final-sched-room.php">Faculty Schedule</option>
-                            <option value="final-sched-section.php">Student Schedule</option>
+                            <option onclick="window.location.href='final-sched-room.php'" value="final-sched-room.php">Room Schedule</option>
+                            <option selected onclick="window.location.href='final-sched-section.php'" value="final-sched-section.php">Student Schedule</option>
+                            <option onclick="window.location.href='final-sched-faculty.php'" value="final-sched-faculty.php">Faculty Schedule</option>
                         </select>
                 </div>
                 <div class="col-2">

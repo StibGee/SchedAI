@@ -8,9 +8,8 @@ collegeid = int(sys.argv[2])
 calendarid = int(sys.argv[3])
 '''depid = 0
 collegeid = 3
-calendarid = 58'''
+calendarid = 72'''
 minor=0
-
 
 
 conn = mysql.connector.connect(
@@ -1342,6 +1341,7 @@ def assigntimeslot(currentsubjectid):
                         continue
                     if roomname=='FIELD':
                         continue
+                    preferreddays = []
                     if subjectfacultyid in facultypreferencedays:
                         preferreddays = list(facultypreferencedays[subjectfacultyid]) 
                         
@@ -1514,6 +1514,8 @@ def assigntimeslot(currentsubjectid):
                                     
                                 else:
                                     continue
+                                facultyoccupied.setdefault(subjectfacultyid, {}).setdefault(dayin3, {})
+                                facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(dayin3, {})
 
                                 if dayin3 not in facultyoccupied[subjectfacultyid]:
                                     facultyoccupied[subjectfacultyid][dayin3] = {}
@@ -2468,9 +2470,7 @@ def assigntimeslot(currentsubjectid):
                         if daylab not in facultyhoursday[faculty_idlab]:
                             facultyhoursday[faculty_idlab][daylab] = Decimal(0)
                             
-                        if getfacultytype(subjectfacultyid)=='Regular':
-                            if getfacultyhoursday(faculty_idlab, daylab)+3>6:
-                                continue
+                        
                             
                         if subjectid in assignedsubjects:
                             '''print("already assigned")'''
@@ -2478,8 +2478,7 @@ def assigntimeslot(currentsubjectid):
                         start_minuteslab = timetominutes(start_timelab)
                         end_minuteslab = timetominutes(end_timelab)
                        
-                        if facultyassignmentcounter[faculty_idlab][daylab]>=2:
-                            start_minuteslab=start_minuteslab+120
+                       
                         
 
                         if faculty_idlab not in facultyoccupied:
@@ -2488,8 +2487,7 @@ def assigntimeslot(currentsubjectid):
                         if daylab not in facultyoccupied[faculty_idlab]:
                             facultyoccupied[faculty_idlab][daylab] = {}
 
-                        if facultyassignmentcounter[faculty_idlab][daylab] == 4:
-                            continue
+                        
                         
                         '''if 0 < countup(roomid, daylab, start_minuteslab) < 6:
                 
@@ -2515,7 +2513,7 @@ def assigntimeslot(currentsubjectid):
                         for time_slotlab in range(start_minuteslab, start_minuteslab+180, 30):
                             if (time_slotlab>=1140):
                                 dayfreelab = False
-                                break
+                                break   
                         
 
                             if not sectionfree(departmentid, yearlvl, section, daylab, time_slotlab):
@@ -2585,8 +2583,7 @@ def assigntimeslot(currentsubjectid):
                         if day1 not in facultyhoursday[subjectfacultyid]:
                             facultyhoursday[subjectfacultyid][day1] = Decimal(0)
 
-                        if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, day1)+3>6:
-                            continue
+                        
                         
                         for time in range(420, 1140, 30):
     
@@ -2680,8 +2677,7 @@ def assigntimeslot(currentsubjectid):
                             if day1 not in facultyhoursday[subjectfacultyid]:
                                 facultyhoursday[subjectfacultyid][day1] = Decimal(0)
 
-                            if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, day1)+3>6:
-                                continue
+                            
                             day1true = None
                             facultyday1true = None
 

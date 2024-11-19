@@ -75,7 +75,7 @@
                     <label for="">Faculty Information</label>
                     <div class="row p-3">
                         <div class="col-12 col-md-6">
-                            <label for="">Position/Rank</label>
+                            <label for="">Highest Degree</label>
                             <div class="input-group">
                                 <input readonly type="text" class="form-control" value="<?php echo $facultyinfo['rank'];?>">
                             </div>

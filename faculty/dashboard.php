@@ -30,8 +30,11 @@
         $collegelatestyear=$schedule->findcollegelatestyear($_SESSION['collegeid']);
         $facultyinfo=$faculty->getfacultyinfo($_SESSION['id']);
         $filteredschedules=$schedule->filteredschedulesfaculty($_SESSION['id'], $collegelatestyear);
-        $calendarinfo=$curriculum->calendarinfo($collegelatestyear);
-
+        if (isset($collegelatestyear)){
+            $calendarinfo=$curriculum->calendarinfo($collegelatestyear);
+        }else{
+            $calendarinfo=$curriculum->calendarinfo(1);
+        }
         $collegeroom=$room->getcollegerooms($_SESSION['collegeid']);
     ?>
 
@@ -42,9 +45,11 @@
         </div>
         <div class="row d-flex justify-content-end align-items-center">
             <div class="col-12 col-md-6 head-label">
+                <?php if (($calendarinfo)){?>
                 <h5>
                     Your Schedule for<span> S.Y: </span><span><?php echo $calendarinfo['name'].' ';?></span><?php echo ($calendarinfo['sem'] == 1) ? "1st sem" : (($calendarinfo['sem'] == 2) ? "2nd sem" : "Unknown semester");?><span></span>
                 </h5>
+                <?php }else{ echo 'No Assigned Scheduled'; } ?>
             </div>
             <div class="col-12 col-md-3">
             <div class="row">

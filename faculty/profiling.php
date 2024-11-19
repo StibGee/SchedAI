@@ -218,9 +218,9 @@
                                 <label class="form-label" for="degree">Highest Degree Obtained</label>
                                 <select class="form-select" name="highestdegree" id="degree" name="degree" required>
                                     <option selected disabled value="">Choose...</option>
-                                    <option value="PhD" <?php if($facultyinfo['rank']=='PhD'){ echo 'selected';}?>>PhD</option>
-                                    <option value="Masteral" <?php if($facultyinfo['rank']=='Masteral'){ echo 'selected';}?>>Masteral</option>
-                                    <option value="None" <?php if($facultyinfo['rank']=='None'){ echo 'selected';}?>>None</option>
+                                    <option value="Doctorate" <?php if($facultyinfo['rank']=='Doctorate'){ echo 'selected';}?>>PhD</option>
+                                    <option value="Masters" <?php if($facultyinfo['rank']=='Masters'){ echo 'selected';}?>>Masteral</option>
+                                    <option value="Bachelors" <?php if($facultyinfo['rank']=='Bachelors'){ echo 'selected';}?>>None</option>
                                 </select>
                             </div>
                             <!--<div class="table-load my-2 p-3 col-6" id="specialization-container" style="display: none;">

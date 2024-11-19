@@ -191,7 +191,7 @@
                 </div>
             </div>
             <div class="row d-flex justify-content-end align-items-center">
-            <div class="col-2">
+                <!--<div class="col-2">
                         <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
                             <option value="">Faculty Schedule</option>
                             <option >Student Schedule</option>
@@ -222,11 +222,9 @@
                             <option value="" selected>Select a Room</option>
                         </select>
                     </form>
-                </div>
+                </div>-->
 
-                <div class="searchbar col-3 ">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search" data-last-active-input="">
-                </div>
+                
                 <div class="col-1 d-flex justify-content-end">
                     <button class="btn btn-success" data-bs-toggle="modal" <?php if($minornofacultycount==0){echo 'data-bs-target="#formModal"';}else{echo 'data-bs-target="#nofacultysubject"';}?>>Generate</button>
 

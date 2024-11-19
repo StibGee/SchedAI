@@ -152,6 +152,16 @@ class Curriculum {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getdistinctcurriculumsschedulecollegeplan($collegeid) {
+        $sqlcalendar = "SELECT DISTINCT year AS year, name AS name 
+                        FROM calendar 
+                        WHERE collegeid = :collegeid AND curriculumplan='1'
+                        ORDER BY year";
+        $stmt = $this->pdo->prepare($sqlcalendar);
+        $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT); 
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     
     public function getdistinctcurriculumsscheduleall() {
         $sqlcalendar = "SELECT DISTINCT year as year,name as name FROM calendar ORDER BY year";

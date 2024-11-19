@@ -35,6 +35,13 @@ class Department {
         $stmt->execute([':collegeid' => $collegeid]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
+    
+    public function getdepartmentdepartment($departmentid) {
+        $sql = "SELECT * FROM department WHERE id = :departmentid ORDER BY yearlvl DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':departmentid' => $departmentid]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
     public function getinitialcollegedepartment($collegeid) {
         $sql = "SELECT id FROM department WHERE collegeid = :collegeid LIMIT 1";
         $stmt = $this->pdo->prepare($sql);

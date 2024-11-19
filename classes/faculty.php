@@ -120,10 +120,10 @@ class Faculty {
         $stmt->bindParam(':day', $day);
         return $stmt->execute();
     }
-    public function editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid) {
-        $sql = "UPDATE faculty SET fname = :fname, lname = :lname, mname = :mname, contactno = :contactno, email = :email, gender = :gender, type = :type, startdate = :startdate, teachinghours = :teachinghours, rank = :rank WHERE id = :facultyid";
+    public function editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $departmentidpost, $masters) {
+        $sql = "UPDATE faculty SET fname = :fname, lname = :lname, mname = :mname, contactno = :contactno, email = :email, gender = :gender, type = :type, startdate = :startdate, teachinghours = :teachinghours, rank = :rank, departmentid = :departmentidpost, masters=:masters WHERE id = :facultyid";
         $stmt = $this->pdo->prepare($sql);
-    
+        $stmt->bindParam(':departmentidpost', $departmentidpost);
         $stmt->bindParam(':fname', $fname);
         $stmt->bindParam(':lname', $lname);
         $stmt->bindParam(':mname', $mname);
@@ -135,7 +135,7 @@ class Faculty {
         $stmt->bindParam(':teachinghours', $teachinghours);
         $stmt->bindParam(':rank', $highestdegree);
         $stmt->bindParam(':facultyid', $facultyid);
-    
+        $stmt->bindParam(':masters', $masters);
         return $stmt->execute();
     }
     

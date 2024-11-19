@@ -367,10 +367,13 @@ class Schedule {
     }
     
     public function findcollegelatestyear($collegeid){
-        $sql = "SELECT MAX(subjectschedule.calendarid)
-                FROM `subjectschedule` 
-                JOIN department ON subjectschedule.departmentid = department.id 
-                WHERE department.collegeid = :collegeid;
+        $sql = "SELECT subjectschedule.calendarid
+                FROM `subjectschedule`
+                JOIN department ON subjectschedule.departmentid = department.id
+                WHERE department.collegeid = :collegeid
+                ORDER BY subjectschedule.id DESC
+                LIMIT 1;
+
                 ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':collegeid' => $collegeid]);

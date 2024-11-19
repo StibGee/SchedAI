@@ -144,9 +144,9 @@
                                         <input type="number" name="collegeid" id="" value="<?php echo $_SESSION['collegeid'];?>" hidden>
                                         <div class="col-6">
                                             <label class="form-label" for="department">Deparment</label>
-                                            <select class="form-select form-select-sm" id="select-classtype" name="departmentid"  <?php if ($_SESSION['departmentid']!=0){echo 'disabled';} ?>>
+                                            <select class="form-select form-select-sm" id="select-classtype" name="departmentid">
                                                 <?php foreach ($collegedepartment as $collegedepartments){?>
-                                                    <option value="<?php echo $collegedepartments['id'];?>" <?php if ($_SESSION['departmentid']==$collegedepartments['id']){echo 'selected';} ?>><?php echo $collegedepartments['name'];?></option>
+                                                    <option value="<?php echo $collegedepartments['id'];?>"><?php echo $collegedepartments['name'];?></option>
                                                 <?php } ?>
                                                 <option value="" >Choose a department</option>
                                             </select>
@@ -172,7 +172,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="form-label" for="midleinit">Middle Initial</label>
-                                                <input class="form-control" id="midleinit" type="text" name="mname" pattern="^[A-Za-z\s]+$" minlength="2" maxlength="50">
+                                                <input class="form-control" id="midleinit" type="text" name="mname" pattern="^[A-Za-z\s]+$" minlength="1" maxlength="50">
                                                 <div class="invalid-feedback">
                                                     Please enter a valid middle Initial.
                                                 </div>
@@ -182,14 +182,14 @@
                                         <div class="row mt-2">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="contactnumber">Contact Number</label>
-                                                <input class="form-control" id="contactnumber" name="contactno" type="number" minlength="11" maxlength="50" required />
+                                                <input class="form-control" id="contactnumber" name="contactno" type="number" minlength="11" maxlength="50" required>
                                                 <div class="invalid-feedback">
-                                                    Please enter a valid contact number (ex. 09xxxxxxxxx).
+                                                    Please enter a valid contact number (ex. 09xxxxxxxxx).  
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label" for="email">Email Address</label>
-                                                <input class="form-control" id="email" name="emailadd" type="email" minlength="2" maxlength="50" required >
+                                                <input class="form-control" id="email" name="emailadd" type="email" minlength="2" maxlength="50" required>
 
                                                 <div class="invalid-feedback">
                                                     Please enter a valid email address.
@@ -198,7 +198,7 @@
 
                                             <div class="col-md-2">
                                                 <label class="form-label" for="gender">Gender</label>
-                                                <select class="form-select" id="gender" name="gender" required="">
+                                                <select class="form-select" id="gender" name="gender" required>
                                                     <option disabled>Choose...</option>
                                                     <option value="Male">Male</option>
                                                     <option value="Male">Female</option>
@@ -224,7 +224,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label" for="startdate">Start Date</label>
-                                                <input class="form-control" id="startdate" type="date" name="startdate" required />
+                                                <input class="form-control" id="startdate" type="date" name="startdate" required>
                                                 <div class="invalid-feedback">
                                                     Please enter a valid date.
                                                 </div>
@@ -237,14 +237,14 @@
                                                 <label class="form-label" for="rank">Highest Degree</label>
                                                 <select class="form-select" id="position" name="rank" required="">
                                                     <option disabled>Please select a highest degree </option>
-                                                    <option selected value="None">Bachelor</option>
-                                                    <option value="phd">PhD </option>
-                                                    <option value="masters">Masters</option>
+                                                    <option selected value="Bachelors">Bachelors Degree</option>
+                                                    <option value="Masters">Masters Degree</option>
+                                                    <option value="Doctorate">Doctorate Degree</option>
                                                 </select>
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label" for="teachinghours">Teaching Hours</label>
-                                                <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week" />
+                                                <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week">
                                             </div>
                                             
                                         </div>

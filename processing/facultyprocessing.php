@@ -36,6 +36,9 @@ switch ($action) {
     case 'delete':
         deletefaculty();
         break;
+    case 'deleteadmin':
+        deletefacultyadmin();
+        break;
     case 'list':
         listRooms();
         break;
@@ -130,11 +133,12 @@ function login($pdo) {
 function addfaculty() {
     global $faculty;
     global $email;
+    
     $fname = trim(stripslashes(htmlspecialchars($_POST['fname'])));
     $mname = trim(stripslashes(htmlspecialchars($_POST['mname'])));
     $lname = trim(stripslashes(htmlspecialchars($_POST['lname'])));
     $contactno = trim(stripslashes(htmlspecialchars($_POST['contactno'])));
-    $bday = trim(stripslashes(htmlspecialchars($_POST['bday'])));
+    $bday = trim(stripslashes(htmlspecialchars($_POST['startdate'])));
     $gender = trim(stripslashes(htmlspecialchars($_POST['gender'])));
     $username = trim(stripslashes(htmlspecialchars($_POST['username'])));
     $password = trim(stripslashes(htmlspecialchars($_POST['password'])));
@@ -205,7 +209,7 @@ function addfacultypreferences() {
     $lname = isset($_POST['lname']) ? filter_var($_POST['lname'], FILTER_SANITIZE_STRING) : '';
     $mname =  isset($_POST['mname']) ? filter_var($_POST['mname'], FILTER_SANITIZE_STRING) : '';
     $contactno = isset($_POST['contactno']) ? filter_var($_POST['contactno'], FILTER_SANITIZE_STRING) : '';
-    $bday =isset($_POST['bday']) ? filter_var($_POST['bday'], FILTER_SANITIZE_STRING) : '';
+    $bday =isset($_POST['startdate']) ? filter_var($_POST['startdate'], FILTER_SANITIZE_STRING) : '';
     $gender = isset($_POST['gender']) ? filter_var($_POST['gender'], FILTER_SANITIZE_STRING) : '';
     $type = isset($_POST['type']) ? filter_var($_POST['type'], FILTER_SANITIZE_STRING) : '';
     $startdate = isset($_POST['startdate']) ? filter_var($_POST['startdate'], FILTER_SANITIZE_STRING) : '';
@@ -305,10 +309,17 @@ function editfacultyprofiling() {
     $startdate = isset($_POST['startdate']) ? filter_var($_POST['startdate'], FILTER_SANITIZE_STRING) : '';
     $teachinghours = isset($_POST['teachinghours']) ? filter_var($_POST['teachinghours'], FILTER_SANITIZE_STRING) : '';
     $highestdegree = isset($_POST['highestdegree']) ? filter_var($_POST['highestdegree'], FILTER_SANITIZE_STRING) : '';
+    $departmentidpost = isset($_POST['departmentidpost']) ? filter_var($_POST['departmentidpost'], FILTER_SANITIZE_STRING) : '';
     $facultyid = isset($_POST['facultyid']) ? filter_var($_POST['facultyid'], FILTER_SANITIZE_STRING) : '';
     $subjectname = isset($_POST['subjectname']) ? $_POST['subjectname'] : [];
-
-
+    
+    if ($highestdegree=='Masters'){
+        $masters='Yes';
+    }elseif($highestdegree=='Doctorate'){
+        $masters='Yes';
+    }else{
+        $masters='No';
+    }
     $monday = isset($_POST['monday']) ? 1 : 0;
     $mondaystartTime = isset($_POST['mondaystartTime']) ? $_POST['mondaystartTime'] : null;
     $mondayendTime = isset($_POST['mondayendTime']) ? $_POST['mondayendTime'] : null;
@@ -333,7 +344,7 @@ function editfacultyprofiling() {
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
     //edit faculty info
-    $editfaculty=$faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid);
+    $editfaculty=$faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $departmentidpost, $masters);
 
     //reset facultysubject 
     $resetfacultysubject= $faculty->resetfacultysubject($facultyid);
@@ -455,7 +466,19 @@ function deletefaculty() {
     }
     exit();
 }
+function deletefacultyadmin() {
+    global $faculty;
+    $id = isset($_POST['id']) ? filter_var($_POST['id'], FILTER_SANITIZE_NUMBER_INT) : 0;
+    $result = $faculty->deletefaculty($id);
 
+
+    if ($result) {
+        header("Location: ../superadmin/users.php?faculty=deleted");
+    } else {
+        header("Location: ../superadmin/users.php?faculty=error");
+    }
+    exit();
+}
 
 function listRooms() {
     global $room;
