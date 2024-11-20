@@ -166,7 +166,7 @@ class Schedule {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function filteredschedulecollege($calendarid, $collegeid) {
-        $sql = "SELECT subject.name as subjectname, subjectcode, subject.type as subjecttype, subject.unit as subjectunit, room.name as roomname, subjectschedule.timestart as starttime,subjectschedule.timeend as endtime,day, subjectschedule.yearlvl as yearlvl, section, faculty.fname as facultyfname, faculty.mname as facultymname, faculty.lname as facultylname, department.abbreviation as abbreviation FROM subjectschedule LEFT JOIN faculty ON subjectschedule.facultyid = faculty.id JOIN department ON department.id=subjectschedule.departmentid JOIN subject ON subject.id=subjectschedule.subjectid JOIN room ON room.id=subjectschedule.roomid WHERE subjectschedule.calendarid=:calendarid and department.collegeid=:collegeid ORDER BY subjectcode,subjectschedule.departmentid ASC, yearlvl ASC, section asc, subjectunit DESC";
+        $sql = "SELECT subject.name as subjectname, subjectcode, subject.type as subjecttype, subject.unit as subjectunit, room.name as roomname, subjectschedule.timestart as starttime,subjectschedule.timeend as endtime,day, subjectschedule.yearlvl as yearlvl, section, faculty.fname as facultyfname, faculty.mname as facultymname, faculty.lname as facultylname, department.abbreviation as abbreviation FROM subjectschedule LEFT JOIN faculty ON subjectschedule.facultyid = faculty.id JOIN department ON department.id=subjectschedule.departmentid JOIN subject ON subject.id=subjectschedule.subjectid LEFT JOIN room ON room.id=subjectschedule.roomid WHERE subjectschedule.calendarid=:calendarid and department.collegeid=:collegeid ORDER BY subjectcode,subjectschedule.departmentid ASC, yearlvl ASC, section asc, subjectunit DESC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':calendarid', $calendarid, PDO::PARAM_INT);
         $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT);
@@ -174,16 +174,21 @@ class Schedule {
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getcollegesection($collegeid) {
+    public function getcollegesection($collegeid, $calendarid) {
         $sql = "SELECT DISTINCT departmentid, subjectschedule.yearlvl, section, department.abbreviation 
                 FROM subjectschedule 
                 JOIN department ON department.id = subjectschedule.departmentid
-                WHERE department.collegeid = :collegeid
+                WHERE department.collegeid = :collegeid 
+                AND subjectschedule.calendarid = :calendarid
+                AND subjectschedule.section IS NOT NULL AND subjectschedule.section != '' 
+                AND subjectschedule.yearlvl IS NOT NULL AND subjectschedule.yearlvl != '' 
                 ORDER BY departmentid, subjectschedule.yearlvl, section";
+        
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':collegeid' => $collegeid]); 
+        $stmt->execute([':collegeid' => $collegeid, ':calendarid' => $calendarid]); 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     public function getdepartmentsection($departmentid) {
         $sql = "SELECT DISTINCT departmentid, subjectschedule.yearlvl, section, department.abbreviation 
                 FROM subjectschedule 

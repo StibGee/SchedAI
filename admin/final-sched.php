@@ -242,6 +242,7 @@
                         <table class="table" id="example">
                             <thead>
                                 <tr>
+                                    <th>No.</th>
                                     <th>Subject Code</th>
                                     <th>Description</th>
                                     <th>Type</th>
@@ -254,12 +255,13 @@
                                 </tr>
                             </thead>
                             <tbody id="tabularTableBody">
-                            <?php
+                            <?php $i=1;
 
                                 foreach ($filteredschedules as $subjectschedules) {
                                    
                                 ?>
                                 <tr>
+                                    <td><?php echo $i;?></td>
                                     <td><?php echo $subjectschedules['subjectcode'];?></td>
                                     <td><?php echo $subjectschedules['subjectname'];?></td>
                                     <td><?php echo $subjectschedules['subjecttype'];?></td>
@@ -275,7 +277,7 @@
                                     <td><?php echo $subjectschedules['roomname'];?></td>
                                     <td><?php echo $subjectschedules['facultyfname'].' '.$subjectschedules['facultylname'];?></td>
                                 </tr>
-                               <?php } ?>
+                               <?php $i+=1; } ?>
                             </tbody>
                         </table>
                     </div>

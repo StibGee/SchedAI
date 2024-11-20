@@ -68,7 +68,19 @@
     }
 
     function generateColor($id) {
+     
         $hue = ($id * 137.508) % 360;
+    
+
+        $hue += rand(-20, 20);
+    
+
+        if ($hue < 0) {
+            $hue += 360;
+        } elseif ($hue > 360) {
+            $hue -= 360;
+        }
+ 
         return "hsl($hue, 70%, 80%)";
     }
     if ($_SESSION['departmentid']==0){
@@ -80,12 +92,13 @@
                 subject.subjectcode as subjectname,
                 subjectschedule.yearlvl as yearlvl,
                 section,
-                subjectschedule.facultyfname as facultyname,
+                faculty.fname as facultyname,
                 subject.type as subjecttype,
                 department.abbreviation as departmentname,
                 subject.hours as subjecthours,
                 subject.unit as subjectunit,
-                subject.type as subjecttype
+                subject.type as subjecttype,
+                subjectschedule.id as subjectscheduleid
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
@@ -132,9 +145,10 @@
         $yearlvl = htmlspecialchars($row['yearlvl']);
         $section = htmlspecialchars($row['section']);
         $facultyname = htmlspecialchars($row['facultyname']);
+        $subjectscheduleid = htmlspecialchars($row['subjectscheduleid']);
+        
 
-
-        $subjectLabel = "$subjectname $subjecttype $departmentname $yearlvl$section ($facultyname)";
+        $subjectLabel = "$subjectscheduleid $subjectname $subjecttype $departmentname $yearlvl$section ($facultyname)";
         $color = generateColor($subjectid);
 
 

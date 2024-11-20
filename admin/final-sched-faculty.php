@@ -103,7 +103,7 @@
                 JOIN faculty ON faculty.id = subjectschedule.facultyid
                 LEFT JOIN room ON room.id = subjectschedule.roomid
                 JOIN department ON subjectschedule.departmentid = department.id
-            WHERE subjectschedule.facultyid = $facultyids AND department.collegeid=$collegeid AND subjectschedule.calendarid=$calendarid";
+            WHERE faculty.id = $facultyids AND department.collegeid=$collegeid AND subjectschedule.calendarid=$calendarid";
     }else{
         $departmentid=$_SESSION['departmentid'];
         $sql = "SELECT
@@ -238,30 +238,25 @@
                         </select>
                 </div>
                 <div class="col-2">
-                    <form class="mb-0" action="final-sched-faculty.php" method="POST">
-                        <select class="form-select  form-select-sm " id="select-classtype" name="facultyid" onchange="this.form.submit()">
-                            <?php foreach ($collegefaculty as $collegefacultys):
-                                //if ($collegerooms['departmentid']==$_SESSION['departmentid']){?>
+                <form class="mb-0" action="final-sched-faculty.php" method="POST">
+                    <select class="form-select form-select-sm" id="select-classtype" name="facultyid" onchange="this.form.submit()">
+                        <!-- Default Select option at the top -->
+                        <option value="" <?php echo !isset($facultyids) ? 'selected' : ''; ?>>Select a Faculty</option>
 
-                                <option value="<?php echo $collegefacultys['facultyid']; ?>"
-                                    <?php
-                                        if (isset($facultyids) && $facultyids == $collegefacultys['facultyid']) {
+                        <?php foreach ($collegefaculty as $collegefacultys): ?>
+                            <option value="<?php echo $collegefacultys['facultyid']; ?>"
+                                <?php
+                                    // Check if this faculty is the one that was previously selected
+                                    if (isset($facultyids) && $facultyids == $collegefacultys['facultyid']) {
+                                        echo 'selected';
+                                    }
+                                ?>>
+                                <?php echo isset($collegefacultys['facultyname']) ? htmlspecialchars($collegefacultys['facultyname']) : ''; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
 
-                                            $facultyname = isset($collegefaculty['facultyname']) ? $collegefacultys['facultyname'] : '';
-                                            echo 'selected';
-                                        }
-                                    ?>>
-                                    <?php echo isset($collegefacultys['facultyname']) ? htmlspecialchars($collegefacultys['facultyname']) : ''; ?>
-                                </option>
-
-
-
-
-
-                            <?php /*}*/ endforeach; ?>
-                            <option value="" selected>Select a Faculty</option>
-                        </select>
-                    </form>
                 </div>
 
                 <div class="searchbar col-3 ">

@@ -26,7 +26,7 @@
 
     if ($_SESSION['departmentid']==0){
         $collegeroom=$room->getcollegerooms($collegeid);
-        $collegesections=$schedule->getcollegesection($collegeid);
+        $collegesections=$schedule->getcollegesection($collegeid, $_SESSION['calendarid']);
     }else{
         $collegeroom=$room->getdepartmentrooms($_SESSION['departmentid']);
         $collegesections=$schedule->getdepartmentsection($_SESSION['departmentid']);
