@@ -3,12 +3,12 @@ import time
 import sys
 import webbrowser
 
-depid = int(sys.argv[1])
+'''depid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
-calendarid = int(sys.argv[3])
-'''depid = 0
+calendarid = int(sys.argv[3])'''
+depid = 0
 collegeid = 3
-calendarid = 72'''
+calendarid = 77
 minor=0
 
 
@@ -36,7 +36,7 @@ if (depid==0):
         WHERE subject.focus != 'Minor' 
         AND subjectschedule.calendarid = %s 
         AND department.collegeid = %s 
-        ORDER BY subjectschedule.departmentid ASC, subject.type DESC, subject.unit DESC, fs.specialization_count ASC, subject.name ASC;
+        ORDER BY subjectschedule.departmentid ASC, subject.type ASC, subject.unit DESC, fs.specialization_count ASC, subject.name ASC;
 
     """, (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
@@ -754,6 +754,7 @@ assignedsubjects = set()
 facultyoccupied={} 
 sectionoccupied={}
 facultypreferencedays = {}
+preferreddays=[]
 
 
 for pref in facultypreference:
@@ -1085,7 +1086,7 @@ def assigntimeslot(currentsubjectid):
                 ELSE 0
             END,
             type DESC,
-            departmentid ASC;
+            departmentid ASC, id ASC;
         """,(collegeid,))
         room = cursor.fetchall()
     else:
@@ -1097,7 +1098,7 @@ def assigntimeslot(currentsubjectid):
                 ELSE 0
             END,
             type DESC,
-            departmentid ASC;
+            departmentid ASC, id ASC;
         """,(depid,))
         room = cursor.fetchall()
         
@@ -1158,14 +1159,16 @@ def assigntimeslot(currentsubjectid):
     '''if backtrackcounters[currentsubjectid] >= maxdepth:
         print(f"No valid solution found for subject {subjectid} after {maxdepth} backtracks.")
        return False '''
-    
-    sorted_rooms = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
+    if newroomlec3[currentsubjectid]:
+        sorted_rooms = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
+    else:
+        sorted_rooms = sorted(room, key=lambda x: (x[2] != subjecttype, x[5], x[1]))
     for rm in sorted_rooms:
         roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
 
         
 
-        
+    
 
 
         '''print(f"trying subject {currentsubjectid} in room {roomname} (id: {roomid}, type: {roomtype})")'''
@@ -1341,7 +1344,7 @@ def assigntimeslot(currentsubjectid):
                         continue
                     if roomname=='FIELD':
                         continue
-                    preferreddays = []
+                    
                     if subjectfacultyid in facultypreferencedays:
                         preferreddays = list(facultypreferencedays[subjectfacultyid]) 
                         
@@ -1515,12 +1518,13 @@ def assigntimeslot(currentsubjectid):
                                 else:
                                     continue
                                 facultyoccupied.setdefault(subjectfacultyid, {}).setdefault(dayin3, {})
-                                facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(dayin3, {})
+                                facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(day2in3, {})
 
                                 if dayin3 not in facultyoccupied[subjectfacultyid]:
                                     facultyoccupied[subjectfacultyid][dayin3] = {}
                                 if day2in3 not in facultyoccupied[subjectfacultyid]:
                                     facultyoccupied[subjectfacultyid][day2in3] = {}
+
                                 if dayin3 not in facultyhoursday[subjectfacultyid]:
                                     facultyhoursday[subjectfacultyid][dayin3] = Decimal(0)
                                 if day2in3 not in facultyhoursday[subjectfacultyid]:

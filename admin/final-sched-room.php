@@ -80,7 +80,7 @@
                 subject.subjectcode as subjectname,
                 subjectschedule.yearlvl as yearlvl,
                 section,
-                faculty.fname as facultyname,
+                subjectschedule.facultyfname as facultyname,
                 subject.type as subjecttype,
                 department.abbreviation as departmentname,
                 subject.hours as subjecthours,
@@ -89,7 +89,7 @@
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
-                JOIN faculty ON faculty.id = subjectschedule.facultyid
+                LEFT JOIN faculty ON faculty.id = subjectschedule.facultyid
                 JOIN department ON subjectschedule.departmentid = department.id
             WHERE roomid = $roomids AND department.collegeid=$collegeid AND subjectschedule.calendarid=$calendarid";
     }else{
@@ -111,7 +111,7 @@
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
-                JOIN faculty ON faculty.id = subjectschedule.facultyid
+                lEFT JOIN faculty ON faculty.id = subjectschedule.facultyid
                 JOIN department ON subjectschedule.departmentid = department.id
             WHERE roomid = $roomids  AND subjectschedule.departmentid=$departmentid AND subjectschedule.calendarid=$calendarid";
     }
