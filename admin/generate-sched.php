@@ -3,7 +3,9 @@
 <?php
         require_once('../include/head.php');
     ?>
-
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/generate-sched.css">
+    <script src="../js/generate-sched.js"></script>
 <body >
 
     <?php
@@ -173,9 +175,7 @@
 
     </main>
 </body>
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/generate-sched.css">
-    <script src="../js/generate-sched.js"></script>
+
     <?php
         require_once('../include/js.php')
     ?>

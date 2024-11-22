@@ -9,6 +9,8 @@
         }
     ?>
 
+<link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/faculty.css">
 <body >
 
     <?php
@@ -22,7 +24,7 @@
 
         $faculty = new Faculty($pdo);
         $department = new Department($pdo);
-        
+
         if($_SESSION['scheduling']=='college'){
             $departmentall = $department->getalldepartment();
             $facultyall = $faculty->getallfacultycollege($_SESSION['collegeid']);
@@ -105,7 +107,7 @@
                                             </button>
                                         </form>
 
-                                        
+
                                         <form action="../processing/facultyprocessing.php" method="post" style="display: inline;">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="id" value="<?php echo $facultys['facultyid']; ?>">
@@ -184,7 +186,7 @@
                                                 <label class="form-label" for="contactnumber">Contact Number</label>
                                                 <input class="form-control" id="contactnumber" name="contactno" type="number" minlength="11" maxlength="50" required>
                                                 <div class="invalid-feedback">
-                                                    Please enter a valid contact number (ex. 09xxxxxxxxx).  
+                                                    Please enter a valid contact number (ex. 09xxxxxxxxx).
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -207,7 +209,7 @@
                                             </div>
                                         </div>
 
-                                        
+
 
                                         <h5  class="mt-4">Faculty Information</h5>
                                         <div class="row mt-2">
@@ -246,7 +248,7 @@
                                                 <label class="form-label" for="teachinghours">Teaching Hours</label>
                                                 <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week">
                                             </div>
-                                            
+
                                         </div>
                                         <h5  class="mt-4">Account Details</h5>
                                         <div class="row mt-2">
@@ -265,7 +267,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                   
+
                                 </div>
                         </div>
                     </div>
@@ -281,16 +283,14 @@
 </body>
 
 
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/faculty.css">
-    
+
     <?php
         require_once('../include/js.php')
     ?>
     <script>
     $(document).ready(function() {
         $('#example').DataTable({
-            "lengthChange": false  
+            "lengthChange": false
         });
     });
 </script>

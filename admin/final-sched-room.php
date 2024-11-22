@@ -68,19 +68,19 @@
     }
 
     function generateColor($id) {
-     
+
         $hue = ($id * 137.508) % 360;
-    
+
 
         $hue += rand(-20, 20);
-    
+
 
         if ($hue < 0) {
             $hue += 360;
         } elseif ($hue > 360) {
             $hue -= 360;
         }
- 
+
         return "hsl($hue, 70%, 80%)";
     }
     if ($_SESSION['departmentid']==0){
@@ -146,7 +146,7 @@
         $section = htmlspecialchars($row['section']);
         $facultyname = htmlspecialchars($row['facultyname']);
         $subjectscheduleid = htmlspecialchars($row['subjectscheduleid']);
-        
+
 
         $subjectLabel = "$subjectscheduleid $subjectname $subjecttype $departmentname $yearlvl$section ($facultyname)";
         $color = generateColor($subjectid);
@@ -210,6 +210,10 @@
 
 ?>
 <!DOCTYPE html>
+<link rel="stylesheet" href="../css/generated-sched-room.css">
+    <link rel="stylesheet" href="../css/main.css">
+
+    <script src="../js/facultyloading.js"></script>
 <body >
 
     <?php
@@ -410,10 +414,7 @@
     opacity: 0.5;
 }
 </style>
-    <link rel="stylesheet" href="../css/generated-sched-room.css">
-    <link rel="stylesheet" href="../css/main.css">
 
-    <script src="../js/facultyloading.js"></script>
     <?php
         require_once('../include/js.php')
     ?>

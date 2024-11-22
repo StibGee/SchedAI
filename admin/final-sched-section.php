@@ -202,6 +202,10 @@
 
 ?>
 <!DOCTYPE html>
+<link rel="stylesheet" href="../css/generated-sched-room.css">
+    <link rel="stylesheet" href="../css/main.css">
+
+    <script src="../js/facultyloading.js"></script>
 <body >
     <?php
         require_once('../include/nav.php');
@@ -231,16 +235,16 @@
                 <form class="mb-0" id="roomForm" action="final-sched-section.php" method="POST">
     <select class="form-select form-select-sm" id="select-classtype" name="roomid" onchange="updateAndSubmit()">
         <option value="" selected>Select a Room</option>
-        <?php foreach ($collegesections as $collegesection) { 
+        <?php foreach ($collegesections as $collegesection) {
             // Create the concatenated value
             $roomValue = htmlspecialchars($collegesection['abbreviation']) . ' ' . htmlspecialchars($collegesection['yearlvl']) . htmlspecialchars($collegesection['section']);
         ?>
-            <option value="<?php echo $roomValue; ?>" 
-                <?php 
+            <option value="<?php echo $roomValue; ?>"
+                <?php
                     // Check if the current room matches the selected department, yearlvl, and section
                     if (($departmentidpost.$yearlvlpost.$sectionpost) == ($collegesection['departmentid'].$collegesection['yearlvl'].$collegesection['section'])) {
-                        echo 'selected'; 
-                    } 
+                        echo 'selected';
+                    }
                 ?>>
                 <?php echo $roomValue; ?>
             </option>
@@ -310,7 +314,7 @@
                                                     echo 'style="background-color: ' . htmlspecialchars($color) . ';"';
 
                                                     foreach ($schedule[$day][$interval] as $data) {
-                                                        $subjectIdClass = htmlspecialchars(str_replace(' ', '', $data['subjectid'])); 
+                                                        $subjectIdClass = htmlspecialchars(str_replace(' ', '', $data['subjectid']));
                                                         if ($data['is_middle']) {
                                                             echo ' class="occupiedmiddle ' . 'subject ' . $subjectIdClass . '"
                                                                 data-subject="' . htmlspecialchars($data['subjectid']) . '"
@@ -395,10 +399,7 @@
     opacity: 0.5;
 }
 </style>
-    <link rel="stylesheet" href="../css/generated-sched-room.css">
-    <link rel="stylesheet" href="../css/main.css">
 
-    <script src="../js/facultyloading.js"></script>
     <?php
         require_once('../include/js.php')
     ?>

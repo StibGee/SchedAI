@@ -3,6 +3,10 @@
 <?php
         require_once('../include/head.php');
     ?>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/allocate.css">
+    <script src="../js/main.js"></script>
+    <script src="../js/allocate.js"></script>
 <body >
 
     <?php
@@ -95,7 +99,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="list">
-                                            
+
                                                 <tr>
                                                     <td class="align-middle subid" hidden><?php echo $subjects['subjectid'];?></td>
                                                     <td class="align-middle subcode"><input type="text"></td>
@@ -250,10 +254,7 @@
                 </div>
 </body>
 
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/allocate.css">
-    <script src="../js/main.js"></script>
-    <script src="../js/allocate.js"></script>
+
     <?php
         require_once('../include/js.php');
     ?>

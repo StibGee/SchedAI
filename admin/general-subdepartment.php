@@ -3,6 +3,11 @@
 <?php
         require_once('../include/head.php');
     ?>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/allocate.css">
+    <script src="../js/main.js"></script>
+    <script src="../js/allocate.js"></script>
 <body >
 
     <?php
@@ -15,7 +20,7 @@
         require_once('../classes/schedule.php');
 
         $collegeid=$_SESSION['collegeid'];
-        
+
         $db = new Database();
         $pdo = $db->connect();
 
@@ -25,25 +30,25 @@
         $schedule = new Schedule($pdo);
         $collegedepartment = $department->getcollegedepartment($collegeid);
         $initialcollegedepartment = $department->getinitialcollegedepartment($collegeid);
-        
+
         $calendar = $curriculum->getallcurriculumsschedule();
         $calendardistinct = $curriculum->getdistinctcurriculumsschedule();
         $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();
         $collegeinfo=$college->getcollegeinfo($collegeid);
 
-        
+
 
         if(isset($_POST['departmentid'])){
             $_SESSION['departmentid'] = $_POST['departmentid'];
-            
-            
+
+
         }elseif(isset($_SESSION['departmentid'])){
             $_SESSION['departmentid']=$_SESSION['departmentid'];
         }
         $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
         $collegemaxyrlvl= $college->getcollegemaxyearlvl($collegeid);
         $departmentminoryearlvl= $schedule->getdepartmentminoryearlvl($_SESSION['departmentid']);
-        
+
         $getminorsubjectscollege=$schedule->getminorsubjectscollege($collegeid, $_SESSION['calendarid']);
 
     ?>
@@ -72,27 +77,27 @@
                                 <?php echo $collegeminoryearlvls['minoryearlvl']; ?>
                                 <span class="step-label">Year Level <?php echo $collegeminoryearlvls['minoryearlvl']; ?></span>
                             </div>
-                        
-                        <?php } ?>   
+
+                        <?php } ?>
                     </div>
                 </div>
                     <div class="col-md-9 scrollable-content">
                         <?php if($_SESSION['departmentid']!=0){ ?>
-                           
+
                             <form action="../processing/scheduleprocessing.php" method="POST" id="wizardForm">
                                 <input type="text" name="action" value='updateminorcollege' hidden>
-                              
+
                                 <input type="number" name="calendarid" value='<?php echo $_SESSION['calendarid'];?>' hidden>
                                 <?php foreach ($departmentminoryearlvl AS $index => $collegeminoryearlvls){ ?>
                                     <div class="step-content <?php if ($collegeminoryearlvls['minoryearlvl']==1){echo 'active';}?>" id="step<?php echo $collegeminoryearlvls['minoryearlvl'];?>">
                                         <div class="row mt-3 d-flex justify-content-end my-2 p-3">
                                             <label for="">Set up Schedule for General Subjects</label>
                                             <div class="table-load my-3 p-3">
-                                            
-                                                
+
+
                                                 <table id="" class="table table-sm fs-9 mb-0 p-3 text-center">
-                                                
-                                                    
+
+
                                                     <p class="generalsubjects fw-bold"><?php echo $collegedepartments['name']; ?></p>
                                                     <thead>
                                                         <tr>
@@ -110,12 +115,12 @@
                                                                 continue;
                                                             }else{?>
                                                                 <tr>
-                                                                    
+
                                                                     <td ><?php echo $collegedepartments['abbreviation'].$getminorsubjectscolleges['yearlvl'].$getminorsubjectscolleges['section'];?></td>
                                                                     <td class="text-start"><input type="text" name="subjectscheduleid[]" id="" value="<?php echo $getminorsubjectscolleges['subjectscheduleid'];?>" hidden><?php echo $getminorsubjectscolleges['name'];?></td>
                                                                     <td><?php echo $getminorsubjectscolleges['unit'];?></td>
                                                                     <td class="text-center">
-                                                                        
+
                                                                             <select name="day[]" class="form-select form-select-sm" id="select-classtype">
                                                                                 <?php if($getminorsubjectscolleges['unit']==3){?>
                                                                                     <option value="MTh">Monday and Thursday</option>
@@ -132,22 +137,22 @@
                                                                                     <option value="" selected disabled>Please select a day</option>
                                                                                 <?php } ?>
                                                                             </select>
-                                                                       
-                                                                    
-                                                                       
+
+
+
                                                                     </td>
                                                                     <td><input type="time" name="timestart[]" class="form-control"></td>
                                                                     <td><input type="time" name="timeend[]" class="form-control"></td>
                                                                 </tr>
                                                             <?php } ?>
-                                                            
-                                                            
-                                                    
+
+
+
                                                         <?php } ?>
                                                     </tbody>
-                                                
+
                                                 </table>
-                                           
+
                                         </div>
                                         </div>
                                         <button type="button" class="btn btn-secondary prev-step">Previous</button>
@@ -156,16 +161,16 @@
                                         <?php }else{ ?>
                                             <button type="submit" class="btn next-step">Submit</button>
                                         <?php } ?>
-                                        
+
                                     </div>
                                 <?php } ?>
-                                
+
                             </form>
                     <?php }else{?>
 
-                    <?php } ?>    
+                    <?php } ?>
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -173,10 +178,6 @@
     </main>
 </body>
 
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/allocate.css">
-    <script src="../js/main.js"></script>
-    <script src="../js/allocate.js"></script>
     <?php
         require_once('../include/js.php');
     ?>

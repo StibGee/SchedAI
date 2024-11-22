@@ -77,6 +77,9 @@
         }
     ?>
 
+<link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/academic-view.css">
+
 <main>
     <div class="mb-1">
         <div class="container py-3">
@@ -380,7 +383,7 @@
                                                                 <input class="form-control" id="subhourslab" type="text" readonly>
                                                             </div>
                                                             <div class="form-check">
-                                                               
+
                                                                 <label class="form-check-label" for=""> <input class="form-check-input" type="checkbox" id="" name="labroom">Prioritize Lab Room</label>
                                                             </div>
                                                         </div>
@@ -399,8 +402,8 @@
                                                     <option value="OJT">Specialized Subject<p>(Immersion)</p></option>
                                                 </select>
                                                 <div class="row mt-3">
-                                                    
-                                                    
+
+
                                                     <label for=""><input class="form-check-input " type="checkbox" id="" name="masters" data-bulk-select-row="data-bulk-select-row" /> Requires Faculty with Masteral</label>
                                                 </div>
                                             </div>
@@ -592,9 +595,6 @@
             }
         };
     </script>
-
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/academic-view.css">
 
 
 <style>

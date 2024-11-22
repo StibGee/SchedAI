@@ -7,7 +7,9 @@
         $_SESSION['loading']=1;
     }
 ?>
-
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/sched.css">
+<script src="../js/schedule.js"></script>
 <body>
     <?php
         require_once('../include/nav.php');
@@ -30,7 +32,7 @@
             $_SESSION['departmentid']=0;
         }else{
             $_SESSION['departmentid']=$_SESSION['departmentid'];
-           
+
         }
 
         /*$calendardistinct = $curriculum->getdistinctcurriculumsschedule();
@@ -123,13 +125,13 @@
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#formeditcalendar<?php echo $calendars['id']; ?>" onclick="event.stopPropagation();">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    
+
 
                                     <form action="../processing/curriculumprocessing.php" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this curriculum?');">
                                         <input type="hidden" name="action" value="deletecalendar">
                                         <input type="hidden" name="id" value="<?php echo $calendars['id']; ?>">
                                         <button type="submit" class="btn btn-danger" onclick="event.stopPropagation();" >
-                                            <i class="fas fa-trash-alt"></i> 
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
 
@@ -511,9 +513,7 @@
     </main>
 </body>
 
-<link rel="stylesheet" href="../css/main.css">
-<link rel="stylesheet" href="../css/sched.css">
-<script src="../js/schedule.js"></script>
+
 <script>
         const startYearInput = document.getElementById('startyear');
         const endYearInput = document.getElementById('endyear');
@@ -590,7 +590,7 @@
 <script>
     (() => {
       'use strict';
-    
+
       const forms = document.querySelectorAll('.needs-validation');
       Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {

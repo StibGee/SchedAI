@@ -3,7 +3,9 @@
 <?php
         require_once('../include/head.php');
     ?>
-
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/accounts.css">
+    <script src="../js/main.js"></script>
 <body >
 
     <?php
@@ -140,9 +142,7 @@
             </div>
     </main>
 </body>
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/accounts.css">
-    <script src="../js/main.js"></script>
+
     <?php
         require_once('../include/js.php')
     ?>

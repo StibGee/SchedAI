@@ -1,6 +1,6 @@
 <?php
     require_once('../include/nav.php');
-    
+
     ini_set('max_execution_time', 20);
 ?>
 <!DOCTYPE html>
@@ -20,7 +20,7 @@
 <body>
 
     <div class="progresspopup">
-        
+
         <div class="progress">
             <div id="progress-bar" class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                 <span id="progress-text">0%</span>
@@ -29,7 +29,7 @@
         <div id="outputstatus" class="outputstatus"></div>
 
     </div>
-    
+
 
     <?php
     while (ob_get_level()) {
@@ -50,8 +50,8 @@
 
                     ?>
                     <script>
-                        
-                        
+
+
                         document.getElementById('outputstatus').innerText = "<?php echo $message; ?>\n";
                     </script>
                     <script>
@@ -73,7 +73,7 @@
                     </script>
                     <?php
                 }
-                
+
                 flush();
             }
         }
@@ -83,6 +83,5 @@
     }
     ?>
 </body>
-<link rel="stylesheet" href="../css/main.css">
-<link rel="stylesheet" href="../css/generated-sched.css">
+
 </html>

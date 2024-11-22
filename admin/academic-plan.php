@@ -7,7 +7,10 @@
             $_SESSION['loading']=1;
         }
     ?>
-
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/academic-plan.css">
+    <script src="../js/main.js"></script>
+    <script src="../js/schedule.js"></script>
 <body >
 
     <?php
@@ -36,22 +39,22 @@
             $_SESSION['departmentid']=$departmentid;
         }elseif($_SESSION['departmentid']){
             $departmentid = $_SESSION['departmentid'];
-          
+
         } else {
             $departmentid = $initialcollegedepartment;
             $_SESSION['departmentidbasis']=$departmentid;
         }
-        
+
         $departmentinfo = $department->getdepartmentinfo($departmentid);
     ?>
     <main>
-        
+
         <div class="container mb-1">
             <div class="row d-flex align-items-center">
                 <div class="col-6">
                     <h3><?php echo $departmentinfo['abbreviation']; ?> Curriculum Plan</h3>
                 </div>
-                
+
                 <div class="col-3">
                     <form class="mb-0" action="academic-plan.php" method="POST">
                         <select class="form-select form-select-sm" id="select-classtype" name="departmentid" onchange="this.form.submit()" <?php if ($_SESSION['scheduling']=='department'){ echo 'disabled';}?>>
@@ -176,15 +179,15 @@
                                 <label for="startyear">Enter Academic Year</label>
                                 <div class="input-group mt-2">
                                     <input type="number" name="academicyear" id="startyear" class="form-control form-control-sm" placeholder="Start Year" minlength="4" required>
-                                    
+
                                     <span class="input-group-text">-</span>
                                     <input type="number" name="endyear" id="endyear" class="form-control form-control-sm" placeholder="End Year" minlength="4" required>
                                     <div class="invalid-feedback">
                                         Please enter a valid year.
                                     </div>
                                 </div>
-                                
-                                
+
+
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="select-semester">Select Semester</label>
@@ -207,10 +210,7 @@
     </main>
 </body>
 
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/academic-plan.css">
-    <script src="../js/main.js"></script>
-    <script src="../js/schedule.js"></script>
+
     <script>
         const startYearInput = document.getElementById('startyear');
         const endYearInput = document.getElementById('endyear');

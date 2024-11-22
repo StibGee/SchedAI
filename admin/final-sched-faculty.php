@@ -33,20 +33,20 @@
 
 
     if (isset($_POST['facultyid'])) {
-        
+
         $facultyids = $_POST['facultyid'];
         $_SESSION['facultyid'] = $_POST['facultyid'];
         foreach ($collegefaculty as $collegefacultys){
-            
+
             if ($collegefacultys['facultyid']== $facultyids){
                 $facultynamefull=$collegefacultys['facultyname'];
-                
+
 
             }
         }
     }elseif(isset($_SESSION['facultyid'])) {
         $facultyids = $_SESSION['facultyid'];
-        
+
 
     }else{
         $facultyids = $inititialcollegefaculty;
@@ -56,8 +56,8 @@
             }
         }
     }
-    
-    if ($_SESSION['departmentid']!=0){ 
+
+    if ($_SESSION['departmentid']!=0){
         $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
         $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
         $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
@@ -147,7 +147,7 @@
         $section = htmlspecialchars($row['section']);
         $facultyname = htmlspecialchars($row['facultyname']);
         $roomname = htmlspecialchars($row['roomname']);
-        
+
 
         $subjectLabel = "$subjectname $subjecttype $departmentname $yearlvl$section ($roomname)";
         $color = generateColor($subjectid);
@@ -211,6 +211,10 @@
 
 ?>
 <!DOCTYPE html>
+    <link rel="stylesheet" href="../css/generated-sched-room.css">
+    <link rel="stylesheet" href="../css/main.css">
+
+    <script src="../js/facultyloading.js"></script>
 <body >
 
     <?php
@@ -406,10 +410,7 @@
     opacity: 0.5;
 }
 </style>
-    <link rel="stylesheet" href="../css/generated-sched-room.css">
-    <link rel="stylesheet" href="../css/main.css">
 
-    <script src="../js/facultyloading.js"></script>
     <?php
         require_once('../include/js.php')
     ?>

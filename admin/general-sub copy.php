@@ -3,6 +3,9 @@
 <?php
     require_once('../include/head.php');
 ?>
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/general-sub.css">
+<script src="../js/schedule.js"></script>
 
 <body>
     <?php
@@ -80,9 +83,7 @@
     </main>
 </body>
 
-<link rel="stylesheet" href="../css/main.css">
-<link rel="stylesheet" href="../css/general-sub.css">
-<script src="../js/schedule.js"></script>
+
 
 <?php
     require_once('../include/js.php');

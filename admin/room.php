@@ -8,7 +8,9 @@
         }
 
     ?>
-
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/room.css">
+    <script src="../js/main.js"></script>
 <body >
 
     <?php
@@ -42,7 +44,7 @@
                 <div class="col-9">
                     <h3>Rooms</h3>
                 </div>
-               
+
                 <div class="col-1 ms-10">
                 <button class="button-modal " data-bs-toggle="modal" data-bs-target="#formModal"><img src="../img/icons/add-icon.png" alt=""></button>
                 </div>
@@ -248,7 +250,7 @@
                                                 </select>
                                             </div>-->
 
-                                
+
 
                                         </div>
                                         <div class="row mt-2">
@@ -332,9 +334,7 @@
 </main>
 </body>
 
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/room.css">
-    <script src="../js/main.js"></script>
+
     <?php
         require_once('../include/js.php')
     ?>
@@ -343,7 +343,7 @@
 <script>
     $(document).ready(function() {
         $('#example').DataTable({
-            "lengthChange": false  
+            "lengthChange": false
         });
     });
 </script>
@@ -363,4 +363,4 @@
       });
     })();
   </script>
-  
+

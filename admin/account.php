@@ -5,7 +5,9 @@
         $_SESSION['currentpage']='acccount';
         $_SESSION['loading']=1;
     ?>
-
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/accounts.css">
+    <script src="../js/main.js"></script>
 <body >
 
     <?php
@@ -30,9 +32,7 @@
     </main>
 
 </body>
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/accounts.css">
-    <script src="../js/main.js"></script>
+
     <?php
         require_once('../include/js.php')
     ?>
