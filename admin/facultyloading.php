@@ -61,7 +61,7 @@
 
                     </div>
 
-                <audio id="audio-element" preload="auto" src="../audio/schedai.wav" muted></audio>
+                    <audio id="audio-element" preload="auto" src="../audio/schedai.mp3" muted></audio>
 
                 <script>
                     const audio = document.getElementById('audio-element');
@@ -182,10 +182,18 @@
         </main>
 
 
-
+        <script>
+        // Play the audio on page load
+        window.onload = function() {
+            const audio = document.getElementById("audio-element");
+            audio.muted = false;
+            audio.play().catch(error => console.log("Audio playback error:", error));
+        };
+    </script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 </html>
+
