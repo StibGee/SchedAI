@@ -2,6 +2,9 @@
 <html lang="en">
 
 
+<?php
+        require_once('../include/js.php')
+    ?>
 <script src="../js/facultyloading.js"></script>
 <?php
     ini_set('max_execution_time', 10000);
@@ -47,7 +50,7 @@
 
 
     }
-    
+
     if ($departmentid!=0){
         $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
         $departmentinfo=$department->getdepartmentinfo($departmentid);
@@ -88,6 +91,8 @@
     }
 }
 ?>
+
+
 <?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading'){?>
     <div class="progresspopupdiv">
 
@@ -114,7 +119,7 @@
     </script>
 
     <?php
-    
+
     $deptid = ($departmentid);
     $colid = ($collegeid);
     $calid = ($_SESSION['calendarid']);
@@ -176,7 +181,7 @@
         document.body.classList.remove('blur-background');
     </script>
     <?php } ?>
-    
+
 
     <main>
         <div class="container mb-5">
@@ -224,12 +229,20 @@
                     </form>
                 </div>-->
 
-                
+
                 <div class="col-1 d-flex justify-content-end">
                     <button class="btn btn-success" data-bs-toggle="modal" <?php if($minornofacultycount==0){echo 'data-bs-target="#formModal"';}else{echo 'data-bs-target="#nofacultysubject"';}?>>Generate</button>
 
                 </div>
-
+                <div class="col-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#warningModal">
+                        Open Warning Modal
+                    </button>
+                </div>
+                <?php
+                // Include the modal HTML
+                include '../include/modal/warning-modals.php';
+                ?>
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex ">
@@ -258,7 +271,7 @@
                             <?php $i=1;
 
                                 foreach ($filteredschedules as $subjectschedules) {
-                                   
+
                                 ?>
                                 <tr>
                                     <td><?php echo $i;?></td>
@@ -306,24 +319,24 @@
         <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg mt-6" role="document">
                 <div class="modal-content border-0">
-                    <div class="modal-header">
+                    <div class="modal-header pb-0">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body p-3">
+                    <div class="modal-body  ">
                         <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
-                        
-                        
+
+
                             <input type="number" name='academicyear' value="<?php echo $_SESSION['year'];?>" hidden>
                             <div class="rounded-top-3 bg-body-tertiary p-2">
-                                <h2 class="head-label">Generate Schedule for <?php if($_SESSION['departmentidbasis']==0){echo $collegeinfo['abbreviation'];}else{echo $departmentinfo['abbreviation'];}?><?php if($_SESSION['sem']==1){echo ' '.$_SESSION['sem'].'st sem';}else{echo ' '.$_SESSION['sem'].'nd sem';}?><?php echo ' S.Y-'.$_SESSION['year'];?></h2>
+                                <h4 class="head-label">Generate Schedule for <?php if($_SESSION['departmentidbasis']==0){echo $collegeinfo['abbreviation'];}else{echo $departmentinfo['abbreviation'];}?><?php if($_SESSION['sem']==1){echo ' '.$_SESSION['sem'].'st sem';}else{echo ' '.$_SESSION['sem'].'nd sem';}?><?php echo ' S.Y-'.$_SESSION['year'];?></h4>
                                 <div class="form-check d-flex justify-content-end">
-                                <input class="form-check-input" type="checkbox" id="generalSubjects" name="includegensub">
-                                <label class="form-check-label" for="generalSubjects">
-                                     Include General Subjects
-                                </label>
+                                    <input class="form-check-input" type="checkbox" id="generalSubjects" name="includegensub">
+                                    <label class="form-check-label" for="generalSubjects">
+                                        Include General Subjects
+                                    </label>
                                 </div>
 
-                                <div class="container mt-4">
+                                <div class="container ">
                                     <div class="row" hidden>
                                         <div class="col-6">
                                             <div class="form-group academic-year">
@@ -531,7 +544,6 @@
             </div>
         </div>
 
-
     </main>
 
 </body>
@@ -558,9 +570,6 @@
         });
     </script>
 
-    <?php
-        require_once('../include/js.php')
-    ?>
 </html>
 <script>
     $(document).ready(function() {
@@ -570,3 +579,16 @@
         });
     });
 </script>
+<script>
+        $(document).ready(function () {
+            // When the warning modal is shown, ensure the nested modal is hidden
+            $('#warningModal').on('show.bs.modal', function () {
+                $('#modifyHoursModal').modal('hide');
+            });
+
+            // When the modify hours modal is hidden, ensure the warning modal is shown
+            $('#modifyHoursModal').on('hidden.bs.modal', function () {
+                $('#warningModal').modal('show');
+            });
+        });
+    </script>

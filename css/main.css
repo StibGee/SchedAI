@@ -30,7 +30,7 @@ a {
     padding: 0 1rem;
     background-color: #ffff;
     z-index: var(--z-fixed);
- 
+
 
 }
 
@@ -244,6 +244,7 @@ a {
         z-index: 1040; /* Ensure backdrop is below modal but above other content */
     }
 
+
 }
 
 .header-text {
@@ -385,12 +386,12 @@ span {
 .page-item:hover{
     cursor: pointer;
     color: #119e0e;
-   
+
 }
 .page-item a:hover{
     cursor: pointer;
     color: #119e0e;
-   
+
 }
 .pagination a {
     color: #119e0e;

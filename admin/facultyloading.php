@@ -6,7 +6,9 @@
         $_SESSION['loading']=1;
     ?>
 
-
+<script src="../js/facultyloading.js"></script>
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/facultyloading.css">
 
     <?php
 
@@ -43,7 +45,7 @@
                 </div>
             <div class="row  mb-4 mx-2">
 
-                
+
             </div>
             <div class="row">
                 <div class=" col-3 my-2">
@@ -87,7 +89,7 @@
                             </tr>
                             </thead>
                             <?php foreach ($existingsubjects AS $existingsubject){ ?>
-                            
+
                             <tbody class="list">
                             <tr>
                                 <td class="align-middle desc"><?php echo $existingsubject['subjectname'];?></td>
@@ -104,10 +106,10 @@
                     <div class="row mt-2 justify-content-between">
                         <div class="col-5">
                             <h5>Faculty Schedule</h5>
-                            
+
                         </div>
                         <div class="col-2">
-                            
+
                         </div>
                     </div>
                     <div class="sched-table">
@@ -179,9 +181,7 @@
 </div>
         </main>
 
-<script src="../js/facultyloading.js"></script>
-<link rel="stylesheet" href="../css/main.css">
-<link rel="stylesheet" href="../css/facultyloading.css">
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
