@@ -396,8 +396,8 @@
                                                 <label class="form-label" for="subname">Program Focus</label>
                                                 <select class="form-select" id="department" required="" name="focus">
                                                     <option selected="" disabled="" value="">Choose...</option>
-                                                    <option>Specialized Subject</option>
-                                                    <option>General Subject</option>
+                                                    <option value="Major">Specialized Subject</option>
+                                                    <option value="Minor">General Subject</option>
                                                     <option value="Major1">Specialized Subject<p>(no schedule)</p></option>
                                                     <option value="OJT">Specialized Subject<p>(Immersion)</p></option>
                                                 </select>

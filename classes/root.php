@@ -8,7 +8,7 @@ class Root {
         $this->pdo = $pdo;
     }
 
-    public function addroot($collegeid, $departmentid, $role, $contactno, $fname, $lname, $mname, $username, $hashedpassword);
+    public function addroot($collegeid, $departmentid, $role, $contactno, $fname, $lname, $mname, $username, $hashedpassword){
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM root WHERE fname = :fname");
         $stmt->bindParam(':fname', $fname);
         $stmt->execute();
@@ -34,6 +34,31 @@ class Root {
         }
     }
     
+    public function addroot($collegeid, $departmentid, $role, $contactno, $fname, $lname, $mname, $username, $hashedpassword){
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM root WHERE fname = :fname");
+        $stmt->bindParam(':fname', $fname);
+        $stmt->execute();
+        $rootexists = $stmt ->fetchColumn();
+    
+        if ($rootexists) {
+            header("Location: ../superadmin/users.php?root=exist");
+            exit();
+        } else {
+            $sql = "INSERT INTO root (fname, lname, mname, contactno, username, password, collegeid, departmentid, role) VALUES (:fname, :lname, :mname, :contactno, :username, :password, :collegeid, :departmentid, :role)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':fname', $fname);
+            $stmt->bindParam(':lname', $lname);
+            $stmt->bindParam(':mname', $mname);
+            $stmt->bindParam(':contactno', $contactno);
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':password', $hashedpassword);
+            $stmt->bindParam(':collegeid', $collegeid);
+            $stmt->bindParam(':departmentid', $departmentid);
+            $stmt->bindParam(':role', $role);
+            return $stmt->execute();
+        
+        }
+    }
 
     public function getroombyid($id) {
         $sql = "SELECT * FROM rooms WHERE id = :id";

@@ -275,7 +275,7 @@
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3><?php echo $roomname;?></h3>
+                    <h3><?php echo $roomname ?? ''; ?></h3>
                     <a href="final-sched.php" id="viewToggleButton" class="btn">
                         Toggle View
                     </a>

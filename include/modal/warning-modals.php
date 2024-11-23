@@ -57,7 +57,7 @@
                         </div>
                     </div>
 
-                    <table class="table p-3 mt-3 table-bordered text-center align-middle" id="facultyTable">
+                    <table class="table p-3 mt-3 table-bordered text-center align-middle" id="vvv">
                         <thead class="table-secondary">
                             <tr>
                                 <th>Name</th>
@@ -132,65 +132,10 @@
     </div>
 </div>
 
-<!-- Inner Modal (Modify Hours Modal) -->
-<div class="modal fade" id="modifyHoursModal1" tabindex="-1" aria-labelledby="modifyHoursModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" id="modal-warnings">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modifyHoursModalLabel">Incomplete Faculty Profiles</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                <div class="row">
-                    <div class="col-6">
-                        <p class="text-start">You can modify the faculty profile here.</p>
-                    </div>
-                    <div class="col-6">
-                        <input type="text" class="form-control" placeholder="Search by name...">
-                    </div>
-                </div>
-
-                <!-- Faculty Table -->
-                <table class="table p-3 mt-3 table-bordered text-center align-middle">
-                <thead class="table-secondary">
-                    <tr>
-                        <th>Name</th>
-                        <th>Rank</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>Regular</td>
-                        <td>
-                            <button type="button" class="btn btn-warning btn-md">Edit</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>Associate</td>
-                        <td>
-                            <button type="button" class="btn btn-warning btn-md">Edit</button>
-                        </td>
-                    </tr>
-                    <!-- Add more rows as needed -->
-                </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         document.getElementById('openModifyHoursModal').addEventListener('click', function () {
             // Close the first modal
@@ -203,7 +148,7 @@
             }, { once: true });
         });
     </script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
 <script>
     document.querySelectorAll('.add-hours-btn').forEach(button => {
         button.addEventListener('click', function () {

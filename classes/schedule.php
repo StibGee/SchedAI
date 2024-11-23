@@ -384,5 +384,27 @@ class Schedule {
         $stmt->execute([':collegeid' => $collegeid]);
         return $stmt->fetchColumn();
     }
+    public function countsubjecthourscollege($collegeid, $calendarid){
+        $sql = "SELECT SUM(subject.hours)
+                FROM subjectschedule 
+                JOIN subject ON subjectschedule.subjectid=subject.id
+                JOIN department ON department.id=subjectschedule.departmentid
+                WHERE department.collegeid = :collegeid AND subjectschedule.calendarid=:calendarid AND subject.focus!='Minor';
+                ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid, ':calendarid' => $calendarid]);
+        return $stmt->fetchColumn();
+    }
+    public function countsubjecthoursdepartment($departmentid, $calendarid){
+        $sql = "SELECT SUM(subject.hours)
+                FROM subjectschedule 
+                JOIN subject ON subjectschedule.subjectid=subject.id
+                JOIN department ON department.id=subjectschedule.departmentid
+                WHERE department.id = :departmentid AND subjectschedule.calendarid=:calendarid AND subject.focus!='Minor';
+                ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':departmentid' => $departmentid, ':calendarid' => $calendarid]);
+        return $stmt->fetchColumn();
+    }
 }
 ?>

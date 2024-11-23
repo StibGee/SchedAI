@@ -309,6 +309,84 @@ class Faculty {
             return false; 
         }
     }
+    public function facultynoprofilecollege($collegeid) {
+        $sql = "SELECT 
+            faculty.*, 
+            faculty.id AS facultyid, 
+            department.abbreviation AS departmentname
+        FROM 
+            faculty
+        JOIN 
+            department ON department.id = faculty.departmentid
+        LEFT JOIN 
+            facultypreferences ON facultypreferences.facultyid = faculty.id
+        WHERE 
+            department.collegeid = :collegeid 
+            AND facultypreferences.facultyid IS NULL;
+        ";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['collegeid' => $collegeid]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function facultynoprofiledepartment($id) {
+        $sql = "SELECT 
+            faculty.*, 
+            faculty.id AS facultyid, 
+            department.abbreviation AS departmentname
+        FROM 
+            faculty
+        JOIN 
+            department ON department.id = faculty.departmentid
+        LEFT JOIN 
+            facultypreferences ON facultypreferences.facultyid = faculty.id
+        WHERE 
+            department.id = :id 
+            AND facultypreferences.facultyid IS NULL;
+        ";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function countfacultyteachinghours($collegeid) {
+        $sql = "SELECT SUM(faculty.teachinghours) 
+                FROM faculty
+                JOIN department ON department.id = faculty.departmentid
+                WHERE department.collegeid = :collegeid AND faculty.active = 1";
+        
+        $stmt = $this->pdo->prepare($sql);
+        
+        // Pass the parameter
+        $stmt->execute([':collegeid' => $collegeid]);
+        
+        return $stmt->fetchColumn();
+    }
+    public function countfacultyteachinghoursdepartment($departmentid) {
+        $sql = "SELECT SUM(faculty.teachinghours) 
+                FROM faculty
+                WHERE faculty.departmentid = :departmentid
+                AND faculty.active = 1";
+        
+        $stmt = $this->pdo->prepare($sql);
+        
+        $stmt->execute([':departmentid' => $departmentid]);
+        
+        return $stmt->fetchColumn();
+    }
+    public function countfacultyteachinghourscollege($collegeid) {
+        $sql = "SELECT SUM(faculty.teachinghours) 
+                FROM faculty
+                JOIN department ON department.id = faculty.departmentid
+                WHERE department.collegeid = :collegeid AND faculty.active = 1";
+        
+        $stmt = $this->pdo->prepare($sql);
+        
+        $stmt->execute([':collegeid' => $collegeid]);
+        
+        return $stmt->fetchColumn();
+    }
+    
     
     
 }

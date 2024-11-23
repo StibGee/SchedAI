@@ -17,6 +17,7 @@
     require_once('../classes/schedule.php');
     require_once('../classes/faculty.php');
     require_once('../classes/email.php');
+    require_once('../classes/room.php');
 
     $collegeid=$_SESSION['collegeid'];
     $scheduling=False;
@@ -25,6 +26,7 @@
 
 
     $curriculum = new Curriculum($pdo);
+    $room = new Room($pdo);
     $email = new Email($pdo);
     $faculty = new Faculty($pdo);
     $schedule = new Schedule($pdo);
@@ -52,6 +54,7 @@
     }
 
     if ($departmentid!=0){
+        $nofaculty=$faculty->facultynoprofiledepartment($departmentid);
         $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
         $departmentinfo=$department->getdepartmentinfo($departmentid);
         $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $departmentid);
@@ -59,12 +62,18 @@
         $minorsubjectsnofaculty=$schedule->minornofacultydepartment($departmentid, $_SESSION['calendarid']);
         $faculties=$faculty->departmentfaculty($departmentid);
         $facultywemail=$faculty->facultywemaildepartment($departmentid);
+        $roomcount=$room->countroomdsepartment($departmentid);
+        $countsubjecthours=$schedule->countsubjecthoursdepartment($collegeid, $_SESSION['calendarid']);
+        $countfacultyworkinghours=$faculty->countfacultyteachinghourscollege($departmentid);
     }else{
+        $countsubjecthours=$schedule->countsubjecthourscollege($_SESSION['collegeid'], $_SESSION['calendarid']);
+        $nofaculty=$faculty->facultynoprofilecollege($_SESSION['collegeid']);
+        $roomcount=$room->countroomscollege($_SESSION['collegeid']);
         $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
         $minorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
         $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
         $collegeinfo=$college->getcollegeinfo($collegeid);
-
+        $countfacultyworkinghours=$faculty->countfacultyteachinghourscollege($collegeid);
         $facultywemail=$faculty->facultywemailcollege($_SESSION['collegeid']);
         $filteredschedules=$schedule->filteredschedulecollege($_SESSION['calendarid'], $_SESSION['collegeid']);
         $faculties=$faculty->collegefaculty($_SESSION['collegeid']);
@@ -92,6 +101,15 @@
 }
 ?>
 
+<?php
+if ($roomcount == 0) {
+    echo "<script>
+        alert('No rooms detected. Add a room first.');
+        window.location.href = 'room.php';
+    </script>";
+    exit;
+}
+?>
 
 <?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading'){?>
     <div class="progresspopupdiv">
@@ -184,6 +202,157 @@
 
 
     <main>
+    <?php if ($countsubjecthours>$countfacultyworkinghours){ ?>
+    <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modal-warnings">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body my-3">
+                    <h2 class="modal-title d-flex justify-content-center mb-3" id="warningModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i> Warning
+                    </h2>
+                    <p class="text-center">The total teaching hours don't match the hours allocated to the faculty. Please adjust this to avoid any issues when scheduling.</p>
+                    <div class="row d-flex justify-content-center mt-5">
+                        <div class="col-5">
+                            Total Subject Hours: <?php if(isset($countsubjecthours)){echo $countsubjecthours;}?>
+                        </div>
+                        <div class="col-5">
+                            Total Faculty Hours: <?php if(isset($countfacultyworkinghours)){echo $countfacultyworkinghours;}?>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-around mt-4">
+                        <div class="col-4 ">
+                            <button type="button" class="btn-wrng p-2 w-100" id="modifyHoursBtn" data-bs-toggle="modal" data-bs-target="#modifyHoursModal1">Modify Faculty Teaching Hours</button>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn-wrng p-2 w-100" id="addFacultyBtn" onclick="window.location.href='faculty.php';">Add new Faculty</button>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer mt-2">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <div class="modal" id="modifyHoursModal1" tabindex="-1" aria-labelledby="modifyHoursModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modal-warnings">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifyHoursModalLabel">Modify Faculty Teaching Hours</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="col-5">
+                                Total Subject Hours: <?php if(isset($countsubjecthours)){echo $countsubjecthours;}?>
+                            </div>
+                            <div class="col-5" class="facultyhourscount">
+                                Total Faculty Hours: <span id="totalFacultyHours">0</span>
+                            </div>
+                        </div>
+                       
+                    </div>
+
+                    <table class="table p-3 mt-3 table-bordered text-center align-middle" id="facultyTable">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Department</th>
+                                <th>Teaching Hours</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($faculties AS $faculty){ ?>
+                            <tr>
+                                <td class="lol"><?php echo $faculty['fname'];?></td>
+                                <td class="lol"><?php echo $faculty['type'];?></td>
+                                <td class="lol"><?php echo $faculty['abbreviation'];?></td>
+                                <td class="lol"><input type="number" min="6" max="30" name="workinghours" value="<?php echo $faculty['teachinghours'];?>" oninput="updateTotalFacultyHours()"></td>
+                                
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success">Save Changes</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+        <script>
+            var myModal = new bootstrap.Modal(document.getElementById('warningModal'));
+            myModal.show(); 
+        </script>
+    
+    <?php } ?>
+    <?php if ($nofaculty){?>
+        
+        <div class="modal fade" id="modifyHoursModal1" tabindex="-1" aria-labelledby="modifyHoursModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content" id="modal-warnings">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modifyHoursModalLabel">Incomplete Faculty Profiles</h5>
+                        
+                    </div>
+                    <div class="modal-body">
+        
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-start">Please complete profiling of the following faculty.</p>
+                            </div>
+                            
+                        </div>
+        
+                        <!-- Faculty Table -->
+                        <table class="table p-3 mt-3 table-bordered text-center align-middle">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($nofaculty as $nofacultys){?>
+                            <tr>
+                                <td><?php echo $nofacultys['fname'].' '.$nofacultys['lname'];?></td>
+                                <td><?php echo $nofacultys['departmentname'];?></td>
+                                <td>
+                                    <form action="profiling.php" method="POST">
+                                        <input type="hidden" name="facultyid" value="<?php echo $nofacultys['facultyid'];?>"> 
+                                        <button type="submit" class="btn btn-warning btn-md">Edit Profile</button>
+                                    </form>
+                                </td>
+
+                            </tr>
+                            
+                            <?php } ?>
+                        </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var myModal = new bootstrap.Modal(document.getElementById('modifyHoursModal1'));
+            myModal.show(); 
+
+        </script>
+        <?php } ?>
+
         <div class="container mb-5">
             <div class="row mt-4">
                 <div class="header-table">
@@ -235,7 +404,7 @@
 
                 </div>
                 <div class="col-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#warningModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyHoursModal1">
                         Open Warning Modal
                     </button>
                 </div>
@@ -498,7 +667,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="noFacultyModalLabel">Subjects Without Faculty</h5>
+                        <h5 class="modal-title" id="noFacultyModalLabel">Subjects Without Faculty Expertise</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form id="assignFacultyForm" method="POST" action="../processing/subjectprocessing.php">
@@ -574,21 +743,60 @@
 <script>
     $(document).ready(function() {
         $('#example').DataTable({
-            "lengthChange": false,  // Allows changing the number of rows shown
-            "pageLength": -1       // Shows all rows without pagination
+            "lengthChange": false,
+            "pageLength": -1     
         });
     });
 </script>
 <script>
-        $(document).ready(function () {
-            // When the warning modal is shown, ensure the nested modal is hidden
-            $('#warningModal').on('show.bs.modal', function () {
-                $('#modifyHoursModal').modal('hide');
-            });
-
-            // When the modify hours modal is hidden, ensure the warning modal is shown
-            $('#modifyHoursModal').on('hidden.bs.modal', function () {
-                $('#warningModal').modal('show');
-            });
+    $(document).ready(function() {
+        $('#facultyTable').DataTable({
+            "lengthChange": false,
+            "pageLength": -1     
         });
-    </script>
+    });
+</script>
+<script>
+let totalFacultyHours = 0;
+let facultyHoursData = [];
+
+function collectAllFacultyHours() {
+    const workingHoursInputs = document.querySelectorAll('input[name="workinghours"]');
+   
+    facultyHoursData = [];
+    totalFacultyHours = 0;
+
+    workingHoursInputs.forEach(input => {
+        let hours = parseFloat(input.value) || 0;
+
+        
+        if (hours < 1) {
+            input.value = ""; 
+            hours = 0; 
+        } else if (hours >30) {
+            input.value = ""; 
+            hours = 0; 
+        }
+
+        facultyHoursData.push(hours);
+        totalFacultyHours += hours; 
+    });
+
+    document.getElementById('totalFacultyHours').textContent = totalFacultyHours;
+}
+
+function updateTotalFacultyHours() {
+    totalFacultyHours = facultyHoursData.reduce((sum, hours) => sum + hours, 0);
+    document.getElementById('totalFacultyHours').textContent = totalFacultyHours;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    collectAllFacultyHours();
+});
+
+$(document).on('input', 'input[name="workinghours"]', function() {
+    collectAllFacultyHours();
+});
+
+
+</script>

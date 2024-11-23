@@ -23,6 +23,9 @@ switch ($action) {
     case 'addrootfaculty':
         addrootfaculty();
         break;
+    case 'updaterootfaculty':
+        updaterootfaculty();
+        break;
     case 'addprofiling':
         addfacultypreferences();
         break;
@@ -201,7 +204,35 @@ function addrootfaculty() {
         exit();
     }
 }
+function updaterootfaculty() {
+    global $faculty;
+    global $email;
+    global $department;
+    
+    $departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
+    $role = trim(stripslashes(htmlspecialchars($_POST['role'])));
+    $emailadd = trim(stripslashes(htmlspecialchars($_POST['emailadd'])));
+    $fname = trim(stripslashes(htmlspecialchars($_POST['fname'])));
+    $mname = trim(stripslashes(htmlspecialchars($_POST['mname'])));
+    $lname = trim(stripslashes(htmlspecialchars($_POST['lname'])));
+    $fullname=$fname.' '.$lname;
+    $username = trim(stripslashes(htmlspecialchars($_POST['username'])));
+    $password = trim(stripslashes(htmlspecialchars($_POST['password'])));
+    $departmentinfo=$department->getdepartmentinfo($departmentid);
+    $collegeid=htmlspecialchars($departmentinfo['collegeid']);
 
+   
+
+    if(isset($_POST['emailadd'])){$emailfaculty=$email->emailnewfaculty($emailadd, $fullname, $username, $password);}
+    $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+    
+    $addfaculty = $faculty->addrootfaculty($fname,$mname,$lname,$username,$hashedpassword,$departmentid,$collegeid,$emailadd, $role);
+
+    if ($addfaculty) {
+        header("Location: ../superadmin/users.php?user=added");
+        exit();
+    }
+}
 function addfacultypreferences() {
     global $faculty;
     

@@ -451,29 +451,67 @@ $(document).ready(function() {
                 checkbox.addEventListener("change", () => {
                     startTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
                     endTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+                    validateMinimumDays();
                 });
 
                 startTimeInput.addEventListener("change", () => {
-                    if (endTimeInput.value && startTimeInput.value >= endTimeInput.value) {
-                        endTimeInput.value = "";
-                        alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} should be later than start time.`);
-                    }
+                    validateTimeRange(startTimeInput, endTimeInput, day);
                 });
 
                 endTimeInput.addEventListener("change", () => {
-                    if (startTimeInput.value && endTimeInput.value <= startTimeInput.value) {
-                        endTimeInput.value = "";
-                        alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} should be later than start time.`);
-                    }
+                    validateTimeRange(startTimeInput, endTimeInput, day);
                 });
             }
         }
 
+        function validateTimeRange(startTimeInput, endTimeInput, day) {
+            const earliestTime = "07:00";
+            const latestTime = "19:00";
+
+            
+            if (startTimeInput.value && (startTimeInput.value < earliestTime || startTimeInput.value > latestTime)) {
+                alert(`Start time for ${day.charAt(0).toUpperCase() + day.slice(1)} must be between 7:00 AM and 7:00 PM.`);
+                startTimeInput.value = "";
+            }
+
+
+            if (endTimeInput.value && (endTimeInput.value < earliestTime || endTimeInput.value > latestTime)) {
+                alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} must be between 7:00 AM and 7:00 PM.`);
+                endTimeInput.value = "";
+            }
+
+            if (startTimeInput.value && endTimeInput.value && endTimeInput.value <= startTimeInput.value) {
+                alert(`End time for ${day.charAt(0).toUpperCase() + day.slice(1)} should be later than start time.`);
+                endTimeInput.value = "";
+            }
+        }
+
+        function validateMinimumDays() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+
+            if (checkedCount < 3) {
+                alert("You must select at least 3 days.");
+            }
+        }
 
         const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
         days.forEach(day => toggleTimeInputs(day));
+
+        // Validate at least 3 days on form submission
+        const form = document.querySelector("form"); // Adjust selector to your form's actual ID/class
+        form.addEventListener("submit", function (event) {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+
+            if (checkedCount < 3) {
+                alert("You must select at least 3 days.");
+                event.preventDefault(); // Prevent form submission
+            }
+        });
     });
 </script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const nonumberInputs = document.querySelectorAll('.nonumber');
@@ -496,5 +534,91 @@ $(document).ready(function() {
     }
   </script>
 <script src="color-modes.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const steps = document.querySelectorAll("[id^='step']"); // Select elements with IDs starting with 'step'
+    const nextButtons = document.querySelectorAll(".next-step");
+    const prevButtons = document.querySelectorAll(".prev-step");
 
+    // Function to validate required inputs in the current step
+    function validateStep(currentStep) {
+        const requiredFields = currentStep.querySelectorAll("[required]");
+        return Array.from(requiredFields).every((field) => {
+            if (field.type === "checkbox") {
+                return field.checked;
+            }
+            return field.value.trim() !== "";
+        });
+    }
 
+    // Function to toggle the "Next" button based on validation
+    function toggleNextButton(currentStep) {
+        const nextButton = currentStep.querySelector(".next-step");
+        if (validateStep(currentStep)) {
+            nextButton.disabled = false;
+        } else {
+            nextButton.disabled = true;
+        }
+    }
+
+    // Function to add event listeners for required fields
+    function addValidationListeners(currentStep) {
+        const requiredFields = currentStep.querySelectorAll("[required]");
+        requiredFields.forEach((field) => {
+            field.addEventListener("input", () => {
+                toggleNextButton(currentStep);
+            });
+            if (field.type === "checkbox") {
+                field.addEventListener("change", () => {
+                    toggleNextButton(currentStep);
+                });
+            }
+        });
+    }
+
+    // Function to show the step by ID
+    function showStep(stepId) {
+        steps.forEach((step) => {
+            if (step.id === stepId) {
+                step.style.display = "block";
+                toggleNextButton(step);
+                addValidationListeners(step); // Add listeners when step is shown
+            } else {
+                step.style.display = "none";
+            }
+        });
+    }
+
+    // Add event listeners for "Next" buttons
+    nextButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const currentStep = button.closest("[id^='step']");
+            const nextStepId = `step${parseInt(currentStep.id.replace("step", ""), 10) + 1}`;
+            showStep(nextStepId);
+        });
+    });
+
+    // Add event listeners for "Previous" buttons
+    prevButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const currentStep = button.closest("[id^='step']");
+            const prevStepId = `step${parseInt(currentStep.id.replace("step", ""), 10) - 1}`;
+            showStep(prevStepId);
+        });
+    });
+
+    // Initialize: Show only the first step and set up validation
+    steps.forEach((step, i) => {
+        step.style.display = i === 0 ? "block" : "none";
+        if (i === 0) {
+            toggleNextButton(step);
+            addValidationListeners(step);
+        }
+    });
+});
+
+</script>
+
+<script>
+    
+</script>

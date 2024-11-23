@@ -270,7 +270,7 @@
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
                             <button type="button" class="btn  prev-step">Previous</button>
-                            <button type="button" class="btn  next-step">Next</button>
+                            <button type="button" class="btn  next-step step3btn">Next</button>
                         </div>
                     </div>
                     <div class="step-content p-4" id="step4">
@@ -282,7 +282,7 @@
                                     <option selected disabled value="">Choose...</option>
                                     <option value="Doctorate" <?php if($facultyinfo['rank']=='Doctorate'){ echo 'selected';}?>>Doctorate Degree</option>
                                     <option value="Masters" <?php if($facultyinfo['rank']=='Masters'){ echo 'selected';}?>>Masters Degree</option>
-                                    <option value="Bachelor" <?php if($facultyinfo['rank']=='Bachelor'){ echo 'selected';}?>>Bachelor Degree</option>
+                                    <option value="Bachelors" <?php if($facultyinfo['rank']=='Bachelors'){ echo 'selected';}?>>Bachelor Degree</option>
                                 </select>
                             </div>
                             <!--<div class="table-load my-2 p-3 col-6" id="specialization-container" style="display: none;">
@@ -356,7 +356,7 @@
 
                         <div class="form-footer mt-4 d-flex justify-content-between">
                             <button type="button" class="btn prev-step">Previous</button>
-                            <button type="submit" class="btn complete">Finish</button>
+                            <button type="submit" class="btn next-step step5btn" disabled>Finish</button>
                         </div>
                     </div>
             </div>
@@ -450,6 +450,206 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const nextButton = document.querySelector(".step3btn"); // The "Next" button for Step 3
+    const checkboxes = document.querySelectorAll(".load-subject-checkbox1"); // All checkboxes for subject selection
+    const step3Content = document.querySelector("#step3"); // The step3 content
+    let messageBox = document.createElement("div"); // Create a message box
+    messageBox.style.color = "red"; // Set message text color to red
+    messageBox.style.marginTop = "10px"; // Add some spacing for the message box
+    step3Content.appendChild(messageBox); // Add the message box to step3 content
 
+    // Function to count selected checkboxes
+    function countSelectedSubjects() {
+        let selectedCount = 0;
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                selectedCount++;
+            }
+        });
+        return selectedCount;
+    }
+
+    // Function to handle validation and enable/disable the next button
+    function updateNextButtonState() {
+        const selectedSubjects = countSelectedSubjects();
+        
+        // Enable the button if 3 or more subjects are selected, otherwise disable it
+        if (selectedSubjects >= 3) {
+            nextButton.disabled = false; // Enable the button
+            messageBox.textContent = ""; // Clear the message if condition is met
+        } else {
+            nextButton.disabled = true;  // Disable the button
+            messageBox.textContent = "Please select at least 3 subjects."; // Show the message
+        }
+    }
+
+    // Event listener for each checkbox to trigger validation
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", updateNextButtonState);
+    });
+
+    // Handle "Next" button click event
+    nextButton.addEventListener("click", function () {
+        const selectedSubjects = countSelectedSubjects();
+        if (selectedSubjects < 3) {
+            messageBox.textContent = "Please select at least 3 subjects."; // Show the message
+        }
+    });
+
+    // Initial validation when the page loads
+    updateNextButtonState();
+});
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+// Function to toggle time input visibility based on checkbox selection
+function toggleTimeInputs(day) {
+    const checkbox = document.querySelector(`input[name="${day}"]`);
+    const startTimeInput = document.querySelector(`input[name="${day}startTime"]`);
+    const endTimeInput = document.querySelector(`input[name="${day}endTime"]`);
+
+    if (checkbox && startTimeInput && endTimeInput) {
+        // Toggle time input fields based on checkbox status
+        startTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+        endTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+
+        // Event listener to toggle visibility when checkbox is changed
+        checkbox.addEventListener("change", () => {
+            startTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+            endTimeInput.style.display = checkbox.checked ? "inline-block" : "none";
+        });
+
+        // Event listeners for validating time range and start/end time logic
+        startTimeInput.addEventListener("change", () => {
+            validateTimeRange(startTimeInput, endTimeInput, day);
+        });
+
+        endTimeInput.addEventListener("change", () => {
+            validateTimeRange(startTimeInput, endTimeInput, day);
+        });
+    }
+}
+
+// Function to validate that time values are within valid range
+function validateTimeRange(startTimeInput, endTimeInput, day) {
+    const earliestTime = "07:00";
+    const latestTime = "19:00";
+
+    // Validate start time within range
+    if (startTimeInput.value && (startTimeInput.value < earliestTime || startTimeInput.value > latestTime)) {
+        alert(`Start time for ${capitalizeFirstLetter(day)} must be between 7:00 AM and 7:00 PM.`);
+        startTimeInput.value = ""; // Reset the value if out of range
+    }
+
+    // Validate end time within range
+    if (endTimeInput.value && (endTimeInput.value < earliestTime || endTimeInput.value > latestTime)) {
+        alert(`End time for ${capitalizeFirstLetter(day)} must be between 7:00 AM and 7:00 PM.`);
+        endTimeInput.value = ""; // Reset the value if out of range
+    }
+
+    // Validate that end time is after start time
+    if (startTimeInput.value && endTimeInput.value && endTimeInput.value <= startTimeInput.value) {
+        alert(`End time for ${capitalizeFirstLetter(day)} should be later than start time.`);
+        endTimeInput.value = ""; // Reset the value if invalid
+    }
+
+    // Validate that the end time is at least 6 hours after the start time
+    if (startTimeInput.value && endTimeInput.value) {
+        const startTime = new Date(`1970-01-01T${startTimeInput.value}:00`);
+        const endTime = new Date(`1970-01-01T${endTimeInput.value}:00`);
+
+        // Calculate the time difference in hours
+        const timeDifference = (endTime - startTime) / (1000 * 60 * 60);
+
+        // If the time difference is less than 6 hours, show an alert
+        if (timeDifference < 6) {
+            alert(`The end time for ${capitalizeFirstLetter(day)} must be at least 6 hours after the start time.`);
+            endTimeInput.value = ""; // Reset the value if the time difference is too short
+        }
+    }
+}
+
+// Helper function to capitalize the first letter of the day name
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Initialize the time input toggling for each day
+const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+days.forEach(day => toggleTimeInputs(day));
+
+});
+
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const finishButton = document.querySelector(".step5btn"); // Finish button for Step 5
+    const checkboxes = document.querySelectorAll('#step5 input[type="checkbox"]'); // All checkboxes within step5
+    const timeInputs = document.querySelectorAll('#step5 input[type="time"]'); // All time inputs within step5
+    
+    // Function to count checked checkboxes within step5
+    function countCheckedDays() {
+        let checkedCount = 0;
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                checkedCount++;
+            }
+        });
+        return checkedCount;
+    }
+
+    // Function to check if all selected days have time inputs filled
+    function areTimeInputsFilled() {
+        let allTimeInputsFilled = true;
+
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                const day = checkbox.name;
+                const startTimeInput = document.querySelector(`input[name="${day}startTime"]`);
+                const endTimeInput = document.querySelector(`input[name="${day}endTime"]`);
+                
+                // Check if both start and end times are filled
+                if (!startTimeInput.value || !endTimeInput.value) {
+                    allTimeInputsFilled = false;
+                }
+            }
+        });
+
+        return allTimeInputsFilled;
+    }
+
+    // Function to handle enabling/disabling the Finish button
+    function updateFinishButtonState() {
+        const checkedDays = countCheckedDays();
+        const timeInputsFilled = areTimeInputsFilled();
+
+        // Enable the button if at least 3 checkboxes are selected and time inputs are filled, otherwise disable it
+        if (checkedDays >= 3 && timeInputsFilled) {
+            finishButton.disabled = false; // Enable the button
+        } else {
+            finishButton.disabled = true;  // Disable the button
+        }
+    }
+
+    // Add event listeners to checkboxes to track changes
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", updateFinishButtonState);
+    });
+
+    // Add event listeners to time inputs to track changes
+    timeInputs.forEach((timeInput) => {
+        timeInput.addEventListener("change", updateFinishButtonState);
+    });
+
+    // Initial check when the page loads
+    updateFinishButtonState();
+});
+
+</script>
 </html>
 

@@ -85,6 +85,18 @@ class Room {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['id'] : null;
     }
+    public function countroomscollege($collegeid) {
+        $sql = "SELECT COUNT(*) FROM room WHERE collegeid = :collegeid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid]);
+        return $stmt->fetchColumn();
+    }
+    public function countroomsdepartment($departmentid) {
+        $sql = "SELECT COUNT(*) FROM room WHERE departmentid = :departmentid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':departmentid' => $departmentid]);
+        return $stmt->fetchColumn();
+    }
     /*public function getcollegerooms($collegeid) {
         $sql = "SELECT * FROM room WHERE collegeid = :collegeid";
         $stmt = $this->pdo->prepare($sql);
