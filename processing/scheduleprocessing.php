@@ -269,28 +269,30 @@ function swap() {
     $draggedDays = $schedule->splitDays($draggedsubjectday);
     $droppedDays = $schedule->splitDays($droppedsubjectday);
 
-    foreach ($draggedDays as $day) {
-        if ($schedule->hasConflictFaculty($droppedcalendarid, $day, $droppedsubjectstarttime, $droppedsubjectendtime, $draggedsubjectid, $droppedfacultyid)) {
-            header("Location: ../admin/final-sched-room.php?swap=facultyconflict");
-            exit;
-        }
-    }
     foreach ($droppedDays as $day) {
-        if ($schedule->hasConflictFaculty($droppedcalendarid, $day, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $draggedfacultyid)) {
-        
-            header("Location: ../admin/final-sched-room.php?swap=facultyconflict");
+        if ($schedule->hasConflictFaculty($droppedcalendarid, $day, $droppedsubjectstarttime, $droppedsubjectendtime, $droppedsubjectid , $draggedfacultyid)) {
+            //die("drop".' '.$draggedsubjectid.' to '.$day.' '.$droppedsubjectstarttime.' '.$droppedsubjectendtime.' '.$ .' '.$draggedfacultyid);
+            header("Location: ../admin/final-sched-room.php?swap=facultyconflict"); 
             exit;
         }
     }
     foreach ($draggedDays as $day) {
-        if ($schedule->hasConflictSection($droppedcalendarid, $day, $droppedsubjectstarttime, $droppedsubjectendtime, $draggedsubjectid, $draggeddepartmentid, $draggedyear, $draggedsection)) {
+        if ($schedule->hasConflictFaculty($droppedcalendarid, $day, $draggedsubjectstarttime, $draggedsubjectendtime, $draggedsubjectid, $droppedfacultyid)) {
+            
+            header("Location: ../admin/final-sched-room.php?swap=facultyconflict");
+            exit;
+        }
+    }
+    
+    foreach ($droppedDays as $day) {
+        if ($schedule->hasConflictSection($droppedcalendarid,$day, $droppedsubjectstarttime, $droppedsubjectendtime, $droppedsubjectid, $draggeddepartmentid , $draggedyear, $draggedsection)) {
+        
             header("Location: ../admin/final-sched-room.php?swap=studentconflict");
             exit;
         }
     }
-    foreach ($droppedDays as $day) {
-        if ($schedule->hasConflictSection($droppedcalendarid,$day, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $droppeddepartmentid, $droppedyear, $droppedsection)) {
-        
+    foreach ($draggedDays as $day) {
+        if ($schedule->hasConflictSection($droppedcalendarid, $day, $draggedsubjectstarttime,$draggedsubjectendtime , $draggedsubjectid , $droppeddepartmentid, $droppedyear, $droppedsection)) {
             header("Location: ../admin/final-sched-room.php?swap=studentconflict");
             exit;
         }

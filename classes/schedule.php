@@ -115,7 +115,14 @@ class Schedule {
         $sql = "
             SELECT COUNT(*) 
             FROM subjectschedule 
-            WHERE FIND_IN_SET(:day, day) > 0
+            WHERE
+            (
+                (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day))
+                OR day = :day
+                OR (day = 'MTh' AND :day IN ('M', 'Th'))
+                OR (day = 'WS' AND :day IN ('W', 'S'))
+                OR (day = 'TF' AND :day IN ('T', 'F'))
+            )
             AND CAST(timestart AS TIME) < :endtime
             AND CAST(timeend AS TIME) > :starttime
             AND id != :subjectscheduleid AND subjectschedule.facultyid=:facultyid AND subjectschedule.calendarid=:calendarid";
@@ -134,7 +141,15 @@ class Schedule {
         $sql = "
             SELECT COUNT(*)
             FROM subjectschedule
-            WHERE FIND_IN_SET('F', day) > 0
+            WHERE
+            (
+                (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day))
+                OR day = :day
+                OR (day = 'MTh' AND :day IN ('M', 'Th'))
+                OR (day = 'WS' AND :day IN ('W', 'S'))
+                OR (day = 'TF' AND :day IN ('T', 'F'))
+            )
+
             AND CAST(timestart AS TIME) < :endtime
             AND CAST(timeend AS TIME) > :starttime
             AND id != :subjectscheduleid AND subjectschedule.departmentid=:departmentid=:departmentid AND subjectschedule.yearlvl=:yearlvl AND subjectschedule.section=:section AND subjectschedule.calendarid=:calendarid";

@@ -395,8 +395,35 @@
         </div>
 
     </main>
+
+<!-- Modal -->
+<div class="modal fade" id="swapModal" tabindex="-1" aria-labelledby="swapModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="swapModalLabel">Swap Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center" id="modalMessage">
+        <!-- Dynamic message will go here -->
+      </div>
+      <div class="modal-footer">
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 </body>
-<style>.timetable-cell {
+<style>
+
+.modal-dialog {
+    max-width: 300px; 
+}
+.timetable-cell {
     border: 1px solid #ddd;
     padding: 10px;
     width: 100px;
@@ -556,5 +583,49 @@ window.addEventListener("load", () => {
         window.scrollTo(0, parseInt(scrollPosition, 10));
     }
 });
+
+</script>
+<script>
+   
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+function showModal(message, messageType) {
+    const modalMessage = document.getElementById('modalMessage');
+    modalMessage.textContent = message;
+
+    const modalContent = modalMessage.parentElement;
+    modalContent.classList.remove('text-danger', 'text-warning', 'text-success');
+    if (messageType === 'error') {
+        modalContent.classList.add('text-danger');
+    } else if (messageType === 'warning') {
+        modalContent.classList.add('text-danger');
+    } else if (messageType === 'success') {
+        modalContent.classList.add('text-success');
+    }
+
+
+    const modal = new bootstrap.Modal(document.getElementById('swapModal'), {
+        backdrop: 'static',
+        keyboard: false,    
+    });
+    modal.show();
+
+    setTimeout(() => {
+        modal.hide();
+    }, 3000);
+}
+
+
+const swapStatus = getQueryParam('swap');
+if (swapStatus === 'facultyconflict') {
+    showModal("Error: Schedule swapping failed due to faculty schedule conflict.", 'error');
+} else if (swapStatus === 'studentconflict') {
+    showModal("Error: Schedule swapping failed due to student schedule conflict.", 'warning');
+} else if (swapStatus === 'success') {
+    showModal("Schedule swapped successfully!", 'success');
+}
 
 </script>
