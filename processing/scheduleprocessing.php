@@ -251,21 +251,61 @@ function swap() {
     $draggedsubjectday = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['day'] : null;
     $draggedsubjectstarttime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timestart'] : null;
     $draggedsubjectendtime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timeend'] : null;
+    $draggedfacultyid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['facultyid'] : null;
+    $draggeddepartmentid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['departmentid'] : null;
+    $draggedyear = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['yearlvl'] : null;
+    $draggedsection = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['section'] : null;
 
     $droppeddsubjectscheduleinfo = $schedule->subjectscheduleinfo($droppedsubjectid);
     $droppedsubjectday = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['day'] : null;
     $droppedsubjectstarttime = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['timestart'] : null;
     $droppedsubjectendtime = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['timeend'] : null;
+    $droppedfacultyid = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['facultyid'] : null;
+    $droppeddepartmentid = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['departmentid'] : null;
+    $droppedyear = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['yearlvl'] : null;
+    $droppedsection = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['section'] : null;
+    $droppedcalendarid = $droppeddsubjectscheduleinfo ? $droppeddsubjectscheduleinfo['calendarid'] : null;
 
+    $draggedDays = $schedule->splitDays($draggedsubjectday);
+    $droppedDays = $schedule->splitDays($droppedsubjectday);
+
+    foreach ($draggedDays as $day) {
+        if ($schedule->hasConflictFaculty($droppedcalendarid, $day, $droppedsubjectstarttime, $droppedsubjectendtime, $draggedsubjectid, $droppedfacultyid)) {
+            header("Location: ../admin/final-sched-room.php?swap=facultyconflict");
+            exit;
+        }
+    }
+    foreach ($droppedDays as $day) {
+        if ($schedule->hasConflictFaculty($droppedcalendarid, $day, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $draggedfacultyid)) {
+        
+            header("Location: ../admin/final-sched-room.php?swap=facultyconflict");
+            exit;
+        }
+    }
+    foreach ($draggedDays as $day) {
+        if ($schedule->hasConflictSection($droppedcalendarid, $day, $droppedsubjectstarttime, $droppedsubjectendtime, $draggedsubjectid, $draggeddepartmentid, $draggedyear, $draggedsection)) {
+            header("Location: ../admin/final-sched-room.php?swap=studentconflict");
+            exit;
+        }
+    }
+    foreach ($droppedDays as $day) {
+        if ($schedule->hasConflictSection($droppedcalendarid,$day, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $droppeddepartmentid, $droppedyear, $droppedsection)) {
+        
+            header("Location: ../admin/final-sched-room.php?swap=studentconflict");
+            exit;
+        }
+    }
+    
     
     $swap=$schedule->swapschedule($draggedsubjectid, $draggedsubjectday, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $droppedsubjectday, $droppedsubjectstarttime, $droppedsubjectendtime);
 
     if($swap){
-        header("Location: ../admin/final-sched-room.php");
+        header("Location: ../admin/final-sched-room.php?swap=success");
     }else {
         header("Location: ../admin/final-sched-room.php?swap=failed");
     }  
 }
+
 function updateroom() {
     global $room;
 

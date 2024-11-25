@@ -88,6 +88,7 @@ class Schedule {
     }
 
     public function swapschedule($draggedsubjectid, $draggedsubjectday, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $droppedsubjectday, $droppedsubjectstarttime, $droppedsubjectendtime) {
+        
         $sql = "UPDATE subjectschedule SET day = :day, timestart = :timestart, timeend = :timeend WHERE id = :subjectscheduleid";
         $stmt = $this->pdo->prepare($sql);
         $result1 = $stmt->execute([
@@ -106,6 +107,49 @@ class Schedule {
         ]);
 
         return $result1 && $result2;
+    }
+    public function splitDays($days) {
+        return preg_split('/(?=[A-Z])/', $days, -1, PREG_SPLIT_NO_EMPTY);
+    }
+    public function hasConflictFaculty($calendarid,$day, $starttime, $endtime, $excludeSubjectId, $facultyid) {
+        $sql = "
+            SELECT COUNT(*) 
+            FROM subjectschedule 
+            WHERE FIND_IN_SET(:day, day) > 0
+            AND CAST(timestart AS TIME) < :endtime
+            AND CAST(timeend AS TIME) > :starttime
+            AND id != :subjectscheduleid AND subjectschedule.facultyid=:facultyid AND subjectschedule.calendarid=:calendarid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':day' => $day,
+            ':starttime' => $starttime,
+            ':endtime' => $endtime,
+            ':subjectscheduleid' => $excludeSubjectId,
+            ':facultyid' => $facultyid,
+            ':calendarid' => $calendarid 
+        ]);
+        return $stmt->fetchColumn() > 0;
+    }
+    public function hasConflictSection($calendarid,$day, $starttime, $endtime, $excludeSubjectId, $departmentid, $yearlvl, $section) {
+        $sql = "
+            SELECT COUNT(*)
+            FROM subjectschedule
+            WHERE FIND_IN_SET('F', day) > 0
+            AND CAST(timestart AS TIME) < :endtime
+            AND CAST(timeend AS TIME) > :starttime
+            AND id != :subjectscheduleid AND subjectschedule.departmentid=:departmentid=:departmentid AND subjectschedule.yearlvl=:yearlvl AND subjectschedule.section=:section AND subjectschedule.calendarid=:calendarid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':day' => $day,
+            ':starttime' => $starttime,
+            ':endtime' => $endtime,
+            ':subjectscheduleid' => $excludeSubjectId,
+            ':departmentid' => $departmentid,
+            ':calendarid' => $calendarid,
+            ':yearlvl' => $yearlvl,
+            ':section' => $section,
+        ]);
+        return $stmt->fetchColumn() > 0;
     }
     
     
