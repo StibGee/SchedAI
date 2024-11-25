@@ -111,7 +111,7 @@ if ($roomcount == 0) {
 }
 ?>
 
-<?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading'){?>
+<?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading' && ($countsubjecthours<$countfacultyworkinghours)){?>
     <div class="progresspopupdiv">
 
 
@@ -202,6 +202,15 @@ if ($roomcount == 0) {
 
 
     <main>
+    <?php
+    if ($countsubjecthours>$countfacultyworkinghours) {
+        echo "<script>
+            alert('Add new faculty first');
+            window.location.href = 'faculty.php';
+        </script>";
+        exit;
+    }
+    ?>
     <?php if ($countsubjecthours>$countfacultyworkinghours){ ?>
     <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -492,7 +501,7 @@ if ($roomcount == 0) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body  ">
-                        <form id="formModalForm" action="../processing/scheduleprocessing.php"  method="post">
+                        <form id="formModalForm" class="needs-validation" action="../processing/scheduleprocessing.php"  method="post" novalidate>
 
 
                             <input type="number" name='academicyear' value="<?php echo $_SESSION['year'];?>" hidden>
@@ -577,8 +586,12 @@ if ($roomcount == 0) {
                                                                     <tr>
                                                                         <td style="border: none;">Year Level <?php echo $i;?></td>
                                                                         <td style="border: none;">
-                                                                            <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>[]" class="form-control form-control-sm" style="width: 200px;">
+                                                                            <input id="sectionInput" placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>[]" class="form-control form-control-sm" style="width: 200px;" min="1" max="26" required>
+                                                                            <div class="invalid-feedback">
+                                                                                Please enter a valid number of sections (minimum 1).
+                                                                            </div>
                                                                         </td>
+                                                                        
                                                                         <td style="border: none;">
                                                                             <select class="form-select form-select-sm m-0"  name="curriculum<?php echo $i;?>[]">
                                                                                 <?php
@@ -625,7 +638,10 @@ if ($roomcount == 0) {
                                                                 <tr>
                                                                     <td style="border: none;">Year Level <?php echo $i;?></td>
                                                                     <td style="border: none;">
-                                                                        <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>[]" class="form-control form-control-sm" style="width: 200px;">
+                                                                        <input placeholder="Input No. of Sections" type="number" name="section<?php echo $i;?>[]" class="form-control form-control-sm" style="width: 200px;" min="1" max="26" required>
+                                                                        <div class="invalid-feedback">
+                                                                                Please enter a valid number of sections (minimum 1).
+                                                                        </div>
                                                                     </td>
                                                                     <td style="border: none;">
                                                                         <select class="form-select form-select-sm m-0" name="curriculum<?php echo $i;?>[]">
@@ -800,3 +816,19 @@ $(document).on('input', 'input[name="workinghours"]', function() {
 
 
 </script>
+<script>
+    (() => {
+      'use strict';
+
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>

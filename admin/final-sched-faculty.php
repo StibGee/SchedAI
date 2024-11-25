@@ -244,8 +244,8 @@
                 <div class="col-2">
                 <form class="mb-0" action="final-sched-faculty.php" method="POST">
                     <select class="form-select form-select-sm" id="select-classtype" name="facultyid" onchange="this.form.submit()">
-                        <!-- Default Select option at the top -->
-                        <option value="" <?php echo !isset($facultyids) ? 'selected' : ''; ?>>Select a Faculty</option>
+                       
+                        <option disabled value="" <?php echo !isset($facultyids) ? 'selected' : ''; ?>>Select a Faculty</option>
 
                         <?php foreach ($collegefaculty as $collegefacultys): ?>
                             <option value="<?php echo $collegefacultys['facultyid']; ?>"

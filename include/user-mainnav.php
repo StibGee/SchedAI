@@ -4,9 +4,13 @@ if (!isset($_SESSION['role'])){
     exit();
 }
 if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenthead') {
-    header("Location: ../index.php");
+    header("Location: ../admin/facultyloading.php");
     exit();
-}?>
+}elseif($_SESSION['role'] == 'Admin'){
+    header("Location: ../superadmin/landing.php");
+    exit();
+}
+?>
 
 <body id="body-pd">
     <header class="header" id="header">

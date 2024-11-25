@@ -417,3 +417,7 @@ input[type="checkbox"] {
 input[type="checkbox"]:hover {
     accent-color: #145a32 !important; /* Darker green for hover */
 }
+input {
+    accent-color: #145a32 !important;
+}
+

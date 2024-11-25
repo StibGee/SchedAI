@@ -209,7 +209,8 @@ function updaterootfaculty() {
     global $email;
     global $department;
     
-    $departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
+    $facultyid = (int) trim(stripslashes(htmlspecialchars($_POST['facultyid'])));
+    $departmentid = (int) trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
     $role = trim(stripslashes(htmlspecialchars($_POST['role'])));
     $emailadd = trim(stripslashes(htmlspecialchars($_POST['emailadd'])));
     $fname = trim(stripslashes(htmlspecialchars($_POST['fname'])));
@@ -221,15 +222,13 @@ function updaterootfaculty() {
     $departmentinfo=$department->getdepartmentinfo($departmentid);
     $collegeid=htmlspecialchars($departmentinfo['collegeid']);
 
-   
-
-    if(isset($_POST['emailadd'])){$emailfaculty=$email->emailnewfaculty($emailadd, $fullname, $username, $password);}
+    
     $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
     
-    $addfaculty = $faculty->addrootfaculty($fname,$mname,$lname,$username,$hashedpassword,$departmentid,$collegeid,$emailadd, $role);
+    $addfaculty = $faculty->updaterootfaculty($facultyid, $fname,$mname,$lname,$username,$hashedpassword,$departmentid,$collegeid,$emailadd, $role);
 
     if ($addfaculty) {
-        header("Location: ../superadmin/users.php?user=added");
+        header("Location: ../superadmin/users.php?user=updated");
         exit();
     }
 }

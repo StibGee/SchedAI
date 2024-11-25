@@ -145,7 +145,7 @@ class Subject {
         return $results;
     }
     public function getdistinctsubjectscollege($collegeid) {
-        $stmt = $this->pdo->prepare("SELECT DISTINCT commonname AS name FROM subject JOIN department ON department.id=subject.departmentid WHERE collegeid = :collegeid AND focus='Major'");
+        $stmt = $this->pdo->prepare("SELECT DISTINCT commonname AS name FROM subject JOIN department ON department.id=subject.departmentid WHERE collegeid = :collegeid AND focus!='Minor'");
         $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

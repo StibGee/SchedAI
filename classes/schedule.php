@@ -389,7 +389,7 @@ class Schedule {
                 FROM subjectschedule 
                 JOIN subject ON subjectschedule.subjectid=subject.id
                 JOIN department ON department.id=subjectschedule.departmentid
-                WHERE department.collegeid = :collegeid AND subjectschedule.calendarid=:calendarid AND subject.focus!='Minor';
+                WHERE department.collegeid = :collegeid AND subjectschedule.calendarid=:calendarid AND subject.focus!='Minor' AND subject.focus!='Major1';
                 ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':collegeid' => $collegeid, ':calendarid' => $calendarid]);
@@ -400,7 +400,7 @@ class Schedule {
                 FROM subjectschedule 
                 JOIN subject ON subjectschedule.subjectid=subject.id
                 JOIN department ON department.id=subjectschedule.departmentid
-                WHERE department.id = :departmentid AND subjectschedule.calendarid=:calendarid AND subject.focus!='Minor';
+                WHERE department.id = :departmentid AND subjectschedule.calendarid=:calendarid AND subject.focus!='Minor' AND subject.focus!='Major1';
                 ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':departmentid' => $departmentid, ':calendarid' => $calendarid]);

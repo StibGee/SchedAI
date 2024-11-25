@@ -234,7 +234,7 @@
                 <div class="col-2">
                 <form class="mb-0" id="roomForm" action="final-sched-section.php" method="POST">
     <select class="form-select form-select-sm" id="select-classtype" name="roomid" onchange="updateAndSubmit()">
-        <option value="" selected>Select a Room</option>
+        <option disabled >Select a Section</option>
         <?php foreach ($collegesections as $collegesection) {
             // Create the concatenated value
             $roomValue = htmlspecialchars($collegesection['abbreviation']) . ' ' . htmlspecialchars($collegesection['yearlvl']) . htmlspecialchars($collegesection['section']);

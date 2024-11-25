@@ -60,7 +60,7 @@ class Room {
         $sql = "SELECT *, department.name AS departmentname, room.name AS roomname, room.id as roomid 
                 FROM room 
                 JOIN department ON department.id = room.departmentid 
-                WHERE department.collegeid = :collegeid";
+                WHERE department.collegeid = :collegeid ORDER BY room.name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT); 
         $stmt->execute();

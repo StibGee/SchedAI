@@ -33,9 +33,9 @@
             $facultyall = $faculty->getallfacultydepartment($_SESSION['departmentid']);
         }
         $collegedepartment = $department->getcollegedepartment($_SESSION['collegeid']);
+        
 
-
-
+        
 
     ?>
 

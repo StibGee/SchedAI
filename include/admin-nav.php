@@ -3,8 +3,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if ($_SESSION['role'] != 'Admin') {
-    header("Location: ../index.php");
+if ($_SESSION['role'] == 'collegesecretary' || $_SESSION['role'] == 'departmenthead') {
+    header("Location: ../admin/facultyloading.php");
+    exit();
+}elseif($_SESSION['role']!='Admin'){
+    header("Location: ../faculty/dashboard.php");
     exit();
 }?>
 

@@ -49,7 +49,7 @@
             $year=$_SESSION['year'];
             $sem=$_SESSION['sem'];
             $calendarid = $_SESSION['calendarid'];
-            $departmentid = $_SESSION['departmentidbasis'];
+            
             $yearlvl=$_SESSION['yearlvl'];
         }
 

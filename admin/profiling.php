@@ -5,7 +5,12 @@
     ?>
 
 <body >
+    <style>
+        input {
+            accent-color: #145a32 !important;
+        }
 
+    </style>
     <?php
         require_once('../include/user-nav.php');
 
@@ -24,7 +29,7 @@
         if (isset($_POST['facultyid'])){
             $facultyid=$_POST['facultyid'];
         }
-        if ($_SESSION['departmentid']!=0){
+        if ($_SESSION['scheduling']=='department'){
             $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid']);
             $collegedepartment = $department->getdepartmentdepartment($_SESSION['departmentid']);
             
@@ -33,7 +38,7 @@
             
             $collegedepartment = $department->getcollegedepartment($_SESSION['collegeid']);
         }
-
+    
         $facultyinfo = $faculty->getfacultyinfo($facultyid);
         $existingsubjects = $faculty->getfacultysubjects($facultyid);
         if ($facultyinfo) {
@@ -136,7 +141,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label" for="midleinit">MI</label>
-                                <input class="form-control" id="midleinit" type="text" name="mname" value="<?php if(isset($facultyinfo['mname'])){ echo $facultyinfo['mname'];} ?>" required />
+                                <input class="form-control" id="midleinit" type="text" name="mname" value="<?php if(isset($facultyinfo['mname'])){ echo $facultyinfo['mname'];} ?>" />
                             </div>
                         </div>
                         <div class="row mt-5">

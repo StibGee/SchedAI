@@ -67,38 +67,7 @@
                     <h3>Colleges</h3>
                 </div>
                 <div class="college mt-5">
-                    <div class="row">
-                        <div class="col-md-2 mb-3">
-                            <a href="../SuperAdmin/colleges.php">
-                                <img src="../img/logo/ccslogo.png" alt="College 1 Logo" class="img-fluid" style="max-height: 100px;">
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <a href="../SuperAdmin/colleges.php">
-                                <img src="../img/logo/ccslogo.png" alt="College 2 Logo" class="img-fluid" style="max-height: 100px;">
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <a href="../SuperAdmin/colleges.php">
-                                <img src="../img/logo/ccslogo.png" alt="College 3 Logo" class="img-fluid" style="max-height: 100px;">
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <a href="../SuperAdmin/colleges.php">
-                                <img src="../img/logo/ccslogo.png" alt="College 4 Logo" class="img-fluid" style="max-height: 100px;">
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <a href="../SuperAdmin/colleges.php">
-                                <img src="../img/logo/ccslogo.png" alt="College 4 Logo" class="img-fluid" style="max-height: 100px;">
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <a href="../SuperAdmin/colleges.php">
-                                <img src="../img/logo/ccslogo.png" alt="College 4 Logo" class="img-fluid" style="max-height: 100px;">
-                            </a>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
 

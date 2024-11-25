@@ -26,7 +26,7 @@
     $calendarid=$_SESSION['calendarid'];
     $collegeinfo=$college->getcollegeinfo($collegeid);
 
-
+   
     if (isset($_POST['roomid'])) {
         $roomids = $_POST['roomid'];
         $_SESSION['roomid'] = $_POST['roomid'];
@@ -66,6 +66,7 @@
         $intervals[] = sprintf("%02d:00-%02d:30", $i, $i);
         $intervals[] = sprintf("%02d:30-%02d:00", $i, $i + 1);
     }
+    
 
     function generateColor($id) {
 
@@ -243,6 +244,7 @@
                 <div class="col-2">
                     <form class="mb-0" action="final-sched-room.php" method="POST">
                         <select class="form-select  form-select-sm " id="select-classtype" name="roomid" onchange="this.form.submit()">
+                            <option disabled value="" <?php echo !isset($roomids) ? 'selected': ''; ?>>Select a Room</option>
                             <?php foreach ($collegeroom as $collegerooms):
                                 //if ($collegerooms['departmentid']==$_SESSION['departmentid']){?>
 
@@ -262,7 +264,7 @@
 
 
                             <?php /*}*/ endforeach; ?>
-                            <option value="" selected>Select a Room</option>
+                           
                         </select>
                     </form>
                 </div>

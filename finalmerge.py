@@ -3,12 +3,9 @@ import time
 import sys
 import webbrowser
 
-'''depid = int(sys.argv[1])
+depid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
-calendarid = int(sys.argv[3])'''
-depid = 0
-collegeid = 3
-calendarid = 78
+calendarid = int(sys.argv[3])
 minor=1
 
 
@@ -352,7 +349,7 @@ def assign_subject(currentshubjectid):
 
     sortedfaculty = sorted(facultysubject1, key=lambda x: (x[13] != subjectscheduledepartmentid))
     
-    for facultysubjects in sortedfaculty:
+    for facultysubjects in facultysubject1:
         facultysubjectfacultyid = facultysubjects[3]
         facultysubjectfsubjectname = facultysubjects[2]
         facultysubjectmasters = facultysubjects[11]
@@ -369,7 +366,7 @@ def assign_subject(currentshubjectid):
                 if not lec3daysgapfaculty(facultysubjectfacultyid):
                     continue
 
-        if not newfaculty[currentshubjectid] and facultysubjectfname=='NEW':
+        if (not newfaculty[currentshubjectid] and currentshubjectid!=0) and facultysubjectfname=='NEW':
             continue
               
 
@@ -763,7 +760,7 @@ assignedsubjects = set()
 facultyoccupied={} 
 sectionoccupied={}
 facultypreferencedays = {}
-preferreddays=[]
+
 
 
 for pref in facultypreference:
@@ -1412,7 +1409,9 @@ def assigntimeslot(currentsubjectid):
                     
                     if subjectfacultyid in facultypreferencedays:
                         preferreddays = list(facultypreferencedays[subjectfacultyid]) 
-                        
+                    else:
+                        preferreddays = []
+
                     for dayin3 in preferreddays: 
                         
                         
@@ -1809,6 +1808,8 @@ def assigntimeslot(currentsubjectid):
                         continue
                     if subjectfacultyid in facultypreferencedays:
                         preferreddays = list(facultypreferencedays[subjectfacultyid]) 
+                    else:
+                        preferreddays = []
 
                     if roomtype != subjecttype and not (roomtype == 'Lab' and subjecttype == 'Lec'):
                         continue
@@ -2079,9 +2080,9 @@ def assigntimeslot(currentsubjectid):
                         countdown_value = countdown(roomid, daylab, start_minuteslab) 
 
                         
-                        if countup_value<6 and countup_value!=0 and (countdown_value-6)!=0 and countup_value<(countdown_value-6):
+                        if (countup_value%6)!=0 and countup_value!=0 and (countdown_value-6)!=0 and countup_value<(countdown_value-6):
                             continue
-                        elif countup_value<6 and countup_value!=0 and (countdown_value-6)!=0 and countup_value>(countdown_value-6):
+                        elif (countup_value%6)!=0 and countup_value!=0 and (countdown_value-6)!=0 and countup_value>(countdown_value-6):
                             continue  
                         elif (countdown_value-6)<6 and countdown_value-6!=0 and countdown_value<countup_value:
                             continue
@@ -2156,7 +2157,8 @@ def assigntimeslot(currentsubjectid):
                     roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
                     if subjectfacultyid in facultydaystimelab:
                         preferreddays = list(set(entry[0] for entry in facultydaystimelab[subjectfacultyid]))
-                    
+                    else:
+                        preferreddays = []
                     
 
                     if roomname=='FIELD':
@@ -2718,7 +2720,8 @@ def assigntimeslot(currentsubjectid):
                     roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
                     if subjectfacultyid in facultydaystimelab:
                         preferreddays = list(set(entry[0] for entry in facultydaystimelab[subjectfacultyid]))
-                    
+                    else:
+                        preferreddays = []
                     if roomname!='FIELD':
                         continue
                         
