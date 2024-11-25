@@ -18,10 +18,10 @@
     $collegeid=$_SESSION['collegeid'];
     $inititialcollegeroom = $room->getinitialcollegeroom($collegeid);
 
-    if ($_SESSION['departmentid']==0){
+    if ($_SESSION['departmentidbasis']==0){
         $collegeroom=$room->getcollegerooms($collegeid);
     }else{
-        $collegeroom=$room->getdepartmentrooms($_SESSION['departmentid']);
+        $collegeroom=$room->getdepartmentrooms($_SESSION['departmentidbasis']);
     }
     $calendarid=$_SESSION['calendarid'];
     $collegeinfo=$college->getcollegeinfo($collegeid);
@@ -47,11 +47,11 @@
             }
         }
     }
-    if ($_SESSION['departmentid']!=0){
-        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
-        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
-        $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
-        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+    if ($_SESSION['departmentidbasis']!=0){
+        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentidbasis']);
+        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentidbasis']);
+        $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentidbasis'], $_SESSION['calendarid']);
+        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($_SESSION['departmentidbasis'], $_SESSION['calendarid']);
     }else{
         $minorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
         $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
@@ -84,7 +84,7 @@
 
         return "hsl($hue, 70%, 80%)";
     }
-    if ($_SESSION['departmentid']==0){
+    if ($_SESSION['departmentidbasis']==0){
     $sql = "SELECT
                 day,
                 TIME_FORMAT(timestart, '%H:%i') AS timestart,
@@ -107,7 +107,7 @@
                 JOIN department ON subjectschedule.departmentid = department.id
             WHERE roomid = $roomids AND department.collegeid=$collegeid AND subjectschedule.calendarid=$calendarid";
     }else{
-        $departmentid=$_SESSION['departmentid'];
+        $departmentid=$_SESSION['departmentidbasis'];
         $sql = "SELECT
                 day,
                 TIME_FORMAT(timestart, '%H:%i') AS timestart,
@@ -121,7 +121,8 @@
                 department.abbreviation as departmentname,
                 subject.hours as subjecthours,
                 subject.unit as subjectunit,
-                subject.type as subjecttype
+                subject.type as subjecttype,
+                subjectschedule.id as subjectscheduleid
             FROM
                 subjectschedule
                 JOIN subject ON subject.id = subjectschedule.subjectid
@@ -229,7 +230,7 @@
                         <button class="back" onclick="window.location.href='schedule.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentid']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
+                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentidbasis']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
                     </h5>
                 </div>
             </div>

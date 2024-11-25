@@ -22,11 +22,11 @@
 
     $inititialcollegefaculty = $faculty->getinitialcollegefaculty($collegeid);
 
-    if ($_SESSION['departmentid']==0){
+    if ($_SESSION['departmentidbasis']==0){
         $collegefaculty=$faculty->getallfacultycollege($collegeid);
     }else{
-        $collegefaculty=$faculty->getallfacultydepartment($_SESSION['departmentid']);
-        $collegeroom=$room->getdepartmentrooms($_SESSION['departmentid']);
+        $collegefaculty=$faculty->getallfacultydepartment($_SESSION['departmentidbasis']);
+        $collegeroom=$room->getdepartmentrooms($_SESSION['departmentidbasis']);
     }
     $calendarid=$_SESSION['calendarid'];
     $collegeinfo=$college->getcollegeinfo($collegeid);
@@ -57,7 +57,7 @@
         }
     }
 
-    if ($_SESSION['departmentid']!=0){
+    if ($_SESSION['departmentidbasis']!=0){
         $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
         $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
         $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
@@ -81,7 +81,7 @@
         $hue = ($id * 137.508) % 360;
         return "hsl($hue, 70%, 80%)";
     }
-    if ($_SESSION['departmentid']==0){
+    if ($_SESSION['departmentidbasis']==0){
     $sql = "SELECT
                 day,
                 TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,
@@ -105,7 +105,7 @@
                 JOIN department ON subjectschedule.departmentid = department.id
             WHERE faculty.id = $facultyids AND department.collegeid=$collegeid AND subjectschedule.calendarid=$calendarid";
     }else{
-        $departmentid=$_SESSION['departmentid'];
+        $departmentid=$_SESSION['departmentidbasis'];
         $sql = "SELECT
                 day,
                 TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,

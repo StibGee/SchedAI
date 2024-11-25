@@ -24,23 +24,23 @@
     $sectionpost = isset($_POST['sectionpost']) ? $_POST['sectionpost'] : 'A';
 
 
-    if ($_SESSION['departmentid']==0){
+    if ($_SESSION['departmentidbasis']==0){
         $collegeroom=$room->getcollegerooms($collegeid);
         $collegesections=$schedule->getcollegesection($collegeid, $_SESSION['calendarid']);
     }else{
-        $collegeroom=$room->getdepartmentrooms($_SESSION['departmentid']);
-        $collegesections=$schedule->getdepartmentsection($_SESSION['departmentid']);
+        $collegeroom=$room->getdepartmentrooms($_SESSION['departmentidbasis']);
+        $collegesections=$schedule->getdepartmentsection($_SESSION['departmentidbasis']);
     }
     $calendarid=$_SESSION['calendarid'];
     $collegeinfo=$college->getcollegeinfo($collegeid);
 
 
     $departmentinfo1=$department->getdepartmentinfo($departmentidpost);
-    if ($_SESSION['departmentid']!=0){
-        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentid']);
-        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentid']);
-        $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
-        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($_SESSION['departmentid'], $_SESSION['calendarid']);
+    if ($_SESSION['departmentidbasis']!=0){
+        $departmentinfo=$department->getdepartmentinfo($_SESSION['departmentidbasis']);
+        $filteredschedules=$schedule->filteredschedule($_SESSION['calendarid'], $_SESSION['departmentidbasis']);
+        $minornofacultycount=$schedule->minorfacultycountdepartment($_SESSION['departmentidbasis'], $_SESSION['calendarid']);
+        $minorsubjectsnofaculty=$schedule->minornofacultydepartment($_SESSION['departmentidbasis'], $_SESSION['calendarid']);
     }else{
         $minorsubjectsnofaculty=$schedule->minornofacultycollege($collegeid, $_SESSION['calendarid']);
         $minornofacultycount=$schedule->minorfacultycountcollege($collegeid, $_SESSION['calendarid']);
@@ -90,7 +90,7 @@
                 AND subjectschedule.section = '$sectionpost'
             ";
     }else{
-        $departmentid=$_SESSION['departmentid'];
+        $departmentid=$_SESSION['departmentidbasis'];
         $sql = "SELECT
                 day,
                 TIME_FORMAT(subjectschedule.timestart, '%H:%i') AS timestart,
@@ -219,7 +219,7 @@
                         <button class="back" onclick="window.location.href='schedule.php'">
                             <i class="fa-solid fa-circle-arrow-left"></i>
                         </button>
-                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentid']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
+                        <?php if(($_SESSION['sem'])==1){echo "1st Semester";}else{echo "2nd Semester";}?> <span><?php if ($_SESSION['departmentidbasis']!=0){echo $departmentinfo['abbreviation']; }else{ echo $collegeinfo['abbreviation'];}?></span> <span>SY-</span> <span><?php echo $_SESSION['year'];?></span>
                     </h5>
                 </div>
             </div>

@@ -91,6 +91,7 @@ class Room {
         $stmt->execute([':collegeid' => $collegeid]);
         return $stmt->fetchColumn();
     }
+    
     public function countroomsdepartment($departmentid) {
         $sql = "SELECT COUNT(*) FROM room WHERE departmentid = :departmentid";
         $stmt = $this->pdo->prepare($sql);

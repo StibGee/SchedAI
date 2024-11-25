@@ -44,6 +44,7 @@
 
     if(isset($_POST['departmentid'])){
         $departmentid = $_POST['departmentid'];
+        
     }elseif(isset($_SESSION['departmentidbasis'])){
         $departmentid=$_SESSION['departmentidbasis'];
         $_SESSION['departmentidbasis']=$_SESSION['departmentidbasis'];
@@ -54,6 +55,7 @@
     }
 
     if ($departmentid!=0){
+        $collegeid=0;
         $nofaculty=$faculty->facultynoprofiledepartment($departmentid);
         $calendardistinct = $curriculum->getdistinctcurriculumsschedulecollege($_SESSION['collegeid']);
         $departmentinfo=$department->getdepartmentinfo($departmentid);
@@ -62,9 +64,9 @@
         $minorsubjectsnofaculty=$schedule->minornofacultydepartment($departmentid, $_SESSION['calendarid']);
         $faculties=$faculty->departmentfaculty($departmentid);
         $facultywemail=$faculty->facultywemaildepartment($departmentid);
-        $roomcount=$room->countroomdsepartment($departmentid);
-        $countsubjecthours=$schedule->countsubjecthoursdepartment($collegeid, $_SESSION['calendarid']);
-        $countfacultyworkinghours=$faculty->countfacultyteachinghourscollege($departmentid);
+        $roomcount=$room->countroomsdepartment($departmentid);
+        $countsubjecthours=$schedule->countsubjecthoursdepartment($departmentid, $_SESSION['calendarid']);
+        $countfacultyworkinghours=$faculty->countfacultyteachinghoursdepartment($departmentid);
     }else{
         $countsubjecthours=$schedule->countsubjecthourscollege($_SESSION['collegeid'], $_SESSION['calendarid']);
         $nofaculty=$faculty->facultynoprofilecollege($_SESSION['collegeid']);
@@ -102,6 +104,7 @@
 ?>
 
 <?php
+
 if ($roomcount == 0) {
     echo "<script>
         alert('No rooms detected. Add a room first.');
@@ -110,7 +113,6 @@ if ($roomcount == 0) {
     exit;
 }
 ?>
-
 <?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading' && ($countsubjecthours<$countfacultyworkinghours)){?>
     <div class="progresspopupdiv">
 
@@ -211,7 +213,7 @@ if ($roomcount == 0) {
         exit;
     }
     ?>
-    <?php if ($countsubjecthours>$countfacultyworkinghours){ ?>
+    <?php if (0==1){ ?>
     <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" id="modal-warnings">

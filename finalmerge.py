@@ -6,6 +6,10 @@ import webbrowser
 depid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
 calendarid = int(sys.argv[3])
+
+'''depid = 1
+collegeid = 3
+calendarid = 89'''
 minor=1
 
 
@@ -106,9 +110,16 @@ else:
             GROUP BY subjectname
         ) AS fs ON fs.subjectname = subject.commonname
         WHERE subject.focus != 'Minor' AND subject.focus!='Major1'
-        AND subjectschedule.calendarid = %s 
-        AND department.id = %s 
-        ORDER BY subjectschedule.departmentid ASC, subject.type DESC, subject.unit DESC, fs.specialization_count ASC, subject.name ASC;
+        AND subjectschedule.calendarid = %s
+        AND department.id = %s
+        ORDER BY 
+            CASE WHEN subject.focus = 'OJT' THEN 1 ELSE 0 END ASC, -- Force 'OJT' rows to the end
+            subject.type DESC, 
+            subject.unit DESC, 
+            fs.specialization_count ASC, 
+            subject.requirelabroom ASC,
+            subject.focus ASC, 
+            subject.name ASC;
     """, (calendarid, depid))
     subjectschedule = cursor.fetchall()
 
@@ -259,8 +270,8 @@ def assign_subject(currentshubjectid):
         lowesthoursfaculty = None
         lowesthours = float('inf')
 
-        '''sortedfaculty1 = sorted(facultysubject1, key=lambda x: (x[13] != subjectscheduledepartmentid))'''
-        for facultysubjects in facultysubject1:
+        sortedfaculty1 = sorted(facultysubject1, key=lambda x: (x[13] != subjectscheduledepartmentid))
+        for facultysubjects in sortedfaculty1:
             facultysubjectfacultyid = facultysubjects[3]
             facultysubjectfsubjectname = facultysubjects[2]
             facultysubjectmasters = facultysubjects[11]
@@ -349,7 +360,7 @@ def assign_subject(currentshubjectid):
 
     sortedfaculty = sorted(facultysubject1, key=lambda x: (x[13] != subjectscheduledepartmentid))
     
-    for facultysubjects in facultysubject1:
+    for facultysubjects in sortedfaculty:
         facultysubjectfacultyid = facultysubjects[3]
         facultysubjectfsubjectname = facultysubjects[2]
         facultysubjectmasters = facultysubjects[11]
@@ -418,7 +429,7 @@ assignedsubjects = {}
 if assign_subject(0):
         print("all subjects are assigned")
 else:
-        webbrowser.open("http://schedai.online")
+        webbrowser.open("http://schedai.online/admin/final-sched.php")
 conn.commit()
 
 cursor.close()
@@ -681,10 +692,10 @@ else:
             WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 0 THEN 4  -- unit 1 with requirelabroom = 0 comes last
             ELSE 5   -- Default case for other units, if any
         END
-    ,ordered_schedule.startdate ASC, ordered_schedule.departmentid ASC;""", (calendarid, depid))
+    ,ordered_schedule.startdate ASC;""", (calendarid, depid))
     subjectschedule = cursor.fetchall()
 
-    cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus!='Major1' AND subject.focus!='Minor' AND subjectschedule.calendarid = %s AND department.id = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, depid))
+    cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus!='Major1' AND subject.focus!='Minor' AND subjectschedule.calendarid = %s AND department.id = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC""", (calendarid, depid))
     subjectschedulecount = cursor.fetchone()
 
     cursor.execute("""SELECT * FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.id=%s""",(depid,))
@@ -695,12 +706,12 @@ else:
 
     cursor.execute("""
         SELECT 
-        subjectschedule.*, 
-        subject.id AS subject_id, 
-        subject.subjectcode, 
-        subject.name AS subject_name, 
-        department.id AS department_id, 
-        department.abbreviation 
+            subjectschedule.*, 
+            subject.id AS subject_id, 
+            subject.subjectcode, 
+            subject.name AS subject_name, 
+            department.id AS department_id, 
+            department.abbreviation 
         FROM 
             subjectschedule 
         JOIN 
@@ -709,6 +720,9 @@ else:
             department ON department.id = subjectschedule.departmentid 
         WHERE 
             subject.focus = 'Minor' 
+            AND subjectschedule.day!='N/A'
+            AND subjectschedule.timestart!= ''
+            AND subjectschedule.timeend!= ''
             AND department.id = %s 
             AND subjectschedule.calendarid = %s
     """,(depid,calendarid))
@@ -3066,5 +3080,3 @@ except Exception as e:
 cursor.close()
 conn.close()
 
-print(roomoccupied[14])
-print(facultyoccupied[8])

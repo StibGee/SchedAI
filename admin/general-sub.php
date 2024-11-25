@@ -35,7 +35,7 @@
         $calendardistinctall = $curriculum->getdistinctcurriculumsscheduleall();
         $collegeinfo=$college->getcollegeinfo($collegeid);
 
-
+        
 
         if(isset($_POST['departmentid'])){
             $_SESSION['departmentid'] = $_POST['departmentid'];
@@ -56,7 +56,7 @@
 
         }
 
-        $_SESSION['departmentid'];
+        
 
     ?>
     <main>
