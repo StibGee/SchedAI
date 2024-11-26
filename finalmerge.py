@@ -429,7 +429,7 @@ assignedsubjects = {}
 if assign_subject(0):
         print("all subjects are assigned")
 else:
-        webbrowser.open("http://schedai.online/admin/final-sched.php")
+        webbrowser.open("http://schedai.online/schedai/admin/final-sched.php?faculty=lacking")
 conn.commit()
 
 cursor.close()
@@ -949,6 +949,7 @@ if minor==1:
 
       
 def sectionfree(departmentid, yearlvl, section, day, time):
+    
     
     department = sectionoccupied.get(departmentid, {})
     year = department.get(yearlvl, {})

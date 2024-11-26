@@ -215,7 +215,7 @@ class Faculty {
         $sql = "SELECT *, faculty.id AS facultyid, department.name AS departmentname, CONCAT(faculty.fname, ' ', faculty.lname) AS facultyname
                 FROM faculty 
                 JOIN department ON department.id = faculty.departmentid 
-                WHERE department.collegeid = :collegeid ORDER BY faculty.type DESC";
+                WHERE department.collegeid = :collegeid ORDER BY faculty.type DESC, faculty.startdate ASC,faculty.departmentid ASC";
                 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['collegeid' => $collegeid]);
@@ -234,7 +234,7 @@ class Faculty {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function getinitialcollegefaculty($collegeid) {
-        $sql = "SELECT id FROM faculty WHERE collegeid = :collegeid LIMIT 1";
+        $sql = "SELECT id FROM faculty WHERE collegeid = :collegeid ORDER BY faculty.startdate LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':collegeid' => $collegeid]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

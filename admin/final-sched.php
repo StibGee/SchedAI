@@ -207,7 +207,7 @@ if ($roomcount == 0) {
     <?php
     if ($countsubjecthours>$countfacultyworkinghours) {
         echo "<script>
-            alert('Add new faculty first');
+            alert('Lacking faculty! Add new faculty first');
             window.location.href = 'faculty.php';
         </script>";
         exit;
@@ -414,11 +414,11 @@ if ($roomcount == 0) {
                     <button class="btn btn-success" data-bs-toggle="modal" <?php if($minornofacultycount==0){echo 'data-bs-target="#formModal"';}else{echo 'data-bs-target="#nofacultysubject"';}?>>Generate</button>
 
                 </div>
-                <div class="col-3">
+                <!--<div class="col-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyHoursModal1">
                         Open Warning Modal
                     </button>
-                </div>
+                </div>-->
                 <?php
                 // Include the modal HTML
                 include '../include/modal/warning-modals.php';

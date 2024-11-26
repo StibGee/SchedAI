@@ -29,7 +29,7 @@
         $collegesections=$schedule->getcollegesection($collegeid, $_SESSION['calendarid']);
     }else{
         $collegeroom=$room->getdepartmentrooms($_SESSION['departmentidbasis']);
-        $collegesections=$schedule->getdepartmentsection($_SESSION['departmentidbasis']);
+        $collegesections=$schedule->getdepartmentsection($_SESSION['departmentidbasis'],$_SESSION['calendarid']);
     }
     $calendarid=$_SESSION['calendarid'];
     $collegeinfo=$college->getcollegeinfo($collegeid);
@@ -272,7 +272,12 @@
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3><?php echo $departmentinfo1['abbreviation'].' '.$yearlvl.$section;?></h3>
+                    <h3><?php 
+                    if (isset($departmentinfo1['abbreviation'], $yearlvl, $section)) {
+                        echo $departmentinfo1['abbreviation'] . ' ' . $yearlvl . $section;
+                    }
+                    ?>
+                    </h3>
                     <a href="final-sched.php" id="viewToggleButton" class="btn">
                         Toggle View
                     </a>
