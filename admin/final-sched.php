@@ -467,8 +467,17 @@ if ($roomcount == 0) {
                                     ?>
                                     </td>
                                     <td><?php echo $subjectschedules['day'];?></td>
-                                    <td><?php echo $subjectschedules['roomname'];?></td>
-                                    <td><?php echo $subjectschedules['facultyfname'].' '.$subjectschedules['facultylname'];?></td>
+                                    <td><?php echo (isset($subjectschedules['roomname']) && !empty($subjectschedules['roomname'])) ? $subjectschedules['roomname'] : 'General'; ?></td>
+                                    <td>
+                                        <?php
+                                        echo (isset($subjectschedules['facultyfname'], $subjectschedules['facultylname']) 
+                                            && !empty($subjectschedules['facultyfname']) 
+                                            && !empty($subjectschedules['facultylname'])) 
+                                            ? $subjectschedules['facultyfname'] . ' ' . $subjectschedules['facultylname'] 
+                                            : 'General';
+                                        ?>
+                                    </td>
+
                                 </tr>
                                <?php $i+=1; } ?>
                             </tbody>
@@ -695,6 +704,8 @@ if ($roomcount == 0) {
                                 <thead>
                                     <tr>
                                         <th>Subject Name</th>
+                                        <th>Subject Type</th>
+                                        <th>Subject Department</th>
                                         <th>Select Faculty</th>
                                     </tr>
                                 </thead>
@@ -704,7 +715,15 @@ if ($roomcount == 0) {
                                         <tr>
                                             <td>
                                                 <input type="hidden" name="subjectname[]" value="<?php echo $subject['commonname']; ?>">
-                                                <?php echo $subject['commonname'].' '.$subject['departmentabbreviation']; ?>
+                                                <?php echo $subject['commonname']; ?>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="subjecttype[]" value="<?php echo $subject['subjecttype']; ?>">
+                                                <?php echo $subject['subjecttype']; ?>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="departmentid[]" value="<?php echo $subject['departmentid']; ?>">
+                                                <?php echo $subject['departmentabbreviation'];?>
                                             </td>
                                             <td>
                                                 <select name="facultyid[]" class="form-select">

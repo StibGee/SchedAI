@@ -37,7 +37,7 @@ function addsubject() {
     $masters = isset($_POST['masters']) ? 'Yes' : 'No';
 
     $subjectcode = isset($_POST['subjectcode']) ? filter_var($_POST['subjectcode'], FILTER_SANITIZE_STRING) : '';
-    $subjectname = isset($_POST['subjectname']) ? filter_var($_POST['subjectname'], FILTER_SANITIZE_STRING) : '';
+    $subjectname = isset($_POST['subjectname']) ? trim(filter_var($_POST['subjectname'], FILTER_SANITIZE_STRING)) : '';
     $lecunit = isset($_POST['lecunit']) ? filter_var($_POST['lecunit'], FILTER_SANITIZE_STRING) : '';
     $focus = isset($_POST['focus']) ? trim(stripslashes(htmlspecialchars($_POST['focus']))) : '';
     $calendarid = isset($_POST['calendarid']) ? trim(stripslashes(htmlspecialchars($_POST['calendarid']))) : '';
@@ -165,25 +165,41 @@ function listRooms() {
 }
 
 function addfacultysubject() {
-    
-    global $schedule;
-    global $curriculum;
-    global $subject;
+    global $schedule, $curriculum, $subject;
 
     $subjectnames = $_POST['subjectname']; 
+    $subjecttypes = $_POST['subjecttype']; 
+    $departmentids = $_POST['departmentid']; 
     $facultyids = $_POST['facultyid'];
-   
-    foreach ($subjectnames as $index => $subjectname) {
-        $facultyid = $facultyids[$index];
-        $result = $subject->addfacultysubject($facultyid, $subjectname);
+
+    // Ensure all arrays have the same number of elements
+    if (count($subjectnames) !== count($facultyids) ||
+        count($subjectnames) !== count($subjecttypes) ||
+        count($subjectnames) !== count($departmentids)) {
+        // Redirect or handle error due to mismatch
+        header("Location: ../admin/schedule.php?error=mismatch");
+        exit();
     }
 
-    if ($result) { 
+    $success = true; 
+
+    foreach ($subjectnames as $index => $subjectname) {
+        $facultyid = $facultyids[$index];
+        $subjecttype = $subjecttypes[$index];
+        $departmentid = $departmentids[$index];
+        $result = $subject->addfacultysubject($facultyid, $subjectname, $subjecttype, $departmentid);
+
+        if (!$result) {
+            $success = false; 
+        }
+    }
+
+    if ($success) { 
         header("Location: ../admin/final-sched.php");
-        
     } else {
-        header("Location: ../admin/schedule.php?curriculum=$assigned");
-    }    
+        header("Location: ../admin/schedule.php?curriculum=error");
+    }
     exit();
 }
+
 ?>

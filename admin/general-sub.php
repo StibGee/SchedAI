@@ -134,7 +134,7 @@
                                                                                     <option value="MTh">Monday and Thursday</option>
                                                                                     <option value="TF">Thursday and Friday</option>
                                                                                     <option value="WS">Wednesday and Saturday</option>
-                                                                                    <option value="" selected disabled>Please select a day</option>
+                                                                                    <option value="N/A" disabled>Please select a day</option>
                                                                                 <?php }else{?>
                                                                                     <option value="M">Monday</option>
                                                                                     <option value="T">Tuesday</option>
@@ -142,7 +142,7 @@
                                                                                     <option value="Th">Thursday</option>
                                                                                     <option value="F">Friday</option>
                                                                                     <option value="S">Saturday</option>
-                                                                                    <option value="" selected disabled>Please select a day</option>
+                                                                                    <option value="N/A" disabled>Please select a day</option>
                                                                                 <?php } ?>
                                                                             </select>
 

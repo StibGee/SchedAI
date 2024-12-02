@@ -395,7 +395,7 @@
                                             <div class="row">
                                                 <label class="form-label" for="subname">Program Focus</label>
                                                 <select class="form-select" id="department" required="" name="focus">
-                                                    <option selected="" disabled="" value="">Choose...</option>
+                                                    <option disabled="" value="">Choose...</option>
                                                     <option value="Major">Specialized Subject</option>
                                                     <option value="Minor">General Subject</option>
                                                     <option value="Major1">Specialized Subject<p>(no schedule)</p></option>

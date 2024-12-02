@@ -132,7 +132,7 @@ class Subject {
    
     //fetch distinct subjects
     public function getdistinctsubjects() {
-        $sql = "SELECT DISTINCT commonname AS name FROM subject WHERE focus != 'Minor'";
+        $sql = "SELECT DISTINCT subject.name AS name,  FROM subject WHERE focus != 'Minor'";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -144,9 +144,10 @@ class Subject {
     
         return $results;
     }
-    public function getdistinctsubjectscollege($collegeid) {
-        $stmt = $this->pdo->prepare("SELECT DISTINCT commonname AS name FROM subject JOIN department ON department.id=subject.departmentid WHERE collegeid = :collegeid AND focus!='Minor'");
+    public function getdistinctsubjectscollege($collegeid, $sem) {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT(commonname) AS name, subject.type as type, department.abbreviation as departmentname, department.id as departmentid FROM subject JOIN department ON department.id=subject.departmentid JOIN calendar ON calendar.id=subject.calendarid WHERE calendar.collegeid = :collegeid AND calendar.sem=:sem AND focus!='Minor'");
         $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT);
+        $stmt->bindParam(':sem', $sem, PDO::PARAM_INT);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
@@ -155,11 +156,13 @@ class Subject {
 
    
 
-    public function addfacultysubject($facultyid, $subjectname){
-        $sql="INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid, :subjectname)";
+    public function addfacultysubject($facultyid, $subjectname, $subjecttype, $departmentid){
+        $sql="INSERT INTO facultysubject (facultyid, subjectname, subjecttype, departmentid) VALUES (:facultyid, :subjectname, :subjecttype, :departmentid)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':facultyid', $facultyid);
         $stmt->bindParam(':subjectname', $subjectname);
+        $stmt->bindParam(':subjecttype', $subjecttype);
+        $stmt->bindParam(':departmentid', $departmentid);
         return $stmt->execute(); 
     }
     

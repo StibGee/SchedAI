@@ -9,15 +9,7 @@ class Faculty {
     }
 
     public function addfaculty($fname, $mname, $lname, $contactno, $bday, $gender, $username, $hashedpassword, $type, $startdate, $departmentid, $collegeid, $teachinghours, $rank, $masters, $phd, $emailadd) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM faculty WHERE fname = :fname");
-        $stmt->bindParam(':fname', $fname);
-        $stmt->execute();
-        $facultyexists = $stmt->fetchColumn();
-    
-        if ($facultyexists) {
-            header("Location: ../admin/faculty.php?faculty=exist");
-            exit();
-        }
+        
 
         $stmt = $this->pdo->prepare("INSERT INTO faculty (fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, collegeid, teachinghours, rank, masters, phd, email) VALUES (:fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :collegeid, :teachinghours, :rank, :masters, :phd, :email)");
     
@@ -94,16 +86,22 @@ class Faculty {
         return $facultydayexists > 0;
     }
     
-    public function addfacultysubject($subjectname, $facultyid) {
-        foreach($subjectname as $subjectnames) {
-            $sql = "INSERT INTO facultysubject (facultyid, subjectname) VALUES (:facultyid, :subjectname)";
+    public function addfacultysubject($subjectname, $facultyid, $subjecttype, $subjectdepartmentid) {
+        foreach ($subjectname as $index => $subjectnames) {
+            $sql = "INSERT INTO facultysubject (facultyid, subjectname, subjecttype, departmentid) 
+                    VALUES (:facultyid, :subjectname, :subjecttype, :subjectdepartmentid)";
             $stmt = $this->pdo->prepare($sql);
+        
             $stmt->bindParam(':facultyid', $facultyid, PDO::PARAM_INT);
             $stmt->bindParam(':subjectname', $subjectnames, PDO::PARAM_STR);
-            $stmt->execute(); 
+            $stmt->bindParam(':subjecttype', $subjecttype[$index], PDO::PARAM_STR);
+            $stmt->bindParam(':subjectdepartmentid', $subjectdepartmentid[$index], PDO::PARAM_INT);
+            
+            $stmt->execute();
         }
         return true;
     }
+    
     
     public function addtimepreference($facultyid, $day, $starttime,$endtime){
         $sql ="INSERT INTO facultypreferences (facultyid, day, starttime, endtime) VALUES (:facultyid, :day, :starttime, :endtime)";
@@ -405,6 +403,18 @@ class Faculty {
         $stmt = $this->pdo->prepare($sql);
         
         $stmt->execute([':collegeid' => $collegeid]);
+        
+        return $stmt->fetchColumn();
+    }
+    public function getfacultyteachinghours($calendarid, $facultyid) {
+        $sql = "SELECT SUM(subject.hours) 
+                FROM subject 
+                JOIN subjectschedule ON subjectschedule.subjectid = subject.id 
+                WHERE subjectschedule.calendarid =:calendarid 
+                AND subjectschedule.facultyid =:facultyid;";
+        $stmt = $this->pdo->prepare($sql);
+        
+        $stmt->execute([':calendarid' => $calendarid, ':facultyid' => $facultyid]);
         
         return $stmt->fetchColumn();
     }

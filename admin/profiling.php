@@ -6,9 +6,52 @@
 
 <body >
     <style>
-        input {
-            accent-color: #145a32 !important;
-        }
+        
+
+.pagination .page-item.active .page-link{
+    background-color: #119e0e;
+    border-color: #119e0e;
+    color: white;
+}
+.page-item:hover{
+    cursor: pointer;
+    color: #119e0e;
+
+}
+.page-item a:hover{
+    cursor: pointer;
+    color: #119e0e;
+
+}
+.pagination a {
+    color: #119e0e;
+}
+tr:has(input[type="checkbox"]:checked) {
+    background-color: #d1e7dd;
+}
+input[type="checkbox"]:checked ~ td {
+    background-color: #d1e7dd; /* Success green for the cells */
+    color: #0f5132; /* Text color for better contrast */
+}
+
+/* Alternatively, style the entire row */
+input[type="checkbox"]:checked ~ td,
+input[type="checkbox"]:checked ~ td + td {
+    background-color: #d1e7dd; /* Success green for all cells */
+}
+input[type="checkbox"] {
+    accent-color: #198754 !important; /* Bootstrap success green */
+}
+
+/* Optional: Add a hover effect */
+input[type="checkbox"]:hover {
+    accent-color: #145a32 !important; /* Darker green for hover */
+}
+input {
+    accent-color: #145a32 !important;
+}
+
+
 
     </style>
     <?php
@@ -18,6 +61,8 @@
         require_once('../classes/db.php');
         require_once('../classes/faculty.php');
         require_once('../classes/department.php');
+        require_once('../classes/college.php');
+        require_once('../classes/curriculum.php');
 
         $db = new Database();
         $pdo = $db->connect();
@@ -25,17 +70,21 @@
         $subject = new Subject($pdo);
         $department = new Department($pdo);
         $faculty = new Faculty($pdo);
+        $college = new College($pdo);
+        $curriculum = new Curriculum($pdo);
 
         if (isset($_POST['facultyid'])){
             $facultyid=$_POST['facultyid'];
         }
         if ($_SESSION['scheduling']=='department'){
-            $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid']);
+            $latestsem = $curriculum->latestsem($_SESSION['collegeid']);
+            //$distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid'], $latestsem);
+           
             $collegedepartment = $department->getdepartmentdepartment($_SESSION['departmentid']);
             
         }else{
-            $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid']);
-            
+            $latestsem = $curriculum->latestsem($_SESSION['collegeid']);
+            $distinctsubjects = $subject->getdistinctsubjectscollege($_SESSION['collegeid'], $latestsem);
             $collegedepartment = $department->getcollegedepartment($_SESSION['collegeid']);
         }
     
@@ -219,7 +268,8 @@
                                     <thead>
                                         <tr>
                                             <th data-sort="subcode">Subject Name</th>
-
+                                            <th data-sort="desc">Type</th>
+                                            <th data-sort="desc">Department</th>
                                             <th>action</th>
                                         </tr>
                                     </thead>
@@ -228,7 +278,18 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <label for="">Preferred Subject Selection</label>
+                            <label for="">Preferred Subject Selection for <?php if (isset($latestsem)) echo $latestsem == 1 ? '1st Sem' : ($latestsem == 2 ? '2nd Sem' : htmlspecialchars($latestsem)); ?></label>
+                            <div id="specialization" class="d-inline-block w-auto " style="width: 100%; display: inline-block; margin-right: 20px !important;">
+
+                                <select id="filterSelector" class="form-select form-select-sm " style="width: 100%; display: inline-block; margin-right: 10px;">
+                                    <option disabled selected>All Department</option>
+                                    <?php foreach ($collegedepartment AS $collegedepartments){?>
+                                        <option value="<?php echo $collegedepartments['abbreviation'];?>"><?php echo $collegedepartments['abbreviation'];?></option>
+                                        
+                                    <?php } ?> 
+                                </select>
+                            </div>
+                            
                             <div class="wrap p-3 m-3">
                                 <div class="table-sub1 table-sub my-3 p-3">
                                 <table id="subjects1" class="table table-sm fs-9 mb-0">
@@ -236,7 +297,8 @@
                                         <tr>
 
                                             <th data-sort="desc">Subject Name</th>
-
+                                            <th data-sort="desc">Type</th>
+                                            <th data-sort="desc">Department</th>
                                             <th>Select</th>
                                         </tr>
                                     </thead>
@@ -247,7 +309,7 @@
                                             $checked = '';
 
                                             foreach ($existingsubjects as $existingsubject) {
-                                                if ($existingsubject['subjectname'] == $subjects['name']) {
+                                                if ($existingsubject['subjectname'] == $subjects['name'] && $existingsubject['subjecttype'] == $subjects['type'] && $existingsubject['departmentid'] == $subjects['departmentid']) {
                                                     $checked = 'checked';
                                                     break;
                                                 }
@@ -255,11 +317,14 @@
                                         ?>
                                         <tr>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
-
+                                            <td class="align-middle desc"><?php echo htmlspecialchars($subjects['type']); ?></td>
+                                            <td class="align-middle desc"><?php echo htmlspecialchars($subjects['departmentname']); ?></td>
                                             <td class="align-middle">
                                                 <input type="checkbox" class="form-check-input load-subject-checkbox1"
                                                     data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>"
-
+                                                    data-subjecttype1="<?php echo htmlspecialchars($subjects['type']); ?>"
+                                                    data-subjectdepartmentname1="<?php echo htmlspecialchars($subjects['departmentname']); ?>"
+                                                    data-subjectdepartmentid1="<?php echo htmlspecialchars($subjects['departmentid']); ?>"
                                                     <?php echo $checked; ?>>
                                             </td>
                                         </tr>
@@ -388,35 +453,42 @@
 
         document.querySelectorAll('.load-subject-checkbox1:checked').forEach(function(checkbox) {
             const subjectName = checkbox.getAttribute('data-subjectname1');
+            const subjecttype = checkbox.getAttribute('data-subjecttype1');
+            const subjectdepartmentname = checkbox.getAttribute('data-subjectdepartmentname1');
+            const subjectdepartmentid = checkbox.getAttribute('data-subjectdepartmentid1');
 
-
-            addToSpecialization(subjectName,checkbox);
+            addToSpecialization(subjectName, subjecttype, subjectdepartmentname, subjectdepartmentid, checkbox);
         });
-
 
         document.querySelectorAll('.load-subject-checkbox1').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 const subjectName = this.getAttribute('data-subjectname1');
-
+                const subjecttype = this.getAttribute('data-subjecttype1');
+                const subjectdepartmentname = this.getAttribute('data-subjectdepartmentname1');
+                const subjectdepartmentid = this.getAttribute('data-subjectdepartmentid1');
 
                 if (this.checked) {
-                    addToSpecialization(subjectName,  this);
+                    addToSpecialization(subjectName, subjecttype, subjectdepartmentname, subjectdepartmentid, this);
                 } else {
-
-                    removeFromSpecialization(subjectName);
+                    removeFromSpecialization(subjectName, subjecttype, subjectdepartmentname);
                 }
             });
         });
     });
 
-    function addToSpecialization(subjectName, checkbox) {
+    function addToSpecialization(subjectName, subjecttype, subjectdepartmentname, subjectdepartmentid, checkbox) {
         const tbody = document.getElementById('loadedSubjects1');
 
         const newRow = document.createElement('tr');
+        newRow.setAttribute('data-subject-id', `${subjectName}-${subjecttype}-${subjectdepartmentname}`); 
+
         newRow.innerHTML = `
             <td hidden><input type="text" name="subjectname[]" value="${subjectName}" class="form-control"></td>
+            <td hidden><input type="text" name="subjecttype[]" value="${subjecttype}" class="form-control"></td>
+            <td hidden><input type="text" name="subjectdepartmentid[]" value="${subjectdepartmentid}" class="form-control"></td>
             <td class="align-middle">${subjectName}</td>
-
+            <td class="align-middle">${subjecttype}</td>
+            <td class="align-middle">${subjectdepartmentname}</td>
             <td class="align-middle">
                 <button type="button" class="btn btn-danger btn-sm remove-subject">Remove</button>
             </td>
@@ -424,35 +496,52 @@
 
         newRow.querySelector('.remove-subject').addEventListener('click', function() {
             newRow.remove();
-
             checkbox.checked = false;
         });
         tbody.appendChild(newRow);
     }
-
-    function removeFromSpecialization(subjectName) {
+    function removeFromSpecialization(subjectName, subjecttype, subjectdepartmentname) {
         const tbody = document.getElementById('loadedSubjects1');
         const rows = tbody.querySelectorAll('tr');
 
         rows.forEach(function(row) {
             const subjectInput = row.querySelector('input[name="subjectname[]"]');
+            const subjectTypeInput = row.querySelector('input[name="subjecttype[]"]');
+            const subjectDepartmentNameInput = row.querySelector('input[name="subjectdepartmentname[]"]');
+            const rowId = row.getAttribute('data-subject-id');
 
-
-            if (subjectInput && subjectInput.value.trim() === subjectName) {
+            if (
+                subjectInput && subjectInput.value === subjectName &&
+                subjectTypeInput && subjectTypeInput.value === subjecttype &&
+                subjectDepartmentNameInput && subjectDepartmentNameInput.value === subjectdepartmentname &&
+                rowId === `${subjectName}-${subjecttype}-${subjectdepartmentname}`
+            ) {
                 row.remove();
             }
+
         });
     }
-
 </script>
+
 <script>
-$(document).ready(function() {
-    $('#subjects1').DataTable({
-        "pageLength": 10,
-        "searching": true,
-        "lengthChange": false
+$(document).ready(function () {
+    var table = $('#subjects1').DataTable({
+        dom: '<"top"f>rt<"bottom"lp><"clear">',
+        initComplete: function () {
+    
+            $(".dataTables_filter").prepend($('#specialization'));
+        }
+    });
+
+    
+    $('#filterSelector').on('change', function () {
+        var filterValue = $(this).val();
+        table.column(2)
+            .search(filterValue)
+            .draw();
     });
 });
+</script>
 </script>
 
 <script>
@@ -481,12 +570,12 @@ $(document).ready(function() {
         const selectedSubjects = countSelectedSubjects();
         
         // Enable the button if 3 or more subjects are selected, otherwise disable it
-        if (selectedSubjects >= 3) {
+        if (selectedSubjects >= 1) {
             nextButton.disabled = false; // Enable the button
             messageBox.textContent = ""; // Clear the message if condition is met
         } else {
             nextButton.disabled = true;  // Disable the button
-            messageBox.textContent = "Please select at least 3 subjects."; // Show the message
+            messageBox.textContent = "Please select at least 1 subject."; // Show the message
         }
     }
 

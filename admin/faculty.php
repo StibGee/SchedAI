@@ -80,7 +80,7 @@
                                     <th>Department</th>
                                     <th>Teaching Hours</th>
                                     <th>Type</th>
-                                    <th>Rank</th>
+                                    <th>Degree</th>
                                     <th>Start Date</th>
                                     <th>Action</th>
                                 </tr>

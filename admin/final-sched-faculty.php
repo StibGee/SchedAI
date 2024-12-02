@@ -35,6 +35,7 @@
     if (isset($_POST['facultyid'])) {
 
         $facultyids = $_POST['facultyid'];
+        $facultyworkinghours=$faculty->getfacultyteachinghours($calendarid, $facultyids);
         $_SESSION['facultyid'] = $_POST['facultyid'];
         foreach ($collegefaculty as $collegefacultys){
 
@@ -45,6 +46,7 @@
             }
         }
     }elseif(isset($_SESSION['facultyid'])) {
+        $facultyworkinghours=$faculty->getfacultyteachinghours($calendarid, $_SESSION['facultyid']);
         $facultyids = $_SESSION['facultyid'];
 
 
@@ -270,8 +272,8 @@
 
             </div>
             <div class="sched-container my-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3><?php if (isset($facultynamefull)){echo $facultynamefull;}?></h3>
+                <div class="d-flex justify-content-between ">
+                    <h3><?php if (isset($facultynamefull)){echo $facultynamefull;}?><?php echo ' '.$facultyworkinghours;?></h4>
                     <a href="final-sched.php" id="viewToggleButton" class="btn">
                         Toggle View
                     </a>

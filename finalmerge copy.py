@@ -688,7 +688,15 @@ else:
             AND subjectschedule.calendarid = %s
             AND department.id = %s
     ) AS ordered_schedule
-    ORDER BY ordered_schedule.startdate ASC;""", (calendarid, depid))
+    ORDER BY 
+        CASE 
+            WHEN ordered_schedule.unit = 3 THEN 1   -- unit 3 comes first
+            WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 1 THEN 2   -- unit 1 with requirelabroom = 1 comes second
+            WHEN ordered_schedule.unit = 2 THEN 3   -- unit 2 comes third
+            WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 0 THEN 4  -- unit 1 with requirelabroom = 0 comes last
+            ELSE 5   -- Default case for other units, if any
+        END
+    ,ordered_schedule.startdate ASC;""", (calendarid, depid))
     subjectschedule = cursor.fetchall()
 
     cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus!='Major1' AND subject.focus!='Minor' AND subjectschedule.calendarid = %s AND department.id = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC""", (calendarid, depid))
@@ -697,7 +705,7 @@ else:
     cursor.execute("""SELECT * FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.id=%s""",(depid,))
     facultyall = cursor.fetchall()
 
-    cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.id=%s AND faculty.id!=0 ORDER BY day ASC, starttime ASC""",(depid,))
+    cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.id=%s AND faculty.id!=0 ORDER BY starttime ASC""",(depid,))
     facultypreference = cursor.fetchall()
 
     cursor.execute("""
@@ -1403,7 +1411,7 @@ def assigntimeslot(currentsubjectid):
                             assignedsubjects.remove(subjectid)
 
             if (backtrackcounters[currentsubjectid] >= maxdepth):
-               
+                
                 if newroomlablol[currentsubjectid]:
                     sorted_room32=sorted_rooms
                 else:
@@ -3077,4 +3085,3 @@ except Exception as e:
 cursor.close()
 conn.close()
 
-print(facultydaystimelec2[8])

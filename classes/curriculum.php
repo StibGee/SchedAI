@@ -61,7 +61,13 @@ class Curriculum {
             return $stmt->execute();
         }
     }
-
+    public function latestsem($collegeid) {
+        $sql = "SELECT sem FROM calendar WHERE collegeid = :collegeid ORDER BY id DESC LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':collegeid' => $collegeid]);
+        return $stmt->fetchColumn();
+    }
+    
     
     
     public function getroombyid($id) {

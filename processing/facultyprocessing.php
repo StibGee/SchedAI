@@ -342,6 +342,8 @@ function editfacultyprofiling() {
     $departmentidpost = isset($_POST['departmentidpost']) ? filter_var($_POST['departmentidpost'], FILTER_SANITIZE_STRING) : '';
     $facultyid = isset($_POST['facultyid']) ? filter_var($_POST['facultyid'], FILTER_SANITIZE_STRING) : '';
     $subjectname = isset($_POST['subjectname']) ? $_POST['subjectname'] : [];
+    $subjecttype = isset($_POST['subjecttype']) ? $_POST['subjecttype'] : [];
+    $subjectdepartmentid = isset($_POST['subjectdepartmentid']) ? $_POST['subjectdepartmentid'] : [];
     
     if ($highestdegree=='Masters'){
         $masters='Yes';
@@ -380,7 +382,7 @@ function editfacultyprofiling() {
     $resetfacultysubject= $faculty->resetfacultysubject($facultyid);
 
     //update facultysubject 
-    $addfacultysubject= $faculty->addfacultysubject($subjectname, $facultyid);
+    $addfacultysubject= $faculty->addfacultysubject($subjectname, $facultyid, $subjecttype, $subjectdepartmentid);
 
     if (isset($_POST['monday'])){
         $dayexisting = $faculty->checkfacultyday($facultyid, '1');
