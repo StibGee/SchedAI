@@ -76,11 +76,10 @@
                                     <th>No.</th>
                                     <th>Name</th>
                                     <th>Gender</th>
-                                    <th>Contact No.</th>
                                     <th>Department</th>
                                     <th>Teaching Hours</th>
+                                    <th>Overload Hours</th>
                                     <th>Type</th>
-                                    <th>Degree</th>
                                     <th>Start Date</th>
                                     <th>Action</th>
                                 </tr>
@@ -91,11 +90,10 @@
                                     <td><?php echo $i; ?></td>
                                     <td><?php echo $facultys['fname']." ".$facultys['mname']." ".$facultys['lname']; ?></td>
                                     <td><?php echo $facultys['gender']; ?></td>
-                                    <td><?php echo $facultys['contactno']; ?></td>
                                     <td><?php echo $facultys['abbreviation']; ?></td>
                                     <td><?php echo $facultys['teachinghours']; ?></td>
+                                    <td><?php echo $facultys['overloadhours']; ?></td>
                                     <td><?php echo $facultys['type']; ?></td>
-                                    <td><?php echo $facultys['rank']; ?></td>
                                     <td><?php echo $facultys['startdate']; ?></td>
                                     <td>
                                     <div style="display: flex;">
@@ -235,7 +233,7 @@
                                         </div>
 
                                         <div class="row mt-3">
-                                            <div class="col-6">
+                                            <div class="col-4">
                                                 <label class="form-label" for="rank">Highest Degree</label>
                                                 <select class="form-select" id="position" name="rank" required="">
                                                     <option disabled>Please select a highest degree </option>
@@ -244,9 +242,13 @@
                                                     <option value="Doctorate">Doctorate Degree</option>
                                                 </select>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-4">
                                                 <label class="form-label" for="teachinghours">Teaching Hours</label>
                                                 <input class="form-control" id="teachinghours" type="number" name="teachinghours" required placeholder="Hours/Week">
+                                            </div>
+                                            <div class="col-4">
+                                                <label class="form-label" for="overloadhours">Overload Hours</label>
+                                                <input class="form-control" id="overloadhours" type="number" name="overloadhours" required placeholder="Hours/Week">
                                             </div>
 
                                         </div>

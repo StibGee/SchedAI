@@ -150,6 +150,8 @@ function addfaculty() {
     $departmentid = trim(stripslashes(htmlspecialchars($_POST['departmentid'])));
     $collegeid = trim(stripslashes(htmlspecialchars($_POST['collegeid'])));
     $teachinghours = trim(stripslashes(htmlspecialchars($_POST['teachinghours'])));
+    $overloadhours = trim(stripslashes(htmlspecialchars($_POST['overloadhours'])));
+    
     $rank = trim(stripslashes(htmlspecialchars($_POST['rank'])));
     $emailadd = trim(stripslashes(htmlspecialchars($_POST['emailadd'])));
     $fullname=$fname.' '.$lname;
@@ -167,7 +169,7 @@ function addfaculty() {
     if(isset($_POST['emailadd'])){$emailfaculty=$email->emailnewfaculty($emailadd, $fullname, $username, $password);}
     $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
     
-    $addfaculty = $faculty->addfaculty($fname,$mname,$lname,$contactno,$bday,$gender,$username,$hashedpassword,$type,$startdate,$departmentid,$collegeid,$teachinghours,$rank,$masters,$phd,$emailadd
+    $addfaculty = $faculty->addfaculty($fname,$mname,$lname,$contactno,$bday,$gender,$username,$hashedpassword,$type,$startdate,$departmentid,$collegeid,$teachinghours,$rank,$masters,$phd,$emailadd, $overloadhours
     );
     if ($addfaculty) {
         header("Location: ../admin/faculty.php?faculty=added");
@@ -337,6 +339,7 @@ function editfacultyprofiling() {
     $gender = isset($_POST['gender']) ? filter_var($_POST['gender'], FILTER_SANITIZE_STRING) : '';
     $type = isset($_POST['type']) ? filter_var($_POST['type'], FILTER_SANITIZE_STRING) : '';
     $startdate = isset($_POST['startdate']) ? filter_var($_POST['startdate'], FILTER_SANITIZE_STRING) : '';
+    $overloadhours = isset($_POST['overloadhours']) ? filter_var($_POST['overloadhours'], FILTER_SANITIZE_STRING) : '';
     $teachinghours = isset($_POST['teachinghours']) ? filter_var($_POST['teachinghours'], FILTER_SANITIZE_STRING) : '';
     $highestdegree = isset($_POST['highestdegree']) ? filter_var($_POST['highestdegree'], FILTER_SANITIZE_STRING) : '';
     $departmentidpost = isset($_POST['departmentidpost']) ? filter_var($_POST['departmentidpost'], FILTER_SANITIZE_STRING) : '';
@@ -376,7 +379,7 @@ function editfacultyprofiling() {
     $saturdayendTime = isset($_POST['saturdayendTime']) ? $_POST['saturdayendTime'] : null;
 
     //edit faculty info
-    $editfaculty=$faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $departmentidpost, $masters);
+    $editfaculty=$faculty->editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $departmentidpost, $masters, $overloadhours);
 
     //reset facultysubject 
     $resetfacultysubject= $faculty->resetfacultysubject($facultyid);

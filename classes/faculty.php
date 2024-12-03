@@ -8,10 +8,10 @@ class Faculty {
         $this->pdo = $pdo;
     }
 
-    public function addfaculty($fname, $mname, $lname, $contactno, $bday, $gender, $username, $hashedpassword, $type, $startdate, $departmentid, $collegeid, $teachinghours, $rank, $masters, $phd, $emailadd) {
+    public function addfaculty($fname, $mname, $lname, $contactno, $bday, $gender, $username, $hashedpassword, $type, $startdate, $departmentid, $collegeid, $teachinghours, $rank, $masters, $phd, $emailadd, $overloadhours) {
         
 
-        $stmt = $this->pdo->prepare("INSERT INTO faculty (fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, collegeid, teachinghours, rank, masters, phd, email) VALUES (:fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :collegeid, :teachinghours, :rank, :masters, :phd, :email)");
+        $stmt = $this->pdo->prepare("INSERT INTO faculty (fname, mname, lname, contactno, bday, gender, username, password, type, startdate, departmentid, collegeid, teachinghours, rank, masters, phd, email, overloadhours) VALUES (:fname, :mname, :lname, :contactno, :bday, :gender, :username, :password, :type, :startdate, :departmentid, :collegeid, :teachinghours, :rank, :masters, :phd, :email, :overloadhours)");
     
         $stmt->bindParam(':fname', $fname);
         $stmt->bindParam(':mname', $mname);
@@ -30,6 +30,8 @@ class Faculty {
         $stmt->bindParam(':masters', $masters);
         $stmt->bindParam(':phd', $phd);
         $stmt->bindParam(':email', $emailadd);
+        $stmt->bindParam(':overloadhours', $overloadhours);
+        
         return $stmt->execute();
     }
     
@@ -135,8 +137,8 @@ class Faculty {
         $stmt->bindParam(':day', $day);
         return $stmt->execute();
     }
-    public function editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $departmentidpost, $masters) {
-        $sql = "UPDATE faculty SET fname = :fname, lname = :lname, mname = :mname, contactno = :contactno, email = :email, gender = :gender, type = :type, startdate = :startdate, teachinghours = :teachinghours, rank = :rank, departmentid = :departmentidpost, masters=:masters WHERE id = :facultyid";
+    public function editfacultyinfo($fname, $lname, $mname, $contactno, $email, $gender, $type, $startdate, $teachinghours, $highestdegree, $facultyid, $departmentidpost, $masters, $overloadhours) {
+        $sql = "UPDATE faculty SET fname = :fname, lname = :lname, mname = :mname, contactno = :contactno, email = :email, gender = :gender, type = :type, startdate = :startdate, teachinghours = :teachinghours, rank = :rank, departmentid = :departmentidpost, masters=:masters, overloadhours=:overloadhours WHERE id = :facultyid";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':departmentidpost', $departmentidpost);
         $stmt->bindParam(':fname', $fname);
@@ -151,6 +153,8 @@ class Faculty {
         $stmt->bindParam(':rank', $highestdegree);
         $stmt->bindParam(':facultyid', $facultyid);
         $stmt->bindParam(':masters', $masters);
+        $stmt->bindParam(':overloadhours', $overloadhours);
+
         return $stmt->execute();
     }
     

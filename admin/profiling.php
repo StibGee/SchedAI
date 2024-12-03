@@ -30,26 +30,30 @@ tr:has(input[type="checkbox"]:checked) {
     background-color: #d1e7dd;
 }
 input[type="checkbox"]:checked ~ td {
-    background-color: #d1e7dd; /* Success green for the cells */
-    color: #0f5132; /* Text color for better contrast */
+    background-color: #d1e7dd;
+    color: #0f5132; 
 }
 
-/* Alternatively, style the entire row */
 input[type="checkbox"]:checked ~ td,
 input[type="checkbox"]:checked ~ td + td {
-    background-color: #d1e7dd; /* Success green for all cells */
+    background-color: #d1e7dd; 
 }
 input[type="checkbox"] {
-    accent-color: #198754 !important; /* Bootstrap success green */
+    accent-color: #198754 !important; 
 }
 
-/* Optional: Add a hover effect */
 input[type="checkbox"]:hover {
-    accent-color: #145a32 !important; /* Darker green for hover */
+    accent-color: #145a32 !important;
 }
 input {
     accent-color: #145a32 !important;
 }
+tr.disabled-row {
+    background-color: #f8d7da;
+    color: #6c757d;
+    pointer-events: none; 
+}
+
 
 
 
@@ -242,15 +246,23 @@ input {
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-6">
+                            <div class="col-3">
                                 <label class="form-label" for="startdate">Start Date</label>
                                 <input class="form-control" id="startdate" type="date" name="startdate" value="<?php if(isset($facultyinfo['startdate'])){ echo $facultyinfo['startdate'];} ?>" required />
                                 <div class="valid-feedback">Looks good!</div>
                             </div>
 
-                            <div class="col-6">
+                            <div class="col-4">
                                 <label class="form-label" for="teachinghours">Teaching Hours</label>
                                 <input class="form-control" id="teachinghours" type="number" name="teachinghours" value="<?php if(isset($facultyinfo['teachinghours'])){ echo $facultyinfo['teachinghours'];} ?>" required placeholder="Hours/Week" />
+                            </div>
+                            <div class="col-1 d-flex align-items-center justify-content-center">
+                                <span>+</span>
+                            </div>
+
+                            <div class="col-4">
+                                <label class="form-label" for="teachinghours">Overload Hours</label>
+                                <input class="form-control" id="teachinghours" type="number" name="overloadhours" value="<?php if(isset($facultyinfo['overloadhours'])){ echo $facultyinfo['overloadhours'];} ?>" required placeholder="Hours/Week" />
                             </div>
                         </div>
 
@@ -299,6 +311,7 @@ input {
                                             <th data-sort="desc">Subject Name</th>
                                             <th data-sort="desc">Type</th>
                                             <th data-sort="desc">Department</th>
+                                            <th data-sort="desc">Faculty</th>
                                             <th>Select</th>
                                         </tr>
                                     </thead>
@@ -315,18 +328,26 @@ input {
                                                 }
                                             }
                                         ?>
-                                        <tr>
+                                        <tr class="<?php echo ($subjects['specializationcount'] >= 1 && $subjects['focus'] !== 'OJT') ? 'disabled-row' : ''; ?>">
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['type']); ?></td>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['departmentname']); ?></td>
+                                            <td class="align-middle desc">
+                                                <?php echo htmlspecialchars($subjects['facultynames'] ?? 'None'); ?>
+                                            </td>
+
+                                            
                                             <td class="align-middle">
                                                 <input type="checkbox" class="form-check-input load-subject-checkbox1"
                                                     data-subjectname1="<?php echo htmlspecialchars($subjects['name']); ?>"
                                                     data-subjecttype1="<?php echo htmlspecialchars($subjects['type']); ?>"
                                                     data-subjectdepartmentname1="<?php echo htmlspecialchars($subjects['departmentname']); ?>"
                                                     data-subjectdepartmentid1="<?php echo htmlspecialchars($subjects['departmentid']); ?>"
-                                                    <?php echo $checked; ?>>
+                                                    <?php echo $checked; ?>
+                                                    <?php if ($subjects['specializationcount'] >= 1 && $subjects['focus'] !== 'OJT') echo 'disabled'; ?>
+                                                >
                                             </td>
+
                                         </tr>
                                         <?php } ?>
 
@@ -527,13 +548,12 @@ input {
 $(document).ready(function () {
     var table = $('#subjects1').DataTable({
         dom: '<"top"f>rt<"bottom"lp><"clear">',
+        order: [], 
         initComplete: function () {
-    
             $(".dataTables_filter").prepend($('#specialization'));
         }
     });
 
-    
     $('#filterSelector').on('change', function () {
         var filterValue = $(this).val();
         table.column(2)
@@ -542,6 +562,7 @@ $(document).ready(function () {
     });
 });
 </script>
+
 </script>
 
 <script>
