@@ -145,7 +145,39 @@ class Subject {
         return $results;
     }
     public function getdistinctsubjectscollege($collegeid, $sem) {
-        $stmt = $this->pdo->prepare("SELECT DISTINCT(commonname) AS name, subject.type as type, department.abbreviation as departmentname, department.id as departmentid FROM subject JOIN department ON department.id=subject.departmentid JOIN calendar ON calendar.id=subject.calendarid WHERE calendar.collegeid = :collegeid AND calendar.sem=:sem AND focus!='Minor'");
+        $stmt = $this->pdo->prepare("SELECT DISTINCT 
+            subject.commonname AS name, 
+            subject.type AS type, 
+            subject.focus AS focus, 
+            department.abbreviation AS departmentname, 
+            department.id AS departmentid,
+            GROUP_CONCAT(
+                DISTINCT CONCAT(faculty.fname, ' ', LEFT(faculty.lname, 1), '.') 
+                ORDER BY faculty.fname ASC
+            ) AS facultynames,
+            (
+                SELECT COUNT(*) 
+                FROM facultysubject 
+                WHERE facultysubject.subjectname = subject.commonname 
+                AND facultysubject.subjecttype = subject.type 
+                AND facultysubject.departmentid = department.id
+            ) AS specializationcount
+        FROM subject
+        JOIN department ON department.id = subject.departmentid
+        JOIN calendar ON calendar.id = subject.calendarid
+        LEFT JOIN facultysubject 
+            ON facultysubject.subjectname = subject.commonname 
+            AND facultysubject.subjecttype = subject.type 
+            AND facultysubject.departmentid = department.id
+        LEFT JOIN faculty 
+            ON facultysubject.facultyid = faculty.id
+        WHERE calendar.collegeid = :collegeid
+        AND calendar.sem = :sem
+        AND subject.focus != 'Minor'
+        GROUP BY subject.commonname, subject.type, department.abbreviation, department.id
+        ORDER BY specializationcount ASC;
+
+        ");
         $stmt->bindParam(':collegeid', $collegeid, PDO::PARAM_INT);
         $stmt->bindParam(':sem', $sem, PDO::PARAM_INT);
         $stmt->execute();

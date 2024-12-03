@@ -273,7 +273,18 @@
             </div>
             <div class="sched-container my-4">
                 <div class="d-flex justify-content-between ">
-                    <h3><?php if (isset($facultynamefull)){echo $facultynamefull;}?><?php echo ' '.$facultyworkinghours;?></h4>
+                <h3>
+                    <?php 
+                        if (isset($facultynamefull)) {
+                            echo $facultynamefull;
+                        }
+                        
+                        if (isset($facultyworkinghours)) {
+                            echo ' ' . $facultyworkinghours;
+                        }
+                    ?>
+                </h3>
+
                     <a href="final-sched.php" id="viewToggleButton" class="btn">
                         Toggle View
                     </a>
