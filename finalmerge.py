@@ -43,6 +43,7 @@ if (depid==0):
             subject.type DESC, 
             subject.unit DESC, 
             fs.specialization_count ASC, 
+            subjectschedule.section ASC,
             subject.requirelabroom ASC,
             subject.focus ASC;
     """, (calendarid, collegeid))
@@ -116,7 +117,8 @@ else:
             subject.name ASC,
             subject.type DESC, 
             subject.unit DESC, 
-            fs.specialization_count ASC, 
+            fs.specialization_count ASC,
+            subjectschedule.section ASC, 
             subject.requirelabroom ASC,
             subject.focus ASC;
             
@@ -190,6 +192,17 @@ def lec3daysgapfaculty(facultyid):
     return False
 
 
+def sectioncount(subjectid):
+    cursor.execute("""
+        SELECT COUNT(*) FROM `subjectschedule` 
+        WHERE subjectid=%s AND calendarid=%s
+    """, (subjectid, calendarid))
+    result = cursor.fetchone()
+
+    
+    if result:  
+        return result[0]
+    return 0  
 
 
 
@@ -268,6 +281,7 @@ def assign_subject(currentshubjectid):
     subjectschedulesubjectmasters = subjectschedules[20]
     subjectschedulefocus = subjectschedules[21]
     subjectscheduledepartmentid = subjectschedules[9]
+    subjectschedulesubjectid = subjectschedules[1]
     
     if (backtrackcounters[currentshubjectid] >= maxdepth):
     
@@ -392,8 +406,11 @@ def assign_subject(currentshubjectid):
                         if ojtsection.get(subjectschedulesection) != facultysubjectfacultyid:
                             continue
                         
-                    
-
+                    if subjectschedulefocus != 'OJT' and subjectschedulesection=='A':
+                        if (sectioncount(subjectschedulesubjectid)*subjectschedulesubjecthours)>facultyworkinghours[facultysubjectfacultyid]:
+                            print(sectioncount(subjectschedulesubjectid)*subjectschedulesubjecthours, facultyworkinghours[facultysubjectfacultyid])
+                            time.sleep(10)
+                            continue
 
 
 

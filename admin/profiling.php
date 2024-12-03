@@ -328,7 +328,7 @@ tr.disabled-row {
                                                 }
                                             }
                                         ?>
-                                        <tr class="<?php echo ($subjects['specializationcount'] >= 1 && $subjects['focus'] !== 'OJT') ? 'disabled-row' : ''; ?>">
+                                        <tr class="<?php echo ($subjects['specializationcount'] >= 10 && $subjects['focus'] !== 'OJT') ? 'disabled-row' : ''; ?>">
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['name']); ?></td>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['type']); ?></td>
                                             <td class="align-middle desc"><?php echo htmlspecialchars($subjects['departmentname']); ?></td>
@@ -344,7 +344,7 @@ tr.disabled-row {
                                                     data-subjectdepartmentname1="<?php echo htmlspecialchars($subjects['departmentname']); ?>"
                                                     data-subjectdepartmentid1="<?php echo htmlspecialchars($subjects['departmentid']); ?>"
                                                     <?php echo $checked; ?>
-                                                    <?php if ($subjects['specializationcount'] >= 1 && $subjects['focus'] !== 'OJT') echo 'disabled'; ?>
+                                                    <?php if ($subjects['specializationcount'] >= 10 && $subjects['focus'] !== 'OJT') echo 'disabled'; ?>
                                                 >
                                             </td>
 
