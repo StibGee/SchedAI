@@ -134,6 +134,14 @@
                                                                                     <option value="MTh">Monday and Thursday</option>
                                                                                     <option value="TF">Thursday and Friday</option>
                                                                                     <option value="WS">Wednesday and Saturday</option>
+                                                                                    <option value="WS">Wednesday and Saturday</option>
+                                                                                    <option value="M">Monday</option>
+                                                                                    <option value="T">T</option>
+                                                                                    <option value="W">W</option>
+                                                                                    <option value="Th">Th</option>
+                                                                                    <option value="F">F</option>
+                                                                                    <option value="S">S</option>
+                                                                                    <option value="Sun">Sun</option>
                                                                                     <option value="N/A" disabled>Please select a day</option>
                                                                                 <?php }else{?>
                                                                                     <option value="M">Monday</option>
