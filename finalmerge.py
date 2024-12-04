@@ -8,7 +8,7 @@ collegeid = int(sys.argv[2])
 calendarid = int(sys.argv[3])'''
 depid = 0
 collegeid = 3
-calendarid = 111
+calendarid = 112
 minor=1
 
 
@@ -1861,7 +1861,10 @@ def assigntimeslot(currentsubjectid):
 
                         if ((findfacultylastassignedup(facultyidlec2, daylec2)!=0) and (startminutes-findfacultylastassignedup(facultyidlec2, daylec2)>320)):
                             continue
-                        '''new'''
+                        
+                        if ((findfacultylastassignedup(facultyidlec2, daylec2)!=0) and findfacultylastassignedup(facultyidlec2, daylec2)>startminutes):
+                            if findfacultylastassignedup(facultyidlec2, daylec2)-90-startminutes+90>450:
+                                continue
                         
                         
 
@@ -2188,7 +2191,7 @@ def assigntimeslot(currentsubjectid):
                             continue     
                         
                         if ((findfacultylastassignedup(faculty_idlab, daylab)!=0) and findfacultylastassignedup(faculty_idlab, daylab)>start_minuteslab):
-                            if findfacultylastassignedup(faculty_idlab, daylab)-150-start_minuteslab+150>670:
+                            if findfacultylastassignedup(faculty_idlab, daylab)-90-start_minuteslab+180>600:
                                 continue
                             
                         '''elif(countup_value<countdown_value and countdown_value>=1):
