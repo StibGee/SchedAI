@@ -399,7 +399,7 @@ class Faculty {
         return $stmt->fetchColumn();
     }
     public function countfacultyteachinghourscollege($collegeid) {
-        $sql = "SELECT SUM(faculty.teachinghours) 
+        $sql = "SELECT SUM(faculty.teachinghours) + SUM(faculty.overloadhours) AS total_hours
                 FROM faculty
                 JOIN department ON department.id = faculty.departmentid
                 WHERE department.collegeid = :collegeid AND faculty.active = 1";

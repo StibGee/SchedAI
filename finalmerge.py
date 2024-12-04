@@ -6,9 +6,9 @@ import webbrowser
 '''depid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
 calendarid = int(sys.argv[3])'''
-depid = 1
+depid = 0
 collegeid = 3
-calendarid = 110
+calendarid = 111
 minor=1
 
 
@@ -29,21 +29,23 @@ if (depid==0):
         JOIN `subject` ON subjectschedule.subjectid = subject.id 
         JOIN department ON department.id = subjectschedule.departmentid
         LEFT JOIN (
-            SELECT subjectname, COUNT(subjectname) AS specialization_count
+            SELECT subjectname, subjecttype, departmentid, COUNT(*) AS specialization_count
             FROM facultysubject
-            GROUP BY subjectname
-        ) AS fs ON fs.subjectname = subject.commonname
-        WHERE subject.focus != 'Minor' AND subject.focus!='Major1'
+            GROUP BY subjectname, subjecttype, departmentid
+        ) AS fs ON fs.subjectname = subject.commonname 
+                AND fs.subjecttype = subject.type 
+                AND fs.departmentid = department.id
+        WHERE subject.focus != 'Minor' AND subject.focus != 'Major1'
         AND subjectschedule.calendarid = %s
         AND department.collegeid = %s
         ORDER BY 
             subject.departmentid ASC,
             CASE WHEN subject.focus = 'OJT' THEN 0 ELSE 1 END ASC, -- Force 'OJT' rows to the end
-            subject.name ASC,
+            fs.specialization_count ASC,
+            subject.commonname ASC,
             subject.type DESC, 
             subject.unit DESC, 
-            fs.specialization_count ASC, 
-            subjectschedule.section ASC,
+            subjectschedule.section ASC, 
             subject.requirelabroom ASC,
             subject.focus ASC;
     """, (calendarid, collegeid))
@@ -100,27 +102,31 @@ if (depid==0):
 
 else:
     cursor.execute("""
-        SELECT * 
+       SELECT * 
         FROM `subjectschedule` 
         JOIN `subject` ON subjectschedule.subjectid = subject.id 
         JOIN department ON department.id = subjectschedule.departmentid
         LEFT JOIN (
-            SELECT subjectname, COUNT(subjectname) AS specialization_count
+            SELECT subjectname, subjecttype, departmentid, COUNT(*) AS specialization_count
             FROM facultysubject
-            GROUP BY subjectname
-        ) AS fs ON fs.subjectname = subject.commonname
-        WHERE subject.focus != 'Minor' AND subject.focus!='Major1'
+            GROUP BY subjectname, subjecttype, departmentid
+        ) AS fs ON fs.subjectname = subject.commonname 
+                AND fs.subjecttype = subject.type 
+                AND fs.departmentid = department.id
+        WHERE subject.focus != 'Minor' AND subject.focus != 'Major1'
         AND subjectschedule.calendarid = %s
         AND department.id = %s
         ORDER BY 
+            subject.departmentid ASC,
             CASE WHEN subject.focus = 'OJT' THEN 0 ELSE 1 END ASC, -- Force 'OJT' rows to the end
-            subject.name ASC,
+            fs.specialization_count ASC,
+            subject.commonname ASC,
             subject.type DESC, 
             subject.unit DESC, 
-            fs.specialization_count ASC,
             subjectschedule.section ASC, 
             subject.requirelabroom ASC,
             subject.focus ASC;
+
             
 
     """, (calendarid, depid))
@@ -284,7 +290,7 @@ def assign_subject(currentshubjectid):
     subjectschedulesubjectid = subjectschedules[1]
     
     if (backtrackcounters[currentshubjectid] >= maxdepth):
-    
+        
 
         sortedfaculty1 = sorted(facultysubject1, key=lambda x: (x[15] != subjectscheduledepartmentid))
         for facultysubjects in sortedfaculty1:
@@ -384,10 +390,10 @@ def assign_subject(currentshubjectid):
             if currentshubjectid not in newfaculty:
                 newfaculty[currentshubjectid]={}
                 
-            if not newfaculty[currentshubjectid]:
+            '''if not newfaculty[currentshubjectid]:
                 if (subjectscheduletype == 'Lec' and subjectscheduleunit == 3):
                     if not lec3daysgapfaculty(facultysubjectfacultyid):
-                        continue
+                        continue'''
 
             if (not newfaculty[currentshubjectid] and currentshubjectid!=0) and facultysubjectfname=='NEW':
                 continue
@@ -406,11 +412,9 @@ def assign_subject(currentshubjectid):
                         if ojtsection.get(subjectschedulesection) != facultysubjectfacultyid:
                             continue
                         
-                    if subjectschedulefocus != 'OJT' and subjectschedulesection=='A':
+                    '''if subjectschedulefocus != 'OJT' and subjectschedulesection=='A':
                         if (sectioncount(subjectschedulesubjectid)*subjectschedulesubjecthours)>facultyworkinghours[facultysubjectfacultyid]:
-                            print(sectioncount(subjectschedulesubjectid)*subjectschedulesubjecthours, facultyworkinghours[facultysubjectfacultyid])
-                            time.sleep(10)
-                            continue
+                            continue'''
 
 
 
@@ -438,13 +442,14 @@ def assign_subject(currentshubjectid):
                     cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[facultysubjectfacultyid]} WHERE `id` = {facultysubjectfacultyid}")
                     conn.commit()
                     progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
-                    print(f"{progress-1:.2f}%: {facultysubjectfsubjectname} {subjectschedulesection} assigned to {facultysubjectfname} {facultysubjectlname} {facultysubjectfacultyid}")
+                    print(f"{progress-1:.2f}%: {facultysubjectfsubjectname} {subjectscheduletype} {subjectschedulesection} assigned to {facultysubjectfname} {facultysubjectlname} {facultysubjectfacultyid}")
                     
                     sys.stdout.flush()
                     if assign_subject(currentshubjectid + 1):
                         return True
 
                     '''print(f"Backtracking subject {currentshubjectid}/{len(subjectschedule)} {subjectschedulesubjectname}")'''
+                    time.sleep(100)
                     assignedsubjectscount-= 1
                     facultyworkinghours[facultysubjectfacultyid] += subjectschedulesubjecthours
                     del assignedsubjects[subjectscheduleid]
@@ -452,7 +457,7 @@ def assign_subject(currentshubjectid):
                     cursor.execute(f"UPDATE `faculty` SET `remainingteachinghours` = {facultyworkinghours[facultysubjectfacultyid]} WHERE `id` = {facultysubjectfacultyid}")
                     conn.commit()
    
-    print(f"failed assigning {currentshubjectid}/{len(subjectschedule)} {subjectschedulesubjectname}, trying previous assignment.")
+    print(f"failed assigning {currentshubjectid}/{len(subjectschedule)} {subjectschedulesubjectname} {subjectscheduletype}   {subjectscheduledepartmentid} , trying previous assignment.")
     backtrackcounters[currentshubjectid] += 1   
     return False
 
@@ -1084,7 +1089,7 @@ def getfacultyhoursday(facultyid, day):
     if facultyid in facultyhoursday:
         if day in facultyhoursday[facultyid]:
             return facultyhoursday[facultyid][day]
-    return None
+    return 0
     
 def findlastfacultyasslec2(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
@@ -1121,6 +1126,21 @@ def getfacultytype(facultyid):
     return None
 assignedsubjectscount=0
 
+def findfacultylastassignedup(facultyid, day):
+    if facultyid not in facultyoccupied or day not in facultyoccupied.get(facultyid, {}):
+        return None  
+
+    day_slots = facultyoccupied[facultyid].get(day, {})
+
+    last_occupied = 0
+
+
+    for time in range(420, 1441, 30): 
+        if day_slots.get(time) == 'occupied':
+            last_occupied = time 
+
+    return int(last_occupied)
+    
 
 def assigningtimeslot(day, starttime, duration, hour, roomid, facultyid, departmentid, yearlvl, section, subjectid):
     
@@ -1363,14 +1383,28 @@ def assigntimeslot(currentsubjectid):
                         
                         
 
-                        if getfacultytype(facultyidpair)=='Regular' and getfacultyhoursday(facultyidpair, day1)>=6 and getfacultyhoursday(facultyidpair, day2)>=6:
+                        if getfacultytype(facultyidpair)=='Regular' and getfacultyhoursday(facultyidpair, day1)+1>=6 and getfacultyhoursday(facultyidpair, day2)+1>=6:
                             continue
 
-                        if (facultysubjectcounter(facultyidpair, day1, startminutes)==2 and facultysubjectcounter(facultyidpair, day2, startminutes)==2):
+                        if (facultysubjectcounter(facultyidpair, day1, startminutes)==2 or facultysubjectcounter(facultyidpair, day2, startminutes)==2):
                             continue
                         
-                        if (facultysubjectcounterdown(facultyidpair, day1, startminutes)==2 and facultysubjectcounterdown(facultyidpair, day2, startminutes)==2):
+                        if (facultysubjectcounterdown(facultyidpair, day1, startminutes)==2 or facultysubjectcounterdown(facultyidpair, day2, startminutes)==2):
                             continue
+
+                        if (facultysubjectcounterdown(facultyidpair, day1, startminutes+90)>0 and facultysubjectcounterdown(facultyidpair, day2, startminutes+90)>0 and facultysubjectcounter(facultyidpair, day1, startminutes)>0 and facultysubjectcounter(facultyidpair, day2, startminutes)>0):
+
+                            continue
+
+                        if ((findfacultylastassignedup(facultyidpair, day1)!=0) and (startminutes-findfacultylastassignedup(facultyidpair, day1)>320)):
+                            continue
+                        
+                        if ((findfacultylastassignedup(facultyidpair, day2)!=0) and (startminutes-findfacultylastassignedup(facultyidpair, day2)>320)):
+                            continue
+                        
+                        if ((findfacultylastassignedup(facultyidpair, day1)!=0) and findfacultylastassignedup(facultyidpair, day1)>startminutes):
+                            if findfacultylastassignedup(facultyidpair, day1)-90-startminutes+90>400:
+                                continue
 
                         if facultyoccupied[facultyidpair][day1].get(startminutes) != 'occupied' and facultyoccupied[facultyidpair][day2].get(startminutes) != 'occupied':
                             countup_value = countup(roomid, day1, startminutes)
@@ -1381,6 +1415,7 @@ def assigntimeslot(currentsubjectid):
                         elif facultyoccupied[facultyidpair][day1].get(startminutes) != 'occupied' and facultyoccupied[facultyidpair][day2].get(startminutes) != 'occupied' and countup_value<3 and countup_value!=0 and (countdown_value-3)!=0 and countup_value>(countdown_value-3):
                             continue
                         
+
 
                         for time_slot in range(startminutes, startminutes+90, 30):
                             if time_slot==1140 :
@@ -1490,7 +1525,7 @@ def assigntimeslot(currentsubjectid):
                         facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(dayin3, Decimal(0))
                         facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(day2in3, Decimal(0))
 
-                        if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, dayin3)>=6 and getfacultyhoursday(subjectfacultyid, day2in3)>=6:
+                        if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, dayin3)+1>6 and getfacultyhoursday(subjectfacultyid, day2in3)+1>6:
                             continue
                         for time3 in range(420, 1140, 30):
                             day1 = False
@@ -1526,6 +1561,12 @@ def assigntimeslot(currentsubjectid):
                                 
                             else:
                                 day2 = False
+                                continue
+
+                            if (facultysubjectcounter(subjectfacultyid, dayin3, time3)==2 or facultysubjectcounter(subjectfacultyid, day2in3, time3)==2):
+                                continue
+                        
+                            if (facultysubjectcounterdown(subjectfacultyid, dayin3, time3)==2 or facultysubjectcounterdown(subjectfacultyid, day2in3, time3)==2):
                                 continue
 
                             if dayin3 not in facultyoccupied[subjectfacultyid]:
@@ -1774,13 +1815,15 @@ def assigntimeslot(currentsubjectid):
                         if subjectid in assignedsubjects:
                             continue
                             
-                        if getfacultytype(facultyidlec2)=='Regular' and (getfacultyhoursday(facultyidlec2, daylec2)+2>=6):
-                            continue
+                        
+                       
+                        
 
                         startminutes = timetominutes(starttime)
                         end_minutes = timetominutes(endtime)
 
-                        
+                        if getfacultytype(facultyidlec2)=='Regular' and ((getfacultyhoursday(facultyidlec2, daylec2))>=5):
+                            continue
                         
                         if roomid not in roomoccupied:
                                 roomoccupied[roomid] = {}
@@ -1797,6 +1840,12 @@ def assigntimeslot(currentsubjectid):
                         if (facultysubjectcounter(facultyidlec2, daylec2, startminutes)==2):
                             continue
 
+                        if (facultysubjectcounterdown(facultyidlec2, daylec2, startminutes+120)==2):
+                            continue
+                        
+                        if (facultysubjectcounterdown(facultyidlec2, daylec2, startminutes+120)>0 and facultysubjectcounter(facultyidlec2, daylec2, startminutes)>0):
+                            continue
+
                         countup_value = countup(roomid, daylec2, startminutes)
                         countdown_value = countdown(roomid, daylec2, startminutes) 
 
@@ -1810,6 +1859,8 @@ def assigntimeslot(currentsubjectid):
                         elif (countdown_value-4)<4 and countdown_value-4!=0 and countdown_value==countup_value:
                             continue
 
+                        if ((findfacultylastassignedup(facultyidlec2, daylec2)!=0) and (startminutes-findfacultylastassignedup(facultyidlec2, daylec2)>320)):
+                            continue
                         '''new'''
                         
                         
@@ -1896,7 +1947,7 @@ def assigntimeslot(currentsubjectid):
                         facultyhours = getfacultyhoursday(subjectfacultyid, daylabbacktrack)
 
                         if getfacultytype(subjectfacultyid)=='Regular':
-                            if facultyhours is not None and facultyhours >= 6:
+                            if facultyhours is not None and facultyhours+2>6:
                                 continue
 
                         for timebacktrack in range(420, 1140, 30):
@@ -2097,7 +2148,7 @@ def assigntimeslot(currentsubjectid):
                             facultyhoursday[faculty_idlab][daylab] = Decimal(0)
                             
                         if getfacultytype(subjectfacultyid)=='Regular':
-                            if getfacultyhoursday(faculty_idlab, daylab)+3>+6:
+                            if getfacultyhoursday(faculty_idlab, daylab)+3>6:
                                 continue
                             
                         if subjectid in assignedsubjects:
@@ -2133,9 +2184,13 @@ def assigntimeslot(currentsubjectid):
                             start_minuteslab = start_minuteslab + (30 * countdown(roomid, daylab, start_minuteslab))'''
                             
                             
+                        if ((findfacultylastassignedup(faculty_idlab, daylab)!=0) and (start_minuteslab-findfacultylastassignedup(faculty_idlab, daylab)>320)):
+                            continue     
+                        
+                        if ((findfacultylastassignedup(faculty_idlab, daylab)!=0) and findfacultylastassignedup(faculty_idlab, daylab)>start_minuteslab):
+                            if findfacultylastassignedup(faculty_idlab, daylab)-150-start_minuteslab+150>670:
+                                continue
                             
-                            
-
                         '''elif(countup_value<countdown_value and countdown_value>=1):
                         if countup_value<countdown_value:
                             start_minuteslab = start_minuteslab+180 + (30 * countdown_value)'''
@@ -2143,6 +2198,9 @@ def assigntimeslot(currentsubjectid):
                             continue
                         
                         if (facultysubjectcounterdown(faculty_idlab, daylab, start_minuteslab+180)==2):
+                            continue
+
+                        if (facultysubjectcounterdown(faculty_idlab, daylab, start_minuteslab+180)>0 and facultysubjectcounter(faculty_idlab, daylab, start_minuteslab)>0):
                             continue
 
                         countup_value = countup(roomid, daylab, start_minuteslab)
@@ -2206,7 +2264,7 @@ def assigntimeslot(currentsubjectid):
                             assignedsubjectscount=assignedsubjectscount+1
 
                             progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
-                            print(f"{progress:.2f}%: {subname} {subjectfacultyid} assigned on {daylab} starting {start_minuteslab}-{start_minuteslab+180}")
+                            print(f"{progress:.2f}%: {subname} {faculty_idlab} assigned on {daylab} starting {start_minuteslab}-{start_minuteslab+180}")
                             sys.stdout.flush()
 
                             if assigntimeslot(currentsubjectid+1): 
@@ -2255,10 +2313,14 @@ def assigntimeslot(currentsubjectid):
                             countdown_value = countdown(roomid, day1, time) 
 
                             if (facultyoccupied[subjectfacultyid][day1].get(time) != 'occupied' and facultysubjectcounter(subjectfacultyid, day1, time)==2):
+                                day1true = False
                                 continue
                         
 
-                        
+                            if ((findfacultylastassignedup(subjectfacultyid, day1)!=0) and (time-findfacultylastassignedup(subjectfacultyid, day1)>320)):
+                                day1true = False
+                                continue  
+
                             if (countdown_value-6)<6 and countdown_value-6!=0:
                                 day1true = False
                                 continue
@@ -2353,6 +2415,10 @@ def assigntimeslot(currentsubjectid):
                             facultyday1true = None
 
                             for time in range(420, 1140, 30):
+                                if ((findfacultylastassignedup(subjectfacultyid, day1)!=0) and (time-findfacultylastassignedup(subjectfacultyid, day1)>320)):
+                                    day1true = False
+                                    continue
+
                                 countup_value = countup(roomid, day1, time)
                                 countdown_value = countdown(roomid, day1, time) 
                             
@@ -3129,12 +3195,26 @@ if depid == 0:
     AND id NOT IN (SELECT ss.roomid FROM subjectschedule ss WHERE ss.roomid IS NOT NULL);
     """
     param = (collegeid,)
+    query = """
+    DELETE FROM faculty
+    WHERE fname = 'NEW'
+    AND faculty.collegeid = %s
+    AND id NOT IN (SELECT ss.facultyid FROM subjectschedule ss WHERE ss.facultyid IS NOT NULL);
+    """
+    param = (collegeid,)
 else:
     query = """
     DELETE FROM room
     WHERE name = 'FIELD'
     AND room.departmentid = %s
     AND id NOT IN (SELECT ss.roomid FROM subjectschedule ss WHERE ss.roomid IS NOT NULL);
+    """
+    param = (depid,)
+    query = """
+    DELETE FROM faculty
+    WHERE fname = 'NEW'
+    AND faculty.departmentid = %s
+    AND id NOT IN (SELECT ss.facultyid FROM subjectschedule ss WHERE ss.facultyid IS NOT NULL);
     """
     param = (depid,)
 
@@ -3150,4 +3230,3 @@ except Exception as e:
 cursor.close()
 conn.close()
 
-print(facultydaystimelab[25])

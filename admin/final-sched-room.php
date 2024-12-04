@@ -513,9 +513,14 @@
 
         }else {
 
-
-            alert(`Cannot swap. Please note the differences:\n
-                Dragged Subject:\nType: ${droppedday}\nHours: ${droppedtime}`);
+            if (droppedday!=null){
+                const confirmMove = confirm("Are you sure you want to move this subject?");
+                if (confirmMove) {
+                    moveSubjects(draggedSubjectId, droppedday, droppedtime);
+                    //alert(`Cannot swap. Please note the differences:\n
+                    //Dragged Subject:${draggedSubjectId} \Day: ${droppedday}\nHours: ${droppedtime}`);
+                }
+            }
         }
 
     }
@@ -563,7 +568,62 @@
             }, 500);
         }
     }
+    function moveSubjects(draggedSubjectId, droppedday, droppedtime) {
+        console.log(`Swapping subject ${draggedSubjectId}`);
+        /*const draggedSubject = document.querySelector(`[data-subject="${draggedSubjectId}"]`);
+        const droppeddays = document.querySelector(`[data-subject="${droppedday}"]`);
+        const droppedtimes = document.querySelector(`[data-subject="${droppedtime}"]`);*/
+       
+        if (draggedSubjectId && droppedday && droppedtime) {
 
+            /*const tempText = draggedSubject.innerHTML;
+            
+            droppedSubject.innerHTML = tempText;*/
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '../processing/scheduleprocessing.php';
+
+            const draggedInput = document.createElement('input');
+            draggedInput.type = 'hidden';
+            draggedInput.name = 'draggedsubjectid';
+            draggedInput.value = draggedSubjectId;
+
+            const droppedInputday = document.createElement('input');
+            droppedInputday.type = 'hidden';
+            droppedInputday.name = 'droppedday';
+            droppedInputday.value = droppedday;
+        
+            const droppedInputtime = document.createElement('input');
+            droppedInputtime.type = 'hidden';
+            droppedInputtime.name = 'droppedtime';
+            droppedInputtime.value = droppedtime;
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'moveschedule';
+
+            const actionInputlocation = document.createElement('input');
+            actionInputlocation.type = 'hidden';
+            actionInputlocation.name = 'location';
+            actionInputlocation.value = 'room';
+
+            form.appendChild(draggedInput);
+            form.appendChild(droppedInputday);
+            form.appendChild(droppedInputtime);
+            form.appendChild(actionInput);
+            form.appendChild(actionInputlocation);
+
+            document.body.appendChild(form);
+
+            console.log('Submitting form');
+
+            setTimeout(() => {
+            form.submit();
+            }, 500);
+        }
+    }
     document.querySelector('table').addEventListener('dragover', handleDragOver);
     document.querySelector('table').addEventListener('drop', handleDrop);
 

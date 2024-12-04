@@ -2,12 +2,14 @@
 require_once '../classes/db.php'; 
 require_once '../classes/schedule.php'; 
 require_once '../classes/curriculum.php'; 
+require_once '../classes/subject.php'; 
 
 
 $db = new Database();
 $pdo = $db->connect();
 $schedule = new Schedule ($pdo); 
-$curriculum = new Curriculum ($pdo); 
+$curriculum = new Curriculum ($pdo);
+$subject = new Subject ($pdo);  
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
@@ -23,6 +25,9 @@ switch ($action) {
         break;
     case 'swap':
         swap();
+        break;
+    case 'moveschedule':
+        move();
         break;
     case 'delete':
         deletecurriculum();
@@ -302,6 +307,69 @@ function swap() {
     
     
     $swap=$schedule->swapschedule($draggedsubjectid, $draggedsubjectday, $draggedsubjectstarttime, $draggedsubjectendtime, $droppedsubjectid, $droppedsubjectday, $droppedsubjectstarttime, $droppedsubjectendtime);
+
+    if($swap){
+        header("Location: ../admin/final-sched-room.php?swap=success");
+    }else {
+        header("Location: ../admin/final-sched-room.php?swap=failed");
+    }  
+}
+
+function move() {
+   
+    global $schedule;
+    global $curriculum;
+    global $subject;
+  
+    $draggedsubjectid = $_POST['draggedsubjectid'];
+    
+    $draggedsubjectscheduleinfo = $schedule->subjectscheduleinfo($draggedsubjectid);
+    $draggedsubjectday = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['day'] : null;
+    $draggedsubjectsubjectid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['subjectid'] : null;
+    $draggedsubjectstarttime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timestart'] : null;
+    $draggedsubjectendtime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timeend'] : null;
+    $draggedfacultyid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['facultyid'] : null;
+    $draggeddepartmentid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['departmentid'] : null;
+    $draggedyear = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['yearlvl'] : null;
+    $draggedsection = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['section'] : null;
+    $draggedcalendarid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['calendarid'] : null;
+    $draggedroomid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['roomid'] : null;
+
+    $subjectinfo = $subject->subjectinfo($draggedsubjectsubjectid);
+    $subjecthours=$subjectinfo ? $subjectinfo['hours']: null;
+    $subjecthours = intval($subjecthours);
+
+ 
+    $droppedday=$_POST['droppedday'];
+    $droppedtime=$_POST['droppedtime'];
+    $location=$_POST['location'];
+
+    $droppedtime=date("H:i", strtotime($droppedtime));
+    $endtime = date("H:i", strtotime($droppedtime . " +$subjecthours hours"));
+   
+   
+    if ($schedule->hasConflictFaculty($draggedcalendarid, $droppedday, $droppedtime, $endtime, $draggedsubjectid , $draggedfacultyid)) {
+        
+        header("Location: ../admin/final-sched-room.php?swap=facultyconflict"); 
+        exit;
+    }
+    
+   
+    if ($schedule->hasConflictSection($draggedcalendarid,$droppedday, $droppedtime, $endtime, $draggedsubjectid, $draggeddepartmentid, $draggedyear , $draggedsection)) {
+        
+        header("Location: ../admin/final-sched-room.php?swap=studentconflict");
+        exit;
+    }
+    if ($schedule->hasConflictRoom($draggedcalendarid,$droppedday, $droppedtime, $endtime, $draggedsubjectid, $draggedroomid)) {
+        die($draggedcalendarid.' '.$droppedday.' '.$droppedtime.' '.$endtime.' '.$draggedsubjectid.' '.$draggedroomid);
+        
+        header("Location: ../admin/final-sched-room.php?swap=roomconflict");
+        exit;
+    }
+   
+    
+    
+    $swap=$schedule->moveschedule($draggedsubjectid, $droppedday, $droppedtime, $endtime);
 
     if($swap){
         header("Location: ../admin/final-sched-room.php?swap=success");

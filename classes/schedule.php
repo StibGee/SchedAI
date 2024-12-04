@@ -108,6 +108,21 @@ class Schedule {
 
         return $result1 && $result2;
     }
+    public function moveschedule($draggedsubjectid, $day, $starttime, $endtime) {
+        
+        $sql = "UPDATE subjectschedule SET day = :day, timestart = :timestart, timeend = :timeend WHERE id = :subjectscheduleid";
+        $stmt = $this->pdo->prepare($sql);
+        $result1 = $stmt->execute([
+            ':subjectscheduleid' => $draggedsubjectid,
+            ':day' => $day,
+            ':timestart' => $starttime,
+            ':timeend' => $endtime
+        ]);
+    
+        $stmt = $this->pdo->prepare($sql);
+
+        return $result1;
+    }
     public function splitDays($days) {
         return preg_split('/(?=[A-Z])/', $days, -1, PREG_SPLIT_NO_EMPTY);
     }
@@ -166,7 +181,33 @@ class Schedule {
         ]);
         return $stmt->fetchColumn() > 0;
     }
-    
+    public function hasConflictRoom($calendarid ,$day, $starttime, $endtime, $excludeSubjectId, $roomid) {
+        $sql = "
+        SELECT COUNT(*)
+        FROM subjectschedule
+        WHERE
+        (
+            (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day))
+            OR day = :day
+            OR (day = 'MTh' AND :day IN ('M', 'Th'))
+            OR (day = 'WS' AND :day IN ('W', 'S'))
+            OR (day = 'TF' AND :day IN ('T', 'F'))
+        )
+
+        AND CAST(timestart AS TIME) < :endtime
+        AND CAST(timeend AS TIME) > :starttime
+        AND id != :subjectscheduleid AND subjectschedule.calendarid=:calendarid and subjectschedule.roomid=:roomid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':calendarid' => $calendarid,
+            ':day' => $day,
+            ':starttime' => $starttime,
+            ':endtime' => $endtime,
+            ':subjectscheduleid' => $excludeSubjectId,
+            ':roomid' => $roomid,
+        ]);
+        return $stmt->fetchColumn() > 0;
+    }
     
     public function getroombyid($id) {
         $sql = "SELECT * FROM rooms WHERE id = :id";

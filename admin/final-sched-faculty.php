@@ -41,6 +41,7 @@
 
             if ($collegefacultys['facultyid']== $facultyids){
                 $facultynamefull=$collegefacultys['facultyname'];
+                $minimumhours=$collegefacultys['teachinghours'];
 
 
             }
@@ -235,7 +236,14 @@
                     </h5>
                 </div>
             </div>
+            
+
             <div class="row d-flex justify-content-end align-items-center">
+            <div class="col-5"> 
+            
+
+                
+            </div>
                 <div class="col-2">
                         <select class="form-select  form-select-sm " id="filter" onchange="handleOptionChange()">
                             <option onclick="window.location.href='final-sched-room.php'" value="final-sched-room.php">Room Schedule</option>
@@ -279,9 +287,7 @@
                             echo $facultynamefull;
                         }
                         
-                        if (isset($facultyworkinghours)) {
-                            echo ' ' . $facultyworkinghours;
-                        }
+                        
                     ?>
                 </h3>
 
@@ -394,6 +400,16 @@
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                        <p class="m-0 d-flex flex-column align-items-end">
+                            <span class="">Minimum Teachers Hours: 
+                                <strong><?php if (isset($minimumhours)) { echo ' ' . $minimumhours; } ?></strong>
+                            </span>
+                            <span>Assigned Teachers Hours: 
+                                <strong><?php if (isset($facultyworkinghours)) { echo ' ' . $facultyworkinghours; } ?></strong>
+                            </span>
+                        </p>
+
+
                     </div>
 
                     </div>
