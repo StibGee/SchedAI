@@ -326,6 +326,7 @@ function move() {
     $draggedsubjectscheduleinfo = $schedule->subjectscheduleinfo($draggedsubjectid);
     $draggedsubjectday = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['day'] : null;
     $draggedsubjectsubjectid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['subjectid'] : null;
+    
     $draggedsubjectstarttime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timestart'] : null;
     $draggedsubjectendtime = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['timeend'] : null;
     $draggedfacultyid = $draggedsubjectscheduleinfo ? $draggedsubjectscheduleinfo['facultyid'] : null;
@@ -338,41 +339,118 @@ function move() {
     $subjectinfo = $subject->subjectinfo($draggedsubjectsubjectid);
     $subjecthours=$subjectinfo ? $subjectinfo['hours']: null;
     $subjecthours = intval($subjecthours);
-
+    $draggedsubjectfocus = $subjectinfo ? $subjectinfo['focus'] : null;
+    $draggedsubjectunit = $subjectinfo ? $subjectinfo['unit'] : null;
+    $draggedsubjecttype = $subjectinfo ? $subjectinfo['type'] : null;
+    
  
-    $droppedday=$_POST['droppedday'];
+    $droppeddayss=$_POST['droppedday'];
     $droppedtime=$_POST['droppedtime'];
     $location=$_POST['location'];
-
-    $droppedtime=date("H:i", strtotime($droppedtime));
     $endtime = date("H:i", strtotime($droppedtime . " +$subjecthours hours"));
-   
-   
-    if ($schedule->hasConflictFaculty($draggedcalendarid, $droppedday, $droppedtime, $endtime, $draggedsubjectid , $draggedfacultyid)) {
-        
-        header("Location: ../admin/final-sched-room.php?swap=facultyconflict"); 
-        exit;
-    }
+        // Mapping days to numbers
     
-   
-    if ($schedule->hasConflictSection($draggedcalendarid,$droppedday, $droppedtime, $endtime, $draggedsubjectid, $draggeddepartmentid, $draggedyear , $draggedsection)) {
+
+    if ($draggedsubjectunit == 3 && $draggedsubjecttype == 'Lec') {
+    
+        if ($droppeddayss=='M'){
+            $droppeddayss='MTh';
+        }elseif ($droppeddayss=='T'){
+            $droppeddayss='TF';
+        }elseif ($droppeddayss=='W'){
+            $droppeddayss='WS';
+        }elseif ($droppeddayss=='Th'){
+            $droppeddayss='MTh';
+        }elseif ($droppeddayss=='F'){
+            $droppeddayss='TF';
+        }elseif ($droppeddayss=='S'){
+            $droppeddayss='WS';
+        }
+           
         
-        header("Location: ../admin/final-sched-room.php?swap=studentconflict");
-        exit;
+        $endtime = date("H:i", strtotime($droppedtime . " +1.5 hours"));
     }
-    if ($schedule->hasConflictRoom($draggedcalendarid,$droppedday, $droppedtime, $endtime, $draggedsubjectid, $draggedroomid)) {
-        die($draggedcalendarid.' '.$droppedday.' '.$droppedtime.' '.$endtime.' '.$draggedsubjectid.' '.$draggedroomid);
+    $droppeddays = $schedule->splitDays($droppeddayss);
+    
+    $droppedtime=date("H:i", strtotime($droppedtime));
+    
+    
+
+    foreach ($droppeddays as $days) {
+        if ($schedule->hasConflictFaculty($draggedcalendarid, $days, $droppedtime, $endtime, $draggedsubjectid , $draggedfacultyid)) {
+            if ($location=='room'){
+                header("Location: ../admin/final-sched-room.php?swap=facultyconflict"); 
+                exit;
+            }elseif($location=='faculty'){
+                header("Location: ../admin/final-sched-faculty.php?swap=facultyconflict"); 
+                exit;
+            }elseif($location=='section'){
+                header("Location: ../admin/final-sched-section.php?swap=facultyconflict"); 
+                exit;
+            }
+            
+        }
+    }
+    foreach ($droppeddays as $days) {
+        if ($schedule->hasConflictSection($draggedcalendarid,$days, $droppedtime, $endtime, $draggedsubjectid, $draggeddepartmentid, $draggedyear , $draggedsection)) {
+            if ($location=='room'){
+                header("Location: ../admin/final-sched-room.php?swap=studentconflict"); 
+                exit;
+            }elseif($location=='faculty'){
+                header("Location: ../admin/final-sched-faculty.php?swap=studentconflict"); 
+                exit;
+            }elseif($location=='section'){
+                header("Location: ../admin/final-sched-section.php?swap=studentconflict"); 
+                exit;
+            }
         
-        header("Location: ../admin/final-sched-room.php?swap=roomconflict");
-        exit;
+        }
+    }
+    foreach ($droppeddays as $days) {
+        if ($schedule->hasConflictRoom($draggedcalendarid,$days, $droppedtime, $endtime, $draggedsubjectid, $draggedroomid)) {
+            
+            if ($location=='room' && $draggedsubjectfocus!='OJT'){
+                header("Location: ../admin/final-sched-room.php?swap=roomconflict"); 
+                exit;
+            }elseif($location=='faculty' && $draggedsubjectfocus!='OJT'){
+                header("Location: ../admin/final-sched-faculty.php?swap=roomconflict"); 
+                exit;
+            }elseif($location=='section' && $draggedsubjectfocus!='OJT'){
+                header("Location: ../admin/final-sched-section.php?swap=roomconflict"); 
+                exit;
+            }
+        }
+    }
+
+    if ($endtime>'19:00'){
+        if ($location=='room'){
+            header("Location: ../admin/final-sched-room.php?swap=roomconflict"); 
+            exit;
+        }elseif($location=='faculty'){
+            header("Location: ../admin/final-sched-faculty.php?swap=roomconflict"); 
+            exit;
+        }elseif($location=='section'){
+            header("Location: ../admin/final-sched-section.php?swap=roomconflict"); 
+            exit;
+        }
     }
    
     
     
-    $swap=$schedule->moveschedule($draggedsubjectid, $droppedday, $droppedtime, $endtime);
+    $swap=$schedule->moveschedule($draggedsubjectid, $droppeddayss, $droppedtime, $endtime);
 
     if($swap){
-        header("Location: ../admin/final-sched-room.php?swap=success");
+        if ($location=='room'){
+            header("Location: ../admin/final-sched-room.php?swap=success");
+            exit;
+        }elseif($location=='faculty'){
+            header("Location: ../admin/final-sched-faculty.php?swap=success"); 
+            exit;
+        }elseif($location=='section'){
+            header("Location: ../admin/final-sched-section.php?swap=success");
+            exit;
+        }
+        
     }else {
         header("Location: ../admin/final-sched-room.php?swap=failed");
     }  

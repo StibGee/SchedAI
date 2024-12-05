@@ -422,6 +422,18 @@ class Faculty {
         
         return $stmt->fetchColumn();
     }
+    public function getfacultyminimumteachinghours($calendarid, $facultyid) {
+        $sql = "SELECT teachinghours 
+                FROM faculty 
+                JOIN subjectschedule ON subjectschedule.facultyid = faculty.id 
+                WHERE subjectschedule.calendarid =:calendarid 
+                AND subjectschedule.facultyid =:facultyid;";
+        $stmt = $this->pdo->prepare($sql);
+        
+        $stmt->execute([':calendarid' => $calendarid, ':facultyid' => $facultyid]);
+        
+        return $stmt->fetchColumn();
+    }
     
     
     

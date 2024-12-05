@@ -687,6 +687,9 @@ if (swapStatus === 'facultyconflict') {
     showModal("Error: Schedule swapping failed due to student schedule conflict.", 'warning');
 } else if (swapStatus === 'success') {
     showModal("Schedule swapped successfully!", 'success');
+} else if (swapStatus === 'roomconflict') {
+    showModal("Error: Schedule swapping failed due to room schedule conflict.", 'warning');
 }
+
 
 </script>

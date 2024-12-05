@@ -132,16 +132,16 @@
                                                                             <select name="day[]" class="form-select form-select-sm" id="select-classtype">
                                                                                 <?php if($getminorsubjectscolleges['unit']==3){?>
                                                                                     <option value="MTh">Monday and Thursday</option>
-                                                                                    <option value="TF">Thursday and Friday</option>
+                                                                                    <option value="TF">Tuesday and Friday</option>
                                                                                     <option value="WS">Wednesday and Saturday</option>
-                                                                                    <option value="WS">Wednesday and Saturday</option>
+                                                                                   
                                                                                     <option value="M">Monday</option>
-                                                                                    <option value="T">T</option>
-                                                                                    <option value="W">W</option>
-                                                                                    <option value="Th">Th</option>
-                                                                                    <option value="F">F</option>
-                                                                                    <option value="S">S</option>
-                                                                                    <option value="Sun">Sun</option>
+                                                                                    <option value="T">Tuesday</option>
+                                                                                    <option value="W">Wednesday</option>
+                                                                                    <option value="Th">Thursday</option>
+                                                                                    <option value="F">Friday</option>
+                                                                                    <option value="S">Saturday</option>
+                                                                                    <option value="Sun">Sunday</option>
                                                                                     <option value="N/A" disabled>Please select a day</option>
                                                                                 <?php }else{?>
                                                                                     <option value="M">Monday</option>

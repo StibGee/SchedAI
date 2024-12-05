@@ -383,6 +383,23 @@
         </div>
 
     </main>
+    <!-- Modal -->
+    <div class="modal fade" id="swapModal" tabindex="-1" aria-labelledby="swapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="swapModalLabel">Swap Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center" id="modalMessage">
+                <!-- Dynamic message will go here -->
+            </div>
+            <div class="modal-footer">
+            
+            </div>
+            </div>
+        </div>
+    </div>
 </body>
 <style>.timetable-cell {
     border: 1px solid #ddd;
@@ -402,6 +419,9 @@
 
 .occupiedmiddle.dragging, .occupiedlast.dragging {
     opacity: 0.5;
+}
+.modal-dialog {
+    max-width: 300px; 
 }
 </style>
 
@@ -466,16 +486,21 @@
         const droppedtime = target.getAttribute('data-time');
 
         if (draggedSubjecttype===droppedSubjecttype && draggedSubjectunit===droppedSubjectunit && draggedSubjecthours===droppedSubjecthours && draggedSubjectId!=droppedSubjectId){
-            const confirmSwap = confirm("Are you sure you want to swap these subjects?");
+            /*const confirmSwap = confirm("Are you sure you want to swap these subjects?");
             if (confirmSwap) {
                 swapSubjects(draggedSubjectId, droppedSubjectId);
-            }
+            }*/
 
         }else {
 
-
-            alert(`Cannot swap. Please note the differences:\n
-                Dragged Subject:\nType: ${droppedday}\nHours: ${droppedtime}`);
+            if (droppedday!=null){
+                const confirmMove = confirm("Are you sure you want to move this subject?");
+                if (confirmMove) {
+                    moveSubjects(draggedSubjectId, droppedday, droppedtime);
+                    //alert(`Cannot swap. Please note the differences:\n
+                    //Dragged Subject:${draggedSubjectId} \Day: ${droppedday}\nHours: ${droppedtime}`);
+                }
+            }
         }
 
     }
@@ -523,7 +548,62 @@
             }, 500);
         }
     }
+    function moveSubjects(draggedSubjectId, droppedday, droppedtime) {
+        console.log(`Swapping subject ${draggedSubjectId}`);
+        /*const draggedSubject = document.querySelector(`[data-subject="${draggedSubjectId}"]`);
+        const droppeddays = document.querySelector(`[data-subject="${droppedday}"]`);
+        const droppedtimes = document.querySelector(`[data-subject="${droppedtime}"]`);*/
+       
+        if (draggedSubjectId && droppedday && droppedtime) {
 
+            /*const tempText = draggedSubject.innerHTML;
+            
+            droppedSubject.innerHTML = tempText;*/
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '../processing/scheduleprocessing.php';
+
+            const draggedInput = document.createElement('input');
+            draggedInput.type = 'hidden';
+            draggedInput.name = 'draggedsubjectid';
+            draggedInput.value = draggedSubjectId;
+
+            const droppedInputday = document.createElement('input');
+            droppedInputday.type = 'hidden';
+            droppedInputday.name = 'droppedday';
+            droppedInputday.value = droppedday;
+        
+            const droppedInputtime = document.createElement('input');
+            droppedInputtime.type = 'hidden';
+            droppedInputtime.name = 'droppedtime';
+            droppedInputtime.value = droppedtime;
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'moveschedule';
+
+            const actionInputlocation = document.createElement('input');
+            actionInputlocation.type = 'hidden';
+            actionInputlocation.name = 'location';
+            actionInputlocation.value = 'section';
+
+            form.appendChild(draggedInput);
+            form.appendChild(droppedInputday);
+            form.appendChild(droppedInputtime);
+            form.appendChild(actionInput);
+            form.appendChild(actionInputlocation);
+
+            document.body.appendChild(form);
+
+            console.log('Submitting form');
+
+            setTimeout(() => {
+            form.submit();
+            }, 500);
+        }
+    }
     document.querySelector('table').addEventListener('dragover', handleDragOver);
     document.querySelector('table').addEventListener('drop', handleDrop);
 
@@ -570,4 +650,51 @@ function updateAndSubmit() {
     // Submit the form after updating the hidden fields
     document.getElementById('roomForm').submit();
 }
+</script>
+<script>
+
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+
+function showModal(message, messageType) {
+    const modalMessage = document.getElementById('modalMessage');
+    modalMessage.textContent = message;
+
+    const modalContent = modalMessage.parentElement;
+    modalContent.classList.remove('text-danger', 'text-warning', 'text-success');
+    if (messageType === 'error') {
+        modalContent.classList.add('text-danger');
+    } else if (messageType === 'warning') {
+        modalContent.classList.add('text-danger');
+    } else if (messageType === 'success') {
+        modalContent.classList.add('text-success');
+    }
+
+
+    const modal = new bootstrap.Modal(document.getElementById('swapModal'), {
+        backdrop: 'static',
+        keyboard: false,    
+    });
+    modal.show();
+
+    setTimeout(() => {
+        modal.hide();
+    }, 3000);
+}
+
+
+const swapStatus = getQueryParam('swap');
+if (swapStatus === 'facultyconflict') {
+    showModal("Error: Schedule swapping failed due to faculty schedule conflict.", 'error');
+} else if (swapStatus === 'studentconflict') {
+    showModal("Error: Schedule swapping failed due to student schedule conflict.", 'warning');
+} else if (swapStatus === 'success') {
+    showModal("Schedule swapped successfully!", 'success');
+}else if (swapStatus === 'roomconflict') {
+    showModal("Error: Schedule swapping failed due to room schedule conflict.", 'warning');
+}
+
 </script>
