@@ -6,9 +6,9 @@ import webbrowser
 '''depid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
 calendarid = int(sys.argv[3])'''
-depid = 0
+depid = 1
 collegeid = 3
-calendarid = 113
+calendarid = 114
 minor=1
 
 
@@ -538,71 +538,71 @@ conn = mysql.connector.connect(
 cursor = conn.cursor()
 if (depid==0):
     cursor.execute("""SELECT 
-    ordered_schedule.id, 
-    ordered_schedule.subjectid, 
-    ordered_schedule.calendarid, 
-    ordered_schedule.yearlvl, 
-    ordered_schedule.section, 
-    ordered_schedule.timestart,
-    ordered_schedule.timeend,
-    ordered_schedule.day, 
-    ordered_schedule.roomname, 
-    ordered_schedule.departmentid, 
-    ordered_schedule.facultyid, 
-    ordered_schedule.subjectcode, 
-    ordered_schedule.name, 
-    ordered_schedule.unit, 
-    ordered_schedule.hours, 
-    ordered_schedule.type, 
-    ordered_schedule.subject_masters, 
-    ordered_schedule.focus, 
-    ordered_schedule.faculty_masters, 
-    ordered_schedule.startdate, 
-    ordered_schedule.requirelabroom
-FROM (
-    SELECT 
-        subjectschedule.id, 
-        subjectschedule.subjectid, 
-        subjectschedule.calendarid, 
-        subjectschedule.yearlvl, 
-        subjectschedule.section, 
-        subjectschedule.timestart,
-        subjectschedule.timeend,
-        subjectschedule.day, 
-        subjectschedule.roomname, 
-        subjectschedule.departmentid, 
-        subjectschedule.facultyid, 
-        subject.subjectcode, 
-        subject.name, 
-        subject.unit, 
-        subject.hours, 
-        subject.type, 
-        subject.masters AS subject_masters, 
-        subject.focus, 
-        faculty.masters AS faculty_masters, 
-        faculty.startdate, 
-        subject.requirelabroom
-    FROM 
-        subjectschedule
-    JOIN 
-        subject ON subjectschedule.subjectid = subject.id 
-    JOIN 
-        faculty ON faculty.id = subjectschedule.facultyid 
-    JOIN 
-        department ON department.id = subjectschedule.departmentid 
-    WHERE 
-        subject.focus != 'Major1' AND subject.focus != 'Minor' 
-        AND subjectschedule.calendarid = %s
-        AND department.collegeid = %s
-) AS ordered_schedule
-ORDER BY ordered_schedule.startdate ASC, 
+        ordered_schedule.id, 
+        ordered_schedule.subjectid, 
+        ordered_schedule.calendarid, 
+        ordered_schedule.yearlvl, 
+        ordered_schedule.section, 
+        ordered_schedule.timestart,
+        ordered_schedule.timeend,
+        ordered_schedule.day, 
+        ordered_schedule.roomname, 
+        ordered_schedule.departmentid, 
+        ordered_schedule.facultyid, 
+        ordered_schedule.subjectcode, 
+        ordered_schedule.name, 
+        ordered_schedule.unit, 
+        ordered_schedule.hours, 
+        ordered_schedule.type, 
+        ordered_schedule.subject_masters, 
+        ordered_schedule.focus, 
+        ordered_schedule.faculty_masters, 
+        ordered_schedule.startdate, 
+        ordered_schedule.requirelabroom
+    FROM (
+        SELECT 
+            subjectschedule.id, 
+            subjectschedule.subjectid, 
+            subjectschedule.calendarid, 
+            subjectschedule.yearlvl, 
+            subjectschedule.section, 
+            subjectschedule.timestart,
+            subjectschedule.timeend,
+            subjectschedule.day, 
+            subjectschedule.roomname, 
+            subjectschedule.departmentid, 
+            subjectschedule.facultyid, 
+            subject.subjectcode, 
+            subject.name, 
+            subject.unit, 
+            subject.hours, 
+            subject.type, 
+            subject.masters AS subject_masters, 
+            subject.focus, 
+            faculty.masters AS faculty_masters, 
+            faculty.startdate, 
+            subject.requirelabroom
+        FROM 
+            subjectschedule
+        JOIN 
+            subject ON subjectschedule.subjectid = subject.id 
+        JOIN 
+            faculty ON faculty.id = subjectschedule.facultyid 
+        JOIN 
+            department ON department.id = subjectschedule.departmentid 
+        WHERE 
+            subject.focus != 'Major1' AND subject.focus != 'Minor' 
+            AND subjectschedule.calendarid = %s
+            AND department.collegeid = %s
+    ) AS ordered_schedule
+    ORDER BY ordered_schedule.startdate ASC,
     CASE 
-        WHEN ordered_schedule.unit = 3 THEN 1   -- unit 3 comes first
-        WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 1 THEN 2   -- unit 1 with requirelabroom = 1 comes second
+        WHEN ordered_schedule.unit = 3 THEN 2   -- unit 3 comes first
+        WHEN ordered_schedule.unit = 1 THEN 1   -- unit 1 with requirelabroom = 1 comes second
         WHEN ordered_schedule.unit = 2 THEN 3   -- unit 2 comes third
         WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 0 THEN 4  -- unit 1 with requirelabroom = 0 comes last
         ELSE 5   -- Default case for other units, if any
-    END""", (calendarid, collegeid))
+    END;""", (calendarid, collegeid))
     subjectschedule = cursor.fetchall()
 
     cursor.execute("""SELECT COUNT(*) FROM `subjectschedule` JOIN subject ON subjectschedule.subjectid=subject.id JOIN faculty ON faculty.id=subjectschedule.facultyid JOIN department ON department.id=subjectschedule.departmentid WHERE subject.focus!='Major1' AND subject.focus!='Minor' AND subjectschedule.calendarid = %s AND department.collegeid = %s ORDER BY FIELD(unit, 3, 1, 2), faculty.startdate ASC """, (calendarid, collegeid))
@@ -611,7 +611,24 @@ ORDER BY ordered_schedule.startdate ASC,
     cursor.execute("""SELECT * FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=%s""",(collegeid,))
     facultyall = cursor.fetchall()
 
-    cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.collegeid=%s AND faculty.id!=0 ORDER BY faculty.id, day ASC,starttime ASC""",(collegeid,))
+    cursor.execute("""SELECT * 
+    FROM facultypreferences 
+    JOIN faculty ON faculty.id = facultypreferences.facultyid 
+    JOIN department ON department.id = faculty.departmentid 
+    WHERE department.collegeid = %s
+    AND faculty.id != 0 
+    ORDER BY 
+    faculty.id ASC,
+    CASE
+        WHEN facultypreferences.day = 1 THEN 1
+        WHEN facultypreferences.day = 4 THEN 2
+        WHEN facultypreferences.day = 2 THEN 3
+        WHEN facultypreferences.day = 5 THEN 4
+        WHEN facultypreferences.day = 3 THEN 5
+        WHEN facultypreferences.day = 6 THEN 6
+        ELSE facultypreferences.day
+    END ASC,
+    starttime ASC;""",(collegeid,))
     facultypreference = cursor.fetchall()
 
     cursor.execute("""
@@ -724,10 +741,10 @@ else:
             AND subjectschedule.calendarid = %s
             AND department.id = %s
     ) AS ordered_schedule
-    ORDER BY ordered_schedule.startdate ASC,
+    ORDER BY ordered_schedule.startdate ASC,ordered_schedule.yearlvl DESC, 
     CASE 
-        WHEN ordered_schedule.unit = 3 THEN 1   -- unit 3 comes first
-        WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 1 THEN 2   -- unit 1 with requirelabroom = 1 comes second
+        WHEN ordered_schedule.unit = 3 THEN 2   -- unit 3 comes first
+        WHEN ordered_schedule.unit = 1 THEN 1   -- unit 1 with requirelabroom = 1 comes second
         WHEN ordered_schedule.unit = 2 THEN 3   -- unit 2 comes third
         WHEN ordered_schedule.unit = 1 AND ordered_schedule.requirelabroom = 0 THEN 4  -- unit 1 with requirelabroom = 0 comes last
         ELSE 5   -- Default case for other units, if any
@@ -740,7 +757,27 @@ else:
     cursor.execute("""SELECT * FROM faculty JOIN department ON department.id=faculty.departmentid WHERE department.id=%s""",(depid,))
     facultyall = cursor.fetchall()
 
-    cursor.execute("SELECT * FROM facultypreferences JOIN faculty ON faculty.id=facultypreferences.facultyid JOIN department ON department.id=faculty.departmentid WHERE department.id=%s AND faculty.id!=0 ORDER BY faculty.id ASC, day ASC, starttime ASC""",(depid,))
+    cursor.execute("""
+    SELECT * 
+    FROM facultypreferences 
+    JOIN faculty ON faculty.id = facultypreferences.facultyid 
+    JOIN department ON department.id = faculty.departmentid 
+    WHERE department.id = %s
+    AND faculty.id != 0 
+    ORDER BY 
+    faculty.id ASC,
+    CASE
+        WHEN facultypreferences.day = 1 THEN 1
+        WHEN facultypreferences.day = 4 THEN 2
+        WHEN facultypreferences.day = 2 THEN 3
+        WHEN facultypreferences.day = 5 THEN 4
+        WHEN facultypreferences.day = 3 THEN 5
+        WHEN facultypreferences.day = 6 THEN 6
+        ELSE facultypreferences.day
+    END ASC,
+    starttime ASC;
+""", (depid,))
+
     facultypreference = cursor.fetchall()
 
     cursor.execute("""
@@ -1044,7 +1081,7 @@ newroomlec3={}
 newroomlec2={}
 facultysubject={}
 newroomlabtried={}
-maxdepth=20
+maxdepth=20000
 
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
@@ -1517,7 +1554,7 @@ def assigntimeslot(currentsubjectid):
                         if (sectionsubjectcounterdown(departmentid, yearlvl, section, day1, startminutes+90)==2 or sectionsubjectcounterdown(departmentid, yearlvl, section, day1, startminutes+90)==2):
                             continue
 
-                        if ((sectionsubjectcounterdown(departmentid, yearlvl, section, day1, startminutes+90)>0 and sectionsubjectcounter(departmentid, yearlvl, section, day1, startminutes>0)) or (sectionsubjectcounterdown(departmentid, yearlvl, section, day2, startminutes+90)>0 and sectionsubjectcounter(departmentid, yearlvl, section, day2, startminutes+90)>0)):
+                        if ((sectionsubjectcounterdown(departmentid, yearlvl, section, day1, startminutes+90)>0 and sectionsubjectcounter(departmentid, yearlvl, section, day1, startminutes>0)) or (sectionsubjectcounterdown(departmentid, yearlvl, section, day2, startminutes+90)>0 and sectionsubjectcounter(departmentid, yearlvl, section, day2, startminutes)>0)):
                             continue
 
                         if ((findfacultylastassignedup(facultyidpair, day1, startminutes)!=0) and (startminutes-findfacultylastassignedup(facultyidpair, day1,startminutes)>320)):
@@ -2275,7 +2312,7 @@ def assigntimeslot(currentsubjectid):
                 
                 if not newroomlablol[currentsubjectid] and roomname=='NEW ROOM':
                     continue
-
+                
                 if roomname=='FIELD':
                     continue
 
@@ -3414,3 +3451,4 @@ except Exception as e:
 cursor.close()
 conn.close()
 
+print(facultypairdaystime[3])

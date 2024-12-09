@@ -132,7 +132,7 @@ class Schedule {
             FROM subjectschedule 
             WHERE
             (
-                (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day))
+                (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day) AND day != 'Th')
                 OR day = :day
                 OR (day = 'MTh' AND :day IN ('M', 'Th'))
                 OR (day = 'WS' AND :day IN ('W', 'S'))
@@ -158,7 +158,7 @@ class Schedule {
             FROM subjectschedule
             WHERE
             (
-                (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day))
+                (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day) AND day != 'Th')
                 OR day = :day
                 OR (day = 'MTh' AND :day IN ('M', 'Th'))
                 OR (day = 'WS' AND :day IN ('W', 'S'))
@@ -167,7 +167,7 @@ class Schedule {
 
             AND CAST(timestart AS TIME) < :endtime
             AND CAST(timeend AS TIME) > :starttime
-            AND id != :subjectscheduleid AND subjectschedule.departmentid=:departmentid=:departmentid AND subjectschedule.yearlvl=:yearlvl AND subjectschedule.section=:section AND subjectschedule.calendarid=:calendarid";
+            AND id != :subjectscheduleid AND subjectschedule.departmentid=:departmentid AND subjectschedule.yearlvl=:yearlvl AND subjectschedule.section=:section AND subjectschedule.calendarid=:calendarid";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':day' => $day,
@@ -187,7 +187,7 @@ class Schedule {
         FROM subjectschedule
         WHERE
         (
-            (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day))
+            (day LIKE CONCAT(:day, '%') AND LENGTH(day) > LENGTH(:day) AND day != 'Th')
             OR day = :day
             OR (day = 'MTh' AND :day IN ('M', 'Th'))
             OR (day = 'WS' AND :day IN ('W', 'S'))

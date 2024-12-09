@@ -393,6 +393,7 @@ function move() {
     }
     foreach ($droppeddays as $days) {
         if ($schedule->hasConflictSection($draggedcalendarid,$days, $droppedtime, $endtime, $draggedsubjectid, $draggeddepartmentid, $draggedyear , $draggedsection)) {
+            
             if ($location=='room'){
                 header("Location: ../admin/final-sched-room.php?swap=studentconflict"); 
                 exit;
