@@ -110,7 +110,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th style="width: 12%;">Sections</th>
-                                                            <th style="width: 25%;">Description</th>
+                                                            <th style="width: 25%;">Subject Code</th>
                                                             <th style="width: 10%;">Unit</th>
                                                             <th style="width: 23%;">Day</th>
                                                             <th style="width: 15%;">Time Start</th>
@@ -125,7 +125,7 @@
                                                                 <tr>
 
                                                                     <td ><?php echo $collegedepartments['abbreviation'].$getminorsubjectscolleges['yearlvl'].$getminorsubjectscolleges['section'];?></td>
-                                                                    <td class="text-start"><input type="text" name="subjectscheduleid[]" id="" value="<?php echo $getminorsubjectscolleges['subjectscheduleid'];?>" hidden><?php echo $getminorsubjectscolleges['name'];?></td>
+                                                                    <td class="text-start"><input type="text" name="subjectscheduleid[]" id="" value="<?php echo $getminorsubjectscolleges['subjectscheduleid'];?>" hidden><?php echo $getminorsubjectscolleges['subjectcode'];?></td>
                                                                     <td><?php echo $getminorsubjectscolleges['unit'];?></td>
                                                                     <td class="text-center">
 

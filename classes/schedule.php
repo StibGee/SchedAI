@@ -404,13 +404,13 @@ class Schedule {
         return $count > 0;
     }
     public function getcollegeminoryearlvl($collegeid) {
-        $sql = "SELECT DISTINCT subjectschedule.yearlvl AS minoryearlvl FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE collegeid=:collegeid AND subject.focus='Minor'";
+        $sql = "SELECT DISTINCT subjectschedule.yearlvl AS minoryearlvl FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE collegeid=:collegeid AND subject.focus='Minor' ORDER BY subjectschedule.yearlvl ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':collegeid' => $collegeid]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function getdepartmentminoryearlvl($departmentid) {
-        $sql = "SELECT DISTINCT subjectschedule.yearlvl AS minoryearlvl FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE department.id=:departmentid AND subject.focus='Minor'";
+        $sql = "SELECT DISTINCT subjectschedule.yearlvl AS minoryearlvl FROM subjectschedule JOIN subject ON subject.id=subjectschedule.subjectid JOIN department ON department.id=subjectschedule.departmentid WHERE department.id=:departmentid AND subject.focus='Minor' ORDER BY subjectschedule.yearlvl ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':departmentid' => $departmentid]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

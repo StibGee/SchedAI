@@ -7,7 +7,7 @@
     ?>
 <script src="../js/facultyloading.js"></script>
 <?php
-    ini_set('max_execution_time', 10000);
+    ini_set('max_execution_time', 100000000000);
 
     require_once('../include/nav.php');
     require_once('../classes/db.php');
@@ -18,6 +18,7 @@
     require_once('../classes/faculty.php');
     require_once('../classes/email.php');
     require_once('../classes/room.php');
+    require_once('../classes/subject.php');
 
     $collegeid=$_SESSION['collegeid'];
     $scheduling=False;
@@ -26,6 +27,7 @@
 
 
     $curriculum = new Curriculum($pdo);
+    $subject = new Subject($pdo);
     $room = new Room($pdo);
     $email = new Email($pdo);
     $faculty = new Faculty($pdo);
@@ -98,7 +100,7 @@
         $fullname=$facultywemails['fname'];
         $facultyid=$facultywemails['facultyid'];
         $calendarid=$_SESSION['calendarid'];
-        $emailfacultysched=$email->emailfacultyschedule($emailadd, $fullname, $facultyid, $calendarid);
+        //$emailfacultysched=$email->emailfacultyschedule($emailadd, $fullname, $facultyid, $calendarid);
     }
 }
 ?>
@@ -113,7 +115,85 @@ if ($roomcount == 0) {
     exit;
 }
 ?>
-<?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading' && ($countsubjecthours<$countfacultyworkinghours)){?>
+<?php if (isset($_GET['facultylacking'])) { ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modal = new bootstrap.Modal(document.getElementById('facultylacking'));
+            modal.show();
+        });
+    </script>
+<?php } ?>
+
+<div class="modal fade" id="facultylacking" tabindex="-1" aria-labelledby="facultylacking" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noFacultyModalLabel">Subjects Lacking Faculty</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="assignFacultyForm" method="POST" action="../processing/subjectprocessing.php">
+                <input type="text" name="action" value="addfacultysubject" hidden>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Subject Name</th>
+                                <th>Subject Type</th>
+                                <th>Subject Department</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $subjectidlacking = isset($_GET['facultylacking']) ? $_GET['facultylacking'] : null;
+                            $subjectinfo = $subject->subjectinfocomplete($subjectidlacking); 
+                            
+                            if (!empty($subjectinfo)) {
+                             
+                                ?>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="subjectname[]" value="<?php echo $subjectinfo['commonname']; ?>">
+                                        <?php echo $subjectinfo['commonname']; ?>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="subjecttype[]" value="<?php echo $subjectinfo['subjecttype']; ?>">
+                                        <?php echo $subjectinfo['subjecttype']; ?>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="departmentid[]" value="<?php echo $subjectinfo['departmentid']; ?>">
+                                        <?php echo $subjectinfo['departmentabbreviation']; ?>
+                                    </td>
+                                    <td>
+                                        <select name="facultyid[]" class="form-select">
+                                            <option selected disabled>Select Faculty</option>
+                                            <?php
+                                            foreach ($faculties as $faculty) { ?>
+                                                <option value="<?php echo $faculty['facultyid']; ?>">
+                                                    <?php echo $faculty['fname'].' '.$faculty['lname'].' - '.$faculty['abbreviation']; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                            <?php 
+                            } else { 
+                                echo "<tr><td colspan='3'>No data found.</td></tr>";
+                            } ?>
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Done</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php if(isset($_GET['scheduling']) && $_GET['scheduling']=='loading' ){?>
     <div class="progresspopupdiv">
 
 
@@ -205,13 +285,7 @@ if ($roomcount == 0) {
 
     <main>
     <?php
-    if ($countsubjecthours>$countfacultyworkinghours) {
-        echo "<script>
-            alert('Lacking faculty! Add new faculty first');
-            window.location.href = 'faculty.php';
-        </script>";
-        exit;
-    }
+    
     ?>
     <?php if (0==1){ ?>
     <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
@@ -467,14 +541,14 @@ if ($roomcount == 0) {
                                     ?>
                                     </td>
                                     <td><?php echo $subjectschedules['day'];?></td>
-                                    <td><?php echo (isset($subjectschedules['roomname']) && !empty($subjectschedules['roomname'])) ? $subjectschedules['roomname'] : 'General'; ?></td>
+                                    <td><?php echo (isset($subjectschedules['roomname']) && !empty($subjectschedules['roomname'])) ? $subjectschedules['roomname'] : 'N/A'; ?></td>
                                     <td>
                                         <?php
                                         echo (isset($subjectschedules['facultyfname'], $subjectschedules['facultylname']) 
                                             && !empty($subjectschedules['facultyfname']) 
                                             && !empty($subjectschedules['facultylname'])) 
                                             ? $subjectschedules['facultyfname'] . ' ' . $subjectschedules['facultylname'] 
-                                            : 'General';
+                                            : 'N/A';
                                         ?>
                                     </td>
 

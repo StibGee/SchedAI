@@ -405,8 +405,8 @@
                             <span class="">Regular Teaching Hours: 
                                 <strong><?php if (isset($minimumhours)) { echo ' ' . $minimumhours; } ?></strong>
                             </span>
-                            <span>Overloaded Teaching Hours: 
-                                <strong><?php if (isset($facultyworkinghours)) { echo ' ' . $facultyworkinghours-$minimumhours; } ?></strong>
+                            <span>Assigned Teaching Hours: 
+                                <strong><?php if (isset($facultyworkinghours)) { echo ' ' . $facultyworkinghours; } ?></strong>
                             </span>
                         </p>
 

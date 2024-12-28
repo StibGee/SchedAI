@@ -193,7 +193,12 @@ class Subject {
         $stmt->execute([':subjectid' => $subjectid]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
+    public function subjectinfocomplete($subjectid){
+        $sql = "SELECT *, subject.type as subjecttype, department.abbreviation AS departmentabbreviation, subject.departmentid AS departmentid FROM subject JOIN department ON department.id=subject.departmentid WHERE subject.id = :subjectid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':subjectid' => $subjectid]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public function addfacultysubject($facultyid, $subjectname, $subjecttype, $departmentid){
         $sql="INSERT INTO facultysubject (facultyid, subjectname, subjecttype, departmentid) VALUES (:facultyid, :subjectname, :subjecttype, :departmentid)";
         $stmt = $this->pdo->prepare($sql);
