@@ -1420,13 +1420,13 @@ def sectionconsecutive(departmentid, yearlvl, section, day, startminutes, durati
 def faculty3hoursgap(facultyid, day, startminutes, duration):
     if ((findfacultylastassignedup(facultyid, day, startminutes)!=0) and (startminutes-findfacultylastassignedup(facultyid, day, startminutes)>240)):
         return False
-    if ((findfacultylastassigneddown(facultyid, day, startminutes+duration)!=0) and (findfacultylastassigneddown(facultyid, day, startminutes+duration)-startminutes-duration>180)):
+    if ((findfacultylastassigneddown(facultyid, day, startminutes+duration)!=0) and (findfacultylastassigneddown(facultyid, day, startminutes+duration)-startminutes-duration>210)):
         return False
     return True
 
 def section3hoursgap(departmentid, yearlvl, section, day,startminutes, duration):
     '''if (not sectionfree(departmentid, yearlvl, section, day, startminutes-210)):'''
-    if ((findsectionlastassignedup(departmentid, yearlvl, section, day,startminutes)!=0) and (startminutes-findsectionlastassignedup(departmentid, yearlvl, section,day, startminutes)>210)):
+    if ((findsectionlastassignedup(departmentid, yearlvl, section, day,startminutes)!=0) and (startminutes-findsectionlastassignedup(departmentid, yearlvl, section,day, startminutes)>240)):
     
         return False
     if ((findsectionlastassigneddown(departmentid, yearlvl, section, day,startminutes+duration)!=0) and (findsectionlastassigneddown(departmentid, yearlvl, section, day,startminutes+duration)-startminutes-duration>180)):
@@ -2063,7 +2063,7 @@ def assigntimeslot(currentsubjectid):
                                         del assignments[subjectid]
                                     assignedsubjects.remove(subjectid)
 
-                '''lec3found1=False
+                lec3found1=False
                 if not lec3found1:
                     
                     if newroomlablol[currentsubjectid]:
@@ -2193,7 +2193,7 @@ def assigntimeslot(currentsubjectid):
                                     
                             
                                     if day1 and day2 and facultyday1 and facultyday2:  
-                                        
+                                        timer.sleep(100)
                                         lec3found=True
                                         assigningtimeslot(dayin3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus) 
                                         assigningtimeslot(day2in3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus)
@@ -2216,7 +2216,7 @@ def assigntimeslot(currentsubjectid):
                                                                 
                                         if subjectid in assignments:
                                             del assignments[subjectid]
-                                        assignedsubjects.remove(subjectid)'''
+                                        assignedsubjects.remove(subjectid)
                 '''lec3found2=False
                 if not lec3found2:
                     newroomlabtried[currentsubjectid]=True
@@ -2560,7 +2560,7 @@ def assigntimeslot(currentsubjectid):
                                     if subjectid in assignments:
                                         del assignments[subjectid]
                                     assignedsubjects.remove(subjectid)
-
+                    
                     '''lec2found2=False
                     if not lec2found2:
                         
@@ -2776,8 +2776,10 @@ def assigntimeslot(currentsubjectid):
                             
         
             elif(backtrackcounters[currentsubjectid] >= maxdepth):
-                
-                sorted_rooms1 = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
+                if requirelab==1:
+                    sorted_rooms1 = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
+                else:
+                    sorted_rooms1 = sorted(room, key=lambda x: (x[5] != departmentid, x[5], x[1]))
                 for rm in sorted_rooms1:
                     roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
                     if subjectfacultyid in facultydaystimelab:
@@ -2902,8 +2904,11 @@ def assigntimeslot(currentsubjectid):
                 labfound=False
 
                 if not labfound:
+                    if requirelab==1:
+                        sorted_rooms2 = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
+                    else:
+                        sorted_rooms2 = sorted(room, key=lambda x: (x[5] != departmentid, x[5], x[1]))
                     
-                    sorted_rooms2 = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
                     for rm in sorted_rooms2:
                         roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
                         
