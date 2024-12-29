@@ -1171,7 +1171,7 @@ def getfacultytype(facultyid):
     return None
 assignedsubjectscount=0
 
-def findfacultylastassignedup(facultyid, day):
+'''def findfacultylastassignedup(facultyid, day):
     if facultyid not in facultyoccupied or day not in facultyoccupied.get(facultyid, {}):
         return None  
 
@@ -1184,7 +1184,7 @@ def findfacultylastassignedup(facultyid, day):
         if day_slots.get(time) == 'occupied':
             last_occupied = time 
 
-    return int(last_occupied)
+    return int(last_occupied)'''
     
 def findfacultylastassignedup(facultyid, day, timeslot):
     if facultyid not in facultyoccupied or day not in facultyoccupied.get(facultyid, {}):
@@ -1197,8 +1197,7 @@ def findfacultylastassignedup(facultyid, day, timeslot):
 
     for time in range(timeslot-30, 420-30 ,-30): 
         if day_slots.get(time) == 'occupied':
-            last_occupied = time 
-            break
+            return int(time)
 
     return int(last_occupied)
 
@@ -1213,8 +1212,7 @@ def findfacultylastassigneddown(facultyid, day, timeslot):
 
     for time in range(timeslot, 1170, 30): 
         if day_slots.get(time) == 'occupied':
-            last_occupied = time 
-            break
+            return int(time)
 
     return int(last_occupied)
 
@@ -1228,15 +1226,11 @@ def findsectionlastassignedup(departmentid, yearlvl, section, day, timeslot):
     if not day_slots:
         return 0
 
-    last_occupied = 0
-
-
-    for time in range(timeslot-30, 420-30, -30): 
+    for time in range(timeslot - 30, 419, -30):
         if day_slots.get(time) == 'occupied':
-            last_occupied = time
-            break 
+            return int(time)
 
-    return int(last_occupied)
+    return 0
 
 def findsectionlastassigneddown(departmentid, yearlvl, section, day, timeslot):
 
@@ -1252,8 +1246,7 @@ def findsectionlastassigneddown(departmentid, yearlvl, section, day, timeslot):
 
     for time in range(timeslot, 1170, 30): 
         if day_slots.get(time) == 'occupied':
-            last_occupied = time
-            break 
+            return int(time)
 
     return int(last_occupied)
 
@@ -1426,9 +1419,9 @@ def faculty3hoursgap(facultyid, day, startminutes, duration):
 
 def section3hoursgap(departmentid, yearlvl, section, day,startminutes, duration):
     '''if (not sectionfree(departmentid, yearlvl, section, day, startminutes-210)):'''
-    if ((findsectionlastassignedup(departmentid, yearlvl, section, day,startminutes)!=0) and (startminutes-findsectionlastassignedup(departmentid, yearlvl, section,day, startminutes)>240)):
-    
-        return False
+    if (findsectionlastassignedup(departmentid, yearlvl, section, day,startminutes)!=0):
+        if (startminutes-findsectionlastassignedup(departmentid, yearlvl, section,day, startminutes)>210):
+            return False
     if ((findsectionlastassigneddown(departmentid, yearlvl, section, day,startminutes+duration)!=0) and (findsectionlastassigneddown(departmentid, yearlvl, section, day,startminutes+duration)-startminutes-duration>180)):
         return False
     return True
@@ -1533,6 +1526,8 @@ def assigntimeslot(currentsubjectid):
     elif newroomlec2[currentsubjectid]:
         sorted_rooms = sorted(room, key=lambda x: (x[0]))
     elif units==1.0 and subjecttype=='Lec':
+        sorted_rooms = sorted(room, key=lambda x: (x[5] != departmentid, x[5], x[0]))
+    elif units==1.0 and subjecttype=='Lab' and requirelab==0:
         sorted_rooms = sorted(room, key=lambda x: (x[5] != departmentid, x[5], x[0]))
     else:
         sorted_rooms = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[0]))
@@ -1889,6 +1884,7 @@ def assigntimeslot(currentsubjectid):
                             
                             
                             if day1 and day2 and facultyday1 and facultyday2:      
+                                
                                 lec3found=True
                                 assigningtimeslot(dayin3, time3, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus)
                                 assigningtimeslot(day2in3, time3, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus)
@@ -2193,7 +2189,7 @@ def assigntimeslot(currentsubjectid):
                                     
                             
                                     if day1 and day2 and facultyday1 and facultyday2:  
-                                        timer.sleep(100)
+                                       
                                         lec3found=True
                                         assigningtimeslot(dayin3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus) 
                                         assigningtimeslot(day2in3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus)
@@ -2904,6 +2900,7 @@ def assigntimeslot(currentsubjectid):
                 labfound=False
 
                 if not labfound:
+                    
                     if requirelab==1:
                         sorted_rooms2 = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
                     else:
@@ -2941,13 +2938,13 @@ def assigntimeslot(currentsubjectid):
                                 countup_value = countup(roomid, day1, time)
                                 countdown_value = countdown(roomid, day1, time) 
                             
-                                if countup_value<6 and countup_value-6!=0:
+                                '''if countup_value<6 and countup_value-6!=0:
                                     day1true = False
                                     continue
 
                                 if countdown_value-6<6 and countdown_value!=0:
                                     day1true = False
-                                    continue
+                                    continue'''
 
                                 if not facultyconsecutive(subjectfacultyid, day1, time, 180):
                                     day1true = False
