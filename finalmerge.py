@@ -615,8 +615,8 @@ if (depid==0):
     CASE 
         WHEN ordered_schedule.focus = 'OJT' THEN 1  -- Give 'OJT' the lowest priority
         ELSE 0
-    END,
-    ordered_schedule.startdate ASC,  -- Now sort by startdate only if not OJT
+    END, ordered_schedule.startdate ASC,
+     -- Now sort by startdate only if not OJT
     CASE 
         WHEN ordered_schedule.unit = 3 THEN 1   -- unit 3 comes first
         WHEN ordered_schedule.unit = 1 THEN 2   -- unit 1 with requirelabroom = 1 comes second
@@ -1089,8 +1089,7 @@ newroomlec3={}
 newroomlec2={}
 facultysubject={}
 newroomlabtried={}
-maxdepth=
-
+maxdepth=50
 def findlastfacultyasslec3(facultyid, day):
     '''print(f"Finding last assignment for faculty {facultyid} on day {day}")'''
     
@@ -1414,7 +1413,7 @@ def sectionconsecutive(departmentid, yearlvl, section, day, startminutes, durati
         return False
     if (sectionsubjectcounterdown(departmentid, yearlvl, section, day, startminutes+duration)>=2):
         return False
-    if (sectionsubjectcounter(departmentid, yearlvl, section, day, startminutes)>0 and sectionsubjectcounterdown(departmentid, yearlvl, section, day, startminutes+duration)>0):
+    if (not sectionfree(departmentid, yearlvl, section, day, startminutes-30)) and (not sectionfree(departmentid, yearlvl, section, day, startminutes+duration)):
         return False
     return True
 
@@ -1596,19 +1595,27 @@ def assigntimeslot(currentsubjectid):
                             continue
 
 
-                        if not facultyconsecutive(facultyidpair, day1, startminutes, 90) or not facultyconsecutive(facultyidpair, day2, startminutes, 90):
+                        if not facultyconsecutive(facultyidpair, day1, startminutes, 90):
+                            continue
+                        if not facultyconsecutive(facultyidpair, day2, startminutes, 90):
                             continue
                         if not sectionconsecutive(departmentid, yearlvl, section, day1, startminutes, 90):
                             continue
                         if not sectionconsecutive(departmentid, yearlvl, section, day2, startminutes, 90):
                             continue
-                        if not faculty3hoursgap(facultyidpair, day1, startminutes, 90) or not faculty3hoursgap(facultyidpair, day2, startminutes, 90):
+                        if not faculty3hoursgap(facultyidpair, day1, startminutes, 90):
                             continue
-                        if not section3hoursgap(departmentid, yearlvl, section, day1, startminutes, 90) or not section3hoursgap(departmentid, yearlvl, section, day2, startminutes, 90):
+                        if not faculty3hoursgap(facultyidpair, day2, startminutes, 90):
+                            continue
+                        if not section3hoursgap(departmentid, yearlvl, section, day1, startminutes, 90):
+                            continue
+                        if not section3hoursgap(departmentid, yearlvl, section, day2, startminutes, 90):
                             continue
                         
-                        
-                        
+                        if (not sectionfree(departmentid, yearlvl, section, day1, startminutes-30)) and (not sectionfree(departmentid, yearlvl, section, day1, startminutes+90)):
+                            continue
+                        if (not sectionfree(departmentid, yearlvl, section, day2, startminutes-30)) and (not sectionfree(departmentid, yearlvl, section, day2, startminutes+90)):
+                            continue
                         '''if (facultysubjectcounter(facultyidpair, day1, startminutes)>=2 or facultysubjectcounter(facultyidpair, day2, startminutes)>=2):
                             continue
                         
@@ -1781,6 +1788,7 @@ def assigntimeslot(currentsubjectid):
 
                         if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(subjectfacultyid, dayin3)+1>6 and getfacultyhoursday(subjectfacultyid, day2in3)+1>6:
                             continue
+
                         for time3 in range(420, 1140, 30):
                             day1 = False
                             day2 = False
@@ -1818,19 +1826,37 @@ def assigntimeslot(currentsubjectid):
                                 continue
 
                             
-                            if not facultyconsecutive(subjectfacultyid, dayin3, time3, 90) or not facultyconsecutive(subjectfacultyid, day2in3, time3, 90):
+                            if not facultyconsecutive(subjectfacultyid, dayin3, time3, 90):
                                 day1 = False
                                 continue
-                            if not sectionconsecutive(departmentid, yearlvl, section, day1, time3, 90) or not sectionconsecutive(departmentid, yearlvl, section, day2in3, time3, 90):
+                            if not facultyconsecutive(subjectfacultyid, day2in3, time3, 90):
                                 day1 = False
                                 continue
-                            if not faculty3hoursgap(subjectfacultyid, dayin3, time3, 90) or not faculty3hoursgap(subjectfacultyid, day2in3, time3, 90):
+                            if not sectionconsecutive(departmentid, yearlvl, section, day1, time3, 90):
                                 day1 = False
                                 continue
-                            if not section3hoursgap(departmentid, yearlvl, section, dayin3, time3, 90) or not section3hoursgap(departmentid, yearlvl, section, day2, time3, 90):
+                            if not sectionconsecutive(departmentid, yearlvl, section, day2in3, time3, 90):
                                 day1 = False
                                 continue
-                            
+                            if not faculty3hoursgap(subjectfacultyid, dayin3, time3, 90):
+                                day1 = False
+                                continue
+                            if not faculty3hoursgap(subjectfacultyid, day2in3, time3, 90):
+                                day1 = False
+                                continue
+
+                            if not section3hoursgap(departmentid, yearlvl, section, dayin3, time3, 90):
+                                day1 = False
+                                continue
+                            if not section3hoursgap(departmentid, yearlvl, section, day2in3, time3, 90):
+                                day1 = False
+                                continue
+                            if (not sectionfree(departmentid, yearlvl, section, dayin3, time3-30)) and (not sectionfree(departmentid, yearlvl, section, dayin3, time3+90)):
+                                day1 = False
+                                continue
+                            if (not sectionfree(departmentid, yearlvl, section, day2in3, time3-30)) and (not sectionfree(departmentid, yearlvl, section, day2in3, time3+90)):
+                                day1 = False
+                                continue
                             
                             if dayin3 not in facultyoccupied[subjectfacultyid]:
                                 facultyoccupied[subjectfacultyid][dayin3] = {}
@@ -1931,19 +1957,36 @@ def assigntimeslot(currentsubjectid):
                                     if day2in3-3!=dayin3:
                                         break
                                 
-                                if not facultyconsecutive(subjectfacultyid, dayin3, time, 90) or not facultyconsecutive(subjectfacultyid, day2in3, time, 90):
+                                if not facultyconsecutive(subjectfacultyid, dayin3, time, 90):
                                     day1 = False
                                     continue
-                                if not sectionconsecutive(departmentid, yearlvl, section, day1, time, 90) or not sectionconsecutive(departmentid, yearlvl, section, day2in3, time, 90):
+                                if not facultyconsecutive(subjectfacultyid, day2in3, time, 90):
                                     day1 = False
                                     continue
-                                if not faculty3hoursgap(subjectfacultyid, dayin3, time, 90) or not faculty3hoursgap(subjectfacultyid, day2in3, time, 90):
+                                if not sectionconsecutive(departmentid, yearlvl, section, dayin3, time, 90):
                                     day1 = False
                                     continue
-                                if not section3hoursgap(departmentid, yearlvl, section, dayin3, time, 90) or not section3hoursgap(departmentid, yearlvl, section, day2, time, 90):
+                                if not sectionconsecutive(departmentid, yearlvl, section, day2in3, time, 90):
                                     day1 = False
                                     continue
-                                
+                                if not faculty3hoursgap(subjectfacultyid, dayin3, time, 90):
+                                    day1 = False
+                                    continue
+                                if not faculty3hoursgap(subjectfacultyid, day2in3, time, 90):
+                                    day1 = False
+                                    continue
+                                if not section3hoursgap(departmentid, yearlvl, section, dayin3, time, 90):
+                                    day1 = False
+                                    continue
+                                if not section3hoursgap(departmentid, yearlvl, section, day2in3, time, 90):
+                                    day1=False
+                                    continue
+                                if (not sectionfree(departmentid, yearlvl, section, dayin3, time3-30)) and (not sectionfree(departmentid, yearlvl, section, dayin3, time3+90)):
+                                    day1 = False
+                                    continue
+                                if (not sectionfree(departmentid, yearlvl, section, day2in3, time3-30)) and (not sectionfree(departmentid, yearlvl, section, day2in3, time3+90)):
+                                    day1 = False
+                                    continue
 
                                 if (checkroomfree(roomid, dayin3, time) and
                                     checkroomfree(roomid, dayin3, time+30) and
@@ -2478,6 +2521,7 @@ def assigntimeslot(currentsubjectid):
                             if countup_value<countdown_value:
                                 start_minuteslab = start_minuteslab+180 + (30 * countdown_value)'''
 
+                            
                             if not facultyconsecutive(faculty_idlab, daylab, start_minuteslab, 180):
                                 continue
                             if not sectionconsecutive(departmentid, yearlvl, section, daylab, start_minuteslab, 180):
@@ -2619,22 +2663,22 @@ def assigntimeslot(currentsubjectid):
                             countup_value = countup(roomid, day1, time)
                             countdown_value = countdown(roomid, day1, time) 
 
-                            if (facultyoccupied[subjectfacultyid][day1].get(time) != 'occupied' and facultysubjectcounter(subjectfacultyid, day1, time)==2):
+                            '''if (facultyoccupied[subjectfacultyid][day1].get(time) != 'occupied' and facultysubjectcounter(subjectfacultyid, day1, time)==2):
                                 day1true = False
                                 continue
                         
 
                             if ((findfacultylastassignedup(subjectfacultyid, day1, time)!=0) and (time-findfacultylastassignedup(subjectfacultyid, day1, time)>320)):
                                 day1true = False
-                                continue  
+                                continue '''
 
-                            if (countdown_value-6)<6 and countdown_value-6!=0:
+                            '''if (countdown_value-6)<6 and countdown_value-6!=0:
                                 day1true = False
                                 continue
 
                             if (countup_value)<6 and countup_value!=0:
                                 day1true = False
-                                continue
+                                continue'''
 
                             if not facultyconsecutive(subjectfacultyid, day1, time, 180):
                                 day1true = False
@@ -3101,8 +3145,8 @@ def assigntimeslot(currentsubjectid):
                                 facultyoccupied[faculty_idlab][daylab] = {}
 
                             
-                            if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(faculty_idlab, daylab)+3>6:
-                                continue
+                            '''if getfacultytype(subjectfacultyid)=='Regular' and getfacultyhoursday(faculty_idlab, daylab)+3>6:
+                                continue'''
                             
                             
 
@@ -3119,8 +3163,8 @@ def assigntimeslot(currentsubjectid):
                             if ((sectionsubjectcounter(departmentid, yearlvl, section, daylab, start_minuteslab)>0 and sectionsubject[departmentid][yearlvl][section][daylab].get(start_minuteslab)!=000) and (sectionsubjectcounterdown(departmentid, yearlvl, section, daylab, start_minuteslab+180)>0 and sectionsubject[departmentid][yearlvl][section][daylab].get(start_minuteslab)!=000)):
                                 continue
                             
-                            if not section3hoursgap(departmentid, yearlvl, section, daylab, start_minuteslab, 180):
-                                continue
+                            '''if not section3hoursgap(departmentid, yearlvl, section, daylab, start_minuteslab, 180):
+                                continue'''
 
 
                             '''if 0 < countup(roomid, daylab, start_minuteslab) < 6:
@@ -3580,4 +3624,4 @@ except Exception as e:
 cursor.close()
 conn.close()
 
-print(facultypairdaystime[3])
+print(sectionoccupied)
