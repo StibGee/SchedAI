@@ -1418,14 +1418,16 @@ def sectionconsecutive(departmentid, yearlvl, section, day, startminutes, durati
     return True
 
 def faculty3hoursgap(facultyid, day, startminutes, duration):
-    if ((findfacultylastassignedup(facultyid, day, startminutes)!=0) and (startminutes-findfacultylastassignedup(facultyid, day, startminutes)>210)):
+    if ((findfacultylastassignedup(facultyid, day, startminutes)!=0) and (startminutes-findfacultylastassignedup(facultyid, day, startminutes)>240)):
         return False
     if ((findfacultylastassigneddown(facultyid, day, startminutes+duration)!=0) and (findfacultylastassigneddown(facultyid, day, startminutes+duration)-startminutes-duration>180)):
         return False
     return True
 
 def section3hoursgap(departmentid, yearlvl, section, day,startminutes, duration):
+    '''if (not sectionfree(departmentid, yearlvl, section, day, startminutes-210)):'''
     if ((findsectionlastassignedup(departmentid, yearlvl, section, day,startminutes)!=0) and (startminutes-findsectionlastassignedup(departmentid, yearlvl, section,day, startminutes)>210)):
+    
         return False
     if ((findsectionlastassigneddown(departmentid, yearlvl, section, day,startminutes+duration)!=0) and (findsectionlastassigneddown(departmentid, yearlvl, section, day,startminutes+duration)-startminutes-duration>180)):
         return False
@@ -2060,6 +2062,161 @@ def assigntimeslot(currentsubjectid):
                                     if subjectid in assignments:
                                         del assignments[subjectid]
                                     assignedsubjects.remove(subjectid)
+
+                '''lec3found1=False
+                if not lec3found1:
+                    
+                    if newroomlablol[currentsubjectid]:
+                        sorted_room33=sorted_rooms
+                    else:
+                        sorted_room33 = sorted(room, key=lambda x: (x[5] != departmentid, x[2] != subjecttype, x[5], x[1]))
+
+                    for rm in sorted_room33:
+                        roomid, roomname, roomtype, roomstart, roomend, roomdeptid = rm[0], rm[1], rm[2], rm[3], rm[4], rm[5]
+                        if roomname=='FIELD':
+                            continue
+
+                        if not newroomlec3[currentsubjectid] and roomname=='NEW ROOM':
+                            continue
+                        
+                        if newroomlablol[currentsubjectid] and roomname=='NEW ROOM':
+                            continue
+                        
+                        for dayin3 in range(1,7): 
+                            day1 = False
+                            day2 = False
+                            facultyday1 = False
+                            facultyday2 = False
+                            for increment in range(1,5): 
+                                day2in3 = (dayin3 + increment)
+                                if day2in3>dayin3:
+                                    continue
+                                
+                                if day2in3 == 7 or day2in3 == 8 or day2in3 == 9 or day2in3 == 10 or day2in3 == 11:
+                                    continue
+                                facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(dayin3, Decimal(0))
+                                facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(day2in3, Decimal(0))
+                                facultyhoursday1 = getfacultyhoursday(subjectfacultyid, dayin3)
+                                facultyhoursday2 = getfacultyhoursday(subjectfacultyid, day2in3)
+
+                                if getfacultytype(subjectfacultyid) == 'Regular' and facultyhoursday1 is not None and facultyhoursday1 >= 6 and facultyhoursday2 is not None and facultyhoursday2 >= 6:
+                                    continue
+
+                                
+                                for time in range(420, 1140, 30):
+                                    if time==1140:
+                                        day1=False
+                                        break
+                                    if newroomlablol[currentsubjectid]:
+                                        if day2in3==dayin3:
+                                            break
+                                    else:
+                                        if day2in3-3!=dayin3:
+                                            break
+                                    
+                                    if not facultyconsecutive(subjectfacultyid, dayin3, time, 90):
+                                        day1 = False
+                                        continue
+                                    if not facultyconsecutive(subjectfacultyid, day2in3, time, 90):
+                                        day1 = False
+                                        continue
+                                    if not sectionconsecutive(departmentid, yearlvl, section, dayin3, time, 90):
+                                        day1 = False
+                                        continue
+                                    if not sectionconsecutive(departmentid, yearlvl, section, day2in3, time, 90):
+                                        day1 = False
+                                        continue
+                                    if not faculty3hoursgap(subjectfacultyid, dayin3, time, 90):
+                                        day1 = False
+                                        continue
+                                    if not faculty3hoursgap(subjectfacultyid, day2in3, time, 90):
+                                        day1 = False
+                                        continue
+                                    if not section3hoursgap(departmentid, yearlvl, section, dayin3, time, 90):
+                                        day1 = False
+                                        continue
+                                    if not section3hoursgap(departmentid, yearlvl, section, day2in3, time, 90):
+                                        day1=False
+                                        continue
+                                    if (not sectionfree(departmentid, yearlvl, section, dayin3, time3-30)) and (not sectionfree(departmentid, yearlvl, section, dayin3, time3+90)):
+                                        day1 = False
+                                        continue
+                                    if (not sectionfree(departmentid, yearlvl, section, day2in3, time3-30)) and (not sectionfree(departmentid, yearlvl, section, day2in3, time3+90)):
+                                        day1 = False
+                                        continue
+
+                                    if (checkroomfree(roomid, dayin3, time) and
+                                        checkroomfree(roomid, dayin3, time+30) and
+                                        checkroomfree(roomid, dayin3, time+60)):
+                                        day1 = True
+                                        
+                                    else:
+                                        day1 = False
+                                        continue
+                                    
+                                    if (checkroomfree(roomid, day2in3, time) and
+                                        checkroomfree(roomid, day2in3, time+30) and
+                                        checkroomfree(roomid, day2in3, time+60)):
+                                        day2 = True
+                                        
+                                    else:
+                                        day2 = False
+                                        continue
+                                    facultyoccupied.setdefault(subjectfacultyid, {}).setdefault(dayin3, {})
+                                    facultyhoursday.setdefault(subjectfacultyid, {}).setdefault(day2in3, {})
+
+                                    if dayin3 not in facultyoccupied[subjectfacultyid]:
+                                        facultyoccupied[subjectfacultyid][dayin3] = {}
+                                    if day2in3 not in facultyoccupied[subjectfacultyid]:
+                                        facultyoccupied[subjectfacultyid][day2in3] = {}
+
+                                    if dayin3 not in facultyhoursday[subjectfacultyid]:
+                                        facultyhoursday[subjectfacultyid][dayin3] = Decimal(0)
+                                    if day2in3 not in facultyhoursday[subjectfacultyid]:
+                                        facultyhoursday[subjectfacultyid][day2in3] = Decimal(0)
+
+                                    if (facultyoccupied[subjectfacultyid][dayin3].get(time) == 'free' and
+                                        facultyoccupied[subjectfacultyid][dayin3].get(time + 30) == 'free' and
+                                        facultyoccupied[subjectfacultyid][dayin3].get(time + 60) == 'free' and sectionfree(departmentid, yearlvl, section, dayin3, time) and sectionfree(departmentid, yearlvl, section, dayin3, time+30) and sectionfree(departmentid, yearlvl, section, dayin3, time+60)):
+                                        facultyday1 = True
+                                    else:
+                                        facultyday1 = False
+                                        continue
+                                    if (facultyoccupied[subjectfacultyid][day2in3].get(time) == 'free' and
+                                        facultyoccupied[subjectfacultyid][day2in3].get(time + 30) == 'free' and
+                                        facultyoccupied[subjectfacultyid][day2in3].get(time + 60) == 'free' and sectionfree(departmentid, yearlvl, section, day2in3, time) and sectionfree(departmentid, yearlvl, section, day2in3, time+30) and sectionfree(departmentid, yearlvl, section, day2in3, time+60)):
+                                        facultyday2 = True
+                                    else:
+                                        facultyday2 = False
+                                        continue
+                                            
+                                    
+                            
+                                    if day1 and day2 and facultyday1 and facultyday2:  
+                                        
+                                        lec3found=True
+                                        assigningtimeslot(dayin3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus) 
+                                        assigningtimeslot(day2in3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid, subjectfocus)
+                                    
+                                        assignments[subjectid] = (time, time + 90, (dayin3, day2in3), roomid)
+                                        
+                                        assignedsubjects.add(subjectid)
+                                        assignedsubjectscount=assignedsubjectscount+1
+                                        progress = (assignedsubjectscount) / subjectschedulecount[0] * 100
+                                        print(f"{progress:.2f}%: {subname} {subjectfacultyid} assigned on {dayin3} and {day2in3} starting {time}-{time+90}")
+                                        sys.stdout.flush()
+
+                                        if assigntimeslot(currentsubjectid+1):
+                                            return True 
+                                        
+                                        
+                                        backtrackingtimeslot(dayin3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid) 
+                                        backtrackingtimeslot(day2in3, time, 90, 1.5, roomid, subjectfacultyid, departmentid, yearlvl, section, subjectid) 
+                                        assignedsubjectscount=assignedsubjectscount-1
+                                                                
+                                        if subjectid in assignments:
+                                            del assignments[subjectid]
+                                        assignedsubjects.remove(subjectid)'''
                 '''lec3found2=False
                 if not lec3found2:
                     newroomlabtried[currentsubjectid]=True
@@ -2068,15 +2225,8 @@ def assigntimeslot(currentsubjectid):
                     newroomlec3[currentsubjectid]=True
         
 
-                    query = """
-                        INSERT INTO `room` (`name`, `type`, `departmentid`, `collegeid`)
-                        VALUES (%s, %s, %s, %s)
-                    """
-                    values = ("NEW ROOM", 'Lec', departmentid, collegeid)
-                    cursor.execute(query, values)
-                    conn.commit()
-
-                    if assigntimeslot(currentsubjectid):
+                    
+                    if assigntimeslot(currentsubjectid+1):
                         return True'''
                                 
 
@@ -3161,6 +3311,11 @@ def assigntimeslot(currentsubjectid):
                             if (sectionsubjectcounterdown(departmentid, yearlvl, section, daylab, start_minuteslab+180)==2 and sectionsubject[departmentid][yearlvl][section][daylab].get(start_minuteslab+180)!=000):
                                 continue
                             if ((sectionsubjectcounter(departmentid, yearlvl, section, daylab, start_minuteslab)>0 and sectionsubject[departmentid][yearlvl][section][daylab].get(start_minuteslab)!=000) and (sectionsubjectcounterdown(departmentid, yearlvl, section, daylab, start_minuteslab+180)>0 and sectionsubject[departmentid][yearlvl][section][daylab].get(start_minuteslab)!=000)):
+                                continue
+                            
+                            if not faculty3hoursgap(faculty_idlab, daylab, start_minuteslab, 180):
+                                continue
+                            if not section3hoursgap(departmentid, yearlvl, section, daylab, start_minuteslab, 180):
                                 continue
                             
                             '''if not section3hoursgap(departmentid, yearlvl, section, daylab, start_minuteslab, 180):
