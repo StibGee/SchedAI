@@ -2850,6 +2850,8 @@ def assigntimeslot(currentsubjectid):
                 if subjecttype=='Lab' and roomtype!="Lab" and requirelab==1:
                     continue
 
+                if subjecttype=='Lab' and roomtype=="Lab" and requirelab==0:
+                    continue
                 
 
                 for faculty_idlab, slotslab in facultydaystimelab.items():
@@ -3049,6 +3051,8 @@ def assigntimeslot(currentsubjectid):
 
                     if subjecttype=='Lab' and roomtype!="Lab" and requirelab==1:
                         continue
+                    if subjecttype=='Lab' and roomtype=="Lab" and requirelab==0:
+                        continue
 
                     if not newroomlablol[currentsubjectid] and roomname=='NEW ROOM':
                         continue
@@ -3178,6 +3182,8 @@ def assigntimeslot(currentsubjectid):
                             
                             continue
                         if subjecttype=='Lab' and roomtype!="Lab" and requirelab==1:
+                            continue
+                        if subjecttype=='Lab' and roomtype=="Lab" and requirelab==0:
                             continue
                         
                         for day1 in range(1,7): 
