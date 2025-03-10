@@ -4,12 +4,12 @@ import sys
 import urllib.parse
 import webbrowser
 
-'''depid = int(sys.argv[1])
+depid = int(sys.argv[1])
 collegeid = int(sys.argv[2])
-calendarid = int(sys.argv[3])'''
-depid = 0
+calendarid = int(sys.argv[3])
+'''depid = 0
 collegeid = 3
-calendarid = 122
+calendarid = 122'''
 minor=1
 
 

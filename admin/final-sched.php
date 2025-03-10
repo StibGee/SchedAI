@@ -3,7 +3,7 @@
 
 
 <?php
-        require_once('../include/js.php')
+        require_once('../include/js.php');
     ?>
 <script src="../js/facultyloading.js"></script>
 <?php
